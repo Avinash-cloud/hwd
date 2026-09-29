@@ -12,8 +12,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-                serif: ['Georgia', 'Cambria', ...defaultTheme.fontFamily.serif],
+                sans: ['Poppins', 'Figtree', ...defaultTheme.fontFamily.sans],
+                serif: ['Poppins', 'Georgia', 'Cambria', ...defaultTheme.fontFamily.serif],
+                bebas: ['"Bebas Neue"', 'sans-serif'],
+                poppins: ['Poppins', 'sans-serif'],
+                heading: ['"Bebas Neue"', 'sans-serif'],
+                subheading: ['Poppins', 'sans-serif'],
             },
             colors: {
                 brand: {
