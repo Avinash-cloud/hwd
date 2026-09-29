@@ -199,4 +199,61 @@ class HaridwarBlissTest extends TestCase
         // Admin allowed
         $this->actingAs($adminUser)->get('/admin')->assertStatus(200);
     }
+
+    public function test_predictive_search_api_returns_matching_products(): void
+    {
+        $category = Category::create(['name' => 'Puja Essentials', 'slug' => 'puja-essentials']);
+        Product::create([
+            'category_id' => $category->id,
+            'name' => 'Premium Long Lasting Cotton Wicks',
+            'slug' => 'premium-cotton-wicks',
+            'price' => 159.00,
+            'compare_price' => 259.00,
+            'stock' => 50,
+        ]);
+
+        $response = $this->getJson('/api/search?q=Cotton');
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'name' => 'Premium Long Lasting Cotton Wicks',
+            'price' => 159,
+        ]);
+    }
+
+    public function test_cart_api_endpoints_work_with_ajax(): void
+    {
+        $user = User::factory()->create();
+        Membership::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+            'fee_paid' => 500,
+            'validity_years' => 5,
+            'starts_at' => now(),
+            'expires_at' => now()->addYears(5),
+            'terms_accepted' => true,
+        ]);
+
+        $category = Category::create(['name' => 'Hawan Samagri', 'slug' => 'hawan-samagri']);
+        $product = Product::create([
+            'category_id' => $category->id,
+            'name' => 'Cow Dung Hawan Cups',
+            'slug' => 'cow-dung-hawan-cups',
+            'price' => 249.00,
+            'stock' => 30,
+        ]);
+
+        $this->actingAs($user);
+
+        // Add to cart via JSON
+        $addRes = $this->postJson('/cart/add', ['product_id' => $product->id, 'quantity' => 2]);
+        $addRes->assertStatus(200);
+        $addRes->assertJsonFragment(['success' => true]);
+
+        // Get details via JSON
+        $detailsRes = $this->getJson('/cart/api/details');
+        $detailsRes->assertStatus(200);
+        $detailsRes->assertJsonFragment(['is_member' => true]);
+        $this->assertEquals(2, $detailsRes->json('cart.total_items_count'));
+    }
 }

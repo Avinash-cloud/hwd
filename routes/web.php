@@ -40,9 +40,13 @@ Route::post('/membership/subscribe', [MembershipController::class, 'subscribe'])
 
 // Shopping Cart (Public view, but add requires auth/membership)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart/api/details', [CartController::class, 'apiDetails'])->name('cart.api.details');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+// Predictive Search API
+Route::get('/api/search', [ProductController::class, 'apiSearch'])->name('api.search');
 
 // Customer Protected Routes
 Route::middleware(['auth'])->group(function () {

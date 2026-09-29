@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Haridwar Bliss') }} - Sacred Portal</title>
+        <link rel="icon" type="image/png" href="{{ asset('blue_bliss_loga_v1.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

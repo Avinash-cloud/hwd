@@ -1,230 +1,422 @@
-<nav x-data="{ open: false }"
-    class="bg-white/95 backdrop-blur-md border-b border-[#D97706]/30 sticky top-0 z-50 shadow-xs">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-18 items-center">
-            <!-- Left Brand & Links -->
-            <div class="flex items-center gap-6">
-                <!-- Logo -->
+<header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs">
+    <!-- 1. Top Announcement Bar (99Pandit style) -->
+    <div class="bg-[#881337] text-white text-xs py-2 px-4 shadow-inner">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Left: Rotating / Static Message -->
+            <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                <span class="inline-block text-[#D97706] font-bold">ॐ</span>
+                <span class="font-medium text-white/95">
+                    100% Authentic Brahmakund Gangajal & Vedic Essentials · Directly Sourced from Har Ki Pauri
+                </span>
+                <span class="hidden md:inline text-white/40">|</span>
+                <span class="hidden md:inline text-amber-200 font-semibold">
+                    Free Sacred Delivery on orders above ₹499
+                </span>
+            </div>
+
+            <!-- Right: Batch Verification & Support Links -->
+            <div class="hidden lg:flex items-center gap-4 text-[11px] text-white/80 shrink-0">
+                <a href="{{ route('about') }}" class="hover:text-amber-200 transition">Brahmakund Sanctity</a>
+                <span>·</span>
+                <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
+                <span>·</span>
+                <span class="text-amber-300 font-bold">📞 +91 98765 43210</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Main Header Bar (Logo, Predictive Search, Account, Wishlist, Cart) -->
+    <div class="border-b border-amber-200/50 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4 lg:gap-8">
+                <!-- Mobile Menu Button -->
+                <div class="flex lg:hidden items-center">
+                    <button type="button"
+                            @click="mobileMenuOpen = !mobileMenuOpen"
+                            class="p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition"
+                            aria-label="Toggle Navigation Menu">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Brand Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                        <x-application-logo
-                            class="block h-10 w-10 shadow-sm rounded-xl transition transform group-hover:scale-105" />
-                        <div>
-                            <span
-                                class="block font-serif font-extrabold text-xl text-slate-900 tracking-tight leading-none group-hover:text-[#D97706] transition">Haridwar
-                                Bliss</span>
-                            <span class="block text-[10px] uppercase font-bold tracking-widest text-[#D97706]">Sacred
-                                Gangajal</span>
+                        <x-application-logo class="block h-12 w-12 object-contain transition transform group-hover:scale-105" />
+                        <div class="leading-tight">
+                            <span class="block font-serif font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#D97706] transition">
+                                Haridwar Bliss
+                            </span>
+                            <span class="block text-[10px] uppercase font-bold tracking-widest text-[#D97706]">
+                                Sacred Gangajal & Vedic Store
+                            </span>
                         </div>
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-6 lg:-my-px lg:ms-6 lg:flex">
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Home') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('products.index', ['type' => 'gangajal'])"
-                        :active="request()->fullUrlIs(route('products.index', ['type' => 'gangajal']))">
-                        {{ __('Sacred Gangajal') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*') && !request()->has('type')">
-                        {{ __('Spiritual Catalog') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('membership.join')" :active="request()->routeIs('membership.*')"
-                        class="text-[#D97706] font-semibold">
-                        {{ __('5-Yr Membership') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
-                        {{ __('Brahmakund Sanctity') }}
-                    </x-nav-link>
+                <!-- Central Predictive Search Bar -->
+                <div class="flex-1 max-w-2xl hidden md:block relative"
+                     @click.away="searchOpen = false">
+                    <form action="{{ route('products.index') }}" method="GET" class="relative">
+                        <div class="relative flex items-center">
+                            <input type="search"
+                                   name="search"
+                                   x-model="searchQuery"
+                                   @input.debounce.250ms="performSearch()"
+                                   @focus="if(searchResults.length > 0) searchOpen = true"
+                                   placeholder="Search pure gangajal, cotton wicks, hawan cups, rudraksha, dhoop..."
+                                   autocomplete="off"
+                                   class="w-full pl-11 pr-24 py-2.5 bg-stone-50 hover:bg-white focus:bg-white border border-amber-300/80 focus:border-[#D97706] focus:ring-2 focus:ring-[#D97706]/20 rounded-full text-sm text-slate-900 placeholder:text-slate-400 transition shadow-inner">
+                            
+                            <!-- Search Icon -->
+                            <div class="absolute left-4 text-slate-400 pointer-events-none">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div>
+
+                            <!-- Search Button -->
+                            <button type="submit"
+                                    class="absolute right-1.5 px-4 py-1.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-full text-xs font-bold transition shadow-xs">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Predictive Search Results Dropdown -->
+                    <div x-show="searchOpen && searchResults.length > 0"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-1"
+                         class="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-amber-200/80 overflow-hidden z-50 divide-y divide-slate-100">
+                        <div class="p-2 max-h-96 overflow-y-auto space-y-1">
+                            <template x-for="item in searchResults" :key="item.id">
+                                <a :href="item.url"
+                                   class="flex items-center gap-3 p-2 rounded-xl hover:bg-amber-50/70 transition group">
+                                    <img :src="item.image || 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=120&fit=crop'"
+                                         :alt="item.name"
+                                         class="w-12 h-12 rounded-lg object-cover bg-slate-50 border border-slate-200 shrink-0">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
+                                            <span class="font-bold text-[#D97706]" x-text="item.category"></span>
+                                            <span>·</span>
+                                            <span class="text-amber-500">★ <span x-text="item.rating"></span></span>
+                                        </div>
+                                        <h6 class="text-xs font-bold text-slate-900 truncate group-hover:text-[#D97706] transition"
+                                            x-text="item.name"></h6>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.price"></span>
+                                            <template x-if="item.compare_price">
+                                                <span class="text-[10px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
+                                            </template>
+                                            <template x-if="item.discount">
+                                                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded" x-text="item.discount + '% OFF'"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <svg class="w-4 h-4 text-slate-300 group-hover:text-[#D97706] group-hover:translate-x-0.5 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </template>
+                        </div>
+                        <div class="bg-stone-50 px-4 py-2.5 text-center">
+                            <a :href="'{{ route('products.index') }}?search=' + encodeURIComponent(searchQuery)"
+                               class="text-xs font-bold text-[#D97706] hover:underline">
+                                View all matching sacred offerings →
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Right Actions: Cart & Auth -->
-            <div class="hidden lg:flex lg:items-center lg:gap-4">
-                <!-- Cart Icon -->
-                @php
-                    $cartCount = app(\App\Services\CartService::class)->count();
-                @endphp
-                <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-700 hover:text-[#D97706] transition"
-                    title="View Sacred Cart">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    @if ($cartCount > 0)
-                        <span
-                            class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-[#D97706] rounded-full shadow">
-                            {{ $cartCount }}
-                        </span>
-                    @endif
-                </a>
-
-                @auth
-                    <!-- Active Member Badge -->
-                    @if (Auth::user()->hasActiveMembership())
-                        <span
-                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/30 shadow-xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#D97706] animate-pulse"></span>
-                            5-Yr Member
-                        </span>
+                <!-- Right Action Icons: 5-Yr Membership, Account, Wishlist, Cart Drawer -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <!-- 5-Year Devotee Membership Pill -->
+                    @auth
+                        @if (Auth::user()->hasActiveMembership())
+                            <span class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/30">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#D97706] animate-pulse"></span>
+                                <span>5-Yr Member</span>
+                            </span>
+                        @else
+                            <a href="{{ route('membership.join') }}"
+                               class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition">
+                                <span>🎁 Join Membership</span>
+                            </a>
+                        @endif
                     @else
                         <a href="{{ route('membership.join') }}"
-                            class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/30 hover:bg-[#D97706]/20 transition">
-                            Join for ₹500
+                           class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#881337] text-white hover:bg-[#D97706] transition shadow-xs">
+                            <span>Join Membership (₹500)</span>
                         </a>
-                    @endif
+                    @endauth
 
-                    @if (Auth::user()->is_admin)
-                        <a href="{{ route('admin.dashboard') }}"
-                            class="inline-flex items-center px-2.5 py-1 text-xs font-bold rounded-md bg-[#991B1B]/10 text-[#991B1B] border border-[#991B1B]/30 hover:bg-[#991B1B]/20 transition">
-                            Admin Panel
-                        </a>
-                    @endif
-
-                    <!-- User Dropdown -->
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button
-                                class="inline-flex items-center px-3 py-2 border border-[#D97706]/30 text-sm leading-4 font-semibold rounded-xl text-slate-800 bg-[#FFFDF7] hover:bg-[#D97706]/10 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->name }}</div>
-                                <div class="ms-1.5">
-                                    <svg class="fill-current h-4 w-4 text-slate-600" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                    <!-- Account Menu -->
+                    <div class="relative" x-data="{ userMenuOpen: false }">
+                        @auth
+                            <button @click="userMenuOpen = !userMenuOpen"
+                                    class="flex items-center gap-2 p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition">
+                                <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-[#D97706]">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
+                                <span class="hidden lg:inline text-xs font-semibold text-slate-800">
+                                    {{ Str::limit(Auth::user()->name, 10) }}
+                                </span>
+                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
                             </button>
-                        </x-slot>
 
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('dashboard')">
-                                {{ __('My Account & Orders') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile Settings') }}
-                            </x-dropdown-link>
-
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
-                                                        this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="text-sm font-semibold text-slate-700 hover:text-[#D97706] px-3 py-2 transition">
-                        Sign In
-                    </a>
-                    <a href="{{ route('membership.join') }}"
-                        class="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-[#D97706] hover:bg-[#F97316] rounded-xl shadow-sm transition">
-                        Join Membership (₹500)
-                    </a>
-                @endauth
-            </div>
-
-            <!-- Mobile Hamburger -->
-            <div class="-me-2 flex items-center lg:hidden gap-2">
-                <a href="{{ route('cart.index') }}" class="relative p-2 text-slate-700">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    @if (($cartCount ?? 0) > 0)
-                        <span
-                            class="absolute top-1 right-1 px-1.5 py-0.5 text-[10px] font-bold text-white bg-[#D97706] rounded-full">
-                            {{ $cartCount }}
-                        </span>
-                    @endif
-                </a>
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-[#FFFDF7] focus:outline-none transition">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Mobile Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden border-t border-[#D97706]/30 bg-white/98">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                {{ __('Home') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products.index', ['type' => 'gangajal'])">
-                {{ __('Sacred Gangajal') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products.index')">
-                {{ __('Spiritual Catalog') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('membership.join')" class="text-[#D97706] font-bold">
-                {{ __('5-Year Membership (₹500)') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('about')">
-                {{ __('Brahmakund Sanctity') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('faqs')">
-                {{ __('FAQs') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Auth Settings -->
-        <div class="pt-4 pb-3 border-t border-[#D97706]/20 bg-[#FFFDF7]">
-            @auth
-                <div class="px-4 flex items-center justify-between mb-3">
-                    <div>
-                        <div class="font-bold text-base text-slate-800">{{ Auth::user()->name }}</div>
-                        <div class="font-medium text-sm text-slate-500">{{ Auth::user()->email }}</div>
+                            <div x-show="userMenuOpen"
+                                 @click.away="userMenuOpen = false"
+                                 x-transition
+                                 class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-amber-200 py-1.5 z-50 text-xs">
+                                <div class="px-4 py-2 border-b border-slate-100">
+                                    <p class="font-bold text-slate-900 truncate">{{ Auth::user()->name }}</p>
+                                    <p class="text-[11px] text-slate-500 truncate">{{ Auth::user()->email }}</p>
+                                </div>
+                                @if (Auth::user()->is_admin)
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-amber-700 font-bold hover:bg-amber-50">
+                                        ⚡ Admin Portal
+                                    </a>
+                                @endif
+                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium">
+                                    My Orders & Address
+                                </a>
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium">
+                                    Profile Settings
+                                </a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-rose-600 hover:bg-rose-50 font-bold">
+                                        Sign Out
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}"
+                               class="flex items-center gap-1.5 p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition text-xs font-bold"
+                               title="Account Login">
+                                <svg class="w-5 h-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                <span class="hidden sm:inline">Sign In</span>
+                            </a>
+                        @endauth
                     </div>
-                    @if (Auth::user()->hasActiveMembership())
-                        <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-[#D97706]/10 text-[#D97706]">5-Yr
-                            Member</span>
-                    @endif
-                </div>
 
-                <div class="space-y-1">
-                    <x-responsive-nav-link :href="route('dashboard')">
-                        {{ __('My Account & Orders') }}
-                    </x-responsive-nav-link>
-                    @if (Auth::user()->is_admin)
-                        <x-responsive-nav-link :href="route('admin.dashboard')" class="text-[#991B1B] font-bold">
-                            {{ __('Admin Dashboard') }}
-                        </x-responsive-nav-link>
-                    @endif
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-responsive-nav-link>
-                    </form>
+                    <!-- Cart Drawer Trigger Button (99Pandit Style) -->
+                    @php
+                        $cartCount = app(\App\Services\CartService::class)->count();
+                    @endphp
+                    <button type="button"
+                            @click="$dispatch('open-cart-drawer')"
+                            class="relative flex items-center gap-2 px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-slate-900 rounded-xl transition shadow-xs group"
+                            aria-label="Shopping Cart">
+                        <div class="relative">
+                            <svg class="w-5 h-5 text-slate-800 group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            <span class="cart-count-badge absolute -top-2 -right-2.5 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-white bg-[#D97706] rounded-full shadow {{ $cartCount > 0 ? '' : 'hidden' }}">
+                                {{ $cartCount }}
+                            </span>
+                        </div>
+                        <span class="hidden lg:inline text-xs font-bold">Cart</span>
+                    </button>
                 </div>
-            @else
-                <div class="px-4 py-2 flex flex-col gap-2">
-                    <a href="{{ route('login') }}"
-                        class="w-full text-center py-2 text-sm font-bold text-slate-700 bg-white border border-[#D97706]/30 rounded-xl">
-                        Sign In
-                    </a>
-                    <a href="{{ route('membership.join') }}"
-                        class="w-full text-center py-2 text-sm font-bold text-white bg-[#D97706] hover:bg-[#F97316] rounded-xl shadow">
-                        Join 5-Year Membership (₹500)
-                    </a>
-                </div>
-            @endauth
+            </div>
+
+            <!-- Mobile Search Bar (visible on mobile only) -->
+            <div class="md:hidden pb-3">
+                <form action="{{ route('products.index') }}" method="GET" class="relative">
+                    <input type="search"
+                           name="search"
+                           placeholder="Search Gangajal, Wicks, Hawan Cups..."
+                           class="w-full pl-10 pr-4 py-2 bg-stone-50 border border-amber-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400">
+                    <div class="absolute left-3 top-2.5 text-slate-400">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</nav>
+
+    <!-- 3. Category Horizontal Navigation Menu (99Pandit Style) -->
+    <nav class="hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-11 text-xs">
+                <!-- Left: Category List with dropdowns -->
+                <div class="flex items-center space-x-1 font-semibold text-slate-700">
+                    <!-- Home -->
+                    <a href="{{ route('home') }}"
+                       class="px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('home') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                        Home
+                    </a>
+
+                    <!-- Dynamic Categories from navCategories -->
+                    @if (isset($navCategories) && $navCategories->count() > 0)
+                        @foreach ($navCategories->take(7) as $cat)
+                            <div class="relative group" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
+                                <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
+                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                                    <span>{{ $cat->name }}</span>
+                                    @if ($cat->children && $cat->children->count() > 0)
+                                        <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    @endif
+                                </a>
+
+                                <!-- Subcategories Dropdown -->
+                                @if ($cat->children && $cat->children->count() > 0)
+                                    <div x-show="catOpen"
+                                         x-transition:enter="transition ease-out duration-150"
+                                         x-transition:enter-start="opacity-0 translate-y-1"
+                                         x-transition:enter-end="opacity-100 translate-y-0"
+                                         x-transition:leave="transition ease-in duration-100"
+                                         x-transition:leave-start="opacity-100 translate-y-0"
+                                         x-transition:leave-end="opacity-0 translate-y-1"
+                                         class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-50 divide-y divide-slate-100">
+                                        <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
+                                            {{ $cat->name }} Collections
+                                        </div>
+                                        <div class="py-1">
+                                            @foreach ($cat->children as $sub)
+                                                <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                                                   class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-medium transition">
+                                                    {{ $sub->name }}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                        <div class="pt-1 px-3">
+                                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
+                                               class="text-[11px] font-bold text-[#D97706] hover:underline">
+                                                All in {{ $cat->name }} →
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    @else
+                        <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Puja Essentials</a>
+                        <a href="{{ route('products.index', ['category' => 'hawan-samagri']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Hawan & Samagri</a>
+                        <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Sacred Gangajal</a>
+                    @endif
+
+                    <!-- All Sacred Catalog -->
+                    <a href="{{ route('products.index') }}"
+                       class="px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold' : '' }}">
+                        Complete Catalog
+                    </a>
+                </div>
+
+                <!-- Right: High-priority Devotee Offers -->
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
+                       class="inline-flex items-center gap-1 text-[11px] font-bold text-[#0369A1] hover:underline">
+                        <span>🔍 Verify QR Seal</span>
+                    </a>
+                    <span>·</span>
+                    <a href="{{ route('membership.join') }}"
+                       class="inline-flex items-center gap-1 text-xs font-bold text-[#D97706] hover:text-[#F97316] transition">
+                        <span>🕉️ 5-Yr Devotee Membership</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 4. Mobile Navigation Menu Accordion Drawer -->
+    <div x-show="mobileMenuOpen"
+         x-transition
+         class="lg:hidden bg-white border-b border-amber-200 divide-y divide-slate-100 text-sm">
+        <div class="p-4 space-y-1">
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-slate-900 hover:bg-amber-50">
+                Home
+            </a>
+            @if (isset($navCategories))
+                @foreach ($navCategories as $cat)
+                    <div x-data="{ subOpen: false }">
+                        <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg">
+                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}" class="flex-1">
+                                {{ $cat->name }}
+                            </a>
+                            @if ($cat->children && $cat->children->count() > 0)
+                                <button type="button" @click="subOpen = !subOpen" class="p-1 text-slate-400">
+                                    <svg class="w-4 h-4 transition transform" :class="subOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            @endif
+                        </div>
+                        @if ($cat->children && $cat->children->count() > 0)
+                            <div x-show="subOpen" class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
+                                @foreach ($cat->children as $sub)
+                                    <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                                       class="block py-1.5 text-slate-600 hover:text-[#D97706]">
+                                        {{ $sub->name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            @endif
+            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-slate-900 hover:bg-amber-50">
+                All Products Catalog
+            </a>
+            <a href="{{ route('membership.join') }}" class="block px-3 py-2 rounded-lg font-bold text-[#D97706] hover:bg-amber-50">
+                🎁 5-Year Membership (₹500)
+            </a>
+            <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
+                Brahmakund Sanctity Story
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+if (typeof window.navigationComponent === 'undefined') {
+    window.navigationComponent = function() {
+        return {
+            mobileMenuOpen: false,
+            searchQuery: '',
+            searchResults: [],
+            searchOpen: false,
+
+            performSearch() {
+                if (this.searchQuery.trim().length < 2) {
+                    this.searchResults = [];
+                    this.searchOpen = false;
+                    return;
+                }
+
+                fetch('{{ route('api.search') }}?q=' + encodeURIComponent(this.searchQuery), {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.searchResults = data || [];
+                    this.searchOpen = this.searchResults.length > 0;
+                })
+                .catch(() => {
+                    this.searchResults = [];
+                });
+            }
+        };
+    };
+}
+</script>

@@ -1,56 +1,86 @@
 <x-app-layout>
-    <div class="bg-[#FFFDF7] border-b border-[#D97706]/30 py-6">
+    @php
+        $discount = $product->discount_percentage;
+        $imgUrl = $product->image ?: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&auto=format&fit=crop&q=80';
+        $gallery = $product->gallery ?: [
+            $imgUrl,
+            'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+            'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=800&auto=format&fit=crop&q=80',
+        ];
+    @endphp
+
+    <!-- Breadcrumb -->
+    <div class="bg-[#FFFDF7] border-b border-amber-200/60 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-slate-500 flex items-center gap-2">
-            <a href="{{ route('home') }}" class="hover:text-[#D97706]">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-[#D97706] transition">Home</a>
             <span>/</span>
-            <a href="{{ route('products.index') }}" class="hover:text-[#D97706]">Catalog</a>
+            <a href="{{ route('products.index') }}" class="hover:text-[#D97706] transition">Catalog</a>
             <span>/</span>
             <a href="{{ route('products.index', ['category' => $product->category->slug]) }}"
-                class="hover:text-[#D97706]">{{ $product->category->name }}</a>
+               class="hover:text-[#D97706] transition capitalize">{{ $product->category->name }}</a>
             <span>/</span>
-            <span class="text-slate-900 font-bold truncate">{{ $product->name }}</span>
+            <span class="text-slate-900 font-bold truncate max-w-xs">{{ $product->name }}</span>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <!-- Left: Visual / Image Container -->
-            <div class="space-y-4">
-                <div
-                    class="w-full h-96 bg-white border border-[#D97706]/30 rounded-3xl p-8 flex items-center justify-center shadow-xs overflow-hidden relative">
-                    <div class="text-center">
-                        <div class="w-28 h-28 mx-auto mb-4 text-[#D97706]">
-                            @if ($product->is_gangajal)
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-full h-full"
-                                    stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                                </svg>
-                            @else
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-full h-full"
-                                    stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
-                                </svg>
-                            @endif
-                        </div>
-                        <span
-                            class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest">{{ $product->sku }}</span>
+    <!-- Product Details Main Section (Shop.99Pandit Style) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14"
+         x-data="pdpManager({{ $product->id }}, '{{ $imgUrl }}')">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            
+            <!-- Left Column: Image Gallery (5 cols on lg) -->
+            <div class="lg:col-span-6 space-y-4">
+                <!-- Main Image Display with Badges -->
+                <div class="relative w-full aspect-square bg-[#FFFDF7] border border-amber-200/80 rounded-3xl overflow-hidden shadow-xs">
+                    <img :src="currentImage"
+                         alt="{{ $product->name }}"
+                         class="w-full h-full object-cover object-center transition-all duration-300">
+
+                    <!-- Badges -->
+                    <div class="absolute top-4 left-4 flex flex-col gap-1.5 z-10 pointer-events-none">
+                        @if ($discount)
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-[#881337] text-white shadow-md">
+                                {{ $discount }}% OFF
+                            </span>
+                        @elseif ($product->badge)
+                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-[#D97706] text-white shadow-md">
+                                {{ $product->badge }}
+                            </span>
+                        @endif
+
+                        @if ($product->is_gangajal)
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-extrabold bg-[#0369A1] text-white shadow-md">
+                                <span>🕉️</span> Brahmakund Certified
+                            </span>
+                        @endif
                     </div>
 
-                    @if ($product->is_gangajal)
-                        <div
-                            class="absolute top-4 left-4 bg-[#D97706] text-white px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest shadow-xs">
-                            Brahmakund Certified
+                    @if ($product->batch)
+                        <div class="absolute bottom-4 left-4 z-10">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-slate-900/80 text-amber-300 backdrop-blur-xs border border-white/20">
+                                <span>Batch #{{ $product->batch->batch_number }}</span>
+                            </span>
                         </div>
                     @endif
                 </div>
 
-                <!-- Purity Highlight Box -->
+                <!-- Thumbnail Gallery Row -->
+                <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                    @foreach ($gallery as $idx => $thumb)
+                        <button type="button"
+                                @click="setMainImage('{{ $thumb }}', {{ $idx }})"
+                                class="w-20 h-20 rounded-2xl bg-white border-2 overflow-hidden shrink-0 transition"
+                                :class="selectedThumb === {{ $idx }} ? 'border-[#D97706] shadow-md ring-2 ring-[#D97706]/30' : 'border-slate-200 hover:border-amber-300 opacity-75 hover:opacity-100'">
+                            <img src="{{ $thumb }}" alt="Thumbnail" class="w-full h-full object-cover">
+                        </button>
+                    @endforeach
+                </div>
+
+                <!-- Purity / Origin Guarantee Box -->
                 @if ($product->purity_details)
-                    <div class="bg-[#FFFDF7] border border-[#D97706]/30 rounded-2xl p-5 space-y-2 text-xs">
+                    <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-4 sm:p-5 space-y-1.5 text-xs shadow-xs">
                         <div class="flex items-center gap-2 font-serif font-bold text-[#881337] text-sm">
-                            <span>🛡️ Verified Sanctity & Lab Details</span>
+                            <span>🛡️ Consecration & Sanctity Assurance</span>
                         </div>
                         <p class="text-slate-700 leading-relaxed">
                             {{ $product->purity_details }}
@@ -59,167 +89,301 @@
                 @endif
             </div>
 
-            <!-- Right: Product Specifications & Order Box -->
-            <div class="space-y-6">
+            <!-- Right Column: Product Info & Purchase Actions (6 cols on lg) -->
+            <div class="lg:col-span-6 space-y-6">
                 <div>
-                    <span
-                        class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">{{ $product->category->name }}</span>
-                    <h1 class="text-3xl font-serif font-extrabold text-slate-900 mt-1">{{ $product->name }}</h1>
-                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">{{ $product->short_description }}</p>
+                    <!-- Category & Ratings -->
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
+                            {{ $product->category->name }}
+                        </span>
+
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-lg text-xs font-bold text-slate-800">
+                            <span class="text-amber-500">★★★★★</span>
+                            <span>{{ number_format($product->rating ?? 4.8, 1) }}</span>
+                            <span class="text-slate-400 font-normal">({{ $product->reviews_count ?? 15 }} devotee reviews)</span>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-slate-900 leading-tight">
+                        {{ $product->name }}
+                    </h1>
+
+                    <!-- Short Description -->
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                        {{ $product->short_description }}
+                    </p>
                 </div>
 
-                <!-- Price Card with Member Comparison -->
-                <div class="bg-white border border-[#D97706]/20 rounded-2xl p-6 shadow-xs space-y-4">
-                    <div class="flex items-baseline justify-between">
-                        <div>
-                            <span class="text-xs text-slate-500 block">Devotee Member Price</span>
-                            <div class="flex items-baseline gap-2">
+                <!-- Price Block (99Pandit Style) -->
+                <div class="bg-[#FFFDF7] border border-amber-200/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+                    <div class="flex items-baseline gap-3 flex-wrap">
+                        <span class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                            ₹{{ number_format($product->price, 0) }}
+                        </span>
+
+                        @if ($product->compare_price && $product->compare_price > $product->price)
+                            <del class="text-lg text-slate-400 font-semibold">
+                                ₹{{ number_format($product->compare_price, 0) }}
+                            </del>
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-[#881337] text-white">
+                                Save {{ $discount }}%
+                            </span>
+                        @endif
+                    </div>
+
+                    <p class="text-[11px] text-slate-500">
+                        Inclusive of all taxes · Free Sacred Delivery on orders above ₹499
+                    </p>
+
+                    <!-- Member Pricing Benefit Banner -->
+                    <div class="pt-3 border-t border-amber-200/60 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-[#D97706]/10 text-[#D97706] flex items-center justify-center font-bold text-xs">
+                                🕉️
+                            </span>
+                            <div>
+                                <span class="font-bold text-slate-800">5-Year Member Rate:</span>
                                 @if ($product->is_gangajal)
-                                    <span class="text-3xl font-extrabold text-[#0369A1] font-serif">₹0</span>
-                                    <span class="text-xs font-bold text-[#0369A1]">(1st Bottle / Month Free)</span>
+                                    <span class="text-[#0369A1] font-bold">1st Bottle Free / Month</span>
                                 @else
-                                    <span
-                                        class="text-3xl font-extrabold text-[#0369A1] font-serif">₹{{ number_format($product->member_price ?? $product->price, 2) }}</span>
+                                    <span class="text-[#D97706] font-bold">₹{{ number_format($product->member_price ?? ($product->price * 0.85), 0) }}</span>
                                 @endif
                             </div>
                         </div>
 
-                        <div class="text-right">
-                            <span class="text-xs text-slate-400 block">Regular Price</span>
-                            <span
-                                class="text-base font-semibold text-slate-400 line-through">₹{{ number_format($product->price, 2) }}</span>
-                        </div>
-                    </div>
-
-                    <div
-                        class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                        <span>Standard Shipping: ₹{{ number_format($shippingRate) }} flat per order</span>
-                        <span class="font-bold text-[#0369A1]">In Stock ({{ $product->stock }} units)</span>
-                    </div>
-
-                    <!-- Add to Cart Action -->
-                    @auth
-                        @if (Auth::user()->hasActiveMembership() || Auth::user()->is_admin)
-                            <form method="POST" action="{{ route('cart.add') }}" class="space-y-4 pt-2">
-                                @csrf
-                                <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                                <div class="flex items-center gap-4">
-                                    <div class="w-32">
-                                        <label for="quantity"
-                                            class="block text-xs font-bold text-slate-700 mb-1">Quantity</label>
-                                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="10"
-                                            class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl focus:ring-[#D97706] focus:border-[#D97706]" />
-                                    </div>
-
-                                    <div class="flex-1 pt-5">
-                                        <button type="submit"
-                                            class="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-[#D97706] hover:bg-[#F97316] shadow-md transition">
-                                            Add to Sacred Cart
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        @else
-                            <div class="bg-[#FFFDF7] p-4 rounded-xl border border-[#D97706]/30 space-y-3">
-                                <div class="flex items-center gap-2 text-xs font-bold text-[#881337]">
-                                    <span>🔒 Member Exclusive Sacred Item</span>
-                                </div>
-                                <p class="text-xs text-slate-700 leading-relaxed">
-                                    You are signed in as <strong>{{ Auth::user()->name }}</strong>. To order sacred Gangajal and
-                                    enjoy free monthly deliveries, please activate your 5-Year Membership.
-                                </p>
-                                <a href="{{ route('membership.join') }}"
-                                    class="w-full inline-flex items-center justify-center py-2.5 px-4 bg-[#D97706] hover:bg-[#F97316] text-white font-bold text-xs rounded-xl shadow-xs transition">
-                                    Activate 5-Year Membership (₹{{ number_format($membershipFee) }})
-                                </a>
-                            </div>
+                        @if (!Auth::check() || !Auth::user()->hasActiveMembership())
+                            <a href="{{ route('membership.join') }}" class="font-bold text-[#D97706] hover:underline text-[11px]">
+                                Join Membership →
+                            </a>
                         @endif
-                    @else
-                        <div class="bg-[#FFFDF7] p-4 rounded-xl border border-[#D97706]/30 space-y-3">
-                            <div class="flex items-center gap-2 text-xs font-bold text-[#881337]">
-                                <span>🔒 Devotee Membership Required to Order</span>
-                            </div>
-                            <p class="text-xs text-slate-700 leading-relaxed">
-                                Please sign in or join our 5-Year Sacred Membership (₹{{ number_format($membershipFee) }})
-                                to add this consecrated offering to your cart.
-                            </p>
-                            <div class="flex gap-2">
-                                <a href="{{ route('login') }}"
-                                    class="flex-1 text-center py-2.5 px-3 bg-white border border-[#D97706]/30 text-slate-800 font-bold text-xs rounded-xl hover:bg-[#FFFDF7] transition">
-                                    Sign In
-                                </a>
-                                <a href="{{ route('membership.join') }}"
-                                    class="flex-1 text-center py-2.5 px-3 bg-[#D97706] hover:bg-[#F97316] text-white font-bold text-xs rounded-xl transition">
-                                    Join for ₹{{ number_format($membershipFee) }}
-                                </a>
-                            </div>
-                        </div>
-                    @endauth
+                    </div>
                 </div>
 
-                <!-- Description & Specifications Accordion / Sections -->
-                <div class="space-y-6 pt-4 border-t border-slate-200">
-                    <div>
-                        <h3 class="font-serif font-bold text-base text-slate-900 mb-2">Detailed Description</h3>
-                        <div class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-                            {{ $product->description }}
+                <!-- Quantity & Actions Box -->
+                <div class="space-y-4 pt-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-36 shrink-0">
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">Quantity</label>
+                            <div class="inline-flex items-center w-full border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+                                <button type="button"
+                                        @click="if(quantity > 1) quantity--"
+                                        class="w-10 py-2.5 text-slate-600 hover:bg-slate-100 font-bold text-sm transition">
+                                    -
+                                </button>
+                                <input type="number"
+                                       x-model.number="quantity"
+                                       min="1" max="50"
+                                       class="w-full text-center border-0 text-sm font-bold text-slate-900 focus:ring-0 p-0" />
+                                <button type="button"
+                                        @click="quantity++"
+                                        class="w-10 py-2.5 text-slate-600 hover:bg-slate-100 font-bold text-sm transition">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pt-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                <span>In Stock ({{ $product->stock }} units ready to dispatch)</span>
+                            </span>
                         </div>
                     </div>
 
+                    <!-- Dual CTA Buttons: Add to Cart + Buy It Now -->
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <!-- Add to Cart (Ajax + Drawer) -->
+                        <button type="button"
+                                @click="addToCart(false)"
+                                :disabled="adding"
+                                class="flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5 disabled:opacity-50">
+                            <template x-if="!adding">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                    </svg>
+                                    <span>Add to Sacred Cart</span>
+                                </span>
+                            </template>
+                            <template x-if="adding">
+                                <span>Adding to Cart...</span>
+                            </template>
+                        </button>
+
+                        <!-- Buy It Now -->
+                        <button type="button"
+                                @click="addToCart(true)"
+                                :disabled="adding"
+                                class="flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 bg-[#881337] hover:bg-[#991B1B] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5 disabled:opacity-50">
+                            <span>Buy It Now</span>
+                            <span>⚡</span>
+                        </button>
+                    </div>
+
+                    @if (!Auth::check() || !Auth::user()->hasActiveMembership())
+                        <p class="text-[11px] text-slate-500 italic text-center">
+                            Note: Placing orders requires signing in or joining the 5-Year Membership (₹500 for 5 years).
+                        </p>
+                    @endif
+                </div>
+
+                <!-- Devotee Trust Badges -->
+                <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center text-xs">
+                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
+                        <span class="text-xl block">🕉️</span>
+                        <span class="font-bold text-slate-800 text-[11px] block">Consecrated</span>
+                        <span class="text-[10px] text-slate-500 block">Har Ki Pauri</span>
+                    </div>
+                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
+                        <span class="text-xl block">📦</span>
+                        <span class="font-bold text-slate-800 text-[11px] block">Damage-Free</span>
+                        <span class="text-[10px] text-slate-500 block">Hermetic Packaging</span>
+                    </div>
+                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
+                        <span class="text-xl block">🔄</span>
+                        <span class="font-bold text-slate-800 text-[11px] block">Easy Support</span>
+                        <span class="text-[10px] text-slate-500 block">Devotee Care</span>
+                    </div>
+                </div>
+
+                <!-- Expandable Accordion Tabs (Vedic Significance, Specs, Shipping) -->
+                <div class="pt-4 border-t border-slate-100 space-y-2 text-xs" x-data="{ openTab: 1 }">
+                    <!-- Tab 1: Vedic Significance & Description -->
+                    <div class="border border-amber-200/60 rounded-xl overflow-hidden">
+                        <button type="button"
+                                @click="openTab = (openTab === 1 ? null : 1)"
+                                class="w-full px-4 py-3 bg-[#FFFDF7] flex items-center justify-between text-left font-bold text-slate-800 hover:text-[#D97706] transition">
+                            <span>Vedic Significance & Detailed Usage</span>
+                            <span x-text="openTab === 1 ? '−' : '+'" class="text-base font-mono"></span>
+                        </button>
+                        <div x-show="openTab === 1" class="p-4 bg-white text-slate-700 leading-relaxed border-t border-amber-200/50 space-y-3">
+                            <p class="whitespace-pre-line">{{ $product->description }}</p>
+                            @if ($product->benefits)
+                                <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200/50">
+                                    <strong class="font-bold text-[#881337] block mb-1">Spiritual & Domestic Benefits:</strong>
+                                    <p>{{ $product->benefits }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Specifications -->
                     @if ($product->specifications)
-                        <div>
-                            <h3 class="font-serif font-bold text-base text-slate-900 mb-2">Specifications</h3>
-                            <div class="bg-white border border-slate-200 rounded-xl divide-y divide-slate-100 text-xs">
-                                @foreach ($product->specifications as $label => $val)
-                                    <div class="flex justify-between p-3">
-                                        <span class="text-slate-500 font-medium">{{ $label }}</span>
-                                        <span class="text-slate-900 font-bold">{{ $val }}</span>
-                                    </div>
-                                @endforeach
+                        <div class="border border-amber-200/60 rounded-xl overflow-hidden">
+                            <button type="button"
+                                    @click="openTab = (openTab === 2 ? null : 2)"
+                                    class="w-full px-4 py-3 bg-[#FFFDF7] flex items-center justify-between text-left font-bold text-slate-800 hover:text-[#D97706] transition">
+                                <span>Specifications & Materials</span>
+                                <span x-text="openTab === 2 ? '−' : '+'" class="text-base font-mono"></span>
+                            </button>
+                            <div x-show="openTab === 2" class="p-4 bg-white border-t border-amber-200/50">
+                                <dl class="divide-y divide-slate-100">
+                                    @foreach ($product->specifications as $key => $val)
+                                        <div class="py-2 flex justify-between">
+                                            <dt class="text-slate-500 font-medium">{{ $key }}:</dt>
+                                            <dd class="text-slate-900 font-bold">{{ $val }}</dd>
+                                        </div>
+                                    @endforeach
+                                </dl>
                             </div>
                         </div>
                     @endif
 
-                    @if ($product->benefits)
-                        <div>
-                            <h3 class="font-serif font-bold text-base text-slate-900 mb-2">Spiritual & Ritual Benefits</h3>
-                            <div
-                                class="bg-[#FFFDF7] border border-[#D97706]/20 p-4 rounded-xl text-xs text-slate-700 leading-relaxed">
-                                {{ $product->benefits }}
-                            </div>
+                    <!-- Tab 3: Shipping & Delivery Timelines -->
+                    <div class="border border-amber-200/60 rounded-xl overflow-hidden">
+                        <button type="button"
+                                @click="openTab = (openTab === 3 ? null : 3)"
+                                class="w-full px-4 py-3 bg-[#FFFDF7] flex items-center justify-between text-left font-bold text-slate-800 hover:text-[#D97706] transition">
+                            <span>Shipping, Packaging & Delivery Information</span>
+                            <span x-text="openTab === 3 ? '−' : '+'" class="text-base font-mono"></span>
+                        </button>
+                        <div x-show="openTab === 3" class="p-4 bg-white text-slate-700 leading-relaxed border-t border-amber-200/50 space-y-2">
+                            <p>• Dispatched within 24-48 hours directly from our Haridwar sanctum.</p>
+                            <p>• Pan-India express delivery typically arrives within 3-5 business days via Shiprocket insured couriers.</p>
+                            <p>• Free shipping applied automatically on all orders over ₹499.</p>
                         </div>
-                    @endif
+                    </div>
                 </div>
+
             </div>
         </div>
 
-        <!-- Related Offerings -->
-        @if ($relatedProducts->isNotEmpty())
-            <div class="mt-20 pt-12 border-t border-[#D97706]/20">
-                <h2 class="text-2xl font-serif font-bold text-slate-900 mb-8">Related Sacred Offerings</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Related Products Section (Shop.99Pandit Style) -->
+        @if ($relatedProducts && $relatedProducts->count() > 0)
+            <div class="mt-16 sm:mt-24 pt-12 border-t border-amber-200/60">
+                <div class="text-center mb-8">
+                    <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
+                        Complementary Devotional Items
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-serif font-extrabold text-slate-900 mt-1">
+                        You May Also Need for Your Puja
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     @foreach ($relatedProducts as $rel)
-                        <div
-                            class="bg-white rounded-2xl border border-[#D97706]/20 p-4 shadow-xs flex flex-col justify-between hover:shadow-md transition">
-                            <div>
-                                <h4 class="font-serif font-bold text-sm text-slate-900 mb-1">
-                                    <a href="{{ route('products.show', $rel->slug) }}"
-                                        class="hover:text-[#D97706]">{{ $rel->name }}</a>
-                                </h4>
-                                <span
-                                    class="text-xs font-bold text-[#D97706]">₹{{ number_format($rel->member_price ?? $rel->price, 2) }}</span>
-                            </div>
-                            <div class="mt-4">
-                                <a href="{{ route('products.show', $rel->slug) }}"
-                                    class="block text-center py-2 bg-[#FFFDF7] hover:bg-[#D97706]/10 text-[#D97706] text-xs font-bold rounded-lg border border-[#D97706]/30 transition">
-                                    View Details
-                                </a>
-                            </div>
-                        </div>
+                        <x-product-card :product="$rel" />
                     @endforeach
                 </div>
             </div>
         @endif
     </div>
 </x-app-layout>
+
+<script>
+if (typeof window.pdpManager === 'undefined') {
+    window.pdpManager = function(productId, initialImage) {
+        return {
+            currentImage: initialImage,
+            selectedThumb: 0,
+            quantity: 1,
+            adding: false,
+
+            setMainImage(url, index) {
+                this.currentImage = url;
+                this.selectedThumb = index;
+            },
+
+            addToCart(redirectCheckout = false) {
+                this.adding = true;
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+                fetch('{{ route('cart.add') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ product_id: productId, quantity: this.quantity })
+                })
+                .then(res => {
+                    if (res.status === 401 || res.status === 403) {
+                        return res.json().then(data => {
+                            window.location.href = data.redirect || '{{ route('login') }}';
+                        });
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    this.adding = false;
+                    if (data && data.success) {
+                        window.dispatchEvent(new CustomEvent('cart-updated'));
+                        if (redirectCheckout) {
+                            window.location.href = '{{ route('checkout.index') }}';
+                        } else {
+                            window.dispatchEvent(new CustomEvent('open-cart-drawer'));
+                        }
+                    }
+                })
+                .catch(() => {
+                    this.adding = false;
+                });
+            }
+        };
+    };
+}
+</script>

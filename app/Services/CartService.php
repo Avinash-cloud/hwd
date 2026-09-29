@@ -165,12 +165,17 @@ class CartService
 
             $items[] = [
                 'product' => $product,
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'image' => $product->image,
+                'compare_price' => $product->compare_price ? (float) $product->compare_price : null,
                 'quantity' => $qty,
                 'unit_price' => $unitPrice,
                 'line_subtotal' => $lineSubtotal,
                 'line_discount' => $lineDiscount,
                 'line_total' => $lineTotal,
                 'has_free_bottle' => $hasFreeBottle,
+                'is_free_monthly_bottle' => $hasFreeBottle,
             ];
         }
 
@@ -181,8 +186,12 @@ class CartService
             'items' => $items,
             'subtotal' => $subtotal,
             'discount' => $discount,
+            'discount_amount' => $discount,
             'shipping' => $shipping,
+            'shipping_amount' => $shipping,
             'total' => $total,
+            'total_amount' => $total,
+            'total_items_count' => $this->count(),
             'free_bottle_applied' => $freeBottleApplied,
             'gangajal_count' => $gangajalCount,
         ];

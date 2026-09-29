@@ -18,17 +18,6 @@
 
 <body
     class="font-sans text-slate-900 antialiased bg-stone-50 min-h-full flex flex-col selection:bg-[#D97706] selection:text-white">
-    <!-- Site Announcement Bar -->
-    <div class="bg-[#881337] text-white text-xs py-2 px-4 text-center font-medium shadow-xs">
-        <span class="inline-flex items-center gap-2">
-            <span>🕉️ Authentic Brahmakund Gangajal · Untouched Bottling from Har Ki Pauri</span>
-            <span class="hidden md:inline">|</span>
-            <a href="{{ route('membership.join') }}"
-                class="underline font-bold hover:text-white transition hidden md:inline">Join 5-Year Membership (₹500)
-                for Free Monthly Gangajal Delivery →</a>
-        </span>
-    </div>
-
     @include('layouts.navigation')
 
     <!-- Flash Messages -->
@@ -191,6 +180,9 @@
             </div>
         </div>
     </footer>
+
+    <!-- Slide-over Ajax Cart Drawer -->
+    <x-cart-drawer />
 </body>
 
 </html>
