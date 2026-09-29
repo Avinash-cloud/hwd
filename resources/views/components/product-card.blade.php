@@ -14,7 +14,7 @@
             <img src="{{ $imgUrl }}"
                  alt="{{ $product->name }}"
                  loading="lazy"
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\' fill=\'%23fffbeb\'><rect width=\'400\' height=\'400\' fill=\'%23fef3c7\'/><text x=\'50%25\' y=\'45%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'72\'>🪔</text><text x=\'50%25\' y=\'65%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'16\' fill=\'%23b45309\' font-family=\'sans-serif\' font-weight=\'bold\'>Haridwar Bliss</text></svg>';"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\' fill=\'%23fffbeb\'><rect width=\'400\' height=\'400\' fill=\'%23fef3c7\'/><circle cx=\'200\' cy=\'200\' r=\'80\' fill=\'%23d97706\' opacity=\'0.15\'/><path d=\'M200 130 C185 170 160 200 160 230 C160 262 178 285 200 285 C222 285 240 262 240 230 C240 200 215 170 200 130 Z\' fill=\'%23d97706\'/><text x=\'50%25\' y=\'80%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'16\' fill=\'%23b45309\' font-family=\'sans-serif\' font-weight=\'bold\'>Haridwar Bliss</text></svg>';"
                  class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
         </a>
 
@@ -31,8 +31,9 @@
             @endif
 
             @if ($product->is_gangajal)
-                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-[#0369A1] text-white shadow-xs">
-                    <span>🕉️</span> Brahmakund
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-extrabold bg-[#0369A1] text-white shadow-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span>
+                    <span>Brahmakund Certified</span>
                 </span>
             @endif
         </div>
@@ -40,8 +41,9 @@
         <!-- Bestseller / Rating Flag (Top Right) -->
         @if ($product->is_bestseller)
             <div class="absolute top-2.5 right-2.5 z-10 pointer-events-none">
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300 shadow-xs">
-                    ★ Bestseller
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300 shadow-xs">
+                    <svg class="w-2.5 h-2.5 fill-current text-amber-600" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <span>Bestseller</span>
                 </span>
             </div>
         @endif
@@ -58,7 +60,7 @@
 
                 <!-- Rating -->
                 <div class="inline-flex items-center gap-1 text-slate-600 font-semibold text-[11px] shrink-0">
-                    <span class="text-amber-500">★</span>
+                    <svg class="w-3 h-3 fill-current text-amber-500" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                     <span>{{ number_format($product->rating ?? 4.8, 1) }}</span>
                     @if ($product->reviews_count)
                         <span class="text-slate-400 text-[10px]">({{ $product->reviews_count }})</span>

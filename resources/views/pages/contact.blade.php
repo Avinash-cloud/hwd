@@ -21,7 +21,12 @@
 
                     <div class="space-y-4 text-xs">
                         <div class="flex items-start gap-3">
-                            <span class="text-lg">📍</span>
+                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
                             <div>
                                 <strong class="font-bold text-slate-900 block">Sourcing Sanctum:</strong>
                                 <p class="text-slate-600 mt-0.5">Brahmakund Ghat, Har Ki Pauri, Haridwar, Uttarakhand -
@@ -30,7 +35,11 @@
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <span class="text-lg">📞</span>
+                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </div>
                             <div>
                                 <strong class="font-bold text-slate-900 block">Devotee Care Helpline:</strong>
                                 <p class="text-slate-600 mt-0.5">{{ $supportPhone }} (Mon - Sat, 09:00 AM - 06:00 PM)
@@ -39,7 +48,11 @@
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <span class="text-lg">✉️</span>
+                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
                             <div>
                                 <strong class="font-bold text-slate-900 block">Official Support Email:</strong>
                                 <p class="text-slate-600 mt-0.5">{{ $supportEmail }}</p>
@@ -51,7 +64,12 @@
                 <!-- Har Ki Pauri Map Embed Visual -->
                 <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 text-white text-center space-y-3">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
-                        <span class="font-bold text-[#D97706] font-mono">📍 Google Maps Satellite Reference</span>
+                        <span class="inline-flex items-center gap-1.5 font-bold text-[#D97706] font-mono">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            </svg>
+                            <span>Google Maps Satellite Reference</span>
+                        </span>
                         <span class="text-slate-400 text-[11px]">Brahmakund Coordinates: 29.9567° N, 78.1708° E</span>
                     </div>
                     <div

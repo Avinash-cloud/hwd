@@ -29,28 +29,44 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                 <div
                     class="p-4 rounded-2xl {{ in_array($order->order_status, ['placed', 'confirmed', 'batched', 'dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/10 border border-[#0369A1]/30 text-[#0369A1]' : 'bg-slate-50 text-slate-400' }}">
-                    <span class="text-lg block mb-1">✓</span>
+                    <div class="w-7 h-7 mx-auto mb-1.5 rounded-full flex items-center justify-center {{ in_array($order->order_status, ['placed', 'confirmed', 'batched', 'dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/20 text-[#0369A1]' : 'bg-slate-200 text-slate-400' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
                     <strong class="text-xs block">Order Confirmed</strong>
                     <span class="text-[10px] opacity-75">{{ $order->created_at->format('M d') }}</span>
                 </div>
 
                 <div
                     class="p-4 rounded-2xl {{ in_array($order->order_status, ['batched', 'dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/10 border border-[#0369A1]/30 text-[#0369A1]' : 'bg-slate-50 text-slate-400' }}">
-                    <span class="text-lg block mb-1">🕉️</span>
+                    <div class="w-7 h-7 mx-auto mb-1.5 rounded-full flex items-center justify-center {{ in_array($order->order_status, ['batched', 'dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/20 text-[#0369A1]' : 'bg-slate-200 text-slate-400' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
                     <strong class="text-xs block">Batch Consecrated</strong>
                     <span class="text-[10px] opacity-75">{{ $order->batch?->batch_number ?? 'Har Ki Pauri' }}</span>
                 </div>
 
                 <div
                     class="p-4 rounded-2xl {{ in_array($order->order_status, ['dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/10 border border-[#0369A1]/30 text-[#0369A1]' : 'bg-slate-50 text-slate-400' }}">
-                    <span class="text-lg block mb-1">🚚</span>
+                    <div class="w-7 h-7 mx-auto mb-1.5 rounded-full flex items-center justify-center {{ in_array($order->order_status, ['dispatched', 'in_transit', 'delivered']) ? 'bg-[#0369A1]/20 text-[#0369A1]' : 'bg-slate-200 text-slate-400' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                        </svg>
+                    </div>
                     <strong class="text-xs block">Dispatched</strong>
                     <span class="text-[10px] opacity-75">{{ $order->tracking_number ?? 'Shiprocket' }}</span>
                 </div>
 
                 <div
                     class="p-4 rounded-2xl {{ $order->order_status === 'delivered' ? 'bg-[#0369A1]/10 border border-[#0369A1]/30 text-[#0369A1]' : 'bg-slate-50 text-slate-400' }}">
-                    <span class="text-lg block mb-1">🏠</span>
+                    <div class="w-7 h-7 mx-auto mb-1.5 rounded-full flex items-center justify-center {{ $order->order_status === 'delivered' ? 'bg-[#0369A1]/20 text-[#0369A1]' : 'bg-slate-200 text-slate-400' }}">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
                     <strong class="text-xs block">Delivered</strong>
                     <span
                         class="text-[10px] opacity-75">{{ $order->delivered_at ? $order->delivered_at->format('M d') : 'Pending' }}</span>

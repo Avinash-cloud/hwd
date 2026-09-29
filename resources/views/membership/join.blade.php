@@ -123,8 +123,10 @@
                         @if (Auth::user()->hasActiveMembership())
                             <div class="py-6 text-center space-y-3">
                                 <div
-                                    class="w-12 h-12 rounded-full bg-[#0369A1]/10 text-[#0369A1] flex items-center justify-center mx-auto text-xl font-bold">
-                                    ✓
+                                    class="w-12 h-12 rounded-full bg-[#0369A1]/10 text-[#0369A1] flex items-center justify-center mx-auto">
+                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
                                 </div>
                                 <h4 class="font-serif font-bold text-base text-slate-900">You Are Already a Sacred Member!</h4>
                                 <p class="text-xs text-slate-500">

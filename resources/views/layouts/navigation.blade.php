@@ -4,7 +4,11 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <!-- Left: Rotating / Static Message -->
             <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                <span class="inline-block text-[#D97706] font-bold">ॐ</span>
+                <span class="inline-flex items-center text-amber-400">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z" clip-rule="evenodd" />
+                    </svg>
+                </span>
                 <span class="font-medium text-white/95">
                     100% Authentic Brahmakund Gangajal & Vedic Essentials · Directly Sourced from Har Ki Pauri
                 </span>
@@ -20,7 +24,12 @@
                 <span>·</span>
                 <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
                 <span>·</span>
-                <span class="text-amber-300 font-bold">📞 +91 98765 43210</span>
+                <span class="inline-flex items-center gap-1 text-amber-300 font-bold">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                    </svg>
+                    <span>+91 98765 43210</span>
+                </span>
             </div>
         </div>
     </div>
@@ -106,7 +115,10 @@
                                         <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
                                             <span class="font-bold text-[#D97706]" x-text="item.category"></span>
                                             <span>·</span>
-                                            <span class="text-amber-500">★ <span x-text="item.rating"></span></span>
+                                            <span class="inline-flex items-center gap-0.5 text-amber-500 font-bold">
+                                                <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                <span x-text="item.rating"></span>
+                                            </span>
                                         </div>
                                         <h6 class="text-xs font-bold text-slate-900 truncate group-hover:text-[#D97706] transition"
                                             x-text="item.name"></h6>
@@ -147,7 +159,7 @@
                         @else
                             <a href="{{ route('membership.join') }}"
                                class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition">
-                                <span>🎁 Join Membership</span>
+                                <span>Join Membership</span>
                             </a>
                         @endif
                     @else
@@ -183,7 +195,7 @@
                                 </div>
                                 @if (Auth::user()->is_admin)
                                     <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-amber-700 font-bold hover:bg-amber-50">
-                                        ⚡ Admin Portal
+                                        Admin Portal
                                     </a>
                                 @endif
                                 <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium">
@@ -250,24 +262,24 @@
         </div>
     </div>
 
-    <!-- 3. Category Horizontal Navigation Menu (99Pandit Style) -->
+    <!-- 3. Category Horizontal Navigation Menu (Single Line, 99Pandit Style) -->
     <nav class="hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-11 text-xs">
-                <!-- Left: Category List with dropdowns -->
-                <div class="flex items-center space-x-1 font-semibold text-slate-700">
+                <!-- Left: Category List with dropdowns in a single continuous line -->
+                <div class="flex-1 flex items-center space-x-0.5 xl:space-x-1.5 font-medium text-slate-700 whitespace-nowrap overflow-visible py-1">
                     <!-- Home -->
                     <a href="{{ route('home') }}"
-                       class="px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('home') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('home') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Home
                     </a>
 
                     <!-- Dynamic Categories from navCategories -->
                     @if (isset($navCategories) && $navCategories->count() > 0)
                         @foreach ($navCategories->take(7) as $cat)
-                            <div class="relative group" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
+                            <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
                                 <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                                   class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                                     <span>{{ $cat->name }}</span>
                                     @if ($cat->children && $cat->children->count() > 0)
                                         <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -308,28 +320,26 @@
                             </div>
                         @endforeach
                     @else
-                        <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Puja Essentials</a>
-                        <a href="{{ route('products.index', ['category' => 'hawan-samagri']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Hawan & Samagri</a>
-                        <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}" class="px-3 py-1.5 rounded-lg hover:text-[#D97706] transition">Sacred Gangajal</a>
+                        <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Puja Essentials</a>
+                        <a href="{{ route('products.index', ['category' => 'hawan-samagri']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Hawan & Samagri</a>
+                        <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Sacred Gangajal</a>
                     @endif
 
                     <!-- All Sacred Catalog -->
                     <a href="{{ route('products.index') }}"
-                       class="px-3 py-1.5 rounded-lg hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold' : '' }}">
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold' : '' }}">
                         Complete Catalog
                     </a>
                 </div>
 
-                <!-- Right: High-priority Devotee Offers -->
-                <div class="flex items-center gap-3">
+                <!-- Right: Verifiable Batch QR Link (clean, no emojis) -->
+                <div class="hidden xl:flex items-center shrink-0 pl-3">
                     <a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
-                       class="inline-flex items-center gap-1 text-[11px] font-bold text-[#0369A1] hover:underline">
-                        <span>🔍 Verify QR Seal</span>
-                    </a>
-                    <span>·</span>
-                    <a href="{{ route('membership.join') }}"
-                       class="inline-flex items-center gap-1 text-xs font-bold text-[#D97706] hover:text-[#F97316] transition">
-                        <span>🕉️ 5-Yr Devotee Membership</span>
+                       class="whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold text-[#0369A1] bg-sky-50/70 hover:bg-sky-100/70 border border-sky-200 transition">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span>Verify Batch Seal</span>
                     </a>
                 </div>
             </div>
@@ -376,7 +386,7 @@
                 All Products Catalog
             </a>
             <a href="{{ route('membership.join') }}" class="block px-3 py-2 rounded-lg font-bold text-[#D97706] hover:bg-amber-50">
-                🎁 5-Year Membership (₹500)
+                5-Year Membership (₹500)
             </a>
             <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
                 Brahmakund Sanctity Story

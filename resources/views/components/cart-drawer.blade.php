@@ -32,7 +32,9 @@
                     <div class="px-6 py-5 bg-[#FFFDF7] border-b border-[#D97706]/20 flex items-center justify-between">
                         <div class="flex items-center gap-2.5">
                             <span class="w-8 h-8 rounded-lg bg-[#D97706]/10 text-[#D97706] flex items-center justify-center font-bold text-sm">
-                                🛒
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                </svg>
                             </span>
                             <div>
                                 <h3 class="font-serif font-bold text-slate-900 text-lg leading-tight">Your Sacred Cart</h3>
@@ -53,7 +55,7 @@
                     <div class="px-6 py-3 bg-amber-50 border-b border-amber-200/60 text-xs">
                         <template x-if="subtotal >= 499">
                             <div class="flex items-center gap-2 text-emerald-800 font-semibold">
-                                <span>🎉</span>
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                 <span>Congratulations! You qualify for <strong>FREE Sacred Delivery</strong> across India.</span>
                             </div>
                         </template>
@@ -85,8 +87,10 @@
                         <!-- Empty State -->
                         <template x-if="!loading && items.length === 0">
                             <div class="py-16 text-center">
-                                <div class="w-16 h-16 rounded-full bg-[#FFFDF7] border-2 border-dashed border-[#D97706]/40 flex items-center justify-center text-2xl mx-auto mb-4">
-                                    🕉️
+                                <div class="w-16 h-16 rounded-full bg-[#FFFDF7] border-2 border-dashed border-[#D97706]/40 flex items-center justify-center mx-auto mb-4 text-[#D97706]">
+                                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                    </svg>
                                 </div>
                                 <h4 class="font-serif font-bold text-slate-800 text-base mb-1">Your cart is empty</h4>
                                 <p class="text-xs text-slate-500 max-w-xs mx-auto mb-6">
@@ -196,9 +200,19 @@
                             </a>
 
                             <div class="flex items-center justify-center gap-3 text-[10px] text-slate-500 pt-1">
-                                <span class="flex items-center gap-1">🔒 100% Secure Checkout</span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                    <span>100% Secure Checkout</span>
+                                </span>
                                 <span>·</span>
-                                <span class="flex items-center gap-1">🕉️ Consecrated at Haridwar</span>
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    <span>Consecrated at Haridwar</span>
+                                </span>
                             </div>
                         </div>
                     </template>

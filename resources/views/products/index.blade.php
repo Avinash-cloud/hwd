@@ -47,7 +47,7 @@
                 @if (!Auth::check() || !Auth::user()->hasActiveMembership())
                     <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 text-xs shadow-xs space-y-2">
                         <div class="flex items-center gap-2 text-[#D97706] font-bold">
-                            <span>🕉️</span>
+                            <span class="w-2 h-2 rounded-full bg-[#D97706]"></span>
                             <span>Devotee Privilege</span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-[11px]">
@@ -82,7 +82,7 @@
                             </a>
                             <a href="{{ route('products.index', ['type' => 'gangajal']) }}"
                                class="flex items-center justify-between py-1.5 px-2 rounded-lg transition {{ request('type') === 'gangajal' ? 'bg-amber-100/70 text-[#D97706] font-bold' : 'text-slate-700 hover:bg-slate-50' }}">
-                                <span>🌊 Sacred Gangajal Only</span>
+                                <span>Sacred Gangajal Only</span>
                             </a>
                             @foreach ($categories as $cat)
                                 <div x-data="{ catExpanded: {{ request('category') === $cat->slug || ($cat->children && $cat->children->pluck('slug')->contains(request('category'))) ? 'true' : 'false' }} }">
@@ -194,7 +194,11 @@
                     </div>
                 @else
                     <div class="bg-white rounded-3xl border border-amber-200/80 p-12 text-center space-y-4 shadow-xs">
-                        <div class="text-4xl">🕉️</div>
+                        <div class="w-16 h-16 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto text-[#D97706]">
+                            <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
                         <h3 class="text-lg font-serif font-bold text-slate-900">No offerings match your selected criteria</h3>
                         <p class="text-xs text-slate-500 max-w-md mx-auto">
                             Try broadening your price filters or exploring other sacred categories such as Puja Essentials, Hawan Samagri, or Sacred Gangajal.

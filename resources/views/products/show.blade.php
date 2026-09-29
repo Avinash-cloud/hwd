@@ -50,7 +50,7 @@
 
                         @if ($product->is_gangajal)
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-extrabold bg-[#0369A1] text-white shadow-md">
-                                <span>🕉️</span> Brahmakund Certified
+                                <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span> Brahmakund Certified
                             </span>
                         @endif
                     </div>
@@ -80,7 +80,10 @@
                 @if ($product->purity_details)
                     <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-4 sm:p-5 space-y-1.5 text-xs shadow-xs">
                         <div class="flex items-center gap-2 font-serif font-bold text-[#881337] text-sm">
-                            <span>🛡️ Consecration & Sanctity Assurance</span>
+                            <svg class="w-4 h-4 shrink-0 text-[#881337]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                            <span>Consecration & Sanctity Assurance</span>
                         </div>
                         <p class="text-slate-700 leading-relaxed">
                             {{ $product->purity_details }}
@@ -99,7 +102,11 @@
                         </span>
 
                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-lg text-xs font-bold text-slate-800">
-                            <span class="text-amber-500">★★★★★</span>
+                            <div class="flex items-center text-amber-500">
+                                @for ($i = 0; $i < 5; $i++)
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                @endfor
+                            </div>
                             <span>{{ number_format($product->rating ?? 4.8, 1) }}</span>
                             <span class="text-slate-400 font-normal">({{ $product->reviews_count ?? 15 }} devotee reviews)</span>
                         </div>
@@ -141,7 +148,9 @@
                     <div class="pt-3 border-t border-amber-200/60 flex items-center justify-between text-xs">
                         <div class="flex items-center gap-2">
                             <span class="w-6 h-6 rounded-full bg-[#D97706]/10 text-[#D97706] flex items-center justify-center font-bold text-xs">
-                                🕉️
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                             </span>
                             <div>
                                 <span class="font-bold text-slate-800">5-Year Member Rate:</span>
@@ -218,7 +227,9 @@
                                 :disabled="adding"
                                 class="flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 bg-[#881337] hover:bg-[#991B1B] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5 disabled:opacity-50">
                             <span>Buy It Now</span>
-                            <span>⚡</span>
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
                         </button>
                     </div>
 
@@ -232,17 +243,29 @@
                 <!-- Devotee Trust Badges -->
                 <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center text-xs">
                     <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <span class="text-xl block">🕉️</span>
+                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
                         <span class="font-bold text-slate-800 text-[11px] block">Consecrated</span>
                         <span class="text-[10px] text-slate-500 block">Har Ki Pauri</span>
                     </div>
                     <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <span class="text-xl block">📦</span>
+                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
                         <span class="font-bold text-slate-800 text-[11px] block">Damage-Free</span>
                         <span class="text-[10px] text-slate-500 block">Hermetic Packaging</span>
                     </div>
                     <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <span class="text-xl block">🔄</span>
+                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
                         <span class="font-bold text-slate-800 text-[11px] block">Easy Support</span>
                         <span class="text-[10px] text-slate-500 block">Devotee Care</span>
                     </div>

@@ -86,7 +86,8 @@
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                     <div class="max-w-2xl space-y-4 sm:space-y-6 py-12">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#881337]/50 text-rose-300 border border-[#881337] backdrop-blur-xs">
-                            <span>🔥 100% Charcoal-Free & Desi Cow Dung Base</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                            <span>100% Charcoal-Free & Desi Cow Dung Base</span>
                         </div>
 
                         <h2 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white">
@@ -131,7 +132,8 @@
                 <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                     <div class="max-w-2xl space-y-4 sm:space-y-6 py-12">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#0369A1]/30 text-sky-300 border border-[#0369A1]/50 backdrop-blur-xs">
-                            <span>📿 Energized in Haridwar Altar Prayers</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                            <span>Energized in Haridwar Altar Prayers</span>
                         </div>
 
                         <h2 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white">
@@ -193,7 +195,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-6 sm:mb-8">
                 <h2 class="text-xl sm:text-2xl font-serif font-bold text-slate-900 tracking-tight">
-                    <span class="text-[#D97706]">ॐ ||</span> Sacred Collections <span class="text-[#D97706]">|| ॐ</span>
+                    Sacred Collections
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 mt-1">
                     Select a category to discover consecrated offerings & daily pooja essentials
@@ -210,7 +212,7 @@
                             <img src="{{ $cat->image ?: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=200&fit=crop' }}"
                                  alt="{{ $cat->name }}"
                                  loading="lazy"
-                                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%23fef3c7\'><rect width=\'100\' height=\'100\' fill=\'%23fef3c7\'/><text x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\'>🕉️</text></svg>';"
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%23fef3c7\'><rect width=\'100\' height=\'100\' fill=\'%23fef3c7\'/><circle cx=\'50\' cy=\'50\' r=\'20\' fill=\'%23d97706\' opacity=\'0.2\'/><path d=\'M50 25 C45 38 38 48 38 58 C38 67 43 74 50 74 C57 74 62 67 62 58 C62 48 55 38 50 25 Z\' fill=\'%23d97706\'/></svg>';"
                                  class="w-full h-full object-cover rounded-full group-hover:brightness-105 transition duration-300">
                         </div>
 
@@ -229,10 +231,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
                 <div>
-                    <div class="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#D97706] uppercase tracking-widest font-mono">
-                        <span>🕉️ Devotee Top Picks</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 mt-1">
+                    <h2 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900">
                         Best Selling Sacred Samagri
                     </h2>
                 </div>
@@ -261,7 +260,8 @@
                 <!-- Left: Consecrated Sourcing Story -->
                 <div class="lg:col-span-7 space-y-6">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/20 text-[#D97706] border border-[#D97706]/40">
-                        <span>🕉️ Har Ki Pauri · Brahma Muhurta Sanctity</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        <span>Har Ki Pauri · Brahma Muhurta Sanctity</span>
                     </div>
 
                     <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-white leading-tight">
@@ -275,17 +275,23 @@
                     <!-- Sacred Quality Badges -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
                         <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80">
-                            <span class="block text-xl mb-1">🔬</span>
+                            <svg class="w-6 h-6 mb-2 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
                             <span class="block font-bold text-xs text-white">Lab Certified Purity</span>
                             <span class="block text-[11px] text-slate-400">Tested pH 7.8 & minerals</span>
                         </div>
                         <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80">
-                            <span class="block text-xl mb-1">🛡️</span>
+                            <svg class="w-6 h-6 mb-2 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
                             <span class="block font-bold text-xs text-white">Touchless UV Seal</span>
                             <span class="block text-[11px] text-slate-400">100% hermetic capping</span>
                         </div>
                         <div class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700/80 col-span-2 sm:col-span-1">
-                            <span class="block text-xl mb-1">📲</span>
+                            <svg class="w-6 h-6 mb-2 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                            </svg>
                             <span class="block font-bold text-xs text-white">Unique QR Code</span>
                             <span class="block text-[11px] text-slate-400">Verifiable collection data</span>
                         </div>
@@ -315,8 +321,10 @@
                                 Brahmakund Batch #HB-GANG-2026-001
                             </h3>
                         </div>
-                        <div class="w-12 h-12 rounded-xl bg-[#D97706]/20 border border-[#D97706]/40 flex items-center justify-center text-[#D97706] text-xl">
-                            🕉️
+                        <div class="w-12 h-12 rounded-xl bg-[#D97706]/20 border border-[#D97706]/40 flex items-center justify-center text-[#D97706]">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
                         </div>
                     </div>
 
@@ -359,7 +367,7 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
                 <div>
                     <span class="text-xs font-extrabold text-[#D97706] uppercase tracking-widest font-mono">
-                        🔥 Daily Altar Worship
+                        Daily Altar Worship
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 mt-1">
                         Puja & Hawan Essentials
@@ -386,7 +394,7 @@
             <div class="bg-gradient-to-r from-[#881337] via-[#991B1B] to-[#7F1D1D] border border-amber-300/40 rounded-3xl p-8 sm:p-12 shadow-2xl relative">
                 <div class="max-w-3xl space-y-4">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-400/20 text-amber-200 border border-amber-300/40">
-                        <span>🕉️ Haridwar Bliss 5-Year Devotee Circle</span>
+                        <span>Haridwar Bliss 5-Year Devotee Circle</span>
                     </span>
 
                     <h2 class="text-2xl sm:text-4xl font-serif font-extrabold text-white leading-tight">
@@ -399,15 +407,21 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
                         <div class="flex items-center gap-2">
-                            <span class="text-amber-300 font-bold">✓</span>
+                            <svg class="w-4 h-4 text-amber-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
                             <span>1st Bottle Free Every Month</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-amber-300 font-bold">✓</span>
+                            <svg class="w-4 h-4 text-amber-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
                             <span>Member-Only Discounted Rates</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="text-amber-300 font-bold">✓</span>
+                            <svg class="w-4 h-4 text-amber-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                            </svg>
                             <span>Priority Delivery Across India</span>
                         </div>
                     </div>
@@ -434,7 +448,7 @@
             <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
                 <div>
                     <span class="text-xs font-extrabold text-[#D97706] uppercase tracking-widest font-mono">
-                        📿 Divine Energy & Fragrance
+                        Divine Energy & Fragrance
                     </span>
                     <h2 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 mt-1">
                         Spiritual Store & Temple Aromas
@@ -469,7 +483,13 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-sm">
                 <div class="bg-[#FFFDF7] p-6 sm:p-8 rounded-3xl border border-[#D97706]/20 space-y-4 shadow-xs">
-                    <div class="text-[#D97706] flex gap-1 text-base">★★★★★</div>
+                    <div class="text-amber-500 flex gap-0.5">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-700 leading-relaxed italic text-xs sm:text-sm">
                         "Living in Chennai, getting fresh holy water from Har Ki Pauri every month seemed impossible until we joined Haridwar Bliss. The QR code showing the exact morning collection video brought tears of devotion to our family."
                     </p>
@@ -480,7 +500,13 @@
                 </div>
 
                 <div class="bg-[#FFFDF7] p-6 sm:p-8 rounded-3xl border border-[#D97706]/20 space-y-4 shadow-xs">
-                    <div class="text-[#D97706] flex gap-1 text-base">★★★★★</div>
+                    <div class="text-amber-500 flex gap-0.5">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-700 leading-relaxed italic text-xs sm:text-sm">
                         "The packaging is immaculate. Clean, touch-free hermetic seals with zero leakage. The cow dung hawan cups smell heavenly and create the exact ambience of a temple morning aarti."
                     </p>
@@ -491,7 +517,13 @@
                 </div>
 
                 <div class="bg-[#FFFDF7] p-6 sm:p-8 rounded-3xl border border-[#D97706]/20 space-y-4 shadow-xs">
-                    <div class="text-[#D97706] flex gap-1 text-base">★★★★★</div>
+                    <div class="text-amber-500 flex gap-0.5">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    </div>
                     <p class="text-slate-700 leading-relaxed italic text-xs sm:text-sm">
                         "The brass panchamukhi aarti diya and pure sandalwood dhoop sticks transform our pooja altar into Har Ki Pauri every evening. Truly authentic Vedic service and fast dispatch."
                     </p>
@@ -508,23 +540,39 @@
     <section class="py-10 bg-amber-50/60 border-b border-amber-200/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="space-y-1.5 p-3">
-                    <div class="text-3xl">🕉️</div>
+                <div class="space-y-2 p-3">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-100/80 border border-amber-300/60 flex items-center justify-center text-[#D97706]">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
                     <h4 class="font-bold text-slate-900 text-xs sm:text-sm">100% Brahmakund</h4>
                     <p class="text-[11px] text-slate-500">Sourced directly from Har Ki Pauri</p>
                 </div>
-                <div class="space-y-1.5 p-3">
-                    <div class="text-3xl">🧪</div>
+                <div class="space-y-2 p-3">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-100/80 border border-amber-300/60 flex items-center justify-center text-[#D97706]">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
                     <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Lab Tested Purity</h4>
                     <p class="text-[11px] text-slate-500">Certified chemical & microbe-free</p>
                 </div>
-                <div class="space-y-1.5 p-3">
-                    <div class="text-3xl">📦</div>
+                <div class="space-y-2 p-3">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-100/80 border border-amber-300/60 flex items-center justify-center text-[#D97706]">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
                     <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Hermetic UV Capping</h4>
                     <p class="text-[11px] text-slate-500">Untouched sanitary bottling</p>
                 </div>
-                <div class="space-y-1.5 p-3">
-                    <div class="text-3xl">🚀</div>
+                <div class="space-y-2 p-3">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-100/80 border border-amber-300/60 flex items-center justify-center text-[#D97706]">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
                     <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Pan-India Express</h4>
                     <p class="text-[11px] text-slate-500">Insured express delivery</p>
                 </div>
