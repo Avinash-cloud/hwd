@@ -1,130 +1,140 @@
 <x-admin-layout title="Admin Dashboard">
     <x-slot name="header">
-        Operational Dashboard
+        Dashboard
     </x-slot>
 
-    <!-- Top KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Page Title & Header Actions -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-xl font-semibold text-slate-900">Dashboard</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Overview of store revenue, fulfillment, batches, and recent activity.</p>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="flex items-center gap-2 flex-wrap">
+            <a href="{{ route('admin.products.create') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition shadow-xs">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span>Add Product</span>
+            </a>
+            <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
+                <span>Add Category</span>
+            </a>
+            <a href="{{ route('admin.batches.create') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
+                <span>Consecrate Batch</span>
+            </a>
+            <a href="{{ route('admin.sliders.index') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
+                <span>Hero Sliders</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- KPI Metric Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <!-- Revenue Card -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm">
-            <span class="text-xs uppercase font-mono text-slate-400 font-bold block">Total Realized Revenue</span>
-            <div class="mt-3 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-[#D97706] font-serif">₹{{ number_format($grandRevenue, 2) }}</span>
-                <span class="text-xs text-[#0369A1] font-bold">Paid</span>
+        <div class="bg-white border border-slate-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Revenue</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">Paid</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2">
-                Orders: ₹{{ number_format($totalRevenue, 2) }} | Subs: ₹{{ number_format($membershipRevenue, 2) }}
+            <div class="mt-2.5">
+                <span class="text-2xl font-bold text-slate-900 tracking-tight">₹{{ number_format($grandRevenue, 2) }}</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 pt-2 border-t border-slate-100 flex justify-between">
+                <span>Orders: ₹{{ number_format($totalRevenue, 2) }}</span>
+                <span>Subs: ₹{{ number_format($membershipRevenue, 2) }}</span>
             </p>
         </div>
 
         <!-- Active Members Card -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm">
-            <span class="text-xs uppercase font-mono text-slate-400 font-bold block">Active 5-Yr Members</span>
-            <div class="mt-3 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-white font-serif">{{ $activeMembers }}</span>
-                <span class="text-xs text-[#D97706] font-bold">₹500 / 5-Yr</span>
+        <div class="bg-white border border-slate-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Active Members</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-medium">5-Yr Plan</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2">
-                Total Registered Users: {{ $totalUsers }}
+            <div class="mt-2.5">
+                <span class="text-2xl font-bold text-slate-900 tracking-tight">{{ $activeMembers }}</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 pt-2 border-t border-slate-100">
+                Registered devotees: <strong class="text-slate-700 font-medium">{{ $totalUsers }}</strong>
             </p>
         </div>
 
         <!-- Orders Card -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm">
-            <span class="text-xs uppercase font-mono text-slate-400 font-bold block">Total Dispatches</span>
-            <div class="mt-3 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-white font-serif">{{ $totalOrders }}</span>
-                <span class="text-xs text-[#0369A1] font-bold">Shiprocket</span>
+        <div class="bg-white border border-slate-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Dispatches</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Shiprocket</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2">
-                All confirmed shipments
+            <div class="mt-2.5">
+                <span class="text-2xl font-bold text-slate-900 tracking-tight">{{ $totalOrders }}</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 pt-2 border-t border-slate-100">
+                All confirmed shipments & dispatches
             </p>
         </div>
 
         <!-- Batches Summary Card -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm">
-            <span class="text-xs uppercase font-mono text-slate-400 font-bold block">Consecrated Batches</span>
-            <div class="mt-3 flex items-baseline justify-between">
-                <span class="text-3xl font-extrabold text-white font-serif">{{ $recentBatches->count() }}</span>
-                <span class="text-xs text-[#0369A1] font-bold">Brahmakund</span>
+        <div class="bg-white border border-slate-200 rounded-xl p-5">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wider">Consecrated Batches</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 font-medium">Haridwar</span>
             </div>
-            <p class="text-[11px] text-slate-500 mt-2">
-                Active QR verification enabled
+            <div class="mt-2.5">
+                <span class="text-2xl font-bold text-slate-900 tracking-tight">{{ $recentBatches->count() }}</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 pt-2 border-t border-slate-100">
+                Active QR verification batches
             </p>
         </div>
     </div>
 
-    <!-- Quick Actions Bar -->
-    <div class="flex flex-wrap items-center gap-3 mb-8">
-        <a href="{{ route('admin.batches.create') }}" class="px-4 py-2 bg-[#D97706] hover:bg-[#F97316] text-white font-bold text-xs rounded-xl shadow-xs transition">
-            + Consecrate New Batch
-        </a>
-        <a href="{{ route('admin.sliders.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#D97706]/20 hover:bg-[#D97706]/30 text-amber-300 font-bold text-xs rounded-xl border border-[#D97706]/40 transition">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span>Homepage Hero Sliders</span>
-        </a>
-        <a href="{{ route('admin.categories.create') }}" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition">
-            + Add Category
-        </a>
-        <a href="{{ route('admin.products.create') }}" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition">
-            + Add New Product
-        </a>
-        <a href="{{ route('admin.settings.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-[#D97706] font-bold text-xs rounded-xl border border-slate-700 transition">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span>Dynamic Pricing Settings</span>
-        </a>
-        <a href="{{ route('admin.reports.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition">
-            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            <span>Sales & GST Reports</span>
-        </a>
-    </div>
-
-    <!-- Tables Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Left 2 Cols: Recent Orders -->
-        <div class="lg:col-span-2 bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="font-serif font-bold text-base text-white">Recent Customer Orders</h3>
-                <a href="{{ route('admin.orders.index') }}" class="text-xs text-[#D97706] hover:underline">View All Orders →</a>
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left 2 Cols: Recent Customer Orders -->
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-sm font-semibold text-slate-900">Recent Customer Orders</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Latest shipments and orders received</p>
+                </div>
+                <a href="{{ route('admin.orders.index') }}" class="text-xs text-amber-700 hover:text-amber-800 font-medium">View all →</a>
             </div>
 
             @if ($recentOrders->isEmpty())
-                <p class="text-xs text-slate-500 py-6 text-center">No orders recorded yet.</p>
+                <div class="py-10 text-center">
+                    <p class="text-xs text-slate-400">No orders recorded yet.</p>
+                </div>
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead>
-                            <tr class="text-slate-400 border-b border-slate-800 font-mono text-[11px]">
-                                <th class="pb-3">Order No</th>
-                                <th class="pb-3">Devotee</th>
-                                <th class="pb-3">Total (INR)</th>
-                                <th class="pb-3">Status</th>
-                                <th class="pb-3 text-right">Actions</th>
+                            <tr class="bg-slate-50/75 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px] tracking-wider">
+                                <th class="py-2.5 px-4">Order No</th>
+                                <th class="py-2.5 px-4">Devotee</th>
+                                <th class="py-2.5 px-4">Total</th>
+                                <th class="py-2.5 px-4">Status</th>
+                                <th class="py-2.5 px-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-800/80">
+                        <tbody class="divide-y divide-slate-100">
                             @foreach ($recentOrders as $o)
-                                <tr>
-                                    <td class="py-3 font-mono font-bold text-[#D97706]">
-                                        <a href="{{ route('admin.orders.show', $o->id) }}">{{ $o->order_number }}</a>
+                                <tr class="hover:bg-slate-50/60 transition">
+                                    <td class="py-3 px-4 font-mono font-medium text-slate-900">
+                                        <a href="{{ route('admin.orders.show', $o->id) }}" class="hover:text-amber-700">{{ $o->order_number }}</a>
                                     </td>
-                                    <td class="py-3">{{ $o->user->name ?? 'Guest' }}</td>
-                                    <td class="py-3 font-bold text-white">₹{{ number_format($o->total_amount, 2) }}</td>
-                                    <td class="py-3">
-                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase {{ $o->order_status === 'delivered' ? 'bg-[#0369A1]/20 text-[#0369A1] border border-[#0369A1]/40' : 'bg-[#D97706]/20 text-[#D97706] border border-[#D97706]/40' }}">
+                                    <td class="py-3 px-4 text-slate-700">{{ $o->user->name ?? 'Guest' }}</td>
+                                    <td class="py-3 px-4 font-medium text-slate-900">₹{{ number_format($o->total_amount, 2) }}</td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium uppercase {{ $o->order_status === 'delivered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-800 border border-amber-200' }}">
                                             {{ $o->order_status }}
                                         </span>
                                     </td>
-                                    <td class="py-3 text-right space-x-2">
-                                        <a href="{{ route('admin.orders.show', $o->id) }}" class="text-[#D97706] hover:underline">Fulfill</a>
-                                        <a href="{{ route('admin.orders.packingSlip', $o->id) }}" target="_blank" class="text-slate-400 hover:text-white">Slip</a>
+                                    <td class="py-3 px-4 text-right space-x-2">
+                                        <a href="{{ route('admin.orders.show', $o->id) }}" class="text-amber-700 hover:text-amber-800 font-medium">Fulfill</a>
+                                        <span class="text-slate-300">·</span>
+                                        <a href="{{ route('admin.orders.packingSlip', $o->id) }}" target="_blank" class="text-slate-500 hover:text-slate-800">Slip ↗</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -135,23 +145,26 @@
         </div>
 
         <!-- Right Col: Active Batches -->
-        <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="font-serif font-bold text-base text-white">Batches & Traceability</h3>
-                <a href="{{ route('admin.batches.index') }}" class="text-xs text-[#D97706] hover:underline">All Batches →</a>
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-sm font-semibold text-slate-900">Traceability Batches</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Consecrated Ganga water batches</p>
+                </div>
+                <a href="{{ route('admin.batches.index') }}" class="text-xs text-amber-700 hover:text-amber-800 font-medium">All batches →</a>
             </div>
 
-            <div class="space-y-3">
+            <div class="p-4 space-y-3">
                 @foreach ($recentBatches as $batch)
-                    <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+                    <div class="p-3 rounded-lg border border-slate-200 text-xs space-y-1">
                         <div class="flex items-center justify-between">
-                            <strong class="font-mono text-[#D97706] text-xs">{{ $batch->batch_number }}</strong>
-                            <span class="px-1.5 py-0.5 rounded text-[10px] uppercase bg-[#0369A1]/20 text-[#0369A1] border border-[#0369A1]/40">{{ $batch->status }}</span>
+                            <span class="font-mono text-slate-900 font-semibold">{{ $batch->batch_number }}</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-medium bg-sky-50 text-sky-700 border border-sky-200">{{ $batch->status }}</span>
                         </div>
-                        <p class="text-slate-300 text-[11px] truncate">{{ $batch->sourcing_ghat }}</p>
-                        <p class="text-slate-500 text-[10px]">Collection: {{ $batch->collection_date->format('M d, Y') }} · Orders: {{ $batch->orders_count }}</p>
-                        <div class="pt-1 flex gap-2">
-                            <a href="{{ route('verify.batch', $batch->batch_number) }}" target="_blank" class="text-[10px] text-[#D97706] hover:underline">Verify QR Page ↗</a>
+                        <p class="text-slate-600 text-[11px] truncate">{{ $batch->sourcing_ghat }}</p>
+                        <div class="pt-1 flex items-center justify-between text-[11px]">
+                            <span class="text-slate-400">Date: {{ $batch->collection_date->format('M d, Y') }}</span>
+                            <a href="{{ route('verify.batch', $batch->batch_number) }}" target="_blank" class="text-sky-700 hover:text-sky-800 font-medium">Verify QR ↗</a>
                         </div>
                     </div>
                 @endforeach

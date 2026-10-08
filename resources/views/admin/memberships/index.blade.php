@@ -1,75 +1,108 @@
-<x-admin-layout title="Manage Memberships">
-    <x-slot name="header">
-        5-Year Sacred Devotee Memberships
-    </x-slot>
+<x-admin-layout title="Memberships">
+    <x-slot name="header">Memberships</x-slot>
 
+    <!-- Page Header & Filters -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-            <h2 class="text-xl font-serif font-bold text-white">All Memberships ({{ $memberships->total() }})</h2>
-            <p class="text-xs text-slate-400 mt-1">Devotees entitled to monthly ₹0 Gangajal deliveries and exclusive catalog access.</p>
+            <h1 class="text-xl font-semibold text-slate-900">5-Year Devotee Memberships ({{ $memberships->total() }})</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Devotees entitled to monthly ₹0 Gangajal deliveries and exclusive catalog access.</p>
         </div>
 
-        <div class="flex items-center gap-2 text-xs">
-            <a href="{{ route('admin.memberships.index') }}" class="px-3 py-1.5 rounded-lg font-bold {{ !request('status') ? 'bg-[#D97706] text-white' : 'bg-slate-800 text-slate-300' }}">All</a>
-            <a href="{{ route('admin.memberships.index', ['status' => 'active']) }}" class="px-3 py-1.5 rounded-lg font-bold {{ request('status') === 'active' ? 'bg-[#D97706] text-white' : 'bg-slate-800 text-slate-300' }}">Active</a>
-            <a href="{{ route('admin.memberships.index', ['status' => 'cancelled']) }}" class="px-3 py-1.5 rounded-lg font-bold {{ request('status') === 'cancelled' ? 'bg-[#D97706] text-white' : 'bg-slate-800 text-slate-300' }}">Cancelled</a>
+        <div class="flex items-center gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0">
+            <a href="{{ route('admin.memberships.index') }}"
+               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ !request('status') ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                All
+            </a>
+            <a href="{{ route('admin.memberships.index', ['status' => 'active']) }}"
+               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'active' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                Active
+            </a>
+            <a href="{{ route('admin.memberships.index', ['status' => 'cancelled']) }}"
+               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'cancelled' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                Cancelled
+            </a>
         </div>
     </div>
 
-    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 shadow-sm overflow-x-auto">
-        <table class="w-full text-left text-xs">
-            <thead>
-                <tr class="text-slate-400 border-b border-slate-800 font-mono text-[11px]">
-                    <th class="pb-3">Devotee</th>
-                    <th class="pb-3">Contact</th>
-                    <th class="pb-3">Fee Paid</th>
-                    <th class="pb-3">Validity</th>
-                    <th class="pb-3">Days Left</th>
-                    <th class="pb-3">Status</th>
-                    <th class="pb-3 text-right">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800/80">
-                @foreach ($memberships as $m)
-                    <tr>
-                        <td class="py-3 font-bold text-white">
-                            {{ $m->user->name }}
-                        </td>
-                        <td class="py-3">
-                            <span class="block text-slate-300">{{ $m->user->email }}</span>
-                            <span class="block text-[10px] text-slate-500">{{ $m->user->phone ?? 'No phone' }}</span>
-                        </td>
-                        <td class="py-3 font-mono font-bold text-[#D97706]">₹{{ number_format($m->fee_paid, 2) }}</td>
-                        <td class="py-3 text-slate-400">
-                            {{ $m->starts_at->format('d M Y') }} → {{ $m->expires_at->format('d M Y') }}
-                        </td>
-                        <td class="py-3">
-                            @if ($m->expires_at->isFuture())
-                                <span class="font-mono text-[#0369A1] font-bold">{{ (int) now()->diffInDays($m->expires_at) }} days</span>
-                            @else
-                                <span class="text-[#991B1B] font-bold">Expired</span>
-                            @endif
-                        </td>
-                        <td class="py-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $m->status === 'active' ? 'bg-[#0369A1]/20 text-[#0369A1] border border-[#0369A1]/40' : 'bg-[#991B1B]/20 text-[#991B1B] border border-[#991B1B]/40' }}">
-                                {{ $m->status }}
-                            </span>
-                        </td>
-                        <td class="py-3 text-right">
-                            <form method="POST" action="{{ route('admin.memberships.toggle', $m->id) }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-xs text-[#D97706] hover:underline" onclick="return confirm('Toggle status for this member?')">
-                                    {{ $m->status === 'active' ? 'Deactivate' : 'Reactivate' }}
-                                </button>
-                            </form>
-                        </td>
+    <!-- Memberships Table -->
+    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
+                        <th class="py-3 px-4">Devotee</th>
+                        <th class="py-3 px-4">Contact</th>
+                        <th class="py-3 px-4">Fee Paid</th>
+                        <th class="py-3 px-4">Validity Period</th>
+                        <th class="py-3 px-4 text-center">Days Left</th>
+                        <th class="py-3 px-4 text-center">Status</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div class="mt-6">
-            {{ $memberships->links() }}
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @forelse ($memberships as $m)
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-3 px-4 font-medium text-slate-900">
+                                {{ $m->user->name }}
+                            </td>
+                            <td class="py-3 px-4">
+                                <div class="text-slate-700">{{ $m->user->email }}</div>
+                                <div class="text-[11px] text-slate-400">{{ $m->user->phone ?? 'No phone' }}</div>
+                            </td>
+                            <td class="py-3 px-4 font-mono font-medium text-slate-900">
+                                ₹{{ number_format($m->fee_paid, 2) }}
+                            </td>
+                            <td class="py-3 px-4 text-slate-600">
+                                {{ $m->starts_at->format('d M Y') }} → {{ $m->expires_at->format('d M Y') }}
+                            </td>
+                            <td class="py-3 px-4 text-center font-mono">
+                                @if ($m->expires_at->isFuture())
+                                    <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                        {{ (int) now()->diffInDays($m->expires_at) }} days
+                                    </span>
+                                @else
+                                    <span class="px-2 py-0.5 rounded text-[11px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                                        Expired
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                @if ($m->status === 'active')
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        Active
+                                    </span>
+                                @else
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-medium uppercase bg-rose-50 text-rose-700 border border-rose-200">
+                                        Cancelled
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="py-3 px-4 text-right">
+                                <form method="POST" action="{{ route('admin.memberships.toggle', $m->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                            class="text-xs {{ $m->status === 'active' ? 'text-slate-500 hover:text-red-600' : 'text-amber-700 hover:text-amber-800' }} font-medium transition"
+                                            onclick="return confirm('Toggle status for this member?')">
+                                        {{ $m->status === 'active' ? 'Deactivate' : 'Reactivate' }}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="py-12 text-center text-slate-400">
+                                No memberships found.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
+
+        @if ($memberships->hasPages())
+            <div class="p-4 border-t border-slate-200 bg-white">
+                {{ $memberships->links() }}
+            </div>
+        @endif
     </div>
 </x-admin-layout>

@@ -1,220 +1,199 @@
 <x-admin-layout title="Create Homepage Slide">
     <x-slot name="header">
-        Create Homepage Slide
+        Hero Sliders
     </x-slot>
 
-    <div class="max-w-4xl mx-auto bg-slate-950/80 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
-        <div class="mb-6 pb-6 border-b border-slate-800">
-            <h2 class="text-lg font-serif font-bold text-white">Add New Promotional Slide</h2>
-            <p class="text-xs text-slate-400 mt-1">
-                Configure the banner visuals, sacred slogans, and buttons displayed on the public storefront homepage hero carousel.
+    <div class="max-w-3xl mx-auto">
+        <div class="mb-6">
+            <h1 class="text-xl font-semibold text-slate-900">Add Slide</h1>
+            <p class="text-xs text-slate-500 mt-0.5">
+                Configure visuals, headlines, and call-to-action buttons for the homepage carousel.
             </p>
         </div>
 
-        <form method="POST" action="{{ route('admin.sliders.store') }}" enctype="multipart/form-data" class="space-y-6 text-xs text-slate-300"
-              x-data="{
-                  previewUrl: '',
-                  imageSource: 'file',
-                  handleFileSelect(e) {
-                      const file = e.target.files[0];
-                      if (file) {
-                          this.previewUrl = URL.createObjectURL(file);
+        <div class="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-xs">
+            <form method="POST" action="{{ route('admin.sliders.store') }}" enctype="multipart/form-data" class="space-y-6 text-sm"
+                  x-data="{
+                      previewUrl: '',
+                      imageSource: 'file',
+                      handleFileSelect(e) {
+                          const file = e.target.files[0];
+                          if (file) {
+                              this.previewUrl = URL.createObjectURL(file);
+                          }
                       }
-                  }
-              }">
-            @csrf
+                  }">
+                @csrf
 
-            <!-- Slogan & Heading -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div class="sm:col-span-2">
-                    <label class="block font-bold text-white mb-1">Slide Title / Main Heading *</label>
-                    <input type="text"
-                           name="title"
-                           value="{{ old('title') }}"
-                           required
-                           placeholder="e.g. Pure, Untouched Gangajal for Your Daily Abhishek"
-                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]" />
-                    @error('title')
-                        <p class="text-red-400 text-[11px] mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
+                <!-- Section: Content -->
                 <div>
-                    <label class="block font-bold text-white mb-1">Top Pill / Kicker Slogan</label>
-                    <input type="text"
-                           name="subtitle"
-                           value="{{ old('subtitle') }}"
-                           placeholder="e.g. Directly from Har Ki Pauri · Brahmakund"
-                           class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]" />
-                    @error('subtitle')
-                        <p class="text-red-400 text-[11px] mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
+                    <h2 class="text-sm font-semibold text-slate-900 mb-3">Slide Content</h2>
 
-            <!-- Description -->
-            <div>
-                <label class="block font-bold text-white mb-1">Slide Description / Subtext</label>
-                <textarea name="description"
-                          rows="3"
-                          placeholder="e.g. Collected at Brahma Muhurta during morning Ganga Aarti from Har Ki Pauri. Hermetically sealed, lab tested, and trackable via unique batch QR codes."
-                          class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">{{ old('description') }}</textarea>
-                @error('description')
-                    <p class="text-red-400 text-[11px] mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Slide Title *</label>
+                            <input type="text"
+                                   name="title"
+                                   value="{{ old('title') }}"
+                                   required
+                                   placeholder="e.g. Pure, Untouched Gangajal for Your Daily Abhishek"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            @error('title') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
 
-            <!-- Image Upload or URL Selection -->
-            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
-                <div class="flex items-center justify-between">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Kicker Slogan (Pill)</label>
+                            <input type="text"
+                                   name="subtitle"
+                                   value="{{ old('subtitle') }}"
+                                   placeholder="e.g. From Har Ki Pauri"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            @error('subtitle') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
                     <div>
-                        <span class="block font-bold text-white">Slide Background Image *</span>
-                        <span class="block text-[11px] text-slate-400">High-resolution banner (recommended: 1920x800px or 1600x700px)</span>
-                    </div>
-
-                    <!-- Toggle Mode -->
-                    <div class="flex rounded-lg bg-slate-950 p-1 border border-slate-800 text-[11px]">
-                        <button type="button"
-                                @click="imageSource = 'file'"
-                                :class="imageSource === 'file' ? 'bg-[#D97706] text-white font-bold' : 'text-slate-400 hover:text-white'"
-                                class="px-2.5 py-1 rounded-md transition">
-                            Upload File
-                        </button>
-                        <button type="button"
-                                @click="imageSource = 'url'"
-                                :class="imageSource === 'url' ? 'bg-[#D97706] text-white font-bold' : 'text-slate-400 hover:text-white'"
-                                class="px-2.5 py-1 rounded-md transition">
-                            Image URL / Preset
-                        </button>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Description / Subtext</label>
+                        <textarea name="description"
+                                  rows="2"
+                                  placeholder="e.g. Collected at Brahma Muhurta during morning Ganga Aarti from Har Ki Pauri..."
+                                  class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">{{ old('description') }}</textarea>
+                        @error('description') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
-                <!-- Option A: File Upload -->
-                <div x-show="imageSource === 'file'" class="space-y-3">
-                    <input type="file"
-                           name="image_file"
-                           accept="image/*"
-                           @change="handleFileSelect($event)"
-                           class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#D97706] file:text-white hover:file:bg-[#F97316] file:cursor-pointer" />
-                    @error('image_file')
-                        <p class="text-red-400 text-[11px] mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Option B: Image URL -->
-                <div x-show="imageSource === 'url'" class="space-y-2">
-                    <input type="text"
-                           name="image_url"
-                           x-model="previewUrl"
-                           value="{{ old('image_url') }}"
-                           placeholder="https://... or images/haridwar-panorama-clocktower.jpg"
-                           class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]" />
-                    <p class="text-[11px] text-slate-500">
-                        Quick presets: <code class="text-amber-400">images/haridwar-panorama-clocktower.jpg</code>, <code class="text-amber-400">images/brahmakund-ghat-shrines.jpg</code>, <code class="text-amber-400">images/ganga-holy-waters.jpg</code>, <code class="text-amber-400">images/har-ki-pauri-temples.jpg</code>
-                    </p>
-                    @error('image_url')
-                        <p class="text-red-400 text-[11px] mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Live Preview -->
-                <div x-show="previewUrl" class="mt-3">
-                    <span class="block text-[11px] font-bold text-slate-400 mb-1.5">Live Preview:</span>
-                    <div class="h-36 rounded-xl overflow-hidden border border-slate-700 bg-slate-950 relative">
-                        <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover">
+                <!-- Section: Media -->
+                <div class="pt-5 border-t border-slate-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-900">Background Image *</h2>
+                            <span class="block text-xs text-slate-500">Recommended dimensions: 1920x800px or 1600x700px</span>
+                        </div>
+                        <div class="flex rounded-md bg-slate-100 p-0.5 text-xs">
+                            <button type="button"
+                                    @click="imageSource = 'file'"
+                                    :class="imageSource === 'file' ? 'bg-white text-slate-900 shadow-xs font-medium' : 'text-slate-600'"
+                                    class="px-2.5 py-1 rounded transition">
+                                File
+                            </button>
+                            <button type="button"
+                                    @click="imageSource = 'url'"
+                                    :class="imageSource === 'url' ? 'bg-white text-slate-900 shadow-xs font-medium' : 'text-slate-600'"
+                                    class="px-2.5 py-1 rounded transition">
+                                URL
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Call to Action Buttons -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-slate-900/40 p-5 rounded-2xl border border-slate-800">
-                <!-- Primary Button -->
-                <div class="space-y-3">
-                    <span class="block font-bold text-[#D97706]">Primary Button (Gold Solid CTA)</span>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Button Text</label>
+                    <div x-show="imageSource === 'file'">
+                        <input type="file"
+                               name="image_file"
+                               accept="image/*"
+                               @change="handleFileSelect($event)"
+                               class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border file:border-slate-300 file:text-xs file:font-medium file:bg-white file:text-slate-700 hover:file:bg-slate-50 file:cursor-pointer" />
+                        @error('image_file') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div x-show="imageSource === 'url'">
                         <input type="text"
-                               name="button_text"
-                               value="{{ old('button_text', 'Join 5-Year Membership') }}"
-                               placeholder="e.g. Join 5-Year Membership"
-                               class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+                               name="image_url"
+                               x-model="previewUrl"
+                               value="{{ old('image_url') }}"
+                               placeholder="https://... or images/haridwar-panorama-clocktower.jpg"
+                               class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        @error('image_url') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Button Link URL</label>
-                        <input type="text"
-                               name="button_link"
-                               value="{{ old('button_link', '/membership/join') }}"
-                               placeholder="e.g. /membership/join or /products"
-                               class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white" />
-                    </div>
-                </div>
 
-                <!-- Secondary Button -->
-                <div class="space-y-3">
-                    <span class="block font-bold text-slate-300">Secondary Button (Translucent Outline CTA)</span>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Button Text</label>
-                        <input type="text"
-                               name="secondary_button_text"
-                               value="{{ old('secondary_button_text', 'Explore Catalog') }}"
-                               placeholder="e.g. Explore Holy Waters"
-                               class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white" />
-                    </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1">Button Link URL</label>
-                        <input type="text"
-                               name="secondary_button_link"
-                               value="{{ old('secondary_button_link', '/products') }}"
-                               placeholder="e.g. /products?category=sacred-gangajal"
-                               class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+                    <div x-show="previewUrl" class="mt-3">
+                        <div class="h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-900 relative">
+                            <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Settings: Badge Color & Sort Order -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
-                <div>
-                    <label class="block font-bold text-white mb-1">Badge Color Accent</label>
-                    <select name="badge_color" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white">
-                        <option value="amber" {{ old('badge_color') == 'amber' ? 'selected' : '' }}>Sacred Amber / Saffron</option>
-                        <option value="rose" {{ old('badge_color') == 'rose' ? 'selected' : '' }}>Temple Maroon / Rose</option>
-                        <option value="sky" {{ old('badge_color') == 'sky' ? 'selected' : '' }}>Holy Ganga Blue / Azure</option>
-                        <option value="emerald" {{ old('badge_color') == 'emerald' ? 'selected' : '' }}>Auspicious Emerald</option>
-                    </select>
+                <!-- Section: CTA Buttons -->
+                <div class="pt-5 border-t border-slate-200">
+                    <h2 class="text-sm font-semibold text-slate-900 mb-3">Call to Action Buttons</h2>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Primary Button Text</label>
+                            <input type="text"
+                                   name="button_text"
+                                   value="{{ old('button_text', 'Explore Sacred Collection') }}"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Primary Destination URL</label>
+                            <input type="text"
+                                   name="button_link"
+                                   value="{{ old('button_link', '/products') }}"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Secondary Button Text (Optional)</label>
+                            <input type="text"
+                                   name="secondary_button_text"
+                                   value="{{ old('secondary_button_text') }}"
+                                   placeholder="e.g. Join 5-Yr Devotee Club"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Secondary Destination URL</label>
+                            <input type="text"
+                                   name="secondary_button_link"
+                                   value="{{ old('secondary_button_link') }}"
+                                   placeholder="e.g. /membership"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block font-bold text-white mb-1">Display Sort Order</label>
-                    <input type="number"
-                           name="sort_order"
-                           value="{{ old('sort_order', $nextSortOrder) }}"
-                           class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white" />
-                    <p class="text-[10px] text-slate-500 mt-1">Lower numbers appear first</p>
+                <!-- Section: Settings & Ordering -->
+                <div class="pt-5 border-t border-slate-200">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Badge Accent</label>
+                            <select name="badge_color" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                                <option value="amber" {{ old('badge_color') == 'amber' ? 'selected' : '' }}>Saffron Amber</option>
+                                <option value="rose" {{ old('badge_color') == 'rose' ? 'selected' : '' }}>Vermilion Rose</option>
+                                <option value="sky" {{ old('badge_color') == 'sky' ? 'selected' : '' }}>Ganga Sky Blue</option>
+                                <option value="emerald" {{ old('badge_color') == 'emerald' ? 'selected' : '' }}>Tulsi Green</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Display Sort Order</label>
+                            <input type="number"
+                                   name="sort_order"
+                                   value="{{ old('sort_order', 1) }}"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                        </div>
+
+                        <div class="flex items-center pt-2 sm:pt-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox"
+                                       name="is_active"
+                                       value="1"
+                                       {{ old('is_active', true) ? 'checked' : '' }}
+                                       class="rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                <span class="text-sm text-slate-700">Live on Storefront</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex items-center pt-5">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox"
-                               name="is_active"
-                               value="1"
-                               {{ old('is_active', true) ? 'checked' : '' }}
-                               class="rounded text-[#D97706] focus:ring-[#D97706]">
-                        <span class="text-white font-bold">Active & Published on Homepage</span>
-                    </label>
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-200">
+                    <a href="{{ route('admin.sliders.index') }}" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition text-sm font-medium">Cancel</a>
+                    <button type="submit" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-medium text-sm rounded-lg shadow-xs transition">
+                        Save Slide
+                    </button>
                 </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="flex justify-end gap-3 pt-6 border-t border-slate-800">
-                <a href="{{ route('admin.sliders.index') }}"
-                   class="px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white transition">
-                    Cancel
-                </a>
-                <button type="submit"
-                        class="px-6 py-2.5 bg-[#D97706] hover:bg-[#F97316] text-white font-bold rounded-xl shadow-md transition">
-                    Save & Publish Slide
-                </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </x-admin-layout>

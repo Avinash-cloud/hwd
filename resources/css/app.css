@@ -14,6 +14,17 @@
         font-family: 'Poppins', sans-serif !important;
         letter-spacing: normal;
     }
+
+    .admin-shell h1,
+    .admin-shell h2,
+    .admin-shell h3,
+    .admin-shell h4,
+    .admin-shell h5,
+    .admin-shell h6,
+    .admin-shell .font-serif {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        letter-spacing: -0.01em;
+    }
 }
 
 @layer utilities {
