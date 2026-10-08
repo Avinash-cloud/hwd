@@ -106,6 +106,42 @@
                 </div>
             </div>
 
+            <!-- Sourcing Sanctum Photographic Proof -->
+            <div class="py-8 border-b border-[#D97706]/20">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                    <h3 class="font-serif font-bold text-base text-slate-900 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-[#881337]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Verified Collection Sanctum · Har Ki Pauri Brahmakund</span>
+                    </h3>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 w-fit">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        GPS Certified: 29.9567° N, 78.1708° E
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-sm group">
+                        <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
+                             alt="Brahmakund Collection Sanctum"
+                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute bottom-2 left-2 px-2.5 py-1 bg-slate-950/80 text-white text-[11px] font-bold rounded-lg backdrop-blur-xs">
+                            Brahmakund Sanctum (Har Ki Pauri)
+                        </div>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-sm group">
+                        <img src="{{ asset('images/ganga-holy-waters.jpg') }}"
+                             alt="Sacred Maa Ganga Waters"
+                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute bottom-2 left-2 px-2.5 py-1 bg-sky-950/80 text-white text-[11px] font-bold rounded-lg backdrop-blur-xs">
+                            Pristine Living Maa Ganga Stream
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Video & Aarti Link -->
             @if ($batch?->video_url)
                 <div class="py-6 border-b border-[#D97706]/20 flex flex-col sm:flex-row items-center justify-between gap-4">

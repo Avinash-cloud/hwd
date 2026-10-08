@@ -1,21 +1,26 @@
 <x-app-layout>
     <!-- Breadcrumb & Header Banner -->
-    <div class="bg-[#FFFDF7] border-b border-amber-200/60 py-6 sm:py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative bg-stone-900 text-white overflow-hidden py-8 sm:py-12 border-b border-amber-200/60">
+        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+             alt="Har Ki Pauri Haridwar"
+             class="absolute inset-0 w-full h-full object-cover opacity-25 object-center">
+        <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/90 to-stone-950/80"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumbs -->
-            <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                <a href="{{ route('home') }}" class="hover:text-[#D97706] transition">Home</a>
+            <nav class="flex items-center gap-2 text-xs text-slate-300 mb-2">
+                <a href="{{ route('home') }}" class="hover:text-amber-300 transition">Home</a>
                 <span>/</span>
-                <a href="{{ route('products.index') }}" class="hover:text-[#D97706] transition">Catalog</a>
+                <a href="{{ route('products.index') }}" class="hover:text-amber-300 transition">Catalog</a>
                 @if (request('category'))
                     <span>/</span>
-                    <span class="font-bold text-slate-800 capitalize">{{ str_replace('-', ' ', request('category')) }}</span>
+                    <span class="font-bold text-white capitalize">{{ str_replace('-', ' ', request('category')) }}</span>
                 @endif
             </nav>
 
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 tracking-tight">
+                    <h1 class="text-2xl sm:text-3xl font-serif font-extrabold text-white tracking-tight">
                         @if (request('category'))
                             {{ ucwords(str_replace('-', ' ', request('category'))) }}
                         @elseif (request('type') === 'gangajal')
@@ -26,13 +31,13 @@
                             Sacred Spiritual Catalog & Puja Samagri
                         @endif
                     </h1>
-                    <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
+                    <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
                         Explore authentic Brahmakund Gangajal, cow dung hawan cups, pure cotton battis, and temple utensils blessed at Har Ki Pauri.
                     </p>
                 </div>
 
-                <div class="text-xs text-slate-500 font-semibold shrink-0">
-                    Showing <span class="font-bold text-slate-900">{{ $products->total() }}</span> sacred offerings
+                <div class="text-xs text-amber-300 font-semibold shrink-0">
+                    Showing <span class="font-bold text-white">{{ $products->total() }}</span> sacred offerings
                 </div>
             </div>
         </div>
@@ -135,7 +140,18 @@
                                class="flex items-center gap-2 py-1 px-2 rounded hover:bg-slate-50 {{ request('min_price') == '700' ? 'font-bold text-[#D97706]' : '' }}">
                                 <span>Above ₹700</span>
                             </a>
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Sourcing Trust Card with Brahmakund Photo -->
+                <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-xs group">
+                    <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
+                         alt="Brahmakund Har Ki Pauri Haridwar"
+                         class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent p-4 flex flex-col justify-end text-white">
+                        <span class="text-[10px] uppercase font-bold text-amber-300 font-mono">100% Genuine Origin</span>
+                        <h4 class="font-serif font-bold text-xs sm:text-sm text-white">Har Ki Pauri, Brahmakund</h4>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Sourced at Brahma Muhurta morning Aarti in Haridwar</p>
                     </div>
                 </div>
             </aside>

@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\BatchController as AdminBatchController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerDashboardController;
@@ -73,7 +75,18 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+    Route::resource('sliders', AdminSliderController::class)->except(['show']);
+    Route::post('/sliders/{slider}/toggle', [AdminSliderController::class, 'toggleStatus'])->name('sliders.toggle');
+
+    Route::resource('categories', AdminCategoryController::class)->except(['show']);
+    Route::post('/categories/{category}/toggle-active', [AdminCategoryController::class, 'toggleActive'])->name('categories.toggleActive');
+    Route::post('/categories/{category}/toggle-featured', [AdminCategoryController::class, 'toggleFeatured'])->name('categories.toggleFeatured');
+
     Route::resource('products', AdminProductController::class)->except(['show']);
+    Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->name('products.toggleActive');
+    Route::post('/products/{product}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('products.toggleFeatured');
+    Route::post('/products/{product}/toggle-bestseller', [AdminProductController::class, 'toggleBestseller'])->name('products.toggleBestseller');
+
     Route::resource('batches', AdminBatchController::class)->except(['show', 'destroy']);
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');

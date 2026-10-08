@@ -1,11 +1,13 @@
 <x-app-layout>
     @php
         $discount = $product->discount_percentage;
-        $imgUrl = $product->image ?: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&auto=format&fit=crop&q=80';
-        $gallery = $product->gallery ?: [
+        $imgUrl = $product->image_url;
+        $gallery = !empty($product->gallery) ? $product->gallery : [
             $imgUrl,
-            'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=800&auto=format&fit=crop&q=80',
+            asset('images/haridwar-panorama-clocktower.jpg'),
+            asset('images/har-ki-pauri-temples.jpg'),
+            asset('images/brahmakund-ghat-shrines.jpg'),
+            asset('images/ganga-holy-waters.jpg'),
         ];
     @endphp
 
@@ -78,16 +80,19 @@
 
                 <!-- Purity / Origin Guarantee Box -->
                 @if ($product->purity_details)
-                    <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-4 sm:p-5 space-y-1.5 text-xs shadow-xs">
+                    <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-4 sm:p-5 space-y-3 text-xs shadow-xs">
                         <div class="flex items-center gap-2 font-serif font-bold text-[#881337] text-sm">
                             <svg class="w-4 h-4 shrink-0 text-[#881337]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                             <span>Consecration & Sanctity Assurance</span>
                         </div>
-                        <p class="text-slate-700 leading-relaxed">
-                            {{ $product->purity_details }}
-                        </p>
+                        <div class="flex gap-3 items-center">
+                            <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}" alt="Har Ki Pauri Sanctum" class="w-16 h-16 rounded-xl object-cover shrink-0 border border-amber-300/60 shadow-xs">
+                            <p class="text-slate-700 leading-relaxed text-[11px]">
+                                {{ $product->purity_details }}
+                            </p>
+                        </div>
                     </div>
                 @endif
             </div>

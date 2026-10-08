@@ -2,7 +2,7 @@
 
 @php
     $discount = $product->discount_percentage;
-    $imgUrl = $product->image ?: 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=600&auto=format&fit=crop&q=80';
+    $imgUrl = $product->image_url;
 @endphp
 
 <div x-data="productCard({{ $product->id }})"

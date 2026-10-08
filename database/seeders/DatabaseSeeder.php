@@ -161,7 +161,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Sacred Gangajal',
                 'slug' => 'sacred-gangajal',
                 'description' => 'Untouched, hermetically sealed holy water from Brahmakund at Har Ki Pauri with batch traceability QR codes.',
-                'image' => 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=80',
+                'image' => '/images/har-ki-pauri-temples.jpg',
                 'icon' => '🌊',
                 'is_featured' => true,
                 'sort_order' => 3,
@@ -396,7 +396,7 @@ class DatabaseSeeder extends Seeder
                 'volume_ml' => 500,
                 'stock' => 500,
                 'sku' => 'HB-GJ-500',
-                'image' => 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=80',
+                'image' => '/images/ganga-holy-waters.jpg',
                 'purity_details' => 'Sourced from Brahmakund, Haridwar. Lab Tested: pH 7.8, Zero microbial contamination, rich in natural Himalayan minerals.',
                 'specifications' => ['Origin' => 'Brahmakund, Haridwar', 'Volume' => '500 ml', 'Packaging' => 'Hermetically Sealed Glass Container'],
                 'is_bestseller' => true,
@@ -419,7 +419,7 @@ class DatabaseSeeder extends Seeder
                 'volume_ml' => 1000,
                 'stock' => 120,
                 'sku' => 'HB-GJ-1000-CU',
-                'image' => 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=600&auto=format&fit=crop&q=80',
+                'image' => '/images/brahmakund-ghat-shrines.jpg',
                 'purity_details' => '100% authentic Brahmakund water enriched inside an engraved pure copper vessel.',
                 'specifications' => ['Volume' => '1000 ml', 'Vessel' => '100% Pure Embossed Copper', 'Batch Traceability' => 'Verified on QR Portal'],
                 'is_bestseller' => true,
@@ -666,5 +666,7 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        $this->call(SliderSeeder::class);
     }
 }

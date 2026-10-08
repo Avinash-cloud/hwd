@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -68,6 +69,30 @@ class Product extends Model
         }
 
         return null;
+    }
+
+    /**
+     * Get resolved image URL whether it is a local storage path, asset, or full URL.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        if (! $this->image) {
+            return asset('images/ganga-holy-waters.jpg');
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        if (Storage::disk('public')->exists($this->image)) {
+            return Storage::disk('public')->url($this->image);
+        }
+
+        if (file_exists(public_path($this->image))) {
+            return asset($this->image);
+        }
+
+        return asset($this->image);
     }
 
     public function category(): BelongsTo

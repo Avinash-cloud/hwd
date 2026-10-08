@@ -22,10 +22,12 @@
             <!-- Col 1 & 2: Membership Status Card -->
             <div
                 class="lg:col-span-2 bg-[#881337] rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
-                <div class="space-y-4">
+                <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
+                     alt="Har Ki Pauri Sanctum"
+                     class="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-overlay pointer-events-none">
+                <div class="relative z-10 space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase font-bold tracking-widest text-amber-200 font-mono">Haridwar
-                            Bliss Sanctity Pass</span>
+                        <span class="text-xs uppercase font-bold tracking-widest text-amber-200 font-mono">Blu Bliss Sanctity Pass</span>
                         <div class="w-8 h-8 rounded-full bg-white/10 border border-amber-300/30 flex items-center justify-center text-amber-300">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -81,6 +83,12 @@
             <div
                 class="bg-white rounded-3xl border border-[#D97706]/30 p-6 sm:p-8 shadow-xs flex flex-col justify-between space-y-4">
                 <div>
+                    <div class="relative h-28 rounded-2xl overflow-hidden mb-3 border border-amber-200/80">
+                        <img src="{{ asset('images/ganga-holy-waters.jpg') }}" alt="Holy Ganga Waters" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-2.5">
+                            <span class="text-[10px] font-bold text-amber-300">Har Ki Pauri · Brahmakund Sourced</span>
+                        </div>
+                    </div>
                     <span class="text-[11px] font-bold uppercase tracking-widest text-[#D97706] font-mono">Monthly
                         Privilege</span>
                     <h3 class="text-xl font-serif font-bold text-slate-900 mt-1">Claim Your Sacred Gangajal</h3>

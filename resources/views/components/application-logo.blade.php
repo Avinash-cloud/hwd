@@ -1,1 +1,1 @@
-<img src="{{ asset('blue_bliss_loga_v1.png') }}" alt="Logo" {{ $attributes }} />
+<img src="{{ asset('images/logo.png') }}" alt="Blu Bliss - Saaf Pani Swath Ke Nishani" {{ $attributes->merge(['class' => 'object-cover']) }} />

@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Haridwar Bliss') }} - Sacred Portal</title>
-        <link rel="icon" type="image/png" href="{{ asset('blue_bliss_loga_v1.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,9 +21,9 @@
     <body class="font-sans text-slate-900 antialiased bg-[#FFFDF7] min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
             <a href="/" class="inline-flex flex-col items-center group transition">
-                <x-application-logo class="w-14 h-14 shadow-lg rounded-2xl transition transform group-hover:scale-105" />
-                <span class="mt-3 text-2xl font-extrabold tracking-tight text-slate-900 font-serif">Haridwar Bliss</span>
-                <span class="text-xs uppercase font-bold tracking-widest text-[#D97706] mt-0.5">Sacred Brahmakund Gangajal & Vedic Essentials</span>
+                <x-application-logo class="w-16 h-16 shadow-lg rounded-2xl ring-1 ring-[#881337]/30 transition transform group-hover:scale-105" />
+                <span class="mt-3 text-2xl font-extrabold tracking-tight text-slate-900 font-serif">Blu Bliss</span>
+                <span class="text-xs font-bold tracking-wider text-[#881337] mt-0.5">Saaf Pani Swath Ke Nishani</span>
             </a>
         </div>
 

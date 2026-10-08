@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Haridwar Bliss') }} - Sacred Brahmakund Gangajal & Vedic Essentials</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -95,11 +96,10 @@
                 <!-- Col 1: Brand & Origin -->
                 <div class="space-y-4 md:col-span-1">
                     <div class="flex items-center gap-3">
-                        <x-application-logo class="w-10 h-10 rounded-xl" />
+                        <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" />
                         <div>
-                            <span class="block font-serif font-bold text-xl text-white">Haridwar Bliss</span>
-                            <span class="block text-[10px] uppercase font-bold tracking-widest text-[#D97706]">Purity &
-                                Devotion</span>
+                            <span class="block font-serif font-bold text-xl text-white">Blu Bliss</span>
+                            <span class="block text-[10px] font-bold tracking-wider text-amber-300">Saaf Pani Swath Ke Nishani</span>
                         </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">

@@ -88,7 +88,7 @@ class ProductController extends Controller
                     'name' => $p->name,
                     'slug' => $p->slug,
                     'url' => route('products.show', $p->slug),
-                    'image' => $p->image,
+                    'image' => $p->image_url,
                     'price' => (float) $p->price,
                     'compare_price' => $p->compare_price ? (float) $p->compare_price : null,
                     'discount' => $p->discount_percentage,

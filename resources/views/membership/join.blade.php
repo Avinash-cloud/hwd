@@ -1,12 +1,19 @@
 <x-app-layout>
-    <div class="bg-[#FFFDF7] py-12 border-b border-[#D97706]/30">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Sacred
-                Subscription</span>
-            <h1 class="text-4xl sm:text-5xl font-serif font-extrabold text-slate-900 mt-2">
+    <div class="relative bg-stone-900 text-white overflow-hidden py-14 sm:py-20 border-b border-amber-200/40">
+        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+             alt="Har Ki Pauri Haridwar"
+             class="absolute inset-0 w-full h-full object-cover opacity-35 object-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/70 to-stone-900/60"></div>
+
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/30 text-amber-300 border border-[#D97706]/50 backdrop-blur-xs mb-3">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span>Sacred 5-Year Devotee Circle</span>
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-serif font-extrabold text-white">
                 Haridwar Bliss 5-Year Devotee Membership
             </h1>
-            <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            <p class="mt-4 text-sm sm:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed">
                 Connect your household directly to the divine blessings of Maa Ganga at Har Ki Pauri with uninterrupted
                 monthly sacred deliveries for 5 full years.
             </p>

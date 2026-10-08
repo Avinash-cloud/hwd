@@ -54,13 +54,13 @@
                 <!-- Brand Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                        <x-application-logo class="block h-12 w-12 object-contain transition transform group-hover:scale-105" />
+                        <x-application-logo class="block h-12 w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105" />
                         <div class="leading-tight">
-                            <span class="block font-serif font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#D97706] transition">
-                                Haridwar Bliss
+                            <span class="block font-serif font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#881337] transition">
+                                Blu Bliss
                             </span>
-                            <span class="block text-[10px] uppercase font-bold tracking-widest text-[#D97706]">
-                                Sacred Gangajal & Vedic Store
+                            <span class="block text-[10px] font-bold tracking-wider text-[#881337]">
+                                Saaf Pani Swath Ke Nishani
                             </span>
                         </div>
                     </a>

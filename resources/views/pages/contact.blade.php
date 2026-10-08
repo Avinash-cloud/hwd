@@ -68,19 +68,23 @@
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             </svg>
-                            <span>Google Maps Satellite Reference</span>
+                            <span>Sourcing Sanctum Visual Reference</span>
                         </span>
-                        <span class="text-slate-400 text-[11px]">Brahmakund Coordinates: 29.9567° N, 78.1708° E</span>
+                        <span class="text-slate-400 text-[11px]">Brahmakund: 29.9567° N, 78.1708° E</span>
                     </div>
-                    <div
-                        class="w-full h-48 bg-slate-800 rounded-2xl flex items-center justify-center text-xs text-slate-400 border border-slate-700">
-                        <div class="text-center p-4">
-                            <p class="font-serif font-bold text-base text-[#D97706]">Har Ki Pauri, Brahmakund</p>
-                            <p class="text-xs text-slate-400 mt-1">Haridwar, Uttarakhand, India</p>
-                            <a href="https://maps.google.com/?q=Har+Ki+Pauri+Haridwar" target="_blank"
-                                class="mt-3 inline-block px-4 py-1.5 bg-[#D97706]/20 text-[#D97706] border border-[#D97706]/40 rounded-xl font-bold text-xs hover:bg-[#D97706]/30 transition">
-                                Open in Google Maps ↗
-                            </a>
+                    <div class="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-700 group shadow-md">
+                        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                             alt="Har Ki Pauri Haridwar"
+                             class="w-full h-full object-cover transition transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent flex flex-col justify-end p-4 text-center">
+                            <p class="font-serif font-bold text-base text-amber-300">Har Ki Pauri, Brahmakund</p>
+                            <p class="text-xs text-slate-300 mt-0.5">Haridwar, Uttarakhand, India</p>
+                            <div>
+                                <a href="https://maps.google.com/?q=Har+Ki+Pauri+Haridwar" target="_blank"
+                                    class="mt-2.5 inline-block px-4 py-1.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-xs transition shadow-md">
+                                    Open in Google Maps ↗
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

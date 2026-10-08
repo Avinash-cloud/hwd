@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ $title ?? 'Admin Console' }} - Haridwar Bliss</title>
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -23,10 +24,10 @@
             <div>
                 <!-- Brand Header -->
                 <div class="h-18 flex items-center gap-3 px-6 border-b border-slate-800/80">
-                    <x-application-logo class="w-9 h-9 rounded-xl shadow" />
+                    <x-application-logo class="w-10 h-10 rounded-xl shadow object-cover ring-1 ring-white/10" />
                     <div>
-                        <span class="block font-serif font-bold text-lg text-white">Haridwar Bliss</span>
-                        <span class="block text-[10px] uppercase font-bold tracking-widest text-[#D97706]">Admin Console</span>
+                        <span class="block font-serif font-bold text-lg text-white">Blu Bliss</span>
+                        <span class="block text-[10px] uppercase font-bold tracking-widest text-amber-400">Admin Console</span>
                     </div>
                 </div>
 
@@ -53,11 +54,25 @@
                         Batches & Traceability
                     </a>
 
+                    <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition {{ request()->routeIs('admin.categories.*') ? 'bg-[#D97706]/20 text-[#D97706] font-bold border border-[#D97706]/40' : 'text-slate-400 hover:text-white hover:bg-slate-900' }}">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                        Categories & Collections
+                    </a>
+
                     <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition {{ request()->routeIs('admin.products.*') ? 'bg-[#D97706]/20 text-[#D97706] font-bold border border-[#D97706]/40' : 'text-slate-400 hover:text-white hover:bg-slate-900' }}">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                         Products & Inventory
+                    </a>
+
+                    <a href="{{ route('admin.sliders.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition {{ request()->routeIs('admin.sliders.*') ? 'bg-[#D97706]/20 text-[#D97706] font-bold border border-[#D97706]/40' : 'text-slate-400 hover:text-white hover:bg-slate-900' }}">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Hero Sliders
                     </a>
 
                     <a href="{{ route('admin.memberships.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition {{ request()->routeIs('admin.memberships.*') ? 'bg-[#D97706]/20 text-[#D97706] font-bold border border-[#D97706]/40' : 'text-slate-400 hover:text-white hover:bg-slate-900' }}">

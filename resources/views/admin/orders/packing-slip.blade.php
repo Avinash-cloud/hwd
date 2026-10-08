@@ -21,9 +21,12 @@
             </div>
 
             <div class="flex justify-between items-start border-b-2 border-slate-900 pb-4">
-                <div>
-                    <h1 class="font-serif font-bold text-xl text-slate-900">Haridwar Bliss — Dispatch Slip</h1>
-                    <p class="text-xs text-slate-500">Brahmakund Sacred Bottling Unit · Har Ki Pauri</p>
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-12 h-12 rounded-xl object-cover ring-1 ring-slate-200 shrink-0">
+                    <div>
+                        <h1 class="font-serif font-bold text-xl text-slate-900">Blu Bliss — Dispatch Slip</h1>
+                        <p class="text-xs text-slate-500">Brahmakund Sacred Bottling Unit · Har Ki Pauri</p>
+                    </div>
                 </div>
                 <div class="text-right">
                     <strong class="font-mono text-base block">{{ $order->order_number }}</strong>

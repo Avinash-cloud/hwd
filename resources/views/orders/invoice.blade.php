@@ -25,14 +25,16 @@
 
             <!-- Invoice Header -->
             <div class="flex justify-between items-start pb-8 border-b-2 border-[#D97706]">
-                <div>
-                    <h1 class="font-serif font-extrabold text-2xl text-slate-900">Haridwar Bliss</h1>
-                    <p class="text-xs text-[#881337] font-bold uppercase tracking-wider">Sacred Brahmakund Gangajal & Vedic Essentials</p>
-                    <p class="text-xs text-slate-500 mt-2 leading-tight">
-                        Har Ki Pauri, Brahmakund Sanctum<br>
-                        Haridwar, Uttarakhand - 249401, India<br>
-                        GSTIN: 05AAACH1234F1Z8 | FSSAI Certified
-                    </p>
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-14 h-14 rounded-xl object-cover ring-1 ring-slate-200 shrink-0">
+                    <div>
+                        <h1 class="font-serif font-extrabold text-2xl text-slate-900 leading-tight">Blu Bliss</h1>
+                        <p class="text-xs text-[#881337] font-bold">Saaf Pani Swath Ke Nishani</p>
+                        <p class="text-[11px] text-slate-500 mt-1 leading-tight">
+                            Har Ki Pauri, Brahmakund Sanctum, Haridwar - 249401<br>
+                            GSTIN: 05AAACH1234F1Z8 | FSSAI Certified
+                        </p>
+                    </div>
                 </div>
 
                 <div class="text-right">
