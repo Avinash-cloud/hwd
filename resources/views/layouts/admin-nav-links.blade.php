@@ -60,6 +60,22 @@
                 </svg>
                 <span>Hero Sliders</span>
             </a>
+
+            <a href="{{ route('admin.blogs.index') }}"
+               class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.blogs.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.blogs.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                </svg>
+                <span>Blogs & Wisdom</span>
+            </a>
+
+            <a href="{{ route('admin.gallery.index') }}"
+               class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.gallery.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.gallery.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                </svg>
+                <span>Sacred Gallery</span>
+            </a>
         </div>
     </div>
 

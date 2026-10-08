@@ -138,6 +138,10 @@
                     <h4 class="text-xs font-bold uppercase tracking-widest text-[#D97706] mb-4 font-mono">Devotee Care
                     </h4>
                     <ul class="space-y-2.5 text-sm">
+                        <li><a href="{{ route('blogs.index') }}"
+                                class="text-amber-400 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
+                        <li><a href="{{ route('gallery.index') }}"
+                                class="text-amber-400 font-medium hover:text-white transition">Sacred Brahmakund Gallery</a></li>
                         <li><a href="{{ route('membership.join') }}"
                                 class="text-[#D97706] font-semibold hover:text-white transition">5-Year Sacred
                                 Membership (₹500)</a></li>

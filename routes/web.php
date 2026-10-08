@@ -1,17 +1,21 @@
 <?php
 
 use App\Http\Controllers\Admin\BatchController as AdminBatchController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\MembershipController as AdminMembershipController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerDashboardController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\OrderController;
@@ -25,6 +29,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
+
+// Spiritual Blogs & Articles
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
+
+// Sacred Brahmakund Gallery
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 
 Route::get('/about-us', [PageController::class, 'about'])->name('about');
 Route::get('/faqs', [PageController::class, 'faqs'])->name('faqs');
@@ -86,6 +97,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/products/{product}/toggle-active', [AdminProductController::class, 'toggleActive'])->name('products.toggleActive');
     Route::post('/products/{product}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('products.toggleFeatured');
     Route::post('/products/{product}/toggle-bestseller', [AdminProductController::class, 'toggleBestseller'])->name('products.toggleBestseller');
+
+    // Blogs & Articles
+    Route::resource('blogs', AdminBlogController::class)->except(['show']);
+    Route::post('/blogs/{blog}/toggle-published', [AdminBlogController::class, 'togglePublished'])->name('blogs.togglePublished');
+    Route::post('/blogs/{blog}/toggle-featured', [AdminBlogController::class, 'toggleFeatured'])->name('blogs.toggleFeatured');
+
+    // Media Gallery
+    Route::resource('gallery', AdminGalleryController::class)->except(['show']);
+    Route::post('/gallery/{gallery}/toggle-active', [AdminGalleryController::class, 'toggleActive'])->name('gallery.toggleActive');
 
     Route::resource('batches', AdminBatchController::class)->except(['show', 'destroy']);
 

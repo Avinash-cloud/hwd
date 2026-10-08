@@ -330,6 +330,18 @@
                        class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold' : '' }}">
                         Complete Catalog
                     </a>
+
+                    <!-- Spiritual Wisdom Blogs -->
+                    <a href="{{ route('blogs.index') }}"
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('blogs.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                        Spiritual Blogs
+                    </a>
+
+                    <!-- Sacred Gallery -->
+                    <a href="{{ route('gallery.index') }}"
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                        Sacred Gallery
+                    </a>
                 </div>
 
                 <!-- Right: Verifiable Batch QR Link (clean, no emojis) -->
@@ -384,6 +396,12 @@
             @endif
             <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-slate-900 hover:bg-amber-50">
                 All Products Catalog
+            </a>
+            <a href="{{ route('blogs.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">
+                Spiritual Blogs & Wisdom
+            </a>
+            <a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">
+                Sacred Haridwar Gallery
             </a>
             <a href="{{ route('membership.join') }}" class="block px-3 py-2 rounded-lg font-bold text-[#D97706] hover:bg-amber-50">
                 5-Year Membership (₹500)

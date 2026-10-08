@@ -667,6 +667,10 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        $this->call(SliderSeeder::class);
+        $this->call([
+            SliderSeeder::class,
+            BlogSeeder::class,
+            GalleryItemSeeder::class,
+        ]);
     }
 }

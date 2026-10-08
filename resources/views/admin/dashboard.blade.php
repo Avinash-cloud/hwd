@@ -24,8 +24,11 @@
             <a href="{{ route('admin.batches.create') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
                 <span>Consecrate Batch</span>
             </a>
-            <a href="{{ route('admin.sliders.index') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
-                <span>Hero Sliders</span>
+            <a href="{{ route('admin.blogs.create') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
+                <span>Write Article</span>
+            </a>
+            <a href="{{ route('admin.gallery.create') }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-medium rounded-lg transition">
+                <span>Add Gallery</span>
             </a>
         </div>
     </div>
