@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -80,6 +81,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Determine if the user has already claimed their 1 free monthly member product this calendar month.
+     */
+    public function hasClaimedMonthlyFreeProduct(?CarbonInterface $date = null): bool
+    {
+        $target = $date ?? now();
+        $start = $target->copy()->startOfMonth();
+        $end = $target->copy()->endOfMonth();
+
+        return $this->orders()
+            ->where('order_status', '!=', 'cancelled')
+            ->whereBetween('created_at', [$start, $end])
+            ->whereHas('items', function ($query): void {
+                $query->where('is_free_monthly_bottle', true);
+            })
+            ->exists();
+    }
+
+    /**
      * Get user addresses.
      */
     public function addresses(): HasMany
@@ -103,5 +122,28 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class)->latest();
+    }
+
+    /**
+     * Get user reviews.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class)->latest();
+    }
+
+    /**
+     * Check if user is a verified purchaser of a product.
+     */
+    public function hasPurchasedProduct(Product|int $product): bool
+    {
+        $productId = $product instanceof Product ? $product->id : (int) $product;
+
+        return $this->orders()
+            ->where('order_status', '!=', 'cancelled')
+            ->whereHas('items', function ($query) use ($productId): void {
+                $query->where('product_id', $productId);
+            })
+            ->exists();
     }
 }

@@ -80,6 +80,7 @@ window.cartDrawer = function() {
         loading: false,
         items: [],
         subtotal: 0,
+        discount: 0,
         shipping: 0,
         total: 0,
         itemsCount: 0,
@@ -121,8 +122,9 @@ window.cartDrawer = function() {
         applyCartData(cart) {
             this.items = cart.items || [];
             this.subtotal = parseFloat(cart.subtotal) || 0;
-            this.shipping = parseFloat(cart.shipping_amount) || 0;
-            this.total = parseFloat(cart.total_amount) || 0;
+            this.discount = parseFloat(cart.discount_amount || cart.discount) || 0;
+            this.shipping = parseFloat(cart.shipping_amount || cart.shipping) || 0;
+            this.total = parseFloat(cart.total_amount || cart.total) || 0;
             this.itemsCount = parseInt(cart.total_items_count) || this.items.reduce((acc, it) => acc + (it.quantity || 1), 0);
 
             const badges = document.querySelectorAll('.cart-count-badge');
@@ -136,48 +138,60 @@ window.cartDrawer = function() {
             });
         },
 
-        updateQuantity(itemId, quantity) {
+        updateQty(productId, newQty) {
+            this.loading = true;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            fetch('/cart/update/' + itemId, {
-                method: 'PATCH',
+
+            fetch('/cart/update', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ quantity })
+                body: JSON.stringify({ product_id: productId, quantity: Math.max(0, parseInt(newQty) || 0) })
             })
             .then(res => res.json())
             .then(data => {
+                this.loading = false;
                 if (data.cart) {
                     this.applyCartData(data.cart);
-                } else {
-                    this.fetchCart();
                 }
             })
-            .catch(() => {});
+            .catch(() => {
+                this.loading = false;
+            });
         },
 
-        removeItem(itemId) {
+        updateQuantity(productId, newQty) {
+            return this.updateQty(productId, newQty);
+        },
+
+        removeItem(productId) {
+            this.loading = true;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            fetch('/cart/remove/' + itemId, {
-                method: 'DELETE',
+
+            fetch('/cart/remove', {
+                method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
-                }
+                },
+                body: JSON.stringify({ product_id: productId })
             })
             .then(res => res.json())
             .then(data => {
+                this.loading = false;
                 if (data.cart) {
                     this.applyCartData(data.cart);
-                } else {
-                    this.fetchCart();
                 }
             })
-            .catch(() => {});
+            .catch(() => {
+                this.loading = false;
+            });
         }
     };
 };

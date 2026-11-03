@@ -111,12 +111,12 @@
                                 <template x-for="item in items" :key="item.product_id">
                                     <div class="py-3 flex gap-3 group">
                                         <!-- Thumbnail -->
-                                        <div class="w-18 h-18 rounded-xl bg-slate-50 border border-slate-200/80 p-1 shrink-0 overflow-hidden relative">
+                                        <div class="w-18 h-18 rounded-xl bg-slate-50 border border-slate-200/80 p-1 shrink-0 overflow-hidden relative max-w-32">
                                             <img :src="item.image || 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=200&fit=crop'"
                                                  :alt="item.name"
-                                                 class="w-full h-full object-cover rounded-lg">
+                                                 class=" object-cover rounded-lg ">
                                             <template x-if="item.is_free_monthly_bottle">
-                                                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-[#0369A1] text-white shadow">
+                                                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-600 text-white shadow">
                                                     FREE
                                                 </span>
                                             </template>
@@ -138,8 +138,16 @@
                                             </div>
 
                                             <div class="flex items-center gap-2 mt-1">
-                                                <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.unit_price"></span>
-                                                <template x-if="item.compare_price && item.compare_price > item.unit_price">
+                                                <template x-if="item.is_free_monthly_bottle">
+                                                    <span class="text-xs font-extrabold text-emerald-600 font-mono">₹0.00</span>
+                                                </template>
+                                                <template x-if="item.is_free_monthly_bottle">
+                                                    <span class="text-[11px] text-slate-400 line-through" x-text="'₹' + item.unit_price"></span>
+                                                </template>
+                                                <template x-if="!item.is_free_monthly_bottle">
+                                                    <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.unit_price"></span>
+                                                </template>
+                                                <template x-if="!item.is_free_monthly_bottle && item.compare_price && item.compare_price > item.unit_price">
                                                     <span class="text-[11px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
                                                 </template>
                                             </div>
@@ -161,8 +169,13 @@
                                                     </button>
                                                 </div>
 
-                                                <span class="text-xs font-bold text-[#D97706]"
-                                                      x-text="'₹' + item.total_price.toFixed(2)"></span>
+                                                <template x-if="item.is_free_monthly_bottle && item.quantity === 1">
+                                                    <span class="text-xs font-bold text-emerald-600 font-mono">₹0.00</span>
+                                                </template>
+                                                <template x-if="!item.is_free_monthly_bottle || item.quantity > 1">
+                                                    <span class="text-xs font-bold text-[#D97706] font-mono"
+                                                          x-text="'₹' + item.line_total.toFixed(2)"></span>
+                                                </template>
                                             </div>
                                         </div>
                                     </div>
@@ -179,6 +192,12 @@
                                     <span>Subtotal</span>
                                     <span class="font-bold text-slate-900" x-text="'₹' + subtotal.toFixed(2)"></span>
                                 </div>
+                                <template x-if="discount > 0">
+                                    <div class="flex justify-between text-emerald-700 font-semibold">
+                                        <span>Devotee Savings</span>
+                                        <span class="font-mono" x-text="'- ₹' + discount.toFixed(2)"></span>
+                                    </div>
+                                </template>
                                 <div class="flex justify-between">
                                     <span>Shipping Est.</span>
                                     <span class="font-bold"
@@ -223,13 +242,13 @@
 </div>
 
 <script>
-if (typeof window.cartDrawer === 'undefined') {
-    window.cartDrawer = function() {
+window.cartDrawer = function() {
     return {
         isOpen: false,
         loading: false,
         items: [],
         subtotal: 0,
+        discount: 0,
         shipping: 0,
         total: 0,
         itemsCount: 0,
@@ -271,9 +290,10 @@ if (typeof window.cartDrawer === 'undefined') {
         applyCartData(cart) {
             this.items = cart.items || [];
             this.subtotal = parseFloat(cart.subtotal) || 0;
-            this.shipping = parseFloat(cart.shipping_amount) || 0;
-            this.total = parseFloat(cart.total_amount) || 0;
-            this.itemsCount = parseInt(cart.total_items_count) || 0;
+            this.discount = parseFloat(cart.discount_amount || cart.discount) || 0;
+            this.shipping = parseFloat(cart.shipping_amount || cart.shipping) || 0;
+            this.total = parseFloat(cart.total_amount || cart.total) || 0;
+            this.itemsCount = parseInt(cart.total_items_count) || this.items.reduce((acc, it) => acc + (it.quantity || 1), 0);
 
             // Update badge on any cart icon in DOM
             const badges = document.querySelectorAll('.cart-count-badge');
@@ -299,7 +319,7 @@ if (typeof window.cartDrawer === 'undefined') {
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ product_id: productId, quantity: newQty })
+                body: JSON.stringify({ product_id: productId, quantity: Math.max(0, parseInt(newQty) || 0) })
             })
             .then(res => res.json())
             .then(data => {
@@ -309,6 +329,10 @@ if (typeof window.cartDrawer === 'undefined') {
                 }
             })
             .catch(() => { this.loading = false; });
+        },
+
+        updateQuantity(productId, newQty) {
+            return this.updateQty(productId, newQty);
         },
 
         removeItem(productId) {
@@ -336,5 +360,4 @@ if (typeof window.cartDrawer === 'undefined') {
         }
     };
 };
-}
 </script>

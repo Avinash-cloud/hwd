@@ -8,19 +8,29 @@
             <p class="text-xs text-slate-500 mt-0.5">Devotees entitled to monthly ₹0 Gangajal deliveries and exclusive catalog access.</p>
         </div>
 
-        <div class="flex items-center gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0">
-            <a href="{{ route('admin.memberships.index') }}"
-               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ !request('status') ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                All
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.membership-benefits.index') }}"
+               class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition inline-flex items-center gap-1.5 shadow-xs">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                <span>Manage Monthly Benefits (0-N)</span>
             </a>
-            <a href="{{ route('admin.memberships.index', ['status' => 'active']) }}"
-               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'active' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                Active
-            </a>
-            <a href="{{ route('admin.memberships.index', ['status' => 'cancelled']) }}"
-               class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'cancelled' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
-                Cancelled
-            </a>
+
+            <div class="flex items-center gap-1.5 border-b sm:border-b-0 pb-2 sm:pb-0">
+                <a href="{{ route('admin.memberships.index') }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ !request('status') ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                    All
+                </a>
+                <a href="{{ route('admin.memberships.index', ['status' => 'active']) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'active' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                    Active
+                </a>
+                <a href="{{ route('admin.memberships.index', ['status' => 'cancelled']) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ request('status') === 'cancelled' ? 'bg-amber-50 text-amber-900 font-semibold border border-amber-200' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                    Cancelled
+                </a>
+            </div>
         </div>
     </div>
 

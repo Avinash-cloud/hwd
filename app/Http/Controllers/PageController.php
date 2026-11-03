@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactInquiry;
 use App\Models\SiteSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,11 +35,21 @@ class PageController extends Controller
 
     public function submitContact(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:25',
             'subject' => 'required|string|max:255',
             'message' => 'required|string|max:2000',
+        ]);
+
+        ContactInquiry::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
+            'subject' => $validated['subject'],
+            'message' => $validated['message'],
+            'status' => 'unread',
         ]);
 
         return back()->with('success', 'Thank you for contacting Haridwar Bliss. Our team will reach out to you shortly.');

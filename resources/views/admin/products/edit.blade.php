@@ -152,6 +152,17 @@
                                 <span class="text-sm text-slate-700 font-medium">Sacred Gangajal</span>
                             </label>
                         </div>
+
+                        <div class="flex items-center pt-2 sm:pt-6">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox"
+                                       name="is_member_free_eligible"
+                                       value="1"
+                                       {{ old('is_member_free_eligible', $product->is_member_free_eligible) ? 'checked' : '' }}
+                                       class="rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                <span class="text-sm text-slate-700 font-medium">Monthly Member Free Eligible</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 

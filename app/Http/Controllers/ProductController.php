@@ -89,9 +89,10 @@ class ProductController extends Controller
                     'slug' => $p->slug,
                     'url' => route('products.show', $p->slug),
                     'image' => $p->image_url,
-                    'price' => (float) $p->price,
-                    'compare_price' => $p->compare_price ? (float) $p->compare_price : null,
-                    'discount' => $p->discount_percentage,
+                    'in_stock' => $p->isInStock(),
+                    'price' => $p->isInStock() ? (float) $p->price : null,
+                    'compare_price' => $p->isInStock() && $p->compare_price ? (float) $p->compare_price : null,
+                    'discount' => $p->isInStock() ? $p->discount_percentage : null,
                     'rating' => (float) $p->rating,
                     'category' => $p->category?->name,
                     'badge' => $p->badge,
@@ -106,7 +107,7 @@ class ProductController extends Controller
      */
     public function show(string $slug): View
     {
-        $product = Product::with(['category', 'batch'])
+        $product = Product::with(['category', 'batch', 'approvedReviews.user'])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -119,7 +120,10 @@ class ProductController extends Controller
 
         $membershipFee = SiteSetting::get('membership_fee', '500');
         $shippingRate = SiteSetting::get('shipping_charge', '149');
+        $user = auth()->user();
+        $isVerifiedPurchaser = $product->canUserReview($user);
+        $userReview = $product->getUserReview($user);
 
-        return view('products.show', compact('product', 'relatedProducts', 'membershipFee', 'shippingRate'));
+        return view('products.show', compact('product', 'relatedProducts', 'membershipFee', 'shippingRate', 'isVerifiedPurchaser', 'userReview'));
     }
 }

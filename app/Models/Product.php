@@ -26,6 +26,7 @@ class Product extends Model
         'reviews_count',
         'badge',
         'is_gangajal',
+        'is_member_free_eligible',
         'volume_ml',
         'stock',
         'sku',
@@ -49,6 +50,7 @@ class Product extends Model
             'rating' => 'decimal:2',
             'reviews_count' => 'integer',
             'is_gangajal' => 'boolean',
+            'is_member_free_eligible' => 'boolean',
             'volume_ml' => 'integer',
             'stock' => 'integer',
             'gallery' => 'array',
@@ -108,6 +110,65 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function approvedReviews(): HasMany
+    {
+        return $this->hasMany(Review::class)->where('status', 'approved')->latest();
+    }
+
+    /**
+     * Check if product is currently in stock.
+     */
+    public function isInStock(): bool
+    {
+        return (int) $this->stock > 0;
+    }
+
+    /**
+     * Check if a given user can review this product (must be a verified purchaser).
+     */
+    public function canUserReview(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $user->hasPurchasedProduct($this);
+    }
+
+    /**
+     * Retrieve the user's review for this product if one exists.
+     */
+    public function getUserReview(?User $user): ?Review
+    {
+        if (! $user) {
+            return null;
+        }
+
+        return $this->reviews()->where('user_id', $user->id)->first();
+    }
+
+    /**
+     * Recalculate average rating and reviews count from approved reviews.
+     */
+    public function recalculateRating(): void
+    {
+        $approved = $this->reviews()->where('status', 'approved');
+        $count = $approved->count();
+
+        if ($count > 0) {
+            $avg = round($approved->avg('rating'), 1);
+            $this->update([
+                'rating' => $avg,
+                'reviews_count' => $count,
+            ]);
+        }
     }
 
     /**

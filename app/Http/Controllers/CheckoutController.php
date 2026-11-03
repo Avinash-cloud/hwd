@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Batch;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\CartService;
@@ -59,6 +60,14 @@ class CheckoutController extends Controller
 
         if (empty($cartDetails['items'])) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
+
+        // Prevent multiple free product orders in the same calendar month
+        if ($cartDetails['free_bottle_applied'] && $user->hasClaimedMonthlyFreeProduct()) {
+            return redirect()->route('cart.index')->with(
+                'warning',
+                'You have already claimed your monthly complimentary devotee offering for this calendar month.'
+            );
         }
 
         // Validate address
@@ -127,16 +136,24 @@ class CheckoutController extends Controller
             'batch_id' => $batch?->id,
             'subtotal' => $cartDetails['subtotal'],
             'discount_amount' => $cartDetails['discount'],
+            'coupon_code' => $cartDetails['coupon_code'],
+            'coupon_discount' => $cartDetails['coupon_discount'],
             'shipping_amount' => $cartDetails['shipping'],
             'total_amount' => $cartDetails['total'],
             'payment_method' => $paymentMethod,
             'payment_status' => $paymentStatus,
             'payment_id' => $paymentId,
-            'order_status' => 'confirmed',
+            'order_status' => 'new',
+            'inventory_deducted' => false,
             'qr_token' => $qrToken,
             'shipping_address' => $shippingAddress,
             'customer_notes' => $request->input('customer_notes'),
         ]);
+
+        // Increment coupon usage count if coupon was used
+        if ($cartDetails['coupon_code']) {
+            Coupon::where('code', $cartDetails['coupon_code'])->increment('used_count');
+        }
 
         // Create Order Items
         foreach ($cartDetails['items'] as $item) {

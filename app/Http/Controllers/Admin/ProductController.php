@@ -91,6 +91,7 @@ class ProductController extends Controller
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
             'is_gangajal' => 'nullable|boolean',
+            'is_member_free_eligible' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'is_bestseller' => 'nullable|boolean',
@@ -107,6 +108,7 @@ class ProductController extends Controller
 
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::lower(Str::random(5));
         $validated['is_gangajal'] = $request->boolean('is_gangajal');
+        $validated['is_member_free_eligible'] = $request->boolean('is_member_free_eligible');
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_bestseller'] = $request->boolean('is_bestseller');
@@ -154,6 +156,7 @@ class ProductController extends Controller
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
             'is_gangajal' => 'nullable|boolean',
+            'is_member_free_eligible' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
             'is_bestseller' => 'nullable|boolean',
@@ -172,6 +175,7 @@ class ProductController extends Controller
         unset($validated['image_file'], $validated['image_url']);
 
         $validated['is_gangajal'] = $request->boolean('is_gangajal');
+        $validated['is_member_free_eligible'] = $request->boolean('is_member_free_eligible');
         $validated['is_active'] = $request->boolean('is_active');
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['is_bestseller'] = $request->boolean('is_bestseller');

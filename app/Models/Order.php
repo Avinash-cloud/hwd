@@ -17,12 +17,15 @@ class Order extends Model
         'batch_id',
         'subtotal',
         'discount_amount',
+        'coupon_code',
+        'coupon_discount',
         'shipping_amount',
         'total_amount',
         'payment_method',
         'payment_status',
         'payment_id',
         'order_status',
+        'inventory_deducted',
         'tracking_number',
         'courier_name',
         'qr_token',
@@ -39,8 +42,10 @@ class Order extends Model
         return [
             'subtotal' => 'decimal:2',
             'discount_amount' => 'decimal:2',
+            'coupon_discount' => 'decimal:2',
             'shipping_amount' => 'decimal:2',
             'total_amount' => 'decimal:2',
+            'inventory_deducted' => 'boolean',
             'shipping_address' => 'array',
             'billing_address' => 'array',
             'dispatched_at' => 'datetime',
@@ -61,6 +66,18 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Determine if order contains a free monthly member product.
+     */
+    public function hasFreeMonthlyItem(): bool
+    {
+        if ($this->relationLoaded('items')) {
+            return $this->items->contains('is_free_monthly_bottle', true);
+        }
+
+        return $this->items()->where('is_free_monthly_bottle', true)->exists();
     }
 
     /**

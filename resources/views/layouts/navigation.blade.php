@@ -123,12 +123,19 @@
                                         <h6 class="text-xs font-bold text-slate-900 truncate group-hover:text-[#D97706] transition"
                                             x-text="item.name"></h6>
                                         <div class="flex items-center gap-2 mt-0.5">
-                                            <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.price"></span>
-                                            <template x-if="item.compare_price">
-                                                <span class="text-[10px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
+                                            <template x-if="item.in_stock">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.price"></span>
+                                                    <template x-if="item.compare_price">
+                                                        <span class="text-[10px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
+                                                    </template>
+                                                    <template x-if="item.discount">
+                                                        <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded" x-text="item.discount + '% OFF'"></span>
+                                                    </template>
+                                                </div>
                                             </template>
-                                            <template x-if="item.discount">
-                                                <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded" x-text="item.discount + '% OFF'"></span>
+                                            <template x-if="!item.in_stock">
+                                                <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Out of Stock</span>
                                             </template>
                                         </div>
                                     </div>

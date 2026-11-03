@@ -20,7 +20,11 @@
 
         <!-- Discount / Offer Badge (Top Left) -->
         <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10 pointer-events-none">
-            @if ($discount)
+            @if (!$product->isInStock())
+                <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-rose-700 text-white shadow-xs">
+                    Out of Stock
+                </span>
+            @elseif ($discount)
                 <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-[#881337] text-white shadow-xs">
                     {{ $discount }}% OFF
                 </span>
@@ -85,45 +89,59 @@
 
         <!-- Price & Quick Add Button Row (99Pandit Style) -->
         <div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between gap-1.5">
-            <!-- Price Display -->
-            <div class="flex flex-col min-w-0">
-                <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
-                    <span class="font-extrabold text-sm sm:text-base text-slate-900 whitespace-nowrap">
-                        ₹{{ number_format($product->price, 0) }}
-                    </span>
-                    @if ($product->compare_price && $product->compare_price > $product->price)
-                        <del class="text-[11px] sm:text-xs text-slate-400 whitespace-nowrap">
-                            ₹{{ number_format($product->compare_price, 0) }}
-                        </del>
+            @if ($product->isInStock())
+                <!-- Price Display -->
+                <div class="flex flex-col min-w-0">
+                    <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
+                        <span class="font-extrabold text-sm sm:text-base text-slate-900 whitespace-nowrap">
+                            ₹{{ number_format($product->price, 0) }}
+                        </span>
+                        @if ($product->compare_price && $product->compare_price > $product->price)
+                            <del class="text-[11px] sm:text-xs text-slate-400 whitespace-nowrap">
+                                ₹{{ number_format($product->compare_price, 0) }}
+                            </del>
+                        @endif
+                    </div>
+                    @if ($discount)
+                        <span class="text-[10px] font-bold text-emerald-700 leading-none whitespace-nowrap">
+                            Save {{ $discount }}%
+                        </span>
                     @endif
                 </div>
-                @if ($discount)
-                    <span class="text-[10px] font-bold text-emerald-700 leading-none whitespace-nowrap">
-                        Save {{ $discount }}%
-                    </span>
-                @endif
-            </div>
 
-            <!-- Quick Add to Cart Button -->
-            <button type="button"
-                    @click="addToCart()"
-                    :disabled="adding"
-                    class="shrink-0 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-amber-50 hover:bg-[#D97706] text-[#D97706] hover:text-white border border-amber-300 hover:border-[#D97706] rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-50 whitespace-nowrap">
-                <template x-if="!adding">
-                    <span class="inline-flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                <!-- Quick Add to Cart Button -->
+                <button type="button"
+                        @click="addToCart()"
+                        :disabled="adding"
+                        class="shrink-0 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-amber-50 hover:bg-[#D97706] text-[#D97706] hover:text-white border border-amber-300 hover:border-[#D97706] rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-50 whitespace-nowrap">
+                    <template x-if="!adding">
+                        <span class="inline-flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <span>Add</span>
+                        </span>
+                    </template>
+                    <template x-if="adding">
+                        <svg class="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <span>Add</span>
+                    </template>
+                </button>
+            @else
+                <!-- Out of Stock: No price shown on whole app, disabled CTA -->
+                <div class="flex flex-col min-w-0">
+                    <span class="font-extrabold text-xs text-rose-600 uppercase tracking-wide">
+                        Out of Stock
                     </span>
-                </template>
-                <template x-if="adding">
-                    <svg class="animate-spin h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </template>
-            </button>
+                </div>
+                <button type="button"
+                        disabled
+                        class="shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl text-[11px] font-bold cursor-not-allowed whitespace-nowrap">
+                    Out of Stock
+                </button>
+            @endif
         </div>
     </div>
 </div>

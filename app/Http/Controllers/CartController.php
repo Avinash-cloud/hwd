@@ -92,12 +92,12 @@ class CartController extends Controller
 
         $product = Product::findOrFail($productId);
 
-        if (! $product->is_active) {
+        if (! $product->is_active || ! $product->isInStock()) {
             if ($request->expectsJson() || $request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'This product is currently not available.'], 422);
+                return response()->json(['success' => false, 'message' => 'This sacred product is currently out of stock.'], 422);
             }
 
-            return back()->with('error', 'This sacred product is currently not available.');
+            return back()->with('error', 'This sacred product is currently out of stock.');
         }
 
         $this->cartService->add($productId, $quantity);
@@ -157,5 +157,49 @@ class CartController extends Controller
         }
 
         return redirect()->route('cart.index')->with('success', 'Item removed from sacred cart.');
+    }
+
+    /**
+     * Apply promotional coupon code.
+     */
+    public function applyCoupon(Request $request): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'coupon_code' => 'required|string|max:50',
+        ]);
+
+        $result = $this->cartService->applyCoupon($request->input('coupon_code'), $request->user());
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => $result['success'],
+                'message' => $result['message'],
+                'cart' => $this->cartService->getDetails($request->user()),
+            ], $result['success'] ? 200 : 422);
+        }
+
+        if (! $result['success']) {
+            return back()->with('error', $result['message']);
+        }
+
+        return back()->with('success', $result['message']);
+    }
+
+    /**
+     * Remove promotional coupon.
+     */
+    public function removeCoupon(Request $request): RedirectResponse|JsonResponse
+    {
+        $this->cartService->removeCoupon();
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Coupon removed.',
+                'cart' => $this->cartService->getDetails($request->user()),
+            ]);
+        }
+
+        return back()->with('success', 'Coupon code removed.');
     }
 }

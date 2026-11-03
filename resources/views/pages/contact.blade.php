@@ -109,6 +109,13 @@
                     </div>
 
                     <div>
+                        <label class="block font-bold text-slate-700 mb-1">Phone Number (Optional)</label>
+                        <input type="text" name="phone"
+                            class="w-full px-3 py-2 border border-slate-300 rounded-xl"
+                            placeholder="+91 98765 43210" />
+                    </div>
+
+                    <div>
                         <label class="block font-bold text-slate-700 mb-1">Subject *</label>
                         <input type="text" name="subject" required
                             class="w-full px-3 py-2 border border-slate-300 rounded-xl"

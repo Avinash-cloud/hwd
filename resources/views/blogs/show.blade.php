@@ -121,9 +121,13 @@
                                     {{ $prod->name }}
                                 </h3>
                                 <div class="mt-1 flex items-center justify-between">
-                                    <span class="font-bold font-mono text-xs text-slate-900">₹{{ number_format($prod->price, 0) }}</span>
-                                    @if ($prod->is_gangajal)
-                                        <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-1.5 py-0.5 rounded">Free for Members</span>
+                                    @if ($prod->isInStock())
+                                        <span class="font-bold font-mono text-xs text-slate-900">₹{{ number_format($prod->price, 0) }}</span>
+                                        @if ($prod->is_gangajal)
+                                            <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-1.5 py-0.5 rounded">Free for Members</span>
+                                        @endif
+                                    @else
+                                        <span class="text-[10px] text-rose-600 font-bold uppercase tracking-wider">Out of Stock</span>
                                     @endif
                                 </div>
                             </a>

@@ -190,19 +190,26 @@
                     <div class="pt-3 border-t border-slate-100 space-y-2">
                         <div class="flex justify-between text-slate-600">
                             <span>Subtotal:</span>
-                            <span>₹{{ number_format($cartDetails['subtotal'], 2) }}</span>
+                            <span class="font-mono">₹{{ number_format($cartDetails['subtotal'], 2) }}</span>
                         </div>
 
-                        @if ($cartDetails['discount'] > 0)
-                            <div class="flex justify-between text-[#0369A1] font-bold">
-                                <span>Monthly 1st Bottle Discount:</span>
-                                <span>- ₹{{ number_format($cartDetails['discount'], 2) }}</span>
+                        @if ($cartDetails['member_discount'] > 0)
+                            <div class="flex justify-between text-emerald-700 font-bold">
+                                <span>Member Savings / Free Offering:</span>
+                                <span class="font-mono">- ₹{{ number_format($cartDetails['member_discount'], 2) }}</span>
+                            </div>
+                        @endif
+
+                        @if ($cartDetails['coupon_discount'] > 0)
+                            <div class="flex justify-between text-amber-700 font-bold">
+                                <span>Coupon ({{ $cartDetails['coupon_code'] }}):</span>
+                                <span class="font-mono">- ₹{{ number_format($cartDetails['coupon_discount'], 2) }}</span>
                             </div>
                         @endif
 
                         <div class="flex justify-between text-slate-600">
-                            <span>Shipping (Shiprocket Flat):</span>
-                            <span>₹{{ number_format($cartDetails['shipping'], 2) }}</span>
+                            <span>Shipping (Shiprocket Logistics):</span>
+                            <span class="font-mono">₹{{ number_format($cartDetails['shipping'], 2) }}</span>
                         </div>
                     </div>
 
