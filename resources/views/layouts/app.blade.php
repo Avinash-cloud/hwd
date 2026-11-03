@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth h-full overflow-x-hidden">
 
 <head>
     <meta charset="utf-8">
@@ -21,7 +21,7 @@
 </head>
 
 <body
-    class="font-sans text-slate-900 antialiased bg-stone-50 min-h-full flex flex-col selection:bg-[#D97706] selection:text-white">
+    class="font-sans text-slate-900 antialiased bg-stone-50 min-h-full flex flex-col selection:bg-[#D97706] selection:text-white overflow-x-hidden w-full max-w-full">
     @include('layouts.navigation')
 
     <!-- Flash Messages -->
@@ -85,7 +85,7 @@
     @endisset
 
     <!-- Page Content -->
-    <main class="flex-grow">
+    <main class="flex-grow w-full max-w-full overflow-x-hidden">
         {{ $slot }}
     </main>
 

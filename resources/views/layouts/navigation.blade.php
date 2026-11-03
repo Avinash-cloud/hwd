@@ -1,19 +1,19 @@
-<header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs">
+<header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs w-full overflow-hidden">
     <!-- 1. Top Announcement Bar (99Pandit style) -->
-    <div class="bg-[#881337] text-white text-xs py-2 px-4 shadow-inner">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <div class="bg-[#881337] text-white text-xs py-2 px-3 sm:px-4 shadow-inner overflow-hidden w-full">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 min-w-0">
             <!-- Left: Rotating / Static Message -->
-            <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                <span class="inline-flex items-center text-amber-400">
+            <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap min-w-0 flex-1">
+                <span class="inline-flex items-center text-amber-400 shrink-0">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z" clip-rule="evenodd" />
                     </svg>
                 </span>
-                <span class="font-medium text-white/95">
+                <span class="font-medium text-white/95 truncate">
                     100% Authentic Brahmakund Gangajal & Vedic Essentials · Directly Sourced from Har Ki Pauri
                 </span>
-                <span class="hidden md:inline text-white/40">|</span>
-                <span class="hidden md:inline text-amber-200 font-semibold">
+                <span class="hidden md:inline text-white/40 shrink-0">|</span>
+                <span class="hidden md:inline text-amber-200 font-semibold shrink-0">
                     Free Sacred Delivery on orders above ₹499
                 </span>
             </div>
@@ -35,14 +35,14 @@
     </div>
 
     <!-- 2. Main Header Bar (Logo, Predictive Search, Account, Wishlist, Cart) -->
-    <div class="border-b border-amber-200/50 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20 gap-4 lg:gap-8">
+    <div class="border-b border-amber-200/50 bg-white w-full">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4 lg:gap-8 min-w-0">
                 <!-- Mobile Menu Button -->
-                <div class="flex lg:hidden items-center">
+                <div class="flex lg:hidden items-center shrink-0">
                     <button type="button"
                             @click="mobileMenuOpen = !mobileMenuOpen"
-                            class="p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition"
+                            class="p-1.5 sm:p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition touch-manipulation"
                             aria-label="Toggle Navigation Menu">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -52,14 +52,14 @@
                 </div>
 
                 <!-- Brand Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                        <x-application-logo class="block h-12 w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105" />
-                        <div class="leading-tight">
-                            <span class="block font-serif font-extrabold text-xl sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#881337] transition">
+                <div class="min-w-0 flex items-center">
+                    <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0">
+                        <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" />
+                        <div class="leading-tight min-w-0">
+                            <span class="block font-serif font-extrabold text-base sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#881337] transition truncate">
                                 Blu Bliss
                             </span>
-                            <span class="block text-[10px] font-bold tracking-wider text-[#881337]">
+                            <span class="hidden sm:block text-[9px] sm:text-[10px] font-bold tracking-wider text-[#881337] truncate">
                                 Saaf Pani Swath Ke Nishani
                             </span>
                         </div>
@@ -155,7 +155,7 @@
                 </div>
 
                 <!-- Right Action Icons: 5-Yr Membership, Account, Wishlist, Cart Drawer -->
-                <div class="flex items-center gap-2 sm:gap-4">
+                <div class="flex items-center gap-1.5 sm:gap-4 shrink-0">
                     <!-- 5-Year Devotee Membership Pill -->
                     @auth
                         @if (Auth::user()->hasActiveMembership())
@@ -180,14 +180,14 @@
                     <div class="relative" x-data="{ userMenuOpen: false }">
                         @auth
                             <button @click="userMenuOpen = !userMenuOpen"
-                                    class="flex items-center gap-2 p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition">
-                                <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-[#D97706]">
+                                    class="flex items-center gap-1 sm:gap-2 p-1 sm:p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition touch-manipulation">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-[#D97706]">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
                                 <span class="hidden lg:inline text-xs font-semibold text-slate-800">
                                     {{ Str::limit(Auth::user()->name, 10) }}
                                 </span>
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </button>
@@ -236,7 +236,7 @@
                     @endphp
                     <button type="button"
                             @click="$dispatch('open-cart-drawer')"
-                            class="relative flex items-center gap-2 px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-slate-900 rounded-xl transition shadow-xs group"
+                            class="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-slate-900 rounded-xl transition shadow-xs group touch-manipulation"
                             aria-label="Shopping Cart">
                         <div class="relative">
                             <svg class="w-5 h-5 text-slate-800 group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">

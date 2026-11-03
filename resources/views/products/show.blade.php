@@ -12,54 +12,54 @@
     @endphp
 
     <!-- Breadcrumb -->
-    <div class="bg-[#FFFDF7] border-b border-amber-200/60 py-4">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-slate-500 flex items-center gap-2">
-            <a href="{{ route('home') }}" class="hover:text-[#D97706] transition">Home</a>
-            <span>/</span>
-            <a href="{{ route('products.index') }}" class="hover:text-[#D97706] transition">Catalog</a>
-            <span>/</span>
+    <div class="bg-[#FFFDF7] border-b border-amber-200/60 py-3 sm:py-4 overflow-hidden w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-slate-500 flex items-center gap-2 overflow-x-auto whitespace-nowrap scrollbar-none w-full min-w-0">
+            <a href="{{ route('home') }}" class="hover:text-[#D97706] transition shrink-0">Home</a>
+            <span class="shrink-0 text-slate-300">/</span>
+            <a href="{{ route('products.index') }}" class="hover:text-[#D97706] transition shrink-0">Catalog</a>
+            <span class="shrink-0 text-slate-300">/</span>
             <a href="{{ route('products.index', ['category' => $product->category->slug]) }}"
-               class="hover:text-[#D97706] transition capitalize">{{ $product->category->name }}</a>
-            <span>/</span>
-            <span class="text-slate-900 font-bold truncate max-w-xs">{{ $product->name }}</span>
+               class="hover:text-[#D97706] transition capitalize shrink-0">{{ $product->category->name }}</a>
+            <span class="shrink-0 text-slate-300">/</span>
+            <span class="text-slate-900 font-bold truncate max-w-[140px] sm:max-w-xs shrink-0">{{ $product->name }}</span>
         </div>
     </div>
 
     <!-- Product Details Main Section (Shop.99Pandit Style) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14"
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-14 pb-28 lg:pb-14 w-full min-w-0 overflow-hidden"
          x-data="pdpManager({{ $product->id }}, '{{ $imgUrl }}')">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start w-full min-w-0">
             
             <!-- Left Column: Image Gallery (5 cols on lg) -->
-            <div class="lg:col-span-6 space-y-4">
+            <div class="lg:col-span-6 space-y-4 w-full min-w-0 max-w-full">
                 <!-- Main Image Display with Badges -->
-                <div class="relative w-full aspect-square bg-[#FFFDF7] border border-amber-200/80 rounded-3xl overflow-hidden shadow-xs">
+                <div class="relative w-full aspect-square bg-[#FFFDF7] border border-amber-200/80 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs">
                     <img :src="currentImage"
                          alt="{{ $product->name }}"
                          class="w-full h-full object-cover object-center transition-all duration-300">
 
                     <!-- Badges -->
-                    <div class="absolute top-4 left-4 flex flex-col gap-1.5 z-10 pointer-events-none">
+                    <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex flex-col gap-1.5 z-10 pointer-events-none">
                         @if ($discount)
-                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-[#881337] text-white shadow-md">
+                            <span class="inline-flex items-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[11px] sm:text-xs font-extrabold bg-[#881337] text-white shadow-md">
                                 {{ $discount }}% OFF
                             </span>
                         @elseif ($product->badge)
-                            <span class="inline-flex items-center px-3 py-1 rounded-xl text-xs font-extrabold bg-[#D97706] text-white shadow-md">
+                            <span class="inline-flex items-center px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-xl text-[11px] sm:text-xs font-extrabold bg-[#D97706] text-white shadow-md">
                                 {{ $product->badge }}
                             </span>
                         @endif
 
                         @if ($product->is_gangajal)
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-extrabold bg-[#0369A1] text-white shadow-md">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-xl text-[10px] sm:text-[11px] font-extrabold bg-[#0369A1] text-white shadow-md">
                                 <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span> Brahmakund Certified
                             </span>
                         @endif
                     </div>
 
                     @if ($product->batch)
-                        <div class="absolute bottom-4 left-4 z-10">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-slate-900/80 text-amber-300 backdrop-blur-xs border border-white/20">
+                        <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-slate-900/80 text-amber-300 backdrop-blur-xs border border-white/20">
                                 <span>Batch #{{ $product->batch->batch_number }}</span>
                             </span>
                         </div>
@@ -67,11 +67,11 @@
                 </div>
 
                 <!-- Thumbnail Gallery Row -->
-                <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory">
                     @foreach ($gallery as $idx => $thumb)
                         <button type="button"
                                 @click="setMainImage('{{ $thumb }}', {{ $idx }})"
-                                class="w-20 h-20 rounded-2xl bg-white border-2 overflow-hidden shrink-0 transition"
+                                class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-white border-2 overflow-hidden shrink-0 snap-start transition touch-manipulation"
                                 :class="selectedThumb === {{ $idx }} ? 'border-[#D97706] shadow-md ring-2 ring-[#D97706]/30' : 'border-slate-200 hover:border-amber-300 opacity-75 hover:opacity-100'">
                             <img src="{{ $thumb }}" alt="Thumbnail" class="w-full h-full object-cover">
                         </button>
@@ -80,16 +80,16 @@
 
                 <!-- Purity / Origin Guarantee Box -->
                 @if ($product->purity_details)
-                    <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-4 sm:p-5 space-y-3 text-xs shadow-xs">
-                        <div class="flex items-center gap-2 font-serif font-bold text-[#881337] text-sm">
+                    <div class="bg-[#FFFDF7] border border-amber-300/60 rounded-2xl p-3.5 sm:p-5 space-y-2.5 sm:space-y-3 text-xs shadow-xs">
+                        <div class="flex items-center gap-2 font-serif font-bold text-[#881337] text-xs sm:text-sm">
                             <svg class="w-4 h-4 shrink-0 text-[#881337]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                             <span>Consecration & Sanctity Assurance</span>
                         </div>
-                        <div class="flex gap-3 items-center">
-                            <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}" alt="Har Ki Pauri Sanctum" class="w-16 h-16 rounded-xl object-cover shrink-0 border border-amber-300/60 shadow-xs">
-                            <p class="text-slate-700 leading-relaxed text-[11px]">
+                        <div class="flex gap-2.5 sm:gap-3 items-center">
+                            <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}" alt="Har Ki Pauri Sanctum" class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover shrink-0 border border-amber-300/60 shadow-xs">
+                            <p class="text-slate-700 leading-relaxed text-[11px] sm:text-xs">
                                 {{ $product->purity_details }}
                             </p>
                         </div>
@@ -98,15 +98,15 @@
             </div>
 
             <!-- Right Column: Product Info & Purchase Actions (6 cols on lg) -->
-            <div class="lg:col-span-6 space-y-6">
+            <div class="lg:col-span-6 space-y-6 w-full min-w-0 max-w-full">
                 <div>
                     <!-- Category & Ratings -->
-                    <div class="flex items-center justify-between gap-2 mb-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                         <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
                             {{ $product->category->name }}
                         </span>
 
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-lg text-xs font-bold text-slate-800">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-lg text-xs font-bold text-slate-800 shrink-0">
                             <div class="flex items-center text-amber-500">
                                 @for ($i = 0; $i < 5; $i++)
                                     <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
@@ -114,35 +114,35 @@
                             </div>
                             <span>{{ number_format($product->rating ?? 4.8, 1) }}</span>
                             <a href="#devotee-reviews" class="text-slate-500 hover:text-[#D97706] font-normal underline transition">
-                                ({{ $product->approvedReviews->count() > 0 ? $product->approvedReviews->count() : ($product->reviews_count ?? 15) }} devotee reviews)
+                                ({{ $product->approvedReviews->count() > 0 ? $product->approvedReviews->count() : ($product->reviews_count ?? 15) }} reviews)
                             </a>
                         </div>
                     </div>
 
                     <!-- Title -->
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-slate-900 leading-tight">
+                    <h1 class="text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-slate-900 leading-tight">
                         {{ $product->name }}
                     </h1>
 
                     <!-- Short Description -->
-                    <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                    <p class="mt-2.5 sm:mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
                         {{ $product->short_description }}
                     </p>
                 </div>
 
                 @if ($product->isInStock())
                     <!-- Price Block (99Pandit Style) -->
-                    <div class="bg-[#FFFDF7] border border-amber-200/80 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
-                        <div class="flex items-baseline gap-3 flex-wrap">
-                            <span class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    <div class="bg-[#FFFDF7] border border-amber-200/80 rounded-2xl p-4 sm:p-6 shadow-xs space-y-3">
+                        <div class="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
+                            <span class="text-2xl sm:text-4xl font-extrabold text-slate-900">
                                 ₹{{ number_format($product->price, 0) }}
                             </span>
 
                             @if ($product->compare_price && $product->compare_price > $product->price)
-                                <del class="text-lg text-slate-400 font-semibold">
+                                <del class="text-base sm:text-lg text-slate-400 font-semibold">
                                     ₹{{ number_format($product->compare_price, 0) }}
                                 </del>
-                                <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-[#881337] text-white">
+                                <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#881337] text-white">
                                     Save {{ $discount }}%
                                 </span>
                             @endif
@@ -153,9 +153,9 @@
                         </p>
 
                         <!-- Member Pricing Benefit Banner -->
-                        <div class="pt-3 border-t border-amber-200/60 flex items-center justify-between text-xs">
+                        <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
                             <div class="flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full bg-[#D97706]/10 text-[#D97706] flex items-center justify-center font-bold text-xs">
+                                <span class="w-6 h-6 rounded-full bg-[#D97706]/10 text-[#D97706] flex items-center justify-center font-bold text-xs shrink-0">
                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -171,7 +171,7 @@
                             </div>
 
                             @if (!Auth::check() || !Auth::user()->hasActiveMembership())
-                                <a href="{{ route('membership.join') }}" class="font-bold text-[#D97706] hover:underline text-[11px]">
+                                <a href="{{ route('membership.join') }}" class="font-bold text-[#D97706] hover:underline text-[11px] self-start sm:self-auto">
                                     Join Membership →
                                 </a>
                             @endif
@@ -179,46 +179,50 @@
                     </div>
 
                     <!-- Quantity & Actions Box -->
-                    <div class="space-y-4 pt-2">
-                        <div class="flex items-center gap-4">
-                            <div class="w-36 shrink-0">
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Quantity</label>
-                                <div class="inline-flex items-center w-full border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
-                                    <button type="button"
-                                            @click="if(quantity > 1) quantity--"
-                                            class="w-10 py-2.5 text-slate-600 hover:bg-slate-100 font-bold text-sm transition">
-                                        -
-                                    </button>
-                                    <input type="number"
-                                           x-model.number="quantity"
-                                           min="1" max="50"
-                                           class="w-full text-center border-0 text-sm font-bold text-slate-900 focus:ring-0 p-0" />
-                                    <button type="button"
-                                            @click="quantity++"
-                                            class="w-10 py-2.5 text-slate-600 hover:bg-slate-100 font-bold text-sm transition">
-                                        +
-                                    </button>
+                    <div class="space-y-3 sm:space-y-4 pt-1 sm:pt-2">
+                        <!-- Clean Responsive Quantity & Stock Row (No awkward misalignment) -->
+                        <div class="bg-amber-50/40 border border-amber-200/60 rounded-2xl p-3 sm:p-4">
+                            <div class="flex items-center justify-between gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Quantity</label>
+                                    <div class="inline-flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+                                        <button type="button"
+                                                @click="if(quantity > 1) quantity--"
+                                                class="w-9 sm:w-10 py-2 sm:py-2.5 text-slate-600 hover:bg-slate-100 active:bg-slate-200 font-bold text-sm transition touch-manipulation">
+                                            −
+                                        </button>
+                                        <input type="number"
+                                               x-model.number="quantity"
+                                               min="1" max="50"
+                                               class="w-12 sm:w-14 text-center border-0 text-sm font-bold text-slate-900 focus:ring-0 p-0" />
+                                        <button type="button"
+                                                @click="quantity++"
+                                                class="w-9 sm:w-10 py-2 sm:py-2.5 text-slate-600 hover:bg-slate-100 active:bg-slate-200 font-bold text-sm transition touch-manipulation">
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="pt-6">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                                    <span>In Stock</span>
-                                </span>
+                                <div class="text-right">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                        <span>In Stock</span>
+                                    </span>
+                                    <span class="block text-[11px] text-slate-500 mt-0.5 font-medium">Ready to Dispatch</span>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Dual CTA Buttons: Add to Cart + Buy It Now -->
-                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
                             <!-- Add to Cart (Ajax + Drawer) -->
                             <button type="button"
                                     @click="addToCart(false)"
                                     :disabled="adding"
-                                    class="flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5 disabled:opacity-50">
+                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#D97706] hover:bg-[#F97316] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-50">
                                 <template x-if="!adding">
                                     <span class="flex items-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
                                         <span>Add to Sacred Cart</span>
@@ -233,9 +237,9 @@
                             <button type="button"
                                     @click="addToCart(true)"
                                     :disabled="adding"
-                                    class="flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 bg-[#881337] hover:bg-[#991B1B] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5 disabled:opacity-50">
+                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#881337] hover:bg-[#991B1B] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-50">
                                 <span>Buy It Now</span>
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </button>
@@ -249,68 +253,64 @@
                     </div>
                 @else
                     <!-- Out of Stock: No price shown anywhere, disabled actions -->
-                    <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-2">
-                        <div class="flex items-center gap-2 text-rose-800 font-bold text-lg sm:text-xl font-serif">
-                            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
-                            <span>Currently Out of Stock</span>
+                    <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 text-rose-800 font-bold text-base sm:text-xl font-serif">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                <span>Currently Out of Stock</span>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                                Out of Stock
+                            </span>
                         </div>
                         <p class="text-xs text-rose-700 leading-relaxed">
                             Sacred collection and consecrated hermetic bottling is in progress at Haridwar. Please check back soon or explore our other available sacred items.
                         </p>
                     </div>
 
-                    <div class="space-y-4 pt-2">
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
-                                <span class="w-2 h-2 rounded-full bg-rose-600"></span>
-                                <span>Out of Stock</span>
-                            </span>
-                        </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2">
+                        <button type="button"
+                                disabled
+                                class="w-full py-3.5 px-4 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl font-bold text-xs sm:text-sm cursor-not-allowed text-center">
+                            Add to Sacred Cart
+                        </button>
 
-                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                            <button type="button"
-                                    disabled
-                                    class="flex-1 py-4 px-6 bg-slate-100 text-slate-400 border border-slate-200 rounded-xl font-bold text-sm cursor-not-allowed text-center">
-                                Add to Sacred Cart
-                            </button>
-
-                            <button type="button"
-                                    disabled
-                                    class="flex-1 py-4 px-6 bg-slate-200 text-slate-500 rounded-xl font-bold text-sm cursor-not-allowed text-center shadow-xs">
-                                Out of Stock
-                            </button>
-                        </div>
+                        <button type="button"
+                                disabled
+                                class="w-full py-3.5 px-4 bg-slate-200 text-slate-500 rounded-xl font-bold text-xs sm:text-sm cursor-not-allowed text-center shadow-xs">
+                            Out of Stock
+                        </button>
                     </div>
                 @endif
 
                 <!-- Devotee Trust Badges -->
-                <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center text-xs">
-                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 pt-4 border-t border-slate-100 text-center text-xs">
+                    <div class="p-2 sm:p-3 bg-stone-50 rounded-xl space-y-1">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
                             <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <span class="font-bold text-slate-800 text-[11px] block">Consecrated</span>
-                        <span class="text-[10px] text-slate-500 block">Har Ki Pauri</span>
+                        <span class="font-bold text-slate-800 text-[10px] sm:text-[11px] block truncate">Consecrated</span>
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 block truncate">Har Ki Pauri</span>
                     </div>
-                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                    <div class="p-2 sm:p-3 bg-stone-50 rounded-xl space-y-1">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                             </svg>
                         </div>
-                        <span class="font-bold text-slate-800 text-[11px] block">Damage-Free</span>
-                        <span class="text-[10px] text-slate-500 block">Hermetic Packaging</span>
+                        <span class="font-bold text-slate-800 text-[10px] sm:text-[11px] block truncate">Damage-Free</span>
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 block truncate">Hermetic Pack</span>
                     </div>
-                    <div class="p-3 bg-stone-50 rounded-xl space-y-1">
-                        <div class="w-7 h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
+                    <div class="p-2 sm:p-3 bg-stone-50 rounded-xl space-y-1">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                             </svg>
                         </div>
-                        <span class="font-bold text-slate-800 text-[11px] block">Easy Support</span>
-                        <span class="text-[10px] text-slate-500 block">Devotee Care</span>
+                        <span class="font-bold text-slate-800 text-[10px] sm:text-[11px] block truncate">Easy Support</span>
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 block truncate">Devotee Care</span>
                     </div>
                 </div>
 
@@ -377,13 +377,13 @@
         </div>
 
         <!-- Devotee Ratings & Verified Reviews Section -->
-        <section id="devotee-reviews" class="mt-16 sm:mt-24 pt-12 border-t border-amber-200/60">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <section id="devotee-reviews" class="mt-14 sm:mt-24 pt-10 sm:pt-12 border-t border-amber-200/60">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-10">
                 <div>
                     <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
                         Devotee Feedback & Blessings
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-serif font-extrabold text-slate-900 mt-1">
+                    <h2 class="text-xl sm:text-3xl font-serif font-extrabold text-slate-900 mt-1">
                         Devotee Reviews & Ratings
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">
@@ -392,8 +392,8 @@
                 </div>
 
                 <!-- Aggregate Rating Summary Badge -->
-                <div class="flex items-center gap-4 bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 shrink-0 shadow-xs">
-                    <div class="text-3xl font-extrabold text-slate-900 font-serif leading-none">
+                <div class="flex items-center gap-3 sm:gap-4 bg-amber-50/80 border border-amber-200/80 rounded-2xl p-3 sm:p-4 shrink-0 shadow-xs self-start sm:self-auto">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-serif leading-none">
                         {{ number_format($product->rating ?? 4.8, 1) }}
                     </div>
                     <div>
@@ -402,21 +402,21 @@
                                 <svg class="w-4 h-4 {{ $i <= round($product->rating ?? 4.8) ? 'fill-current' : 'text-slate-300 fill-current' }}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                             @endfor
                         </div>
-                        <span class="text-[11px] text-slate-500 font-medium block mt-0.5">
+                        <span class="text-[10px] sm:text-[11px] text-slate-500 font-medium block mt-0.5">
                             Based on {{ $product->approvedReviews->count() > 0 ? $product->approvedReviews->count() : ($product->reviews_count ?? 15) }} devotee reviews
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
                 <!-- Left Column: Add / Manage Review Form (5 cols) -->
-                <div class="lg:col-span-5 bg-white rounded-3xl border border-amber-200/80 p-6 shadow-xs space-y-5">
+                <div class="lg:col-span-5 bg-white rounded-2xl sm:rounded-3xl border border-amber-200/80 p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
                     @if ($isVerifiedPurchaser)
                         <div>
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                                <h3 class="font-serif font-bold text-lg text-slate-900">
+                                <h3 class="font-serif font-bold text-base sm:text-lg text-slate-900">
                                     {{ $userReview ? 'Update Your Review' : 'Share Your Sacred Review' }}
                                 </h3>
                             </div>
@@ -635,6 +635,66 @@
                 </div>
             </div>
         @endif
+
+        <!-- Mobile Sticky Bottom Purchase Bar (Shop.99Pandit / Blinkit Style) -->
+        <div class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-amber-200/80 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+            <div class="max-w-md mx-auto flex items-center justify-between gap-3">
+                @if ($product->isInStock())
+                    <div class="min-w-0">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Price</span>
+                        <div class="flex items-baseline gap-1.5">
+                            <span class="text-xl font-extrabold text-slate-900 leading-none">
+                                ₹{{ number_format($product->price, 0) }}
+                            </span>
+                            @if ($product->compare_price && $product->compare_price > $product->price)
+                                <del class="text-xs text-slate-400">
+                                    ₹{{ number_format($product->compare_price, 0) }}
+                                </del>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <!-- Quick Add to Cart button with Cart Icon -->
+                        <button type="button"
+                                @click="addToCart(false)"
+                                :disabled="adding"
+                                class="p-2.5 bg-amber-50 hover:bg-amber-100 active:bg-amber-200 text-[#D97706] border border-[#D97706]/40 rounded-xl transition touch-manipulation disabled:opacity-50"
+                                title="Add to Sacred Cart">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Buy It Now Button -->
+                        <button type="button"
+                                @click="addToCart(true)"
+                                :disabled="adding"
+                                class="px-5 py-2.5 bg-[#881337] hover:bg-[#991B1B] active:scale-98 text-white text-xs font-bold rounded-xl shadow-md transition touch-manipulation disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap">
+                            <span>Buy Now</span>
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                @else
+                    <div class="min-w-0">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+                            <span>Currently Out of Stock</span>
+                        </span>
+                    </div>
+
+                    <div>
+                        <button type="button"
+                                disabled
+                                class="px-5 py-2.5 bg-slate-200 text-slate-500 text-xs font-bold rounded-xl cursor-not-allowed">
+                            Out of Stock
+                        </button>
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
 </x-app-layout>
 

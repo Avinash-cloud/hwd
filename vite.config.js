@@ -8,4 +8,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: '0.0.0.0', // Tells Vite to listen on your local network
+        cors: true,
+        hmr: {
+            host: '192.168.1.70',
+        },
+    },
 });
