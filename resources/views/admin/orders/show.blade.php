@@ -233,8 +233,13 @@
             <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
                 <h2 class="text-sm font-semibold text-slate-900 pb-2 border-b border-slate-100">Full Shipping Destination</h2>
                 <div class="text-slate-600 text-xs space-y-1.5 leading-relaxed">
-                    <div class="font-bold text-slate-900 text-sm">
-                        {{ $order->shipping_address['recipient_name'] ?? $order->user->name }}
+                    <div class="flex items-center gap-2 font-bold text-slate-900 text-sm">
+                        <span>{{ $order->customer_name }}</span>
+                        @if ($order->isGuest())
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                Guest Order
+                            </span>
+                        @endif
                     </div>
                     <p>{{ $order->shipping_address['address_line1'] ?? '' }}</p>
                     @if(!empty($order->shipping_address['address_line2']))
@@ -248,10 +253,10 @@
                     </p>
                     <p class="text-slate-500">{{ $order->shipping_address['country'] ?? 'India' }}</p>
                     <div class="pt-2 border-t border-slate-100 mt-2 text-slate-700">
-                        Contact Phone: <span class="font-bold font-mono text-slate-900">{{ $order->shipping_address['phone'] ?? $order->user->phone ?? '—' }}</span>
+                        Contact Phone: <span class="font-bold font-mono text-slate-900">{{ $order->customer_phone ?? '—' }}</span>
                     </div>
                     <div class="text-slate-500">
-                        Email: <a href="mailto:{{ $order->user->email ?? '' }}" class="text-amber-700 hover:underline">{{ $order->user->email ?? '—' }}</a>
+                        Email: <a href="mailto:{{ $order->customer_email ?? '' }}" class="text-amber-700 hover:underline">{{ $order->customer_email ?? '—' }}</a>
                     </div>
                 </div>
             </div>

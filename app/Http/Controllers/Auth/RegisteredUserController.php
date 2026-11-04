@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -43,6 +44,11 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        // Automatically link any prior guest orders placed with this email
+        Order::whereNull('user_id')
+            ->where('guest_email', $user->email)
+            ->update(['user_id' => $user->id, 'guest_email' => null]);
 
         Auth::login($user);
 

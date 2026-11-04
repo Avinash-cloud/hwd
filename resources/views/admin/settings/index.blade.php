@@ -65,6 +65,27 @@
                 </div>
             </div>
 
+            <!-- Guest Checkout & Customer Onboarding Section -->
+            <div class="pt-5 border-t border-slate-100 space-y-4">
+                <h2 class="text-sm font-semibold text-slate-900">Guest Checkout & Customer Access</h2>
+
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox"
+                               name="guest_checkout_enabled"
+                               value="1"
+                               {{ $settings['guest_checkout_enabled'] === '1' ? 'checked' : '' }}
+                               class="mt-1 rounded text-amber-600 focus:ring-amber-600 border-slate-300">
+                        <div>
+                            <span class="text-slate-900 block font-semibold text-xs">Allow Guest Checkout for Non-Logged-In Devotees</span>
+                            <span class="text-[11px] text-slate-500 block mt-0.5">
+                                When enabled, customers can add sacred items to cart and checkout directly without logging in or holding a 5-Year Membership. They can optionally create an account during checkout or from their order confirmation page.
+                            </span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
             <!-- Devotee Support & Provenance Metadata Section -->
             <div class="pt-5 border-t border-slate-100 space-y-4">
                 <h2 class="text-sm font-semibold text-slate-900">Devotee Support & Provenance Defaults</h2>

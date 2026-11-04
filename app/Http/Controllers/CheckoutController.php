@@ -7,10 +7,15 @@ use App\Models\Batch;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\SiteSetting;
+use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -20,13 +25,21 @@ class CheckoutController extends Controller
     ) {}
 
     /**
-     * Show checkout page with address selection and pricing breakdown.
+     * Show checkout page with address selection, guest checkout fields, and pricing breakdown.
      */
     public function index(Request $request): View|RedirectResponse
     {
         $user = $request->user();
+        $guestCheckoutEnabled = SiteSetting::get('guest_checkout_enabled', '0') === '1';
 
-        if (! $user->hasActiveMembership() && ! $user->is_admin) {
+        if (! $user && ! $guestCheckoutEnabled) {
+            return redirect()->route('login')->with(
+                'warning',
+                'Please sign in to continue to checkout. You may also join our 5-Year Membership.'
+            );
+        }
+
+        if ($user && ! $user->hasActiveMembership() && ! $user->is_admin && ! $guestCheckoutEnabled) {
             return redirect()->route('membership.join')->with(
                 'warning',
                 'Only active members can place orders for sacred Gangajal. Please activate your 5-Year Membership to continue.'
@@ -39,20 +52,25 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('info', 'Your cart is empty.');
         }
 
-        $addresses = $user->addresses()->latest()->get();
-        $defaultAddress = $user->defaultAddress;
+        $addresses = $user ? $user->addresses()->latest()->get() : collect();
+        $defaultAddress = $user ? $user->defaultAddress : null;
 
-        return view('checkout.index', compact('cartDetails', 'user', 'addresses', 'defaultAddress'));
+        return view('checkout.index', compact('cartDetails', 'user', 'addresses', 'defaultAddress', 'guestCheckoutEnabled'));
     }
 
     /**
-     * Place order and process checkout.
+     * Place order and process checkout for both authenticated devotees and guest shoppers.
      */
     public function store(Request $request): RedirectResponse
     {
         $user = $request->user();
+        $guestCheckoutEnabled = SiteSetting::get('guest_checkout_enabled', '0') === '1';
 
-        if (! $user->hasActiveMembership() && ! $user->is_admin) {
+        if (! $user && ! $guestCheckoutEnabled) {
+            return redirect()->route('login')->with('warning', 'Please sign in to proceed with checkout.');
+        }
+
+        if ($user && ! $user->hasActiveMembership() && ! $user->is_admin && ! $guestCheckoutEnabled) {
             return redirect()->route('membership.join')->with('warning', 'Active membership required to checkout.');
         }
 
@@ -62,22 +80,23 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
 
-        // Prevent multiple free product orders in the same calendar month
-        if ($cartDetails['free_bottle_applied'] && $user->hasClaimedMonthlyFreeProduct()) {
+        // Prevent multiple free product orders in the same calendar month for members
+        if ($cartDetails['free_bottle_applied'] && $user && $user->hasClaimedMonthlyFreeProduct()) {
             return redirect()->route('cart.index')->with(
                 'warning',
                 'You have already claimed your monthly complimentary devotee offering for this calendar month.'
             );
         }
 
-        // Validate address
-        $useExisting = $request->boolean('use_existing_address');
+        $useExisting = $user && $request->boolean('use_existing_address');
+        $guestEmail = null;
 
         if ($useExisting && $request->filled('address_id')) {
             $addressModel = $user->addresses()->findOrFail($request->input('address_id'));
             $shippingAddress = [
                 'recipient_name' => $addressModel->recipient_name,
                 'phone' => $addressModel->phone,
+                'email' => $user->email,
                 'address_line1' => $addressModel->address_line1,
                 'address_line2' => $addressModel->address_line2,
                 'landmark' => $addressModel->landmark,
@@ -87,7 +106,7 @@ class CheckoutController extends Controller
                 'country' => $addressModel->country,
             ];
         } else {
-            $validatedAddress = $request->validate([
+            $validationRules = [
                 'recipient_name' => 'required|string|max:255',
                 'phone' => 'required|string|max:20',
                 'address_line1' => 'required|string|max:255',
@@ -97,26 +116,78 @@ class CheckoutController extends Controller
                 'state' => 'required|string|max:100',
                 'postal_code' => 'required|string|max:10',
                 'save_address' => 'nullable|boolean',
-            ]);
+            ];
 
-            $shippingAddress = $validatedAddress;
+            if (! $user) {
+                $validationRules['email'] = 'required|email|max:255';
+                $validationRules['create_account'] = 'nullable|boolean';
 
-            if ($request->boolean('save_address')) {
+                if ($request->boolean('create_account')) {
+                    $validationRules['email'] = 'required|email|max:255|unique:users,email';
+                    $validationRules['password'] = ['required', 'confirmed', Password::defaults()];
+                }
+            }
+
+            $validated = $request->validate($validationRules);
+
+            // Handle guest account creation if requested
+            if (! $user && $request->boolean('create_account')) {
+                $newUser = User::create([
+                    'name' => $validated['recipient_name'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'password' => Hash::make($request->input('password')),
+                ]);
+
+                Auth::login($newUser);
+                $user = $newUser;
+
+                // Save new address for this newly created user
                 Address::create([
                     'user_id' => $user->id,
                     'type' => 'shipping',
-                    'recipient_name' => $validatedAddress['recipient_name'],
-                    'phone' => $validatedAddress['phone'],
-                    'address_line1' => $validatedAddress['address_line1'],
-                    'address_line2' => $validatedAddress['address_line2'] ?? null,
-                    'landmark' => $validatedAddress['landmark'] ?? null,
-                    'city' => $validatedAddress['city'],
-                    'state' => $validatedAddress['state'],
-                    'postal_code' => $validatedAddress['postal_code'],
+                    'recipient_name' => $validated['recipient_name'],
+                    'phone' => $validated['phone'],
+                    'address_line1' => $validated['address_line1'],
+                    'address_line2' => $validated['address_line2'] ?? null,
+                    'landmark' => $validated['landmark'] ?? null,
+                    'city' => $validated['city'],
+                    'state' => $validated['state'],
+                    'postal_code' => $validated['postal_code'],
+                    'country' => 'India',
+                    'is_default' => true,
+                ]);
+            } elseif (! $user) {
+                $guestEmail = strtolower(trim($validated['email']));
+            } elseif ($user && $request->boolean('save_address')) {
+                Address::create([
+                    'user_id' => $user->id,
+                    'type' => 'shipping',
+                    'recipient_name' => $validated['recipient_name'],
+                    'phone' => $validated['phone'],
+                    'address_line1' => $validated['address_line1'],
+                    'address_line2' => $validated['address_line2'] ?? null,
+                    'landmark' => $validated['landmark'] ?? null,
+                    'city' => $validated['city'],
+                    'state' => $validated['state'],
+                    'postal_code' => $validated['postal_code'],
                     'country' => 'India',
                     'is_default' => $user->addresses()->count() === 0,
                 ]);
             }
+
+            $shippingAddress = [
+                'recipient_name' => $validated['recipient_name'],
+                'phone' => $validated['phone'],
+                'email' => $user ? $user->email : $guestEmail,
+                'address_line1' => $validated['address_line1'],
+                'address_line2' => $validated['address_line2'] ?? null,
+                'landmark' => $validated['landmark'] ?? null,
+                'city' => $validated['city'],
+                'state' => $validated['state'],
+                'postal_code' => $validated['postal_code'],
+                'country' => 'India',
+            ];
         }
 
         $paymentMethod = $request->input('payment_method', 'mock');
@@ -132,7 +203,8 @@ class CheckoutController extends Controller
 
         $order = Order::create([
             'order_number' => $orderNumber,
-            'user_id' => $user->id,
+            'user_id' => $user?->id,
+            'guest_email' => $guestEmail,
             'batch_id' => $batch?->id,
             'subtotal' => $cartDetails['subtotal'],
             'discount_amount' => $cartDetails['discount'],
@@ -149,6 +221,13 @@ class CheckoutController extends Controller
             'shipping_address' => $shippingAddress,
             'customer_notes' => $request->input('customer_notes'),
         ]);
+
+        // If user is authenticated, link any prior guest orders that matched this email
+        if ($user) {
+            Order::whereNull('user_id')
+                ->where('guest_email', $user->email)
+                ->update(['user_id' => $user->id, 'guest_email' => null]);
+        }
 
         // Increment coupon usage count if coupon was used
         if ($cartDetails['coupon_code']) {
@@ -167,6 +246,9 @@ class CheckoutController extends Controller
                 'is_free_monthly_bottle' => $item['has_free_bottle'],
             ]);
         }
+
+        // Store session authorization for guest to view their order confirmation page
+        session()->put('guest_order_access_'.$order->order_number, true);
 
         // Clear cart
         $this->cartService->clear();

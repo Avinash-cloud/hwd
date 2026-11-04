@@ -23,6 +23,56 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        @if ($order->isGuest() && !Auth::check())
+            <!-- Guest Account Creation Callout -->
+            <div class="bg-gradient-to-r from-amber-50 to-[#FFFDF7] border-2 border-amber-300 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-[#D97706]/10 text-[#D97706] flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#D97706]/10 text-[#D97706] uppercase tracking-wider mb-1">
+                            Save for Future Tracking
+                        </span>
+                        <h3 class="font-serif font-bold text-lg text-slate-900">Create an Account to Track Your Sacred Order</h3>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            You completed this order as a guest using <strong>{{ $order->customer_email }}</strong>. Set a secure password below to create your Haridwar Bliss account instantly so you can track dispatch milestones, download invoices, and access devotee privileges in the future.
+                        </p>
+                    </div>
+                </div>
+
+                <form method="POST" action="{{ route('orders.createAccount', $order->order_number) }}" class="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    @csrf
+                    <div>
+                        <input type="password"
+                               name="password"
+                               required
+                               placeholder="Create password (min 8 chars)"
+                               class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                        @error('password')
+                            <p class="text-rose-600 text-[11px] mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <input type="password"
+                               name="password_confirmation"
+                               required
+                               placeholder="Confirm your password"
+                               class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-300 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                    </div>
+                    <div>
+                        <button type="submit"
+                                class="w-full py-2.5 px-4 bg-[#D97706] hover:bg-[#F97316] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 h-full">
+                            <span>Create Account & Link Order</span>
+                            <span>→</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @endif
+
         <!-- Status Timeline -->
         <div class="bg-white rounded-3xl border border-[#D97706]/30 p-6 sm:p-8 shadow-xs">
             <h2 class="text-xs font-bold uppercase tracking-widest text-slate-400 font-mono mb-6">Delivery Progress</h2>
@@ -131,14 +181,15 @@
                 <div class="bg-white rounded-3xl border border-[#D97706]/30 p-8 shadow-xs space-y-4">
                     <h3 class="text-base font-serif font-bold text-slate-900">Destination Address</h3>
                     <div class="text-xs text-slate-600 space-y-1">
-                        <strong
-                            class="text-slate-900 font-bold">{{ $order->shipping_address['recipient_name'] ?? $order->user->name }}</strong>
+                        <strong class="text-slate-900 font-bold">{{ $order->customer_name }}</strong>
                         <p>{{ $order->shipping_address['address_line1'] ?? '' }}
                             {{ $order->shipping_address['address_line2'] ?? '' }}</p>
                         <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['state'] ?? '' }} -
                             {{ $order->shipping_address['postal_code'] ?? '' }}</p>
-                        <p class="text-slate-500">Phone: {{ $order->shipping_address['phone'] ?? $order->user->phone }}
-                        </p>
+                        <p class="text-slate-500">Phone: {{ $order->customer_phone ?? '—' }}</p>
+                        @if ($order->customer_email)
+                            <p class="text-slate-500">Email: {{ $order->customer_email }}</p>
+                        @endif
                     </div>
                 </div>
             </div>

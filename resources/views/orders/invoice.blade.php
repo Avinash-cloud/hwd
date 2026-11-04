@@ -51,10 +51,13 @@
             <div class="grid grid-cols-2 gap-8 py-6 border-b border-slate-200 text-xs">
                 <div>
                     <h3 class="font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2">Customer & Delivery Address</h3>
-                    <p class="font-bold text-sm text-slate-900">{{ $order->shipping_address['recipient_name'] ?? $order->user->name }}</p>
+                    <p class="font-bold text-sm text-slate-900">{{ $order->customer_name }}</p>
                     <p class="text-slate-600 mt-1">{{ $order->shipping_address['address_line1'] ?? '' }} {{ $order->shipping_address['address_line2'] ?? '' }}</p>
                     <p class="text-slate-600">{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['state'] ?? '' }} - {{ $order->shipping_address['postal_code'] ?? '' }}</p>
-                    <p class="text-slate-600 mt-1">Phone: {{ $order->shipping_address['phone'] ?? $order->user->phone }}</p>
+                    <p class="text-slate-600 mt-1">Phone: {{ $order->customer_phone ?? '—' }}</p>
+                    @if ($order->customer_email)
+                        <p class="text-slate-500 text-[11px]">Email: {{ $order->customer_email }}</p>
+                    @endif
                 </div>
 
                 <div class="flex items-start justify-end gap-4">

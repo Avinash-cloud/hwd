@@ -68,20 +68,21 @@ Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->nam
 // Predictive Search API
 Route::get('/api/search', [ProductController::class, 'apiSearch'])->name('api.search');
 
+// Checkout (Accessible by members, or guests when guest checkout is enabled)
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+// Order Confirmation & Invoices (Supports authenticated devotees and guest orders)
+Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+Route::post('/orders/{orderNumber}/create-account', [OrderController::class, 'createAccountFromGuestOrder'])->name('orders.createAccount');
+
 // Customer Protected Routes
 Route::middleware(['auth'])->group(function () {
-    // Checkout (requires active membership)
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-
     // Customer Portal / Dashboard
     Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
     Route::post('/my-account/addresses', [CustomerDashboardController::class, 'storeAddress'])->name('addresses.store');
     Route::delete('/my-account/addresses/{address}', [CustomerDashboardController::class, 'deleteAddress'])->name('addresses.delete');
-
-    // Order Details & Invoices
-    Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
-    Route::get('/orders/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
 
     // Customer Review Submission (verified purchasers only)
     Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');

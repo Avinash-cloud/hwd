@@ -245,7 +245,18 @@
                             </button>
                         </div>
 
-                        @if (!Auth::check() || !Auth::user()->hasActiveMembership())
+                        @php
+                            $guestCheckoutActive = \App\Models\SiteSetting::get('guest_checkout_enabled', '0') === '1';
+                        @endphp
+
+                        @if (!Auth::check() && $guestCheckoutActive)
+                            <p class="text-[11px] text-emerald-700 font-medium text-center flex items-center justify-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Guest Checkout Available · Instant Pan-India Delivery</span>
+                            </p>
+                        @elseif (!Auth::check() || !Auth::user()->hasActiveMembership())
                             <p class="text-[11px] text-slate-500 italic text-center">
                                 Note: Placing orders requires signing in or joining the 5-Year Membership (₹500 for 5 years).
                             </p>

@@ -1,4 +1,4 @@
-<header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs w-full overflow-hidden">
+<header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs w-full">
     <!-- 1. Top Announcement Bar (99Pandit style) -->
     <div class="bg-[#881337] text-white text-xs py-2 px-3 sm:px-4 shadow-inner overflow-hidden w-full">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 min-w-0">
@@ -35,7 +35,7 @@
     </div>
 
     <!-- 2. Main Header Bar (Logo, Predictive Search, Account, Wishlist, Cart) -->
-    <div class="border-b border-amber-200/50 bg-white w-full">
+    <div class="relative z-20 border-b border-amber-200/50 bg-white w-full">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4 lg:gap-8 min-w-0">
                 <!-- Mobile Menu Button -->
@@ -97,6 +97,7 @@
 
                     <!-- Predictive Search Results Dropdown -->
                     <div x-show="searchOpen && searchResults.length > 0"
+                         x-cloak
                          x-transition:enter="transition ease-out duration-150"
                          x-transition:enter-start="opacity-0 translate-y-1"
                          x-transition:enter-end="opacity-100 translate-y-0"
@@ -179,7 +180,8 @@
                     <!-- Account Menu -->
                     <div class="relative" x-data="{ userMenuOpen: false }">
                         @auth
-                            <button @click="userMenuOpen = !userMenuOpen"
+                            <button type="button"
+                                    @click="userMenuOpen = !userMenuOpen"
                                     class="flex items-center gap-1 sm:gap-2 p-1 sm:p-2 text-slate-700 hover:text-[#D97706] hover:bg-amber-50 rounded-xl transition touch-manipulation">
                                 <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-[#D97706]">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -193,30 +195,40 @@
                             </button>
 
                             <div x-show="userMenuOpen"
+                                 x-cloak
                                  @click.away="userMenuOpen = false"
-                                 x-transition
-                                 class="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-amber-200 py-1.5 z-50 text-xs">
-                                <div class="px-4 py-2 border-b border-slate-100">
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1 scale-95"
+                                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                                 x-transition:leave-end="opacity-0 translate-y-1 scale-95"
+                                 class="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-amber-200/80 py-1.5 z-50 text-xs">
+                                <div class="px-4 py-2.5 border-b border-slate-100 bg-amber-50/40 rounded-t-2xl">
                                     <p class="font-bold text-slate-900 truncate">{{ Auth::user()->name }}</p>
                                     <p class="text-[11px] text-slate-500 truncate">{{ Auth::user()->email }}</p>
                                 </div>
-                                @if (Auth::user()->is_admin)
-                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-amber-700 font-bold hover:bg-amber-50">
-                                        Admin Portal
+                                <div class="py-1">
+                                    @if (Auth::user()->is_admin)
+                                        <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-amber-700 font-bold hover:bg-amber-50 transition">
+                                            Admin Portal
+                                        </a>
+                                    @endif
+                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium transition">
+                                        My Orders & Address
                                     </a>
-                                @endif
-                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium">
-                                    My Orders & Address
-                                </a>
-                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium">
-                                    Profile Settings
-                                </a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-rose-600 hover:bg-rose-50 font-bold">
-                                        Sign Out
-                                    </button>
-                                </form>
+                                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-slate-700 hover:bg-amber-50 font-medium transition">
+                                        Profile Settings
+                                    </a>
+                                </div>
+                                <div class="border-t border-slate-100 pt-1">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="w-full text-left px-4 py-2 text-rose-600 hover:bg-rose-50 font-bold transition">
+                                            Sign Out
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         @else
                             <a href="{{ route('login') }}"
@@ -270,11 +282,11 @@
     </div>
 
     <!-- 3. Category Horizontal Navigation Menu (Single Line, 99Pandit Style) -->
-    <nav class="hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
+    <nav class="relative z-10 hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-11 text-xs">
                 <!-- Left: Category List with dropdowns in a single continuous line -->
-                <div class="flex-1 flex items-center space-x-0.5 xl:space-x-1.5 font-medium text-slate-700 whitespace-nowrap overflow-visible py-1">
+                <div class="flex-1 min-w-0 flex items-center gap-0.5 xl:gap-1.5 font-medium text-slate-700 whitespace-nowrap overflow-visible py-1">
                     <!-- Home -->
                     <a href="{{ route('home') }}"
                        class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('home') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
@@ -283,7 +295,7 @@
 
                     <!-- Dynamic Categories from navCategories -->
                     @if (isset($navCategories) && $navCategories->count() > 0)
-                        @foreach ($navCategories->take(7) as $cat)
+                        @foreach ($navCategories->take(5) as $cat)
                             <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
                                 <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
                                    class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
@@ -298,13 +310,14 @@
                                 <!-- Subcategories Dropdown -->
                                 @if ($cat->children && $cat->children->count() > 0)
                                     <div x-show="catOpen"
+                                         x-cloak
                                          x-transition:enter="transition ease-out duration-150"
                                          x-transition:enter-start="opacity-0 translate-y-1"
                                          x-transition:enter-end="opacity-100 translate-y-0"
                                          x-transition:leave="transition ease-in duration-100"
                                          x-transition:leave-start="opacity-100 translate-y-0"
                                          x-transition:leave-end="opacity-0 translate-y-1"
-                                         class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-50 divide-y divide-slate-100">
+                                         class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
                                         <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
                                             {{ $cat->name }} Collections
                                         </div>
@@ -326,6 +339,44 @@
                                 @endif
                             </div>
                         @endforeach
+
+                        <!-- More Categories Dropdown (if more than 5) -->
+                        @if ($navCategories->count() > 5)
+                            <div class="relative group shrink-0" x-data="{ moreCatOpen: false }" @mouseenter="moreCatOpen = true" @mouseleave="moreCatOpen = false">
+                                <button type="button"
+                                        @click="moreCatOpen = !moreCatOpen"
+                                        class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition text-slate-700">
+                                    <span>More Collections</span>
+                                    <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                <div x-show="moreCatOpen"
+                                     x-cloak
+                                     x-transition:enter="transition ease-out duration-150"
+                                     x-transition:enter-start="opacity-0 translate-y-1"
+                                     x-transition:enter-end="opacity-100 translate-y-0"
+                                     x-transition:leave="transition ease-in duration-100"
+                                     x-transition:leave-start="opacity-100 translate-y-0"
+                                     x-transition:leave-end="opacity-0 translate-y-1"
+                                     class="absolute left-0 top-full mt-0 w-60 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                                    <div class="py-1">
+                                        @foreach ($navCategories->slice(5) as $moreCat)
+                                            <a href="{{ route('products.index', ['category' => $moreCat->slug]) }}"
+                                               class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
+                                                {{ $moreCat->name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                    <div class="pt-1.5 px-3">
+                                        <a href="{{ route('products.index') }}" class="text-[11px] font-bold text-[#D97706] hover:underline">
+                                            View Complete Catalog →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @else
                         <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Puja Essentials</a>
                         <a href="{{ route('products.index', ['category' => 'hawan-samagri']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Hawan & Samagri</a>
@@ -338,27 +389,16 @@
                         Complete Catalog
                     </a>
 
-                    <!-- Spiritual Wisdom Blogs -->
+                    <!-- Spiritual Wisdom Blogs (hidden on lg, visible on xl) -->
                     <a href="{{ route('blogs.index') }}"
-                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('blogs.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                       class="hidden xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('blogs.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Spiritual Blogs
                     </a>
 
-                    <!-- Sacred Gallery -->
+                    <!-- Sacred Gallery (hidden on lg/xl, visible on 2xl) -->
                     <a href="{{ route('gallery.index') }}"
-                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                       class="hidden 2xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Sacred Gallery
-                    </a>
-                </div>
-
-                <!-- Right: Verifiable Batch QR Link (clean, no emojis) -->
-                <div class="hidden xl:flex items-center shrink-0 pl-3">
-                    <a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
-                       class="whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold text-[#0369A1] bg-sky-50/70 hover:bg-sky-100/70 border border-sky-200 transition">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                        <span>Verify Batch Seal</span>
                     </a>
                 </div>
             </div>
@@ -367,6 +407,7 @@
 
     <!-- 4. Mobile Navigation Menu Accordion Drawer -->
     <div x-show="mobileMenuOpen"
+         x-cloak
          x-transition
          class="lg:hidden bg-white border-b border-amber-200 divide-y divide-slate-100 text-sm">
         <div class="p-4 space-y-1">
@@ -389,7 +430,7 @@
                             @endif
                         </div>
                         @if ($cat->children && $cat->children->count() > 0)
-                            <div x-show="subOpen" class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
+                            <div x-show="subOpen" x-cloak class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
                                 @foreach ($cat->children as $sub)
                                     <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
                                        class="block py-1.5 text-slate-600 hover:text-[#D97706]">

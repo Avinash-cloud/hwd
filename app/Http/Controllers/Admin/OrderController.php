@@ -46,6 +46,7 @@ class OrderController extends Controller
                 $q->where('order_number', 'like', "%{$search}%")
                     ->orWhere('tracking_number', 'like', "%{$search}%")
                     ->orWhere('coupon_code', 'like', "%{$search}%")
+                    ->orWhere('guest_email', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($uq) use ($search): void {
                         $uq->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%")

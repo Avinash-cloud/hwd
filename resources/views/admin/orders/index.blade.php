@@ -231,11 +231,17 @@
 
                                 <!-- Customer -->
                                 <td class="py-3 px-4">
-                                    <div class="font-semibold text-slate-900">
-                                        {{ $o->user->name ?? ($o->shipping_address['recipient_name'] ?? 'Devotee') }}</div>
-                                    <div class="text-[11px] text-slate-500">{{ $o->user->email ?? '—' }}</div>
+                                    <div class="flex items-center gap-1.5 font-semibold text-slate-900">
+                                        <span>{{ $o->customer_name }}</span>
+                                        @if ($o->isGuest())
+                                            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                                Guest
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="text-[11px] text-slate-500">{{ $o->customer_email ?? '—' }}</div>
                                     <div class="text-[11px] text-slate-600 font-mono">
-                                        {{ $o->shipping_address['phone'] ?? $o->user->phone ?? '—' }}</div>
+                                        {{ $o->customer_phone ?? '—' }}</div>
                                 </td>
 
                                 <!-- Address Summary -->

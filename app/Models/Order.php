@@ -14,6 +14,7 @@ class Order extends Model
     protected $fillable = [
         'order_number',
         'user_id',
+        'guest_email',
         'batch_id',
         'subtotal',
         'discount_amount',
@@ -78,6 +79,38 @@ class Order extends Model
         }
 
         return $this->items()->where('is_free_monthly_bottle', true)->exists();
+    }
+
+    /**
+     * Determine if this order was placed as a guest.
+     */
+    public function isGuest(): bool
+    {
+        return $this->user_id === null;
+    }
+
+    /**
+     * Get resolved customer name.
+     */
+    public function getCustomerNameAttribute(): string
+    {
+        return $this->shipping_address['recipient_name'] ?? $this->user?->name ?? 'Devotee';
+    }
+
+    /**
+     * Get resolved customer email.
+     */
+    public function getCustomerEmailAttribute(): ?string
+    {
+        return $this->shipping_address['email'] ?? $this->guest_email ?? $this->user?->email;
+    }
+
+    /**
+     * Get resolved customer phone.
+     */
+    public function getCustomerPhoneAttribute(): ?string
+    {
+        return $this->shipping_address['phone'] ?? $this->user?->phone;
     }
 
     /**

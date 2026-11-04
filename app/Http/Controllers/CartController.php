@@ -39,6 +39,7 @@ class CartController extends Controller
         return response()->json([
             'cart' => $cartDetails,
             'is_member' => (bool) ($user && ($user->hasActiveMembership() || $user->is_admin)),
+            'guest_checkout_enabled' => SiteSetting::get('guest_checkout_enabled', '0') === '1',
         ]);
     }
 
@@ -48,9 +49,10 @@ class CartController extends Controller
     public function add(Request $request): RedirectResponse|JsonResponse
     {
         $user = $request->user();
+        $guestCheckoutEnabled = SiteSetting::get('guest_checkout_enabled', '0') === '1';
 
-        // Access Control as per SOW Section 3
-        if (! $user) {
+        // Access Control as per SOW Section 3 (bypassable when guest checkout is enabled by admin)
+        if (! $user && ! $guestCheckoutEnabled) {
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -66,7 +68,7 @@ class CartController extends Controller
             );
         }
 
-        if (! $user->hasActiveMembership() && ! $user->is_admin) {
+        if ($user && ! $user->hasActiveMembership() && ! $user->is_admin && ! $guestCheckoutEnabled) {
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
