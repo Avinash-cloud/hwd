@@ -2,13 +2,15 @@
     @php
         $discount = $product->discount_percentage;
         $imgUrl = $product->image_url;
-        $gallery = !empty($product->gallery) ? $product->gallery : [
+        $productGallery = $product->gallery_urls;
+        $gallery = !empty($productGallery) ? array_values(array_unique(array_merge([$imgUrl], $productGallery))) : [
             $imgUrl,
             asset('images/haridwar-panorama-clocktower.jpg'),
             asset('images/har-ki-pauri-temples.jpg'),
             asset('images/brahmakund-ghat-shrines.jpg'),
             asset('images/ganga-holy-waters.jpg'),
         ];
+        $hasVideo = !empty($product->video_url);
     @endphp
 
     <!-- Breadcrumb -->
@@ -32,11 +34,32 @@
             
             <!-- Left Column: Image Gallery (5 cols on lg) -->
             <div class="lg:col-span-6 space-y-4 w-full min-w-0 max-w-full">
-                <!-- Main Image Display with Badges -->
+                <!-- Main Image Display with Badges and Video Player -->
                 <div class="relative w-full aspect-square bg-[#FFFDF7] border border-amber-200/80 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs">
-                    <img :src="currentImage"
-                         alt="{{ $product->name }}"
-                         class="w-full h-full object-cover object-center transition-all duration-300">
+                    <!-- Image View -->
+                    <div x-show="!isVideoActive" class="w-full h-full">
+                        <img :src="currentImage"
+                             alt="{{ $product->name }}"
+                             class="w-full h-full object-contain object-center transition-all duration-300">
+                    </div>
+
+                    <!-- Video View -->
+                    @if ($hasVideo)
+                        <div x-show="isVideoActive" x-cloak class="w-full h-full bg-slate-950 flex items-center justify-center">
+                            @if ($product->is_video_embed)
+                                <iframe src="{{ $product->video_embed_url }}"
+                                        class="w-full h-full"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                            @else
+                                <video controls autoplay class="w-full h-full object-contain">
+                                    <source src="{{ $product->resolved_video_url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            @endif
+                        </div>
+                    @endif
 
                     <!-- Badges -->
                     <div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex flex-col gap-1.5 z-10 pointer-events-none">
@@ -57,6 +80,19 @@
                         @endif
                     </div>
 
+                    <!-- Video Trigger Button Overlay -->
+                    @if ($hasVideo)
+                        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+                            <button type="button"
+                                    @click="toggleVideo()"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition shadow-md touch-manipulation"
+                                    :class="isVideoActive ? 'bg-[#881337] text-white' : 'bg-slate-900/90 text-amber-300 hover:bg-slate-900 border border-white/20'">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <span x-text="isVideoActive ? 'View Photos' : 'Watch Video'"></span>
+                            </button>
+                        </div>
+                    @endif
+
                     @if ($product->batch)
                         <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10">
                             <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-slate-900/80 text-amber-300 backdrop-blur-xs border border-white/20">
@@ -72,10 +108,22 @@
                         <button type="button"
                                 @click="setMainImage('{{ $thumb }}', {{ $idx }})"
                                 class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-white border-2 overflow-hidden shrink-0 snap-start transition touch-manipulation"
-                                :class="selectedThumb === {{ $idx }} ? 'border-[#D97706] shadow-md ring-2 ring-[#D97706]/30' : 'border-slate-200 hover:border-amber-300 opacity-75 hover:opacity-100'">
+                                :class="(!isVideoActive && selectedThumb === {{ $idx }}) ? 'border-[#D97706] shadow-md ring-2 ring-[#D97706]/30' : 'border-slate-200 hover:border-amber-300 opacity-75 hover:opacity-100'">
                             <img src="{{ $thumb }}" alt="Thumbnail" class="w-full h-full object-cover">
                         </button>
                     @endforeach
+
+                    @if ($hasVideo)
+                        <button type="button"
+                                @click="showVideo()"
+                                class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-slate-900 border-2 overflow-hidden shrink-0 snap-start transition touch-manipulation flex flex-col items-center justify-center text-white"
+                                :class="isVideoActive ? 'border-[#D97706] shadow-md ring-2 ring-[#D97706]/30' : 'border-slate-300 hover:border-amber-400 opacity-85 hover:opacity-100'">
+                            <div class="w-6 h-6 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow">
+                                <svg class="w-3 h-3 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <span class="text-[9px] font-bold mt-1 text-amber-200 tracking-tight">Video</span>
+                        </button>
+                    @endif
                 </div>
 
                 <!-- Purity / Origin Guarantee Box -->
@@ -715,12 +763,28 @@ if (typeof window.pdpManager === 'undefined') {
         return {
             currentImage: initialImage,
             selectedThumb: 0,
+            isVideoActive: false,
             quantity: 1,
             adding: false,
 
             setMainImage(url, index) {
                 this.currentImage = url;
                 this.selectedThumb = index;
+                this.isVideoActive = false;
+            },
+
+            showVideo() {
+                this.isVideoActive = true;
+                this.selectedThumb = 'video';
+            },
+
+            toggleVideo() {
+                this.isVideoActive = !this.isVideoActive;
+                if (!this.isVideoActive) {
+                    this.selectedThumb = 0;
+                } else {
+                    this.selectedThumb = 'video';
+                }
             },
 
             addToCart(redirectCheckout = false) {

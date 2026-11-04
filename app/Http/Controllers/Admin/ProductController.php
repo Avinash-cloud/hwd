@@ -90,6 +90,11 @@ class ProductController extends Controller
             'benefits' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
+            'gallery_files' => 'nullable|array',
+            'gallery_files.*' => 'image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'gallery_urls' => 'nullable|string',
+            'video_url' => 'nullable|string|max:1000',
+            'video_file' => 'nullable|file|mimes:mp4,mov,webm,ogg|max:51200',
             'is_gangajal' => 'nullable|boolean',
             'is_member_free_eligible' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -104,7 +109,36 @@ class ProductController extends Controller
             $validated['image'] = $validated['image_url'];
         }
 
-        unset($validated['image_file'], $validated['image_url']);
+        // Additional Gallery Images
+        $gallery = [];
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $file) {
+                $path = $file->store('products/gallery', 'public');
+                $gallery[] = $path;
+            }
+        }
+        if (! empty($validated['gallery_urls'])) {
+            $urls = array_filter(array_map('trim', preg_split('/[\r\n,]+/', $validated['gallery_urls'])));
+            foreach ($urls as $url) {
+                if (! in_array($url, $gallery, true)) {
+                    $gallery[] = $url;
+                }
+            }
+        }
+        if (! empty($gallery)) {
+            $validated['gallery'] = array_values($gallery);
+        }
+
+        // Product Video
+        if ($request->hasFile('video_file')) {
+            $validated['video_url'] = $request->file('video_file')->store('products/videos', 'public');
+        } elseif (! empty($validated['video_url'])) {
+            $validated['video_url'] = trim($validated['video_url']);
+        } else {
+            $validated['video_url'] = null;
+        }
+
+        unset($validated['image_file'], $validated['image_url'], $validated['gallery_files'], $validated['gallery_urls'], $validated['video_file']);
 
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::lower(Str::random(5));
         $validated['is_gangajal'] = $request->boolean('is_gangajal');
@@ -155,6 +189,13 @@ class ProductController extends Controller
             'benefits' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
+            'keep_gallery' => 'nullable|array',
+            'gallery_files' => 'nullable|array',
+            'gallery_files.*' => 'image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'gallery_urls' => 'nullable|string',
+            'video_url' => 'nullable|string|max:1000',
+            'video_file' => 'nullable|file|mimes:mp4,mov,webm,ogg|max:51200',
+            'remove_video' => 'nullable|boolean',
             'is_gangajal' => 'nullable|boolean',
             'is_member_free_eligible' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -172,7 +213,63 @@ class ProductController extends Controller
             $validated['image'] = $validated['image_url'];
         }
 
-        unset($validated['image_file'], $validated['image_url']);
+        // Additional Gallery Images
+        $gallery = is_array($product->gallery) ? $product->gallery : [];
+
+        // Check which existing gallery items are kept
+        if ($request->has('keep_gallery')) {
+            $kept = (array) $request->input('keep_gallery', []);
+            foreach ($gallery as $item) {
+                if (! in_array($item, $kept, true) && Storage::disk('public')->exists($item)) {
+                    Storage::disk('public')->delete($item);
+                }
+            }
+            $gallery = array_values(array_intersect($gallery, $kept));
+        } elseif ($request->boolean('clear_gallery')) {
+            foreach ($gallery as $item) {
+                if (Storage::disk('public')->exists($item)) {
+                    Storage::disk('public')->delete($item);
+                }
+            }
+            $gallery = [];
+        }
+
+        // Append new gallery file uploads
+        if ($request->hasFile('gallery_files')) {
+            foreach ($request->file('gallery_files') as $file) {
+                $path = $file->store('products/gallery', 'public');
+                $gallery[] = $path;
+            }
+        }
+
+        // Append new gallery URLs
+        if (! empty($validated['gallery_urls'])) {
+            $urls = array_filter(array_map('trim', preg_split('/[\r\n,]+/', $validated['gallery_urls'])));
+            foreach ($urls as $url) {
+                if (! in_array($url, $gallery, true)) {
+                    $gallery[] = $url;
+                }
+            }
+        }
+
+        $validated['gallery'] = ! empty($gallery) ? array_values($gallery) : null;
+
+        // Video Handling
+        if ($request->boolean('remove_video')) {
+            if ($product->video_url && Storage::disk('public')->exists($product->video_url)) {
+                Storage::disk('public')->delete($product->video_url);
+            }
+            $validated['video_url'] = null;
+        } elseif ($request->hasFile('video_file')) {
+            if ($product->video_url && Storage::disk('public')->exists($product->video_url)) {
+                Storage::disk('public')->delete($product->video_url);
+            }
+            $validated['video_url'] = $request->file('video_file')->store('products/videos', 'public');
+        } elseif (! empty($validated['video_url'])) {
+            $validated['video_url'] = trim($validated['video_url']);
+        }
+
+        unset($validated['image_file'], $validated['image_url'], $validated['keep_gallery'], $validated['gallery_files'], $validated['gallery_urls'], $validated['video_file'], $validated['remove_video']);
 
         $validated['is_gangajal'] = $request->boolean('is_gangajal');
         $validated['is_member_free_eligible'] = $request->boolean('is_member_free_eligible');
@@ -192,6 +289,18 @@ class ProductController extends Controller
     {
         if ($product->image && Storage::disk('public')->exists($product->image)) {
             Storage::disk('public')->delete($product->image);
+        }
+
+        if (! empty($product->gallery) && is_array($product->gallery)) {
+            foreach ($product->gallery as $item) {
+                if (Storage::disk('public')->exists($item)) {
+                    Storage::disk('public')->delete($item);
+                }
+            }
+        }
+
+        if ($product->video_url && Storage::disk('public')->exists($product->video_url)) {
+            Storage::disk('public')->delete($product->video_url);
         }
 
         $product->delete();

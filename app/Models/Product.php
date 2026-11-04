@@ -97,6 +97,102 @@ class Product extends Model
         return asset($this->image);
     }
 
+    /**
+     * Get resolved gallery URLs.
+     *
+     * @return array<int, string>
+     */
+    public function getGalleryUrlsAttribute(): array
+    {
+        if (empty($this->gallery) || ! is_array($this->gallery)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map(function ($item) {
+            if (! is_string($item) || trim($item) === '') {
+                return null;
+            }
+
+            $item = trim($item);
+
+            if (str_starts_with($item, 'http://') || str_starts_with($item, 'https://')) {
+                return $item;
+            }
+
+            if (Storage::disk('public')->exists($item)) {
+                return Storage::disk('public')->url($item);
+            }
+
+            if (file_exists(public_path($item))) {
+                return asset($item);
+            }
+
+            return asset($item);
+        }, $this->gallery)));
+    }
+
+    /**
+     * Get resolved video URL (direct link or storage URL).
+     */
+    public function getResolvedVideoUrlAttribute(): ?string
+    {
+        if (! $this->video_url) {
+            return null;
+        }
+
+        $url = trim($this->video_url);
+
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+            return $url;
+        }
+
+        if (Storage::disk('public')->exists($url)) {
+            return Storage::disk('public')->url($url);
+        }
+
+        if (file_exists(public_path($url))) {
+            return asset($url);
+        }
+
+        return asset($url);
+    }
+
+    /**
+     * Get YouTube/Vimeo embed URL or direct video URL.
+     */
+    public function getVideoEmbedUrlAttribute(): ?string
+    {
+        if (! $this->video_url) {
+            return null;
+        }
+
+        $url = trim($this->video_url);
+
+        // YouTube: https://www.youtube.com/watch?v=XYZ, https://youtu.be/XYZ, etc.
+        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]+)/i', $url, $matches)) {
+            return 'https://www.youtube.com/embed/'.$matches[1].'?autoplay=1&rel=0';
+        }
+
+        // Vimeo: https://vimeo.com/123456789
+        if (preg_match('/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/i', $url, $matches)) {
+            return 'https://player.vimeo.com/video/'.$matches[3].'?autoplay=1';
+        }
+
+        return $this->resolved_video_url;
+    }
+
+    /**
+     * Check if product video is an embeddable iframe (YouTube or Vimeo).
+     */
+    public function getIsVideoEmbedAttribute(): bool
+    {
+        if (! $this->video_url) {
+            return false;
+        }
+
+        return (bool) preg_match('/(youtube\.com|youtu\.be|vimeo\.com)/i', $this->video_url);
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
