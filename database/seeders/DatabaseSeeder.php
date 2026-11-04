@@ -671,6 +671,7 @@ class DatabaseSeeder extends Seeder
             SliderSeeder::class,
             BlogSeeder::class,
             GalleryItemSeeder::class,
+            NineNinePanditProductSeeder::class,
         ]);
     }
 }
