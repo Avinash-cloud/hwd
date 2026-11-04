@@ -29,7 +29,71 @@
 
     <!-- Product Details Main Section (Shop.99Pandit Style) -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-14 pb-28 lg:pb-14 w-full min-w-0 overflow-hidden"
-         x-data="pdpManager({{ $product->id }}, '{{ $imgUrl }}')">
+         x-data="{
+             currentImage: '{{ addslashes($imgUrl) }}',
+             selectedThumb: 0,
+             isVideoActive: false,
+             quantity: 1,
+             adding: false,
+
+             setMainImage(url, index) {
+                 this.currentImage = url;
+                 this.selectedThumb = index;
+                 this.isVideoActive = false;
+             },
+
+             showVideo() {
+                 this.isVideoActive = true;
+                 this.selectedThumb = 'video';
+             },
+
+             toggleVideo() {
+                 this.isVideoActive = !this.isVideoActive;
+                 if (!this.isVideoActive) {
+                     this.selectedThumb = 0;
+                 } else {
+                     this.selectedThumb = 'video';
+                 }
+             },
+
+             addToCart(redirectCheckout = false) {
+                 this.adding = true;
+                 const csrfToken = document.querySelector('meta[name=\'csrf-token\']')?.getAttribute('content');
+
+                 fetch('{{ route('cart.add') }}', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'Accept': 'application/json',
+                         'X-CSRF-TOKEN': csrfToken,
+                         'X-Requested-With': 'XMLHttpRequest'
+                     },
+                     body: JSON.stringify({ product_id: {{ $product->id }}, quantity: this.quantity })
+                 })
+                 .then(res => {
+                     if (res.status === 401 || res.status === 403) {
+                         return res.json().then(data => {
+                             window.location.href = data.redirect || '{{ route('login') }}';
+                         });
+                     }
+                     return res.json();
+                 })
+                 .then(data => {
+                     this.adding = false;
+                     if (data && data.success) {
+                         window.dispatchEvent(new CustomEvent('cart-updated'));
+                         if (redirectCheckout) {
+                             window.location.href = '{{ route('checkout.index') }}';
+                         } else {
+                             window.dispatchEvent(new CustomEvent('open-cart-drawer'));
+                         }
+                     }
+                 })
+                 .catch(() => {
+                     this.adding = false;
+                 });
+             }
+         }">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start w-full min-w-0">
             
             <!-- Left Column: Image Gallery (5 cols on lg) -->
@@ -756,75 +820,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<script>
-if (typeof window.pdpManager === 'undefined') {
-    window.pdpManager = function(productId, initialImage) {
-        return {
-            currentImage: initialImage,
-            selectedThumb: 0,
-            isVideoActive: false,
-            quantity: 1,
-            adding: false,
-
-            setMainImage(url, index) {
-                this.currentImage = url;
-                this.selectedThumb = index;
-                this.isVideoActive = false;
-            },
-
-            showVideo() {
-                this.isVideoActive = true;
-                this.selectedThumb = 'video';
-            },
-
-            toggleVideo() {
-                this.isVideoActive = !this.isVideoActive;
-                if (!this.isVideoActive) {
-                    this.selectedThumb = 0;
-                } else {
-                    this.selectedThumb = 'video';
-                }
-            },
-
-            addToCart(redirectCheckout = false) {
-                this.adding = true;
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-                fetch('{{ route('cart.add') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({ product_id: productId, quantity: this.quantity })
-                })
-                .then(res => {
-                    if (res.status === 401 || res.status === 403) {
-                        return res.json().then(data => {
-                            window.location.href = data.redirect || '{{ route('login') }}';
-                        });
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    this.adding = false;
-                    if (data && data.success) {
-                        window.dispatchEvent(new CustomEvent('cart-updated'));
-                        if (redirectCheckout) {
-                            window.location.href = '{{ route('checkout.index') }}';
-                        } else {
-                            window.dispatchEvent(new CustomEvent('open-cart-drawer'));
-                        }
-                    }
-                })
-                .catch(() => {
-                    this.adding = false;
-                });
-            }
-        };
-    };
-}
-</script>
