@@ -69,11 +69,10 @@ class NineNinePanditProductSeeder extends Seeder
                     'Ingredients' => 'Pure Desi Cow Ghee, Natural Camphor, Organic Cotton',
                     'Container' => 'Food-grade airtight moisture-proof box',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/ghee-diya-batti.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/ghee-diya-batti.jpg',
+                    '/images/products/akhand-jyoti-diya.jpg',
                 ],
             ],
 
@@ -104,10 +103,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Sublimation' => '100% Residue-Free Burn',
                     'Aroma' => 'Fresh Crisp Himalayan Pine & Camphor',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/bhimseni-camphor.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/bhimseni-camphor.jpg',
                 ],
             ],
 
@@ -138,10 +136,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Charcoal Content' => '0% (Completely Charcoal-Free)',
                     'Fragrance' => 'Deep Temple Loban & Guggal Resins',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/hawan-cups.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/hawan-cups.jpg',
                 ],
             ],
 
@@ -171,10 +168,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Ingredients' => 'Organic Turmeric, Lime extract, Natural Sandalwood, Whole Basmati Rice',
                     'Skin Safety' => 'Dermatologically Safe, Non-Irritating',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/tilak-combo.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/tilak-combo.jpg',
                 ],
             ],
 
@@ -205,10 +201,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Display' => 'Includes Free Transparent Acrylic Table Stand',
                     'Energization' => 'Blessed during Friday Shuddha Lakshmi Abhishek',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/kanak-dhara-yantra.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/kanak-dhara-yantra.jpg',
                 ],
             ],
 
@@ -239,10 +234,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Capping' => 'Hallmarked 925 Sterling Silver',
                     'Certificate' => 'Government accredited Gemology Lab Certificate Included',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/nepali-rudraksha.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1545235617-9465d2a55698?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/nepali-rudraksha.jpg',
                 ],
             ],
 
@@ -273,10 +267,10 @@ class NineNinePanditProductSeeder extends Seeder
                     'Material' => '100% Solid Brass + Thermal Shock Glass',
                     'Oil/Ghee Capacity' => 'Up to 24-36 hrs continuous illumination',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/akhand-jyoti-diya.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/akhand-jyoti-diya.jpg',
+                    '/images/products/ghee-diya-batti.jpg',
                 ],
             ],
 
@@ -307,11 +301,9 @@ class NineNinePanditProductSeeder extends Seeder
                     'Vedic Guide' => 'Shiva Rudrabhishek Vidhi booklet in Hindi & English',
                     'Box' => 'Premium hardbound commemorative gift box',
                 ],
-                'image_url' => 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?w=800&auto=format&fit=crop&q=80',
+                'image_url' => '/images/products/rudrabhishek-puja-kit.jpg',
                 'gallery' => [
-                    'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?w=800&auto=format&fit=crop&q=80',
-                    'https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80',
+                    '/images/products/rudrabhishek-puja-kit.jpg',
                 ],
             ],
         ];
@@ -328,6 +320,10 @@ class NineNinePanditProductSeeder extends Seeder
             unset($productData['category_key']);
             $productData['category_id'] = $catId;
 
+            // Make sure 'image' column is set from 'image_url'
+            $productData['image'] = $productData['image_url'] ?? $productData['image'] ?? null;
+            unset($productData['image_url']);
+
             // Check if product already exists by SKU to maintain idempotence
             $existingProduct = Product::where('sku', $productData['sku'])->first();
 
@@ -338,8 +334,6 @@ class NineNinePanditProductSeeder extends Seeder
                 // Exact slug generation algorithm from Admin\ProductController::store() line 109:
                 // $validated['slug'] = Str::slug($validated['name']).'-'.Str::lower(Str::random(5));
                 $productData['slug'] = Str::slug($productData['name']).'-'.Str::lower(Str::random(5));
-                $productData['image'] = $productData['image_url'] ?? null;
-                unset($productData['image_url']);
 
                 Product::create($productData);
             }
