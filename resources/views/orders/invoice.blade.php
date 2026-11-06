@@ -29,14 +29,14 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200 shrink-0 mt-1">
                     <div>
                         <div class="flex items-center gap-2">
-                            <h1 class="font-serif font-bold italic text-2xl text-slate-900 leading-tight drop-shadow-[1.5px_1.5px_0px_#00E5FF]">Blu Bliss</h1>
+                            <h1 class="font-serif font-extrabold italic text-2xl text-slate-900 leading-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss</h1>
                             <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold uppercase tracking-wider">Packaged Drinking Water</span>
                         </div>
                         <p class="text-xs text-slate-900 font-bold mt-0.5">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>
                         <p class="text-[11px] text-slate-600 font-mono mt-0.5">CIN: <strong class="text-slate-800">U11040UT2025PTC019429</strong></p>
                         <p class="text-[11px] text-slate-600 leading-tight mt-1">
                             G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403<br>
-                            Phone: <span class="font-mono">+91 9891289446</span> | Email: <span class="font-mono">sdenterprisesghaziabad@gmail.com</span><br>
+                            Phone: <span class="font-mono">+91 7042482555</span> | Email: <span class="font-mono">sdenterprisesghaziabad@gmail.com</span><br>
                             GSTIN: 05AAACH1234F1Z8 | FSSAI Certified
                         </p>
                     </div>
@@ -180,7 +180,7 @@
                 <p class="font-bold text-slate-800 text-xs">Pure Haridwar Gangajal (Packaged)</p>
                 <p>Marketed & Billed by <strong>HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</strong> · CIN: <strong class="font-mono text-slate-700">U11040UT2025PTC019429</strong></p>
                 <p>Registered Address: G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Shivalik Nagar, Hardwar, Haridwar- 249403, Uttarakhand</p>
-                <p>Devotee Helpline: +91 9891289446 · Official Email: sdenterprisesghaziabad@gmail.com</p>
+                <p>Devotee Helpline: +91 7042482555 · Official Email: sdenterprisesghaziabad@gmail.com</p>
                 <p class="text-slate-400 pt-1">This is a computer-generated tax invoice and requires no physical signature. Har Har Gange!</p>
             </div>
         </div>

@@ -293,7 +293,7 @@ class HaridwarBlissTest extends TestCase
         $orderInvoiceRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED', false);
         $orderInvoiceRes->assertSee('U11040UT2025PTC019429');
         $orderInvoiceRes->assertSee('G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar');
-        $orderInvoiceRes->assertSee('+91 9891289446');
+        $orderInvoiceRes->assertSee('+91 7042482555');
         $orderInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
 
         // 2. Membership Invoice Verification
@@ -302,7 +302,7 @@ class HaridwarBlissTest extends TestCase
         $memInvoiceRes->assertSee('Pure Haridwar Gangajal (Packaged)');
         $memInvoiceRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED', false);
         $memInvoiceRes->assertSee('U11040UT2025PTC019429');
-        $memInvoiceRes->assertSee('+91 9891289446');
+        $memInvoiceRes->assertSee('+91 7042482555');
         $memInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
 
         // 3. Storefront Footer Verification
@@ -311,7 +311,7 @@ class HaridwarBlissTest extends TestCase
         $homeRes->assertSee('Pure Haridwar Gangajal (Packaged)');
         $homeRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.', false);
         $homeRes->assertSee('U11040UT2025PTC019429');
-        $homeRes->assertSee('+91 9891289446');
+        $homeRes->assertSee('+91 7042482555');
         $homeRes->assertSee('sdenterprisesghaziabad@gmail.com');
     }
 }

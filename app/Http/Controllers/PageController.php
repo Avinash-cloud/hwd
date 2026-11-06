@@ -27,7 +27,7 @@ class PageController extends Controller
 
     public function contact(): View
     {
-        $supportPhone = SiteSetting::get('support_phone', '+91 9891289446');
+        $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
         $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');
 
         return view('pages.contact', compact('supportPhone', 'supportEmail'));

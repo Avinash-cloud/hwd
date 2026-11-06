@@ -102,7 +102,7 @@
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <span class="block font-serif font-bold italic text-2xl text-white tracking-tight">Blu Bliss</span>
+                            <span class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss</span>
                             <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.</span>
                             <span class="block text-[10px] text-slate-400 font-mono">CIN: U11040UT2025PTC019429</span>
                         </div>
@@ -180,7 +180,7 @@
                         </p>
                     </div>
                     <div class="text-xs text-slate-300 space-y-1.5">
-                        <div>Phone: <a href="tel:+919891289446" class="text-amber-300 hover:underline font-mono font-bold">+91 9891289446</a></div>
+                        <div>Phone: <a href="tel:+917042482555" class="text-amber-300 hover:underline font-mono font-bold">+91 7042482555</a></div>
                         <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com" class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a></div>
                     </div>
                 </div>

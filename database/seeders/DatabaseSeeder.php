@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         SiteSetting::set('free_shipping_threshold', '499', 'Free shipping on orders above INR 499');
         SiteSetting::set('free_first_bottle_enabled', '1', 'Enable free monthly 1st Gangajal bottle for active members');
         SiteSetting::set('guest_checkout_enabled', '1', 'Enable guest checkout for non-logged-in customers');
-        SiteSetting::set('support_phone', '+91 9891289446', 'Customer care phone');
+        SiteSetting::set('support_phone', '+91 7042482555', 'Customer care phone');
         SiteSetting::set('support_email', 'sdenterprisesghaziabad@gmail.com', 'Customer care email');
         SiteSetting::set('ghat_location_default', 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand', 'Default holy collection ghat');
 
