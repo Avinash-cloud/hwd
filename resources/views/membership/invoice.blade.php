@@ -40,16 +40,24 @@
         
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-slate-200">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/logo.png') }}" alt="Haridwar Bliss" class="w-12 h-12 rounded-xl object-cover ring-1 ring-amber-200">
+            <div class="flex items-start gap-4">
+                <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-14 h-14 rounded-xl object-cover ring-1 ring-amber-200 shrink-0 mt-1">
                 <div>
-                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Haridwar Bliss</h1>
-                    <span class="text-xs text-slate-500 block">Sacred Brahmakund Gangajal & Vedic Essentials</span>
-                    <span class="text-[11px] text-slate-400 block font-mono mt-0.5">GSTIN: 05AABCH1234F1Z5 • State Code: 05 (Uttarakhand)</span>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-serif font-bold italic text-xl text-slate-900 leading-tight drop-shadow-[1.5px_1.5px_0px_#00E5FF]">Blu Bliss</h1>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold uppercase tracking-wider">Devotee Membership</span>
+                    </div>
+                    <p class="text-xs text-slate-900 font-bold mt-0.5">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>
+                    <p class="text-[11px] text-slate-600 font-mono mt-0.5">CIN: <strong class="text-slate-800">U11040UT2025PTC019429</strong></p>
+                    <p class="text-[11px] text-slate-500 leading-tight mt-1">
+                        G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403<br>
+                        Phone: <span class="font-mono">+91 9891289446</span> • Email: <span class="font-mono">sdenterprisesghaziabad@gmail.com</span><br>
+                        GSTIN: 05AABCH1234F1Z5 • State Code: 05 (Uttarakhand)
+                    </p>
                 </div>
             </div>
 
-            <div class="sm:text-right">
+            <div class="sm:text-right shrink-0">
                 <span class="inline-block px-3 py-1 bg-amber-50 text-[#D97706] border border-amber-200 text-xs font-bold rounded-full uppercase tracking-wider mb-2">
                     Tax Invoice
                 </span>
@@ -58,6 +66,18 @@
                     <p><strong class="text-slate-900">Date:</strong> {{ $membership->created_at->format('d M Y') }}</p>
                     <p><strong class="text-slate-900">Status:</strong> <span class="text-emerald-700 font-bold uppercase">{{ $membership->status }}</span></p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mandatory Legal & Product Designation Banner -->
+        <div class="py-2.5 px-4 bg-amber-50/90 border border-amber-200/90 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div>
+                <span class="text-slate-500 text-[11px]">Billed Offering:</span>
+                <strong class="text-amber-950 font-bold block text-sm tracking-wide">Pure Haridwar Gangajal (Packaged) - 5-Year Membership</strong>
+            </div>
+            <div class="text-right text-[11px] text-slate-600">
+                <span>CIN: <strong class="font-mono text-slate-800">U11040UT2025PTC019429</strong></span><br>
+                <span>SAC Code: <strong class="font-mono text-slate-800">9995</strong> (18% GST Included)</span>
             </div>
         </div>
 
@@ -156,14 +176,12 @@
         </div>
 
         <!-- Footer & Sign-off -->
-        <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-            <div>
-                <p>This is a computer-generated tax invoice and requires no physical signature.</p>
-                <p class="text-slate-400 mt-0.5">Haridwar Bliss Private Limited • Har Ki Pauri Sanctum Ghat, Haridwar, Uttarakhand.</p>
-            </div>
-            <div class="text-center sm:text-right">
-                <span class="font-serif font-bold text-amber-700 text-xs">HAR HAR GANGE</span>
-            </div>
+        <div class="pt-6 border-t border-slate-200 text-[10px] text-slate-500 text-center space-y-1 leading-relaxed">
+            <p class="font-bold text-slate-800 text-xs">Pure Haridwar Gangajal (Packaged)</p>
+            <p>Issued by <strong>HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</strong> · CIN: <strong class="font-mono text-slate-700">U11040UT2025PTC019429</strong></p>
+            <p>Registered Address: G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Shivalik Nagar, Hardwar, Haridwar- 249403, Uttarakhand</p>
+            <p>Devotee Helpline: +91 9891289446 · Official Email: sdenterprisesghaziabad@gmail.com</p>
+            <p class="text-slate-400 pt-1">This is a computer-generated tax invoice and requires no physical signature. Har Har Gange!</p>
         </div>
     </div>
 

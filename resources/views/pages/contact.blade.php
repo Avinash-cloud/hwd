@@ -28,9 +28,11 @@
                                 </svg>
                             </div>
                             <div>
-                                <strong class="font-bold text-slate-900 block">Sourcing Sanctum:</strong>
-                                <p class="text-slate-600 mt-0.5">Brahmakund Ghat, Har Ki Pauri, Haridwar, Uttarakhand -
-                                    249401, India</p>
+                                <strong class="font-bold text-slate-900 block">Registered Office:</strong>
+                                <p class="text-slate-700 mt-0.5 font-medium">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>
+                                <p class="text-[11px] text-slate-500 font-mono">CIN: U11040UT2025PTC019429</p>
+                                <p class="text-slate-600 text-xs mt-1">G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403, India</p>
+                                <p class="text-[11px] text-amber-800 font-semibold mt-1">Holy Collection Sanctum: Brahmakund Ghat, Har Ki Pauri, Haridwar</p>
                             </div>
                         </div>
 

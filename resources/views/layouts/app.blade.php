@@ -100,22 +100,23 @@
                 <!-- Col 1: Brand & Origin -->
                 <div class="space-y-4 md:col-span-1">
                     <div class="flex items-center gap-3">
-                        <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" />
+                        <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <span class="block font-serif font-bold text-xl text-white">Blu Bliss</span>
-                            <span class="block text-[10px] font-bold tracking-wider text-amber-300">Saaf Pani Swath Ke Nishani</span>
+                            <span class="block font-serif font-bold italic text-2xl text-white tracking-tight">Blu Bliss</span>
+                            <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.</span>
+                            <span class="block text-[10px] text-slate-400 font-mono">CIN: U11040UT2025PTC019429</span>
                         </div>
                     </div>
                     <p class="text-sm text-slate-400 leading-relaxed">
-                        Delivering certified pure, untouched Gangajal collected at Brahma Muhurta directly from
+                        Pure Haridwar Gangajal (Packaged) collected at Brahma Muhurta directly from
                         Brahmakund at Har Ki Pauri to your sacred altar.
                     </p>
-                    <div class="text-xs text-[#D97706] flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="text-xs text-slate-300 flex items-start gap-1.5">
+                        <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>Har Ki Pauri, Haridwar, Uttarakhand - 249401</span>
+                        <span>G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403</span>
                     </div>
                 </div>
 
@@ -178,15 +179,15 @@
                             includes a verifiable batch QR code.
                         </p>
                     </div>
-                    <div class="text-xs text-slate-400">
-                        Email: <a href="mailto:bliss@haridwarbliss.com"
-                            class="text-[#D97706] hover:underline">bliss@haridwarbliss.com</a>
+                    <div class="text-xs text-slate-300 space-y-1.5">
+                        <div>Phone: <a href="tel:+919891289446" class="text-amber-300 hover:underline font-mono font-bold">+91 9891289446</a></div>
+                        <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com" class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a></div>
                     </div>
                 </div>
             </div>
 
             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-                <p>&copy; {{ date('Y') }} Haridwar Bliss. All rights reserved. Haridwar, Uttarakhand.</p>
+                <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED (CIN: U11040UT2025PTC019429). Pure Haridwar Gangajal (Packaged). All rights reserved.</p>
                 <div class="flex items-center gap-6">
                     <a href="{{ route('terms') }}" class="hover:text-slate-300 transition">Terms & Conditions</a>
                     <a href="{{ route('privacy') }}" class="hover:text-slate-300 transition">Privacy Policy</a>

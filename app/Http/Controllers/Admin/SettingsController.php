@@ -19,8 +19,8 @@ class SettingsController extends Controller
             'member_shipping_charge' => SiteSetting::get('member_shipping_charge', '0'),
             'free_first_bottle_enabled' => SiteSetting::get('free_first_bottle_enabled', '1'),
             'guest_checkout_enabled' => SiteSetting::get('guest_checkout_enabled', '0'),
-            'support_phone' => SiteSetting::get('support_phone', '+91 98765 43210'),
-            'support_email' => SiteSetting::get('support_email', 'bliss@haridwarbliss.com'),
+            'support_phone' => SiteSetting::get('support_phone', '+91 7042482555'),
+            'support_email' => SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com'),
             'ghat_location_default' => SiteSetting::get('ghat_location_default', 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand'),
         ];
 

@@ -257,4 +257,61 @@ class HaridwarBlissTest extends TestCase
         $detailsRes->assertJsonFragment(['is_member' => true]);
         $this->assertEquals(2, $detailsRes->json('cart.total_items_count'));
     }
+
+    public function test_tax_invoices_and_footer_contain_official_corporate_and_packaged_gangajal_designations(): void
+    {
+        $user = User::factory()->create();
+
+        $membership = Membership::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+            'fee_paid' => 500.00,
+            'validity_years' => 5,
+            'starts_at' => now(),
+            'expires_at' => now()->addYears(5),
+            'terms_accepted' => true,
+            'invoice_number' => 'HB-MEM-2026-00001',
+        ]);
+
+        $order = Order::create([
+            'order_number' => 'HB-ORD-2026-00001',
+            'user_id' => $user->id,
+            'subtotal' => 299.00,
+            'total_amount' => 299.00,
+            'shipping_amount' => 0.00,
+            'qr_token' => 'HB-QR-2026-TEST',
+            'payment_method' => 'razorpay',
+            'payment_status' => 'paid',
+            'order_status' => 'confirmed',
+            'shipping_address' => ['recipient_name' => 'Devotee', 'address_line1' => 'Ghat', 'city' => 'Haridwar', 'state' => 'Uttarakhand', 'postal_code' => '249401'],
+        ]);
+
+        // 1. Order Invoice Verification
+        $orderInvoiceRes = $this->actingAs($user)->get(route('orders.invoice', $order->order_number));
+        $orderInvoiceRes->assertOk();
+        $orderInvoiceRes->assertSee('Pure Haridwar Gangajal (Packaged)');
+        $orderInvoiceRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED', false);
+        $orderInvoiceRes->assertSee('U11040UT2025PTC019429');
+        $orderInvoiceRes->assertSee('G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar');
+        $orderInvoiceRes->assertSee('+91 9891289446');
+        $orderInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
+
+        // 2. Membership Invoice Verification
+        $memInvoiceRes = $this->actingAs($user)->get(route('membership.invoice', $membership->id));
+        $memInvoiceRes->assertOk();
+        $memInvoiceRes->assertSee('Pure Haridwar Gangajal (Packaged)');
+        $memInvoiceRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED', false);
+        $memInvoiceRes->assertSee('U11040UT2025PTC019429');
+        $memInvoiceRes->assertSee('+91 9891289446');
+        $memInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
+
+        // 3. Storefront Footer Verification
+        $homeRes = $this->get('/');
+        $homeRes->assertOk();
+        $homeRes->assertSee('Pure Haridwar Gangajal (Packaged)');
+        $homeRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.', false);
+        $homeRes->assertSee('U11040UT2025PTC019429');
+        $homeRes->assertSee('+91 9891289446');
+        $homeRes->assertSee('sdenterprisesghaziabad@gmail.com');
+    }
 }
