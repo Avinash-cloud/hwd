@@ -52,6 +52,29 @@ class SliderAndDynamicProductTest extends TestCase
         $response->assertSee('Divine Maha Shivratri Blessings From Har Ki Pauri');
         $response->assertSee('Exclusive Sacred Darshan Offer');
         $response->assertSee('Order Maha Abhishek Water');
+        $response->assertSee('bg-gradient-to-r from-black/55 via-black/25 to-transparent');
+    }
+
+    public function test_homepage_banner_without_text_has_no_black_overlay(): void
+    {
+        // Textless banner
+        Slider::create([
+            'title' => null,
+            'subtitle' => null,
+            'description' => null,
+            'image' => 'images/haridwar-panorama-clocktower.jpg',
+            'button_text' => null,
+            'button_link' => '/products?category=puja-essentials',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee('opacity-100');
+        // Black shadow overlay must NOT be present when there is no text
+        $response->assertDontSee('bg-gradient-to-r from-black/55 via-black/25 to-transparent');
+        // Clickable banner overlay link should be present
+        $response->assertSee('href="/products?category=puja-essentials"', false);
     }
 
     public function test_admin_can_view_sliders_index(): void

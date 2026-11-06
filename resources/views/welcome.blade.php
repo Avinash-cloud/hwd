@@ -36,6 +36,11 @@
                         'emerald' => 'bg-emerald-400',
                         default => 'bg-amber-400',
                     };
+                    $hasText = ! empty(trim($slide->title ?? ''))
+                        || ! empty(trim($slide->subtitle ?? ''))
+                        || ! empty(trim($slide->description ?? ''))
+                        || ! empty(trim($slide->button_text ?? ''))
+                        || ! empty(trim($slide->secondary_button_text ?? ''));
                 @endphp
                 <div x-show="activeSlide === {{ $index }}"
                      x-transition:enter="transition ease-out duration-700"
@@ -54,7 +59,7 @@
                                    autoplay
                                    loop
                                    poster="{{ $slide->image_url }}"
-                                   class="w-full h-full object-cover object-center opacity-50">
+                                   class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
                                 <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
                             </video>
 
@@ -75,55 +80,63 @@
                                 <source media="(max-width: 1024px)" srcset="{{ $slide->tablet_image_url }}">
                             @endif
                             <img src="{{ $slide->image_url }}"
-                                 alt="{{ $slide->title }}"
-                                 class="w-full h-full object-cover object-center opacity-45">
+                                 alt="{{ $slide->title ?: 'Sacred Hero Banner' }}"
+                                 class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-95' : 'opacity-100' }}">
                         </picture>
                     @endif
 
-                    <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/80 to-transparent"></div>
+                    @if ($hasText)
+                        <!-- Slightest black shadow gradient to ensure text readability without darkening the whole banner -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent pointer-events-none"></div>
 
-                    <!-- Slide Content -->
-                    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-                        <div class="max-w-2xl space-y-4 sm:space-y-6 py-12">
-                            @if ($slide->subtitle)
-                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
-                                    <span class="w-2 h-2 rounded-full animate-pulse {{ $dotBg }}"></span>
-                                    <span>{{ $slide->subtitle }}</span>
+                        <!-- Slide Content -->
+                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+                            <div class="max-w-2xl space-y-4 sm:space-y-6 py-12">
+                                @if ($slide->subtitle)
+                                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
+                                        <span class="w-2 h-2 rounded-full animate-pulse {{ $dotBg }}"></span>
+                                        <span>{{ $slide->subtitle }}</span>
+                                    </div>
+                                @endif
+
+                                @if ($slide->title)
+                                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                                        {{ $slide->title }}
+                                    </h1>
+                                @endif
+
+                                @if ($slide->description)
+                                    <p class="text-sm sm:text-base text-slate-100 leading-relaxed max-w-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                                        {{ $slide->description }}
+                                    </p>
+                                @endif
+
+                                <div class="flex flex-wrap items-center gap-3 pt-2">
+                                    @if ($slide->button_text && $slide->button_link)
+                                        <a href="{{ $slide->button_link }}"
+                                           class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5">
+                                            <span>{{ $slide->button_text }}</span>
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                            </svg>
+                                        </a>
+                                    @endif
+
+                                    @if ($slide->secondary_button_text && $slide->secondary_button_link)
+                                        <a href="{{ $slide->secondary_button_link }}"
+                                           class="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-bold text-sm backdrop-blur-xs transition">
+                                            <span>{{ $slide->secondary_button_text }}</span>
+                                        </a>
+                                    @endif
                                 </div>
-                            @endif
-
-                            @if ($slide->title)
-                                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white">
-                                    {{ $slide->title }}
-                                </h1>
-                            @endif
-
-                            @if ($slide->description)
-                                <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl">
-                                    {{ $slide->description }}
-                                </p>
-                            @endif
-
-                            <div class="flex flex-wrap items-center gap-3 pt-2">
-                                @if ($slide->button_text && $slide->button_link)
-                                    <a href="{{ $slide->button_link }}"
-                                       class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                                        <span>{{ $slide->button_text }}</span>
-                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                        </svg>
-                                    </a>
-                                @endif
-
-                                @if ($slide->secondary_button_text && $slide->secondary_button_link)
-                                    <a href="{{ $slide->secondary_button_link }}"
-                                       class="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-bold text-sm backdrop-blur-xs transition">
-                                        <span>{{ $slide->secondary_button_text }}</span>
-                                    </a>
-                                @endif
                             </div>
                         </div>
-                    </div>
+                    @else
+                        {{-- If no text, and slide has a link, make the whole banner clickable --}}
+                        @if ($slide->button_link)
+                            <a href="{{ $slide->button_link }}" class="absolute inset-0 z-10 block" aria-label="Explore Banner"></a>
+                        @endif
+                    @endif
                 </div>
             @endforeach
         </div>
