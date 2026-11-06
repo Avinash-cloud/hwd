@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'razorpay' => [
+        'key' => env('RAZORPAY_KEY_ID', 'rzp_test_dummy_key_12345'),
+        'secret' => env('RAZORPAY_KEY_SECRET', 'dummy_secret_67890'),
+        'webhook_secret' => env('RAZORPAY_WEBHOOK_SECRET', 'dummy_webhook_secret'),
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID', 'dummy_google_client_id.apps.googleusercontent.com'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET', 'dummy_google_client_secret'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback'),
+    ],
+
 ];

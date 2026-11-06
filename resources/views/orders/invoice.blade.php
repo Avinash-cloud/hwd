@@ -80,9 +80,12 @@
                     <thead>
                         <tr class="border-b-2 border-slate-200 text-slate-500 font-bold uppercase text-[10px]">
                             <th class="py-2">Item Description</th>
+                            <th class="py-2 text-center">HSN</th>
+                            <th class="py-2 text-center">GST %</th>
                             <th class="py-2 text-center">Qty</th>
-                            <th class="py-2 text-right">Unit Rate</th>
-                            <th class="py-2 text-right">Amount (INR)</th>
+                            <th class="py-2 text-right">Taxable</th>
+                            <th class="py-2 text-right">GST</th>
+                            <th class="py-2 text-right">Total (INR)</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -90,13 +93,19 @@
                             <tr>
                                 <td class="py-3">
                                     <strong class="text-slate-900">{{ $item->product_name }}</strong>
+                                    @if ($item->variant_name)
+                                        <span class="block text-[11px] text-amber-800 font-semibold">Size: {{ $item->variant_name }}</span>
+                                    @endif
                                     @if ($item->is_free_monthly_bottle)
                                         <span class="block text-[10px] text-[#0369A1] font-bold">★ 5-Year Member Monthly Free Bottle</span>
                                     @endif
                                 </td>
+                                <td class="py-3 text-center font-mono text-[11px] text-slate-600">{{ $item->hsn_code ?? '22019010' }}</td>
+                                <td class="py-3 text-center font-mono text-[11px] text-slate-600">{{ number_format($item->gst_percentage ?? 18, 0) }}%</td>
                                 <td class="py-3 text-center">{{ $item->quantity }}</td>
-                                <td class="py-3 text-right">₹{{ number_format($item->unit_price, 2) }}</td>
-                                <td class="py-3 text-right font-bold">₹{{ number_format($item->total_price, 2) }}</td>
+                                <td class="py-3 text-right font-mono">₹{{ number_format($item->taxable_amount ?? round($item->total_price / 1.18, 2), 2) }}</td>
+                                <td class="py-3 text-right font-mono">₹{{ number_format($item->gst_amount ?? round($item->total_price - ($item->total_price / 1.18), 2), 2) }}</td>
+                                <td class="py-3 text-right font-bold font-mono">₹{{ number_format($item->total_price, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -105,27 +114,46 @@
 
             <!-- Invoice Totals -->
             <div class="pt-4 border-t-2 border-slate-200 flex justify-end text-xs">
-                <div class="w-64 space-y-2">
+                <div class="w-80 space-y-2">
                     <div class="flex justify-between text-slate-600">
-                        <span>Items Subtotal:</span>
-                        <span>₹{{ number_format($order->subtotal, 2) }}</span>
+                        <span>Items Subtotal (Inclusive of GST):</span>
+                        <span class="font-mono">₹{{ number_format($order->subtotal, 2) }}</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-lg space-y-1 text-[11px] text-slate-600">
+                        <div class="flex justify-between">
+                            <span>Taxable Value:</span>
+                            <span class="font-mono">₹{{ number_format($order->total_taxable_amount ?? 0, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>CGST:</span>
+                            <span class="font-mono">₹{{ number_format($order->cgst_amount ?? ($order->total_gst_amount / 2), 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>SGST:</span>
+                            <span class="font-mono">₹{{ number_format($order->sgst_amount ?? ($order->total_gst_amount / 2), 2) }}</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-slate-800 pt-1 border-t border-slate-200">
+                            <span>Total GST:</span>
+                            <span class="font-mono">₹{{ number_format($order->total_gst_amount ?? 0, 2) }}</span>
+                        </div>
                     </div>
 
                     @if ($order->discount_amount > 0)
                         <div class="flex justify-between text-[#0369A1] font-bold">
-                            <span>Member Free Bottle Discount:</span>
-                            <span>- ₹{{ number_format($order->discount_amount, 2) }}</span>
+                            <span>Devotee Discount:</span>
+                            <span class="font-mono">- ₹{{ number_format($order->discount_amount, 2) }}</span>
                         </div>
                     @endif
 
                     <div class="flex justify-between text-slate-600">
                         <span>Shiprocket Express Shipping:</span>
-                        <span>₹{{ number_format($order->shipping_amount, 2) }}</span>
+                        <span class="font-mono">₹{{ number_format($order->shipping_amount, 2) }}</span>
                     </div>
 
                     <div class="pt-2 border-t border-slate-200 flex justify-between font-bold text-sm text-slate-900">
-                        <span>Grand Total (INR):</span>
-                        <span class="text-[#D97706] font-serif text-base">₹{{ number_format($order->total_amount, 2) }}</span>
+                        <span>Total Payable (INR):</span>
+                        <span class="text-[#D97706] font-serif text-base font-mono">₹{{ number_format($order->total_amount, 2) }}</span>
                     </div>
                 </div>
             </div>

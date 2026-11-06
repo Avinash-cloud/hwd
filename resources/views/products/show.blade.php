@@ -11,6 +11,9 @@
             asset('images/ganga-holy-waters.jpg'),
         ];
         $hasVideo = !empty($product->video_url);
+        $activeVariants = $product->variants ? $product->variants->where('is_active', true)->values() : collect();
+        $hasVariants = $activeVariants->count() > 0;
+        $defaultVariant = $activeVariants->first();
     @endphp
 
     <!-- Breadcrumb -->
@@ -35,6 +38,79 @@
              isVideoActive: false,
              quantity: 1,
              adding: false,
+             hasVariants: {{ $hasVariants ? 'true' : 'false' }},
+             activeVariantId: {{ $defaultVariant ? $defaultVariant->id : 'null' }},
+             variants: {{ Js::from($activeVariants) }},
+             basePrice: {{ (float) $product->price }},
+             baseComparePrice: {{ $product->compare_price ? (float) $product->compare_price : 'null' }},
+             baseMemberPrice: {{ (float) ($product->member_price ?? ($product->price * 0.85)) }},
+             baseStock: {{ (int) $product->stock }},
+             baseHsn: '{{ $product->hsn_code ?? '22019010' }}',
+             baseGst: {{ (float) ($product->gst_percentage ?: 18.00) }},
+
+             get activeVariant() {
+                 if (!this.hasVariants || !this.variants || this.variants.length === 0) return null;
+                 return this.variants.find(v => v.id === this.activeVariantId) || this.variants[0];
+             },
+
+             get currentPrice() {
+                 if (this.activeVariant) {
+                     return Number(this.activeVariant.price);
+                 }
+                 return this.basePrice;
+             },
+
+             get currentComparePrice() {
+                 if (this.activeVariant) {
+                     return this.activeVariant.compare_price ? Number(this.activeVariant.compare_price) : null;
+                 }
+                 return this.baseComparePrice;
+             },
+
+             get currentDiscount() {
+                 if (this.currentComparePrice && this.currentComparePrice > this.currentPrice) {
+                     return Math.round(((this.currentComparePrice - this.currentPrice) / this.currentComparePrice) * 100);
+                 }
+                 return {{ $discount ?? 0 }};
+             },
+
+             get currentMemberPrice() {
+                 if (this.activeVariant && this.activeVariant.member_price) {
+                     return Number(this.activeVariant.member_price);
+                 }
+                 return this.baseMemberPrice;
+             },
+
+             get currentStock() {
+                 if (this.activeVariant) {
+                     return Number(this.activeVariant.stock);
+                 }
+                 return this.baseStock;
+             },
+
+             get isInStock() {
+                 return this.currentStock > 0;
+             },
+
+             get currentHsn() {
+                 return (this.activeVariant && this.activeVariant.hsn_code) ? this.activeVariant.hsn_code : this.baseHsn;
+             },
+
+             get currentGst() {
+                 return (this.activeVariant && this.activeVariant.gst_percentage) ? Number(this.activeVariant.gst_percentage) : this.baseGst;
+             },
+
+             get taxableAmount() {
+                 return (this.currentPrice / (1 + (this.currentGst / 100))).toFixed(2);
+             },
+
+             get gstAmount() {
+                 return (this.currentPrice - Number(this.taxableAmount)).toFixed(2);
+             },
+
+             selectVariant(id) {
+                 this.activeVariantId = id;
+             },
 
              setMainImage(url, index) {
                  this.currentImage = url;
@@ -57,6 +133,7 @@
              },
 
              addToCart(redirectCheckout = false) {
+                 if (!this.isInStock) return;
                  this.adding = true;
                  const csrfToken = document.querySelector('meta[name=\'csrf-token\']')?.getAttribute('content');
 
@@ -68,7 +145,11 @@
                          'X-CSRF-TOKEN': csrfToken,
                          'X-Requested-With': 'XMLHttpRequest'
                      },
-                     body: JSON.stringify({ product_id: {{ $product->id }}, quantity: this.quantity })
+                     body: JSON.stringify({
+                         product_id: {{ $product->id }},
+                         variant_id: this.activeVariant ? this.activeVariant.id : null,
+                         quantity: this.quantity
+                     })
                  })
                  .then(res => {
                      if (res.status === 401 || res.status === 403) {
@@ -242,27 +323,60 @@
                     </p>
                 </div>
 
-                @if ($product->isInStock())
-                    <!-- Price Block (99Pandit Style) -->
+                @if ($product->isInStock() || $hasVariants)
+                    @if ($hasVariants)
+                        <!-- Variant / Size Selector (Shop.99Pandit style) -->
+                        <div class="space-y-2.5 pt-2">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                                    <span>Select Size / Variant:</span>
+                                    <span class="text-[#D97706] font-extrabold normal-case text-sm" x-text="activeVariant ? activeVariant.name : ''"></span>
+                                </label>
+                                <span class="text-[11px] text-slate-500 font-mono" x-show="activeVariant && activeVariant.sku" x-text="'SKU: ' + activeVariant.sku"></span>
+                            </div>
+                            <div class="flex flex-wrap gap-2.5">
+                                <template x-for="v in variants" :key="v.id">
+                                    <button type="button"
+                                            @click="selectVariant(v.id)"
+                                            class="px-4 py-2.5 rounded-xl border-2 text-xs font-bold transition flex items-center gap-2 touch-manipulation cursor-pointer"
+                                            :class="activeVariantId === v.id ? 'border-[#D97706] bg-amber-50 text-slate-900 shadow-xs ring-2 ring-[#D97706]/30' : 'border-slate-200 bg-white text-slate-700 hover:border-amber-300 hover:bg-amber-50/30'">
+                                        <span x-text="v.name"></span>
+                                        <span class="text-[11px] font-semibold text-slate-500 font-mono" x-text="'₹' + Math.round(v.price)"></span>
+                                        <span x-show="v.stock <= 0" class="text-[9px] px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-medium">Sold Out</span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Price Block (Shop.99Pandit Style with GST Breakdown) -->
                     <div class="bg-[#FFFDF7] border border-amber-200/80 rounded-2xl p-4 sm:p-6 shadow-xs space-y-3">
                         <div class="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
                             <span class="text-2xl sm:text-4xl font-extrabold text-slate-900">
-                                ₹{{ number_format($product->price, 0) }}
+                                ₹<span x-text="Math.round(currentPrice)">{{ number_format($product->price, 0) }}</span>
                             </span>
 
-                            @if ($product->compare_price && $product->compare_price > $product->price)
-                                <del class="text-base sm:text-lg text-slate-400 font-semibold">
-                                    ₹{{ number_format($product->compare_price, 0) }}
-                                </del>
-                                <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#881337] text-white">
-                                    Save {{ $discount }}%
-                                </span>
-                            @endif
+                            <template x-if="currentComparePrice && currentComparePrice > currentPrice">
+                                <div class="inline-flex items-baseline gap-2">
+                                    <del class="text-base sm:text-lg text-slate-400 font-semibold">
+                                        ₹<span x-text="Math.round(currentComparePrice)"></span>
+                                    </del>
+                                    <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#881337] text-white">
+                                        Save <span x-text="currentDiscount"></span>%
+                                    </span>
+                                </div>
+                            </template>
                         </div>
 
-                        <p class="text-[11px] text-slate-500">
-                            Inclusive of all taxes · Free Sacred Delivery on orders above ₹499
-                        </p>
+                        <!-- GST & HSN Breakdown -->
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500">
+                            <span>Inclusive of <span x-text="currentGst"></span>% GST</span>
+                            <span class="text-slate-300">·</span>
+                            <span class="font-mono text-slate-600">Taxable Value: ₹<span x-text="taxableAmount"></span> + GST: ₹<span x-text="gstAmount"></span></span>
+                            <template x-if="currentHsn">
+                                <span class="font-mono text-slate-600">· HSN: <span x-text="currentHsn"></span></span>
+                            </template>
+                        </div>
 
                         <!-- Member Pricing Benefit Banner -->
                         <div class="pt-3 border-t border-amber-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
@@ -277,7 +391,7 @@
                                     @if ($product->is_gangajal)
                                         <span class="text-[#0369A1] font-bold">1st Bottle Free / Month</span>
                                     @else
-                                        <span class="text-[#D97706] font-bold">₹{{ number_format($product->member_price ?? ($product->price * 0.85), 0) }}</span>
+                                        <span class="text-[#D97706] font-bold">₹<span x-text="Math.round(currentMemberPrice)"></span></span>
                                     @endif
                                 </div>
                             </div>
@@ -292,7 +406,7 @@
 
                     <!-- Quantity & Actions Box -->
                     <div class="space-y-3 sm:space-y-4 pt-1 sm:pt-2">
-                        <!-- Clean Responsive Quantity & Stock Row (No awkward misalignment) -->
+                        <!-- Clean Responsive Quantity & Stock Row -->
                         <div class="bg-amber-50/40 border border-amber-200/60 rounded-2xl p-3 sm:p-4">
                             <div class="flex items-center justify-between gap-3">
                                 <div>
@@ -316,11 +430,24 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
-                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                                        <span>In Stock</span>
-                                    </span>
-                                    <span class="block text-[11px] text-slate-500 mt-0.5 font-medium">Ready to Dispatch</span>
+                                    <template x-if="isInStock">
+                                        <div>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                                <span>In Stock</span>
+                                            </span>
+                                            <span class="block text-[11px] text-slate-500 mt-0.5 font-medium">Ready to Dispatch</span>
+                                        </div>
+                                    </template>
+                                    <template x-if="!isInStock">
+                                        <div>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">
+                                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                                <span>Out of Stock</span>
+                                            </span>
+                                            <span class="block text-[11px] text-rose-600 mt-0.5 font-medium">Bottling in Progress</span>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -330,14 +457,14 @@
                             <!-- Add to Cart (Ajax + Drawer) -->
                             <button type="button"
                                     @click="addToCart(false)"
-                                    :disabled="adding"
-                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#D97706] hover:bg-[#F97316] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-50">
+                                    :disabled="adding || !isInStock"
+                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#D97706] hover:bg-[#F97316] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-40 disabled:cursor-not-allowed">
                                 <template x-if="!adding">
                                     <span class="flex items-center gap-2">
                                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
-                                        <span>Add to Sacred Cart</span>
+                                        <span x-text="isInStock ? 'Add to Sacred Cart' : 'Out of Stock'"></span>
                                     </span>
                                 </template>
                                 <template x-if="adding">
@@ -348,9 +475,9 @@
                             <!-- Buy It Now -->
                             <button type="button"
                                     @click="addToCart(true)"
-                                    :disabled="adding"
-                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#881337] hover:bg-[#991B1B] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-50">
-                                <span>Buy It Now</span>
+                                    :disabled="adding || !isInStock"
+                                    class="w-full inline-flex items-center justify-center gap-2 py-3.5 sm:py-4 px-4 sm:px-6 bg-[#881337] hover:bg-[#991B1B] active:scale-98 text-white rounded-xl font-bold text-sm shadow-md transition transform touch-manipulation disabled:opacity-40 disabled:cursor-not-allowed">
+                                <span x-text="isInStock ? 'Buy It Now' : 'Currently Unavailable'"></span>
                                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>

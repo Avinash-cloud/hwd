@@ -54,14 +54,14 @@
                 <!-- Brand Logo -->
                 <div class="min-w-0 flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0">
-                        <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" />
+                        <!-- <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" /> -->
                         <div class="leading-tight min-w-0">
                             <span class="block font-serif font-extrabold text-base sm:text-2xl text-slate-900 tracking-tight group-hover:text-[#881337] transition truncate">
                                 Blu Bliss
                             </span>
-                            <span class="hidden sm:block text-[9px] sm:text-[10px] font-bold tracking-wider text-[#881337] truncate">
+                            <!-- <span class="hidden sm:block text-[9px] sm:text-[10px] font-bold tracking-wider text-[#881337] truncate">
                                 Saaf Pani Swath Ke Nishani
-                            </span>
+                            </span> -->
                         </div>
                     </a>
                 </div>
@@ -173,12 +173,12 @@
                     @else
                         <a href="{{ route('membership.join') }}"
                            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#881337] text-white hover:bg-[#D97706] transition shadow-xs">
-                            <span>Join Membership (₹500)</span>
+                            <span>Join Membership</span>
                         </a>
                     @endauth
 
                     <!-- Account Menu -->
-                    <div class="relative" x-data="{ userMenuOpen: false }">
+                    <div class="relative" x-data="{ userMenuOpen: false }" @scroll.window="userMenuOpen = false">
                         @auth
                             <button type="button"
                                     @click="userMenuOpen = !userMenuOpen"
@@ -295,7 +295,7 @@
 
                     <!-- Dynamic Categories from navCategories -->
                     @if (isset($navCategories) && $navCategories->count() > 0)
-                        @foreach ($navCategories->take(5) as $cat)
+                        @foreach ($navCategories->take(4) as $cat)
                             <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
                                 <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
                                    class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
@@ -340,8 +340,8 @@
                             </div>
                         @endforeach
 
-                        <!-- More Categories Dropdown (if more than 5) -->
-                        @if ($navCategories->count() > 5)
+                        <!-- More Categories Dropdown (if more than 4) -->
+                        @if ($navCategories->count() > 4)
                             <div class="relative group shrink-0" x-data="{ moreCatOpen: false }" @mouseenter="moreCatOpen = true" @mouseleave="moreCatOpen = false">
                                 <button type="button"
                                         @click="moreCatOpen = !moreCatOpen"
@@ -362,7 +362,7 @@
                                      x-transition:leave-end="opacity-0 translate-y-1"
                                      class="absolute left-0 top-full mt-0 w-60 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
                                     <div class="py-1">
-                                        @foreach ($navCategories->slice(5) as $moreCat)
+                                        @foreach ($navCategories->slice(4) as $moreCat)
                                             <a href="{{ route('products.index', ['category' => $moreCat->slug]) }}"
                                                class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
                                                 {{ $moreCat->name }}

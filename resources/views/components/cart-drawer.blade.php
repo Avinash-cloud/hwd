@@ -125,10 +125,16 @@
                                         <!-- Details -->
                                         <div class="flex-1 min-w-0">
                                             <div class="flex justify-between items-start gap-1">
-                                                <h5 class="text-xs font-bold text-slate-900 leading-snug line-clamp-2"
-                                                    x-text="item.name"></h5>
+                                                <div>
+                                                    <h5 class="text-xs font-bold text-slate-900 leading-snug line-clamp-2"
+                                                        x-text="item.name"></h5>
+                                                    <template x-if="item.variant_name">
+                                                        <span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200"
+                                                              x-text="'Size: ' + item.variant_name"></span>
+                                                    </template>
+                                                </div>
                                                 <button type="button"
-                                                        @click="removeItem(item.product_id)"
+                                                        @click="removeItem(item.key || item.product_id)"
                                                         class="text-slate-400 hover:text-rose-600 transition p-1"
                                                         title="Remove item">
                                                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -156,14 +162,14 @@
                                             <div class="flex items-center justify-between mt-2 pt-1 border-t border-slate-100">
                                                 <div class="inline-flex items-center border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
                                                     <button type="button"
-                                                            @click="updateQty(item.product_id, item.quantity - 1)"
+                                                            @click="updateQty(item.key || item.product_id, item.quantity - 1)"
                                                             class="px-2 py-1 text-slate-600 hover:bg-slate-200 text-xs font-bold transition">
                                                         -
                                                     </button>
                                                     <span class="px-2.5 py-1 text-xs font-bold text-slate-900 bg-white"
                                                           x-text="item.quantity"></span>
                                                     <button type="button"
-                                                            @click="updateQty(item.product_id, item.quantity + 1)"
+                                                            @click="updateQty(item.key || item.product_id, item.quantity + 1)"
                                                             class="px-2 py-1 text-slate-600 hover:bg-slate-200 text-xs font-bold transition">
                                                         +
                                                     </button>
@@ -307,7 +313,7 @@ window.cartDrawer = function() {
             });
         },
 
-        updateQty(productId, newQty) {
+        updateQty(keyOrId, newQty) {
             this.loading = true;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -319,7 +325,7 @@ window.cartDrawer = function() {
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ product_id: productId, quantity: Math.max(0, parseInt(newQty) || 0) })
+                body: JSON.stringify({ item_key: String(keyOrId), product_id: keyOrId, quantity: Math.max(0, parseInt(newQty) || 0) })
             })
             .then(res => res.json())
             .then(data => {
@@ -331,11 +337,11 @@ window.cartDrawer = function() {
             .catch(() => { this.loading = false; });
         },
 
-        updateQuantity(productId, newQty) {
-            return this.updateQty(productId, newQty);
+        updateQuantity(keyOrId, newQty) {
+            return this.updateQty(keyOrId, newQty);
         },
 
-        removeItem(productId) {
+        removeItem(keyOrId) {
             this.loading = true;
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
@@ -347,7 +353,7 @@ window.cartDrawer = function() {
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ product_id: productId })
+                body: JSON.stringify({ item_key: String(keyOrId), product_id: keyOrId })
             })
             .then(res => res.json())
             .then(data => {

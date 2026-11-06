@@ -16,7 +16,12 @@ class Slider extends Model
         'title',
         'subtitle',
         'description',
+        'media_type',
         'image',
+        'tablet_image',
+        'mobile_image',
+        'video_url',
+        'video_file',
         'button_text',
         'button_link',
         'secondary_button_text',
@@ -34,27 +39,65 @@ class Slider extends Model
         ];
     }
 
+    public function getIsVideoAttribute(): bool
+    {
+        return $this->media_type === 'video' || ! empty($this->video_file) || ! empty($this->video_url);
+    }
+
     /**
-     * Get resolved image URL whether it is a local storage path, asset, or full URL.
+     * Resolve desktop image URL.
      */
     public function getImageUrlAttribute(): string
     {
-        if (! $this->image) {
-            return asset('images/haridwar-panorama-clocktower.jpg');
+        return $this->resolvePath($this->image, asset('images/haridwar-panorama-clocktower.jpg'));
+    }
+
+    /**
+     * Resolve tablet image URL (1024x600 fallback to desktop image).
+     */
+    public function getTabletImageUrlAttribute(): string
+    {
+        return $this->tablet_image ? $this->resolvePath($this->tablet_image) : $this->image_url;
+    }
+
+    /**
+     * Resolve mobile image URL (750x1000 fallback to desktop image).
+     */
+    public function getMobileImageUrlAttribute(): string
+    {
+        return $this->mobile_image ? $this->resolvePath($this->mobile_image) : $this->image_url;
+    }
+
+    /**
+     * Resolve video URL (either uploaded MP4 or direct video URL).
+     */
+    public function getResolvedVideoUrlAttribute(): ?string
+    {
+        if ($this->video_file) {
+            return $this->resolvePath($this->video_file);
         }
 
-        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
-            return $this->image;
+        return $this->video_url;
+    }
+
+    protected function resolvePath(?string $path, ?string $default = null): string
+    {
+        if (! $path) {
+            return $default ?? '';
         }
 
-        if (Storage::disk('public')->exists($this->image)) {
-            return Storage::disk('public')->url($this->image);
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
         }
 
-        if (file_exists(public_path($this->image))) {
-            return asset($this->image);
+        if (Storage::disk('public')->exists($path)) {
+            return Storage::disk('public')->url($path);
         }
 
-        return asset($this->image);
+        if (file_exists(public_path($path))) {
+            return asset($path);
+        }
+
+        return asset($path);
     }
 }

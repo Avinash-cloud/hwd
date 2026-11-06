@@ -58,7 +58,7 @@
                                         </span>
                                     @endif
                                     <h2 class="font-medium text-slate-900 text-xs leading-snug line-clamp-1">
-                                        {{ $slide->title }}
+                                        {{ $slide->title ?: 'Untitled Slide #' . $slide->id }}
                                     </h2>
                                     @if ($slide->description)
                                         <p class="text-[11px] text-slate-500 line-clamp-1 mt-0.5">

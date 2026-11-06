@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckAdminPermission;
 use App\Http\Middleware\EnsureUserHasMembership;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Foundation\Application;
@@ -14,9 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/*',
+        ]);
+
         $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
             'member' => EnsureUserHasMembership::class,
+            'permission' => CheckAdminPermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

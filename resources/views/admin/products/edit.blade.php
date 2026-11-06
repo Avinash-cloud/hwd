@@ -3,11 +3,11 @@
         Products
     </x-slot>
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h1 class="text-xl font-semibold text-slate-900">Edit Product: {{ $product->name }}</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Update pricing, inventory, descriptions, and media gallery.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Update pricing, HSN/GST, size variants, media gallery, and specifications.</p>
             </div>
             <div class="flex items-center gap-3">
                 <a href="{{ route('products.show', $product->slug) }}" target="_blank" class="px-3 py-1.5 rounded-lg border border-amber-300 text-amber-700 hover:bg-amber-50 text-xs font-medium transition flex items-center gap-1.5">
@@ -23,12 +23,78 @@
         <div class="bg-white border border-slate-200 rounded-xl p-5 sm:p-7 shadow-xs"
              x-data="{
                  activeTab: 'general',
-                 tabsOrder: ['general', 'pricing', 'media', 'details'],
+                 tabsOrder: ['general', 'pricing', 'variants', 'media', 'details'],
+                 price: '{{ old('price', $product->price) }}',
+                 comparePrice: '{{ old('compare_price', $product->compare_price) }}',
+                 memberPrice: '{{ old('member_price', $product->member_price) }}',
+                 gstRate: '{{ old('gst_percentage', $product->gst_percentage ?? 18.00) }}',
+                 hsnCode: '{{ old('hsn_code', $product->hsn_code ?? '22019010') }}',
+                 variants: {{ json_encode(old('variants', $product->variants->map(fn($v) => [
+                     'id' => $v->id,
+                     'name' => $v->name,
+                     'sku' => $v->sku,
+                     'price' => (string) $v->price,
+                     'compare_price' => (string) ($v->compare_price ?? ''),
+                     'member_price' => (string) ($v->member_price ?? ''),
+                     'stock' => $v->stock,
+                     'volume_ml' => $v->volume_ml,
+                     'is_active' => (bool) $v->is_active,
+                 ])->values())) }},
                  previewUrl: '{{ $product->image_url }}',
                  imageSource: '{{ (str_starts_with($product->image ?? '', 'http') || str_starts_with($product->image ?? '', '/')) ? 'url' : 'file' }}',
                  videoSource: 'url',
                  videoUrl: '{{ old('video_url', $product->video_url ?? '') }}',
+                 galleryList: {{ json_encode($product->gallery ?? []) }},
                  galleryPreviews: [],
+
+                 taxableValue() {
+                     const p = parseFloat(this.price) || 0;
+                     const r = parseFloat(this.gstRate) || 0;
+                     if (r <= 0 || p <= 0) return p.toFixed(2);
+                     return (p / (1 + (r / 100))).toFixed(2);
+                 },
+
+                 gstAmount() {
+                     const p = parseFloat(this.price) || 0;
+                     const t = parseFloat(this.taxableValue()) || 0;
+                     return (p - t).toFixed(2);
+                 },
+
+                 addVariant() {
+                     this.variants.push({
+                         id: null,
+                         name: '',
+                         sku: '',
+                         price: this.price || '',
+                         compare_price: this.comparePrice || '',
+                         member_price: this.memberPrice || '',
+                         stock: 50,
+                         volume_ml: '',
+                         is_active: true
+                     });
+                 },
+
+                 removeVariant(idx) {
+                     this.variants.splice(idx, 1);
+                 },
+
+                 moveGalleryItem(fromIndex, toIndex) {
+                     if (toIndex < 0 || toIndex >= this.galleryList.length) return;
+                     const item = this.galleryList.splice(fromIndex, 1)[0];
+                     this.galleryList.splice(toIndex, 0, item);
+                 },
+
+                 removeGalleryItem(index) {
+                     this.galleryList.splice(index, 1);
+                 },
+
+                 setAsCover(imageUrl) {
+                     this.previewUrl = imageUrl;
+                     this.imageSource = 'url';
+                     const urlInput = document.querySelector('input[name=image_url]');
+                     if (urlInput) urlInput.value = imageUrl;
+                 },
+
                  setTab(tab) {
                      this.activeTab = tab;
                      try {
@@ -38,24 +104,28 @@
                          }
                      } catch (e) {}
                  },
+
                  prevTab() {
                      const idx = this.tabsOrder.indexOf(this.activeTab);
                      if (idx > 0) {
                          this.setTab(this.tabsOrder[idx - 1]);
                      }
                  },
+
                  nextTab() {
                      const idx = this.tabsOrder.indexOf(this.activeTab);
                      if (idx < this.tabsOrder.length - 1) {
                          this.setTab(this.tabsOrder[idx + 1]);
                      }
                  },
+
                  handleFileSelect(e) {
                      const file = e.target.files[0];
                      if (file) {
                          this.previewUrl = URL.createObjectURL(file);
                      }
                  },
+
                  handleGallerySelect(e) {
                      this.galleryPreviews = [];
                      const files = e.target.files;
@@ -65,8 +135,9 @@
                          }
                      }
                  },
+
                  init() {
-                     const validTabs = ['general', 'pricing', 'media', 'details'];
+                     const validTabs = ['general', 'pricing', 'variants', 'media', 'details'];
                      const hash = window.location.hash ? window.location.hash.substring(1) : '';
                      let savedTab = '';
                      try {
@@ -75,8 +146,10 @@
 
                      @if ($errors->hasAny(['name', 'sku', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
                          this.setTab('general');
-                     @elseif ($errors->hasAny(['price', 'compare_price', 'member_price', 'stock', 'badge', 'volume_ml', 'is_gangajal', 'is_member_free_eligible']))
+                     @elseif ($errors->hasAny(['price', 'compare_price', 'member_price', 'stock', 'hsn_code', 'gst_percentage', 'badge', 'volume_ml']))
                          this.setTab('pricing');
+                     @elseif ($errors->hasAny(['variants', 'variants.*']))
+                         this.setTab('variants');
                      @elseif ($errors->hasAny(['image_file', 'image_url', 'gallery_files', 'gallery_files.*', 'gallery_urls', 'video_file', 'video_url', 'remove_video']))
                          this.setTab('media');
                      @elseif ($errors->hasAny(['short_description', 'description', 'purity_details', 'benefits']))
@@ -95,61 +168,60 @@
 
             <!-- Tab Navigation Bar -->
             <div class="border-b border-slate-200 mb-6">
-                <nav class="flex space-x-1 sm:space-x-3 overflow-x-auto no-scrollbar -mb-px" aria-label="Product Tabs">
+                <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto no-scrollbar -mb-px" aria-label="Product Tabs">
                     <!-- Tab 1: General Info -->
                     <button type="button"
                             @click="setTab('general')"
                             :class="activeTab === 'general' ? 'border-amber-600 text-amber-700 bg-amber-50/70 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-medium'"
-                            class="flex items-center gap-2 py-3 px-3.5 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                        </svg>
-                        <span>1. General Info</span>
+                            class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <span>1. General</span>
                         @if ($errors->hasAny(['name', 'sku', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
-                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Validation errors in this tab"></span>
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                         @endif
                     </button>
 
-                    <!-- Tab 2: Pricing & Stock -->
+                    <!-- Tab 2: Pricing & GST -->
                     <button type="button"
                             @click="setTab('pricing')"
                             :class="activeTab === 'pricing' ? 'border-amber-600 text-amber-700 bg-amber-50/70 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-medium'"
-                            class="flex items-center gap-2 py-3 px-3.5 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span>2. Pricing & Stock</span>
-                        @if ($errors->hasAny(['price', 'compare_price', 'member_price', 'stock', 'badge', 'volume_ml', 'is_gangajal', 'is_member_free_eligible']))
-                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Validation errors in this tab"></span>
+                            class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>2. Pricing & GST</span>
+                        @if ($errors->hasAny(['price', 'compare_price', 'member_price', 'stock', 'hsn_code', 'gst_percentage', 'badge', 'volume_ml']))
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                         @endif
                     </button>
 
-                    <!-- Tab 3: Media & Gallery -->
+                    <!-- Tab 3: Sizes & Variants -->
+                    <button type="button"
+                            @click="setTab('variants')"
+                            :class="activeTab === 'variants' ? 'border-amber-600 text-amber-700 bg-amber-50/70 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-medium'"
+                            class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                        <span>3. Sizes & Variants</span>
+                        <span x-show="variants.length > 0" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-200 text-amber-800 font-bold" x-text="variants.length"></span>
+                    </button>
+
+                    <!-- Tab 4: Media & Gallery -->
                     <button type="button"
                             @click="setTab('media')"
                             :class="activeTab === 'media' ? 'border-amber-600 text-amber-700 bg-amber-50/70 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-medium'"
-                            class="flex items-center gap-2 py-3 px-3.5 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <span>3. Media & Gallery</span>
+                            class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span>4. Media & Gallery</span>
                         @if ($errors->hasAny(['image_file', 'image_url', 'gallery_files', 'gallery_files.*', 'gallery_urls', 'video_file', 'video_url', 'remove_video']))
-                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Validation errors in this tab"></span>
+                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                         @endif
                     </button>
 
-                    <!-- Tab 4: Descriptions & Details -->
+                    <!-- Tab 5: Descriptions & Details -->
                     <button type="button"
                             @click="setTab('details')"
                             :class="activeTab === 'details' ? 'border-amber-600 text-amber-700 bg-amber-50/70 font-semibold' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300 font-medium'"
-                            class="flex items-center gap-2 py-3 px-3.5 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
-                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span>4. Descriptions & Details</span>
-                        @if ($errors->hasAny(['short_description', 'description', 'purity_details', 'benefits']))
-                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Validation errors in this tab"></span>
-                        @endif
+                            class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span>5. Descriptions & Details</span>
                     </button>
                 </nav>
             </div>
@@ -230,18 +302,19 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: PRICING & INVENTORY -->
+                <!-- TAB 2: PRICING & GST (INCLUSIVE PRICING ENGINE) -->
                 <div x-show="activeTab === 'pricing'" x-cloak class="space-y-6">
                     <div>
-                        <h2 class="text-sm font-semibold text-slate-900 mb-1">Pricing & Inventory</h2>
-                        <p class="text-xs text-slate-500 mb-4">Configure retail price, strike-through MRP, stock units, and membership privileges.</p>
+                        <h2 class="text-sm font-semibold text-slate-900 mb-1">Pricing & GST Management (Inclusive Pricing)</h2>
+                        <p class="text-xs text-slate-500 mb-4">Enter selling price inclusive of GST and applicable GST %. The system automatically calculates taxable value and GST amount.</p>
 
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Sale Price (INR) *</label>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Selling Price (incl. GST) *</label>
                                 <input type="number"
                                        step="0.01"
                                        name="price"
+                                       x-model="price"
                                        value="{{ old('price', $product->price) }}"
                                        required
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
@@ -249,20 +322,23 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Compare Price (MRP)</label>
-                                <input type="number"
-                                       step="0.01"
-                                       name="compare_price"
-                                       value="{{ old('compare_price', $product->compare_price) }}"
-                                       class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">GST Rate (%) *</label>
+                                <select name="gst_percentage" x-model="gstRate" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                                    <option value="0.00">0% (Nil / Exempt)</option>
+                                    <option value="5.00">5% (Puja Samagri / Essentials)</option>
+                                    <option value="12.00">12% (Standard Concession)</option>
+                                    <option value="18.00">18% (Standard Goods & Sacred Ware)</option>
+                                    <option value="28.00">28% (Luxury Goods)</option>
+                                </select>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Member Price</label>
-                                <input type="number"
-                                       step="0.01"
-                                       name="member_price"
-                                       value="{{ old('member_price', $product->member_price) }}"
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">HSN Code</label>
+                                <input type="text"
+                                       name="hsn_code"
+                                       x-model="hsnCode"
+                                       value="{{ old('hsn_code', $product->hsn_code ?? '22019010') }}"
+                                       placeholder="22019010"
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                             </div>
 
@@ -276,7 +352,50 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <!-- Live Reverse GST Calculation Card -->
+                        <div class="mt-4 p-4 rounded-xl bg-amber-50/70 border border-amber-200/80">
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#D97706] block mb-2">Automated GST Breakdown Preview</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                                <div>
+                                    <span class="text-slate-500 block text-[11px]">Selling Price (incl. GST):</span>
+                                    <strong class="text-slate-900 font-mono text-sm">₹<span x-text="price || '0.00'"></span></strong>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 block text-[11px]">Taxable Base Value:</span>
+                                    <strong class="text-slate-900 font-mono text-sm">₹<span x-text="taxableValue()"></span></strong>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 block text-[11px]">Total GST Amount (<span x-text="gstRate"></span>%):</span>
+                                    <strong class="text-[#D97706] font-mono text-sm">₹<span x-text="gstAmount()"></span></strong>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 block text-[11px]">CGST / SGST Split:</span>
+                                    <span class="text-slate-700 font-mono">₹<span x-text="(gstAmount() / 2).toFixed(2)"></span> each</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Compare Price (MRP)</label>
+                                <input type="number"
+                                       step="0.01"
+                                       name="compare_price"
+                                       x-model="comparePrice"
+                                       value="{{ old('compare_price', $product->compare_price) }}"
+                                       class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Member Price</label>
+                                <input type="number"
+                                       step="0.01"
+                                       name="member_price"
+                                       x-model="memberPrice"
+                                       value="{{ old('member_price', $product->member_price) }}"
+                                       class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1.5">Promotional Badge</label>
                                 <input type="text"
@@ -285,7 +404,9 @@
                                        placeholder="e.g. 20% OFF or Best Value"
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                             </div>
+                        </div>
 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <div>
                                 <label class="block text-sm font-medium text-slate-700 mb-1.5">Volume (ml)</label>
                                 <input type="number"
@@ -293,44 +414,114 @@
                                        value="{{ old('volume_ml', $product->volume_ml) }}"
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                             </div>
-                        </div>
 
-                        <div class="pt-5 border-t border-slate-200 mt-5">
-                            <label class="block text-sm font-semibold text-slate-900 mb-3">Product Classification Toggles</label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label class="flex items-start gap-2.5 p-3 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition">
-                                    <input type="checkbox"
-                                           name="is_gangajal"
-                                           value="1"
-                                           {{ old('is_gangajal', $product->is_gangajal) ? 'checked' : '' }}
-                                           class="rounded text-amber-600 focus:ring-amber-500 border-slate-300 mt-0.5">
-                                    <div>
-                                        <span class="text-sm font-semibold text-slate-800 block">Sacred Gangajal</span>
-                                        <span class="text-xs text-slate-500">Subject to Gangajal batch lab reports and verification seals.</span>
-                                    </div>
+                            <div class="flex items-center gap-4 pt-6">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" name="is_gangajal" value="1" {{ old('is_gangajal', $product->is_gangajal) ? 'checked' : '' }} class="rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                    <span class="text-sm text-slate-700 font-medium">Sacred Gangajal</span>
                                 </label>
-
-                                <label class="flex items-start gap-2.5 p-3 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition">
-                                    <input type="checkbox"
-                                           name="is_member_free_eligible"
-                                           value="1"
-                                           {{ old('is_member_free_eligible', $product->is_member_free_eligible) ? 'checked' : '' }}
-                                           class="rounded text-amber-600 focus:ring-amber-500 border-slate-300 mt-0.5">
-                                    <div>
-                                        <span class="text-sm font-semibold text-slate-800 block">Monthly Member Free Eligible</span>
-                                        <span class="text-xs text-slate-500">Allowed for subscriber free monthly quota claiming.</span>
-                                    </div>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" name="is_member_free_eligible" value="1" {{ old('is_member_free_eligible', $product->is_member_free_eligible) ? 'checked' : '' }} class="rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                    <span class="text-sm text-slate-700 font-medium">Monthly Free Quota Eligible</span>
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 3: MEDIA & GALLERY -->
+                <!-- TAB 3: SIZES & VARIANTS -->
+                <div x-show="activeTab === 'variants'" x-cloak class="space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-900 mb-1">Product Sizes & Variants</h2>
+                            <p class="text-xs text-slate-500">Configure multiple product sizes. When variants are present, customers can select sizes with dynamic price/stock updates.</p>
+                        </div>
+
+                        <button type="button"
+                                @click="addVariant()"
+                                class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5 self-start shadow-xs">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            <span>Add Size Variant</span>
+                        </button>
+                    </div>
+
+                    <template x-if="variants.length === 0">
+                        <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                            <svg class="w-10 h-10 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">No Size Variants Configured</h4>
+                            <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">This product will be sold as a single standard unit using the main price and stock set in the Pricing tab. Click "Add Size Variant" above to configure multiple bottle sizes or bundles.</p>
+                        </div>
+                    </template>
+
+                    <div class="space-y-4" x-show="variants.length > 0">
+                        <template x-for="(v, index) in variants" :key="index">
+                            <div class="p-4 bg-slate-50/80 border border-slate-200 rounded-xl space-y-3 relative group">
+                                <input type="hidden" :name="'variants[' + index + '][id]'" :value="v.id">
+
+                                <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider" x-text="'Size / Variant #' + (index + 1) + (v.name ? ' (' + v.name + ')' : '')"></span>
+                                    <button type="button" @click="removeVariant(index)" class="text-xs text-rose-600 hover:text-rose-800 font-semibold flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        <span>Remove</span>
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Size / Variant Name *</label>
+                                        <input type="text" :name="'variants[' + index + '][name]'" x-model="v.name" required placeholder="e.g. 250ml or 1 Litre"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Variant Price (incl. GST) *</label>
+                                        <input type="number" step="0.01" :name="'variants[' + index + '][price]'" x-model="v.price" required placeholder="149.00"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Compare Price (MRP)</label>
+                                        <input type="number" step="0.01" :name="'variants[' + index + '][compare_price]'" x-model="v.compare_price" placeholder="199.00"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Member Price</label>
+                                        <input type="number" step="0.01" :name="'variants[' + index + '][member_price]'" x-model="v.member_price" placeholder="129.00"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800 font-mono">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Stock Units</label>
+                                        <input type="number" :name="'variants[' + index + '][stock]'" x-model="v.stock" placeholder="50"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Variant SKU</label>
+                                        <input type="text" :name="'variants[' + index + '][sku]'" x-model="v.sku" placeholder="HB-GJ-250"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block font-medium text-slate-700 mb-1">Volume (ml)</label>
+                                        <input type="number" :name="'variants[' + index + '][volume_ml]'" x-model="v.volume_ml" placeholder="250"
+                                               class="w-full px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-slate-800">
+                                    </div>
+                                    <div class="flex items-center pt-5">
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="checkbox" :name="'variants[' + index + '][is_active]'" value="1" x-model="v.is_active" class="rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                            <span class="font-medium text-slate-700">Active for sale</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- TAB 4: MEDIA & GALLERY (ENHANCED GALLERY MANAGEMENT) -->
                 <div x-show="activeTab === 'media'" x-cloak class="space-y-6">
                     <div>
-                        <h2 class="text-sm font-semibold text-slate-900 mb-1">Product Media & Gallery</h2>
-                        <p class="text-xs text-slate-500 mb-4">Manage primary cover photo, additional gallery images, and product showcase video.</p>
+                        <h2 class="text-sm font-semibold text-slate-900 mb-1">Product Media & Gallery Management</h2>
+                        <p class="text-xs text-slate-500 mb-4">Manage primary cover photo, reorder gallery images, delete individual photos, and upload videos.</p>
                     </div>
 
                     <!-- 1. Primary Cover Photo -->
@@ -385,40 +576,38 @@
                         </div>
                     </div>
 
-                    <!-- 2. Additional Gallery Images (Multiple Photos) -->
+                    <!-- 2. Additional Gallery Images (Reorderable + Individual Delete) -->
                     <div class="bg-slate-50/70 border border-slate-200 rounded-xl p-4 space-y-4">
                         <div>
-                            <label class="text-xs font-bold text-slate-800 uppercase tracking-wider">Additional Gallery Photos</label>
-                            <span class="block text-[11px] text-slate-500">Thumbnail carousel photos displayed on the product details page</span>
+                            <label class="text-xs font-bold text-slate-800 uppercase tracking-wider">Product Gallery Showcase</label>
+                            <span class="block text-[11px] text-slate-500">Thumbnail carousel photos displayed on the product details page. Reorder using arrows or set as primary cover photo.</span>
                         </div>
 
-                        <!-- Existing Gallery Images -->
-                        @if (!empty($product->gallery) && is_array($product->gallery) && count($product->gallery) > 0)
-                            <div>
-                                <span class="text-xs font-semibold text-slate-700 block mb-2">Existing Gallery Photos (Uncheck to remove):</span>
-                                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                                    @foreach ($product->gallery as $index => $item)
-                                        @php
-                                            $itemUrl = (str_starts_with($item, 'http') || str_starts_with($item, '/')) ? $item : (Storage::disk('public')->exists($item) ? Storage::disk('public')->url($item) : asset($item));
-                                        @endphp
-                                        <label class="relative group cursor-pointer block border border-slate-200 rounded-xl p-1 bg-white hover:border-amber-400 transition shadow-2xs">
-                                            <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-50">
-                                                <img src="{{ $itemUrl }}" class="w-full h-full object-cover">
+                        <input type="hidden" name="gallery_order" :value="JSON.stringify(galleryList)">
+
+                        <!-- Existing Gallery Images with Reordering and Controls -->
+                        <div x-show="galleryList.length > 0">
+                            <span class="text-xs font-semibold text-slate-700 block mb-2">Existing Gallery Photos (<span x-text="galleryList.length"></span>):</span>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                                <template x-for="(item, idx) in galleryList" :key="item">
+                                    <div class="border border-slate-200 rounded-xl p-1 bg-white shadow-2xs space-y-1 relative group">
+                                        <input type="hidden" name="keep_gallery[]" :value="item">
+                                        <div class="w-full aspect-square rounded-lg overflow-hidden bg-slate-50 relative">
+                                            <img :src="(item.startsWith('http') || item.startsWith('/')) ? item : ('/storage/' + item)" class="w-full h-full object-cover">
+                                            <span class="absolute top-1 left-1 bg-slate-900/80 text-white text-[9px] px-1 rounded font-bold" x-text="'#' + (idx + 1)"></span>
+                                        </div>
+                                        <div class="flex items-center justify-between pt-1 px-1">
+                                            <div class="flex items-center gap-0.5">
+                                                <button type="button" @click="moveGalleryItem(idx, idx - 1)" :disabled="idx === 0" title="Move Left" class="p-1 rounded text-slate-500 hover:bg-slate-100 disabled:opacity-20 text-[10px]">◀</button>
+                                                <button type="button" @click="moveGalleryItem(idx, idx + 1)" :disabled="idx === galleryList.length - 1" title="Move Right" class="p-1 rounded text-slate-500 hover:bg-slate-100 disabled:opacity-20 text-[10px]">▶</button>
                                             </div>
-                                            <div class="mt-1.5 flex items-center justify-between px-1">
-                                                <span class="text-[10px] text-slate-500 truncate max-w-[80px]">Photo #{{ $index + 1 }}</span>
-                                                <input type="checkbox"
-                                                       name="keep_gallery[]"
-                                                       value="{{ $item }}"
-                                                       checked
-                                                       class="rounded text-amber-600 focus:ring-amber-500 border-slate-300"
-                                                       title="Keep this image">
-                                            </div>
-                                        </label>
-                                    @endforeach
-                                </div>
+                                            <button type="button" @click="setAsCover(item)" title="Set as primary cover photo" class="text-[10px] text-amber-700 hover:text-amber-900 font-bold">Cover</button>
+                                            <button type="button" @click="removeGalleryItem(idx)" title="Remove image" class="text-rose-600 hover:text-rose-800 p-0.5 text-xs font-bold">✕</button>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
-                        @endif
+                        </div>
 
                         <!-- Add New Gallery Photos -->
                         <div class="pt-2 border-t border-slate-200">
@@ -429,7 +618,7 @@
                                    accept="image/*"
                                    @change="handleGallerySelect($event)"
                                    class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border file:border-slate-300 file:text-xs file:font-medium file:bg-white file:text-slate-700 hover:file:bg-slate-50 file:cursor-pointer" />
-                            <span class="text-[11px] text-slate-400 mt-0.5 block">You can select multiple files to append to the gallery (JPG, PNG, WebP up to 5MB each)</span>
+                            <span class="text-[11px] text-slate-400 mt-0.5 block">Select multiple files (JPG, PNG, WebP up to 5MB each)</span>
                             @error('gallery_files.*') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -497,9 +686,9 @@
                                    name="video_url"
                                    x-model="videoUrl"
                                    value="{{ old('video_url', $product->video_url) }}"
-                                   placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/... or https://vimeo.com/..."
+                                   placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
-                            <span class="text-[11px] text-slate-400 mt-1 block">Supports YouTube, Vimeo, or direct MP4 video URLs.</span>
+                            <span class="text-[11px] text-slate-400 mt-1 block">Supports YouTube, Vimeo, or direct video URLs.</span>
                             @error('video_url') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -514,7 +703,7 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: DESCRIPTIONS & DETAILS -->
+                <!-- TAB 5: DESCRIPTIONS & DETAILS -->
                 <div x-show="activeTab === 'details'" x-cloak class="space-y-6">
                     <div>
                         <h2 class="text-sm font-semibold text-slate-900 mb-1">Descriptions & Sacred Details</h2>

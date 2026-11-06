@@ -6,6 +6,7 @@ namespace App\Models;
 use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,9 +25,12 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'google_id',
+        'avatar',
         'phone',
         'password',
         'is_admin',
+        'is_active',
     ];
 
     /**
@@ -50,6 +54,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -130,6 +135,64 @@ class User extends Authenticatable
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class)->latest();
+    }
+
+    /**
+     * User administration roles.
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * User recurring subscriptions.
+     */
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(MembershipSubscription::class)->latest();
+    }
+
+    /**
+     * Determine if user has a specific role.
+     */
+    public function hasRole(string|array $roles): bool
+    {
+        if (! $this->is_admin) {
+            return false;
+        }
+
+        $roleList = is_array($roles) ? $roles : [$roles];
+
+        // If user is super_admin or no roles table seeded, default admin has root access
+        if ($this->roles()->whereIn('slug', $roleList)->exists()) {
+            return true;
+        }
+
+        if ($this->roles()->where('slug', 'super_admin')->exists() || $this->roles()->count() === 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if user has a specific admin permission.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if (! $this->is_admin || ! $this->is_active) {
+            return false;
+        }
+
+        // Default admin with no explicit roles assigned has full access
+        if ($this->roles()->count() === 0 || $this->roles()->where('slug', 'super_admin')->exists()) {
+            return true;
+        }
+
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission): void {
+            $query->where('slug', $permission);
+        })->exists();
     }
 
     /**

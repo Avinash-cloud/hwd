@@ -135,10 +135,16 @@
                             <div class="py-4 flex items-center justify-between gap-4">
                                 <div>
                                     <h4 class="font-serif font-bold text-slate-900 text-sm">{{ $item->product_name }}</h4>
+                                    @if ($item->variant_name)
+                                        <span class="inline-block px-2 py-0.5 mt-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                                            Size: {{ $item->variant_name }}
+                                        </span>
+                                    @endif
                                     <div class="flex items-center gap-3 text-xs text-slate-500 mt-1">
                                         <span>Qty: {{ $item->quantity }}</span>
                                         <span>·</span>
                                         <span>Unit: ₹{{ number_format($item->unit_price, 2) }}</span>
+                                        <span class="text-[11px] text-slate-400">· HSN: {{ $item->hsn_code ?? '22019010' }} ({{ number_format($item->gst_percentage ?? 18, 0) }}% GST)</span>
                                         @if ($item->is_free_monthly_bottle)
                                             <span
                                                 class="px-2 py-0.5 rounded-full font-bold bg-[#0369A1]/10 text-[#0369A1] text-[10px]">
@@ -156,8 +162,18 @@
 
                     <div class="pt-4 border-t border-slate-200 space-y-2 text-xs">
                         <div class="flex justify-between text-slate-600">
-                            <span>Subtotal:</span>
+                            <span>Subtotal (Inclusive of GST):</span>
                             <span>₹{{ number_format($order->subtotal, 2) }}</span>
+                        </div>
+                        <div class="pl-2.5 py-1.5 border-l-2 border-amber-300 bg-amber-50/40 rounded-r-lg space-y-1 text-[11px] text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Taxable Base Value:</span>
+                                <span class="font-mono font-medium">₹{{ number_format($order->total_taxable_amount ?? 0, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>GST Breakdown (CGST+SGST):</span>
+                                <span class="font-mono font-medium text-slate-800">₹{{ number_format($order->total_gst_amount ?? 0, 2) }}</span>
+                            </div>
                         </div>
                         @if ($order->discount_amount > 0)
                             <div class="flex justify-between text-[#0369A1] font-bold">

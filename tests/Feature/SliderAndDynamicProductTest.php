@@ -100,6 +100,24 @@ class SliderAndDynamicProductTest extends TestCase
         Storage::disk('public')->assertExists($slider->image);
     }
 
+    public function test_admin_can_create_slider_with_no_compulsory_fields(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.sliders.store'), []);
+
+        $response->assertRedirect(route('admin.sliders.index'));
+        $this->assertDatabaseCount('sliders', 1);
+
+        $slider = Slider::first();
+        $this->assertNull($slider->title);
+        $this->assertNull($slider->image);
+        $this->assertEquals('image', $slider->media_type);
+        $this->assertTrue($slider->is_active);
+
+        // Also test updating with no fields provided
+        $updateResponse = $this->actingAs($this->admin)->put(route('admin.sliders.update', $slider->id), []);
+        $updateResponse->assertRedirect(route('admin.sliders.index'));
+    }
+
     public function test_admin_can_update_and_toggle_slider(): void
     {
         $slider = Slider::create([

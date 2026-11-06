@@ -37,11 +37,18 @@ class SliderController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'media_type' => 'nullable|in:image,video',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
+            'tablet_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'tablet_image_url' => 'nullable|string|max:1000',
+            'mobile_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'mobile_image_url' => 'nullable|string|max:1000',
+            'video_file' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
+            'video_url' => 'nullable|string|max:1000',
             'button_text' => 'nullable|string|max:100',
             'button_link' => 'nullable|string|max:255',
             'secondary_button_text' => 'nullable|string|max:100',
@@ -51,19 +58,41 @@ class SliderController extends Controller
             'is_active' => 'nullable|boolean',
         ]);
 
-        if (! $request->hasFile('image_file') && empty($validated['image_url'])) {
-            return back()->withInput()->withErrors(['image_file' => 'Please provide an image file or an image URL for the slide.']);
-        }
+        $mediaType = $request->input('media_type', 'image');
 
+        // Handle desktop image
         if ($request->hasFile('image_file')) {
-            $path = $request->file('image_file')->store('sliders', 'public');
-            $validated['image'] = $path;
+            $validated['image'] = $request->file('image_file')->store('sliders', 'public');
         } else {
-            $validated['image'] = $validated['image_url'];
+            $validated['image'] = $validated['image_url'] ?? null;
         }
 
-        unset($validated['image_file'], $validated['image_url']);
+        // Handle tablet image
+        if ($request->hasFile('tablet_image_file')) {
+            $validated['tablet_image'] = $request->file('tablet_image_file')->store('sliders', 'public');
+        } elseif (! empty($validated['tablet_image_url'])) {
+            $validated['tablet_image'] = $validated['tablet_image_url'];
+        }
 
+        // Handle mobile image
+        if ($request->hasFile('mobile_image_file')) {
+            $validated['mobile_image'] = $request->file('mobile_image_file')->store('sliders', 'public');
+        } elseif (! empty($validated['mobile_image_url'])) {
+            $validated['mobile_image'] = $validated['mobile_image_url'];
+        }
+
+        // Handle video
+        if ($request->hasFile('video_file')) {
+            $validated['video_file'] = $request->file('video_file')->store('sliders/videos', 'public');
+        }
+
+        unset(
+            $validated['image_file'], $validated['image_url'],
+            $validated['tablet_image_file'], $validated['tablet_image_url'],
+            $validated['mobile_image_file'], $validated['mobile_image_url']
+        );
+
+        $validated['media_type'] = $mediaType;
         $validated['is_active'] = $request->boolean('is_active', true);
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
         $validated['badge_color'] = ($validated['badge_color'] ?? null) ?: 'amber';
@@ -87,11 +116,18 @@ class SliderController extends Controller
     public function update(Request $request, Slider $slider): RedirectResponse
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'media_type' => 'nullable|in:image,video',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'image_url' => 'nullable|string|max:1000',
+            'tablet_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'tablet_image_url' => 'nullable|string|max:1000',
+            'mobile_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'mobile_image_url' => 'nullable|string|max:1000',
+            'video_file' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
+            'video_url' => 'nullable|string|max:1000',
             'button_text' => 'nullable|string|max:100',
             'button_link' => 'nullable|string|max:255',
             'secondary_button_text' => 'nullable|string|max:100',
@@ -105,14 +141,43 @@ class SliderController extends Controller
             if ($slider->image && Storage::disk('public')->exists($slider->image)) {
                 Storage::disk('public')->delete($slider->image);
             }
-            $path = $request->file('image_file')->store('sliders', 'public');
-            $validated['image'] = $path;
+            $validated['image'] = $request->file('image_file')->store('sliders', 'public');
         } elseif (! empty($validated['image_url'])) {
             $validated['image'] = $validated['image_url'];
         }
 
-        unset($validated['image_file'], $validated['image_url']);
+        if ($request->hasFile('tablet_image_file')) {
+            if ($slider->tablet_image && Storage::disk('public')->exists($slider->tablet_image)) {
+                Storage::disk('public')->delete($slider->tablet_image);
+            }
+            $validated['tablet_image'] = $request->file('tablet_image_file')->store('sliders', 'public');
+        } elseif (! empty($validated['tablet_image_url'])) {
+            $validated['tablet_image'] = $validated['tablet_image_url'];
+        }
 
+        if ($request->hasFile('mobile_image_file')) {
+            if ($slider->mobile_image && Storage::disk('public')->exists($slider->mobile_image)) {
+                Storage::disk('public')->delete($slider->mobile_image);
+            }
+            $validated['mobile_image'] = $request->file('mobile_image_file')->store('sliders', 'public');
+        } elseif (! empty($validated['mobile_image_url'])) {
+            $validated['mobile_image'] = $validated['mobile_image_url'];
+        }
+
+        if ($request->hasFile('video_file')) {
+            if ($slider->video_file && Storage::disk('public')->exists($slider->video_file)) {
+                Storage::disk('public')->delete($slider->video_file);
+            }
+            $validated['video_file'] = $request->file('video_file')->store('sliders/videos', 'public');
+        }
+
+        unset(
+            $validated['image_file'], $validated['image_url'],
+            $validated['tablet_image_file'], $validated['tablet_image_url'],
+            $validated['mobile_image_file'], $validated['mobile_image_url']
+        );
+
+        $validated['media_type'] = $request->input('media_type', $slider->media_type ?? 'image');
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
         $validated['badge_color'] = ($validated['badge_color'] ?? null) ?: 'amber';

@@ -107,7 +107,12 @@ class ProductController extends Controller
      */
     public function show(string $slug): View
     {
-        $product = Product::with(['category', 'batch', 'approvedReviews.user'])
+        $product = Product::with([
+            'category',
+            'batch',
+            'approvedReviews.user',
+            'variants' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
+        ])
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();

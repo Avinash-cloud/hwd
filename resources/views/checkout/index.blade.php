@@ -27,8 +27,11 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('checkout.store') }}" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <form id="checkout-form" method="POST" action="{{ route('checkout.store') }}" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
             @csrf
+            <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+            <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature">
 
             <!-- Left 2 Cols: Address & Payment Selection -->
             <div class="lg:col-span-2 space-y-8">
@@ -311,16 +314,36 @@
 
                 <div class="space-y-3 text-xs">
                     @foreach ($cartDetails['items'] as $item)
-                        <div class="flex justify-between py-1">
-                            <span class="text-slate-700 truncate max-w-[180px]">{{ $item['product']->name }} (x{{ $item['quantity'] }})</span>
-                            <span class="font-bold text-slate-900 font-mono">₹{{ number_format($item['line_total'], 2) }}</span>
+                        <div class="flex justify-between items-start py-1.5 border-b border-slate-50 last:border-0">
+                            <div class="truncate max-w-[200px]">
+                                <span class="font-bold text-slate-800">{{ $item['product']->name }}</span>
+                                @if (!empty($item['variant_name']))
+                                    <span class="block text-[10px] text-[#D97706] font-bold">Size: {{ $item['variant_name'] }}</span>
+                                @endif
+                                <span class="text-[10px] text-slate-400">Qty: {{ $item['quantity'] }} · HSN: {{ $item['hsn_code'] ?? '22019010' }}</span>
+                            </div>
+                            <span class="font-bold text-slate-900 font-mono text-right">₹{{ number_format($item['line_total'], 2) }}</span>
                         </div>
                     @endforeach
 
                     <div class="pt-3 border-t border-slate-100 space-y-2">
                         <div class="flex justify-between text-slate-600">
-                            <span>Subtotal:</span>
+                            <span>Subtotal (Inclusive of GST):</span>
                             <span class="font-mono">₹{{ number_format($cartDetails['subtotal'], 2) }}</span>
+                        </div>
+
+                        <div class="pl-2.5 py-1.5 border-l-2 border-amber-300 bg-amber-50/40 rounded-r-lg space-y-1 text-[11px] text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Taxable Base Value</span>
+                                <span class="font-mono font-medium">₹{{ number_format($cartDetails['total_taxable_amount'] ?? 0, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total GST Breakdown</span>
+                                <span class="font-mono font-medium text-slate-800">₹{{ number_format($cartDetails['total_gst_amount'] ?? 0, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+                                <span>(CGST: ₹{{ number_format(($cartDetails['total_gst_amount'] ?? 0) / 2, 2) }} + SGST: ₹{{ number_format(($cartDetails['total_gst_amount'] ?? 0) / 2, 2) }})</span>
+                            </div>
                         </div>
 
                         @if ($cartDetails['member_discount'] > 0)
@@ -338,8 +361,19 @@
                         @endif
 
                         <div class="flex justify-between text-slate-600">
-                            <span>Shipping (Shiprocket Logistics):</span>
-                            <span class="font-mono">₹{{ number_format($cartDetails['shipping'], 2) }}</span>
+                            <span class="flex items-center gap-1.5">
+                                <span>Shipping (Shiprocket Logistics):</span>
+                                @if (!empty($cartDetails['is_member_shipping']))
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">Member Rate</span>
+                                @endif
+                            </span>
+                            <span class="font-mono">
+                                @if ($cartDetails['shipping'] <= 0 && $cartDetails['subtotal'] > 0)
+                                    <span class="text-emerald-700 font-bold">FREE</span>
+                                @else
+                                    ₹{{ number_format($cartDetails['shipping'], 2) }}
+                                @endif
+                            </span>
                         </div>
                     </div>
 
@@ -353,6 +387,7 @@
 
                 <div class="pt-4">
                     <button type="submit"
+                        id="place-order-btn"
                         class="w-full py-4 rounded-xl font-bold text-sm text-white bg-[#D97706] hover:bg-[#F97316] shadow-lg transition">
                         Confirm & Place Sacred Order
                     </button>
@@ -370,4 +405,97 @@
             </div>
         </form>
     </div>
+
+    <!-- Razorpay Checkout Integration Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkoutForm = document.getElementById('checkout-form');
+        const submitBtn = document.getElementById('place-order-btn');
+        if (!checkoutForm || !submitBtn) return;
+
+        let razorpayHandled = false;
+
+        checkoutForm.addEventListener('submit', function (e) {
+            const paymentMethod = checkoutForm.querySelector('input[name="payment_method"]:checked')?.value;
+
+            if (paymentMethod === 'cod' || razorpayHandled) {
+                return;
+            }
+
+            e.preventDefault();
+
+            if (!checkoutForm.checkValidity()) {
+                checkoutForm.reportValidity();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Initializing Razorpay Payment...';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            fetch('{{ route('checkout.razorpay.order') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to create Razorpay order');
+                return res.json();
+            })
+            .then(data => {
+                if (data.is_mock) {
+                    document.getElementById('razorpay_payment_id').value = 'pay_mock_' + Math.random().toString(36).substring(2, 12);
+                    document.getElementById('razorpay_order_id').value = data.order_id;
+                    document.getElementById('razorpay_signature').value = 'sig_mock_' + Math.random().toString(36).substring(2, 12);
+                    razorpayHandled = true;
+                    checkoutForm.submit();
+                    return;
+                }
+
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: data.name,
+                    description: data.description,
+                    order_id: data.order_id,
+                    prefill: data.prefill,
+                    theme: { color: '#D97706' },
+                    handler: function (response) {
+                        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                        document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                        document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                        razorpayHandled = true;
+                        checkoutForm.submit();
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            submitBtn.disabled = false;
+                            submitBtn.innerText = 'Confirm & Place Sacred Order';
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    alert('Payment failed: ' + (response.error.description || 'Transaction unsuccessful'));
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Confirm & Place Sacred Order';
+                });
+                rzp.open();
+            })
+            .catch(err => {
+                alert('Unable to initialize Razorpay payment. Please try again or select Cash on Delivery.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Confirm & Place Sacred Order';
+            });
+        });
+    });
+    </script>
 </x-app-layout>

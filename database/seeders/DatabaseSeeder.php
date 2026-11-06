@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         SiteSetting::set('membership_fee', '500', 'One-time 5-year membership fee in INR');
         SiteSetting::set('membership_validity_years', '5', 'Validity duration in years');
         SiteSetting::set('shipping_charge', '149', 'Flat shipping rate in INR per order');
+        SiteSetting::set('member_shipping_charge', '0', 'Discounted or free shipping rate in INR for active 5-year members');
         SiteSetting::set('free_shipping_threshold', '499', 'Free shipping on orders above INR 499');
         SiteSetting::set('free_first_bottle_enabled', '1', 'Enable free monthly 1st Gangajal bottle for active members');
         SiteSetting::set('guest_checkout_enabled', '1', 'Enable guest checkout for non-logged-in customers');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BatchController as AdminBatchController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RazorpayWebhookController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TraceabilityController;
 use Illuminate\Support\Facades\Route;
@@ -54,7 +56,9 @@ Route::get('/verify/{token}', [TraceabilityController::class, 'verify'])->name('
 
 // Membership Subscription (Guest or Auth)
 Route::get('/membership/join', [MembershipController::class, 'index'])->name('membership.join');
+Route::post('/membership/create-razorpay-order', [MembershipController::class, 'createRazorpayOrder'])->middleware('auth')->name('membership.razorpay.order');
 Route::post('/membership/subscribe', [MembershipController::class, 'subscribe'])->middleware('auth')->name('membership.subscribe');
+Route::get('/membership/invoice/{membership}', [MembershipController::class, 'invoice'])->middleware('auth')->name('membership.invoice');
 
 // Shopping Cart (Public view, but add requires auth/membership)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -70,7 +74,9 @@ Route::get('/api/search', [ProductController::class, 'apiSearch'])->name('api.se
 
 // Checkout (Accessible by members, or guests when guest checkout is enabled)
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/razorpay-order', [CheckoutController::class, 'createRazorpayOrder'])->name('checkout.razorpay.order');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::post('/webhooks/razorpay', [RazorpayWebhookController::class, 'handle'])->name('webhooks.razorpay');
 
 // Order Confirmation & Invoices (Supports authenticated devotees and guest orders)
 Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
@@ -151,6 +157,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export/{type}', [AdminReportController::class, 'export'])->name('reports.export');
+
+    // Admin Staff & RBAC Management
+    Route::middleware(['permission:manage_admins'])->group(function () {
+        Route::resource('admins', AdminUserController::class)->except(['show']);
+        Route::post('admins/{admin}/toggle-active', [AdminUserController::class, 'toggleActive'])->name('admins.toggle-active');
+    });
 });
 
 require __DIR__.'/auth.php';

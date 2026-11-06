@@ -17,6 +17,11 @@ class Order extends Model
         'guest_email',
         'batch_id',
         'subtotal',
+        'total_taxable_amount',
+        'total_gst_amount',
+        'cgst_amount',
+        'sgst_amount',
+        'igst_amount',
         'discount_amount',
         'coupon_code',
         'coupon_discount',
@@ -42,6 +47,11 @@ class Order extends Model
     {
         return [
             'subtotal' => 'decimal:2',
+            'total_taxable_amount' => 'decimal:2',
+            'total_gst_amount' => 'decimal:2',
+            'cgst_amount' => 'decimal:2',
+            'sgst_amount' => 'decimal:2',
+            'igst_amount' => 'decimal:2',
             'discount_amount' => 'decimal:2',
             'coupon_discount' => 'decimal:2',
             'shipping_amount' => 'decimal:2',

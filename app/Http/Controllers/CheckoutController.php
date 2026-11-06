@@ -10,6 +10,8 @@ use App\Models\OrderItem;
 use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\CartService;
+use App\Services\RazorpayService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +23,8 @@ use Illuminate\View\View;
 class CheckoutController extends Controller
 {
     public function __construct(
-        protected CartService $cartService
+        protected CartService $cartService,
+        protected RazorpayService $razorpayService
     ) {}
 
     /**
@@ -54,8 +57,45 @@ class CheckoutController extends Controller
 
         $addresses = $user ? $user->addresses()->latest()->get() : collect();
         $defaultAddress = $user ? $user->defaultAddress : null;
+        $razorpayKeyId = $this->razorpayService->getKeyId();
 
-        return view('checkout.index', compact('cartDetails', 'user', 'addresses', 'defaultAddress', 'guestCheckoutEnabled'));
+        return view('checkout.index', compact('cartDetails', 'user', 'addresses', 'defaultAddress', 'guestCheckoutEnabled', 'razorpayKeyId'));
+    }
+
+    /**
+     * Create Razorpay order for cart checkout.
+     */
+    public function createRazorpayOrder(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $cartDetails = $this->cartService->getDetails($user);
+
+        if (empty($cartDetails['items'])) {
+            return response()->json(['error' => 'Cart is empty'], 422);
+        }
+
+        $amount = (float) $cartDetails['total'];
+        $receipt = 'rcpt_'.time().'_'.($user ? $user->id : 'guest');
+
+        $order = $this->razorpayService->createOrder($amount, $receipt, [
+            'type' => 'product_checkout',
+            'user_id' => $user?->id ?? 'guest',
+        ]);
+
+        return response()->json([
+            'order_id' => $order['id'],
+            'amount' => $order['amount'],
+            'currency' => $order['currency'] ?? 'INR',
+            'key' => $this->razorpayService->getKeyId(),
+            'name' => 'Haridwar Bliss',
+            'description' => 'Sacred Brahmakund Order',
+            'prefill' => [
+                'name' => $user?->name ?? '',
+                'email' => $user?->email ?? '',
+                'contact' => $user?->phone ?? '',
+            ],
+            'is_mock' => $order['is_mock'] ?? false,
+        ]);
     }
 
     /**
@@ -142,7 +182,6 @@ class CheckoutController extends Controller
                 Auth::login($newUser);
                 $user = $newUser;
 
-                // Save new address for this newly created user
                 Address::create([
                     'user_id' => $user->id,
                     'type' => 'shipping',
@@ -193,6 +232,16 @@ class CheckoutController extends Controller
         $paymentMethod = $request->input('payment_method', 'mock');
         $paymentStatus = in_array($paymentMethod, ['mock', 'razorpay']) ? 'paid' : 'pending';
         $paymentId = $request->input('razorpay_payment_id', 'pay_HB_ORD_'.Str::random(10));
+        $razorpayOrderId = $request->input('razorpay_order_id');
+        $razorpaySignature = $request->input('razorpay_signature');
+
+        // Signature verification if provided
+        if ($paymentMethod === 'razorpay' && $razorpayOrderId && $razorpaySignature) {
+            $isValid = $this->razorpayService->verifyPaymentSignature($razorpayOrderId, $paymentId, $razorpaySignature);
+            if (! $isValid) {
+                return redirect()->back()->with('error', 'Razorpay payment signature verification failed. Please try again.');
+            }
+        }
 
         // Assign current active batch for Gangajal traceability
         $batch = Batch::where('status', 'ready')->latest('collection_date')->first();
@@ -207,6 +256,11 @@ class CheckoutController extends Controller
             'guest_email' => $guestEmail,
             'batch_id' => $batch?->id,
             'subtotal' => $cartDetails['subtotal'],
+            'total_taxable_amount' => $cartDetails['total_taxable_amount'] ?? 0.00,
+            'total_gst_amount' => $cartDetails['total_gst_amount'] ?? 0.00,
+            'cgst_amount' => $cartDetails['cgst_amount'] ?? 0.00,
+            'sgst_amount' => $cartDetails['sgst_amount'] ?? 0.00,
+            'igst_amount' => $cartDetails['igst_amount'] ?? 0.00,
             'discount_amount' => $cartDetails['discount'],
             'coupon_code' => $cartDetails['coupon_code'],
             'coupon_discount' => $cartDetails['coupon_discount'],
@@ -234,12 +288,18 @@ class CheckoutController extends Controller
             Coupon::where('code', $cartDetails['coupon_code'])->increment('used_count');
         }
 
-        // Create Order Items
+        // Create Order Items with variants and GST details
         foreach ($cartDetails['items'] as $item) {
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item['product']->id,
+                'variant_id' => $item['variant_id'] ?? null,
                 'product_name' => $item['product']->name,
+                'variant_name' => $item['variant_name'] ?? null,
+                'hsn_code' => $item['hsn_code'] ?? '22019010',
+                'gst_percentage' => $item['gst_percentage'] ?? 18.00,
+                'taxable_amount' => $item['taxable_amount'] ?? 0.00,
+                'gst_amount' => $item['gst_amount'] ?? 0.00,
                 'unit_price' => $item['unit_price'],
                 'quantity' => $item['quantity'],
                 'total_price' => $item['line_total'],

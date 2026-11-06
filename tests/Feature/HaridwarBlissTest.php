@@ -91,6 +91,7 @@ class HaridwarBlissTest extends TestCase
 
         $response = $this->actingAs($user)->post('/membership/subscribe', [
             'payment_method' => 'mock',
+            'terms_accepted' => 1,
         ]);
 
         $response->assertRedirect(route('dashboard'));

@@ -66,7 +66,14 @@
                                                 {{ $item['product']->name }}
                                             </a>
                                         </h3>
-                                        <div class="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                                        @if (!empty($item['variant_name']))
+                                            <div class="mt-0.5">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                                                    Size: {{ $item['variant_name'] }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                        <div class="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-500">
                                             @if ($item['has_free_bottle'])
                                                 <span class="line-through text-slate-400">₹{{ number_format($item['unit_price'], 2) }}</span>
                                                 <span class="font-bold text-emerald-700 font-mono">₹0.00</span>
@@ -76,6 +83,8 @@
                                             @else
                                                 <span>Unit Price: ₹{{ number_format($item['unit_price'], 2) }}</span>
                                             @endif
+                                            <span class="text-slate-300">·</span>
+                                            <span class="text-[11px] text-slate-400">GST ({{ $item['gst_percentage'] ?? 18 }}%) included</span>
                                         </div>
                                     </div>
                                 </div>
@@ -84,6 +93,7 @@
                                     <!-- Quantity Update Form -->
                                     <form method="POST" action="{{ route('cart.update') }}" class="flex items-center gap-2">
                                         @csrf
+                                        <input type="hidden" name="item_key" value="{{ $item['key'] }}">
                                         <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
                                         <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="20"
                                             class="w-16 px-2 py-1 text-xs border border-slate-300 rounded-lg text-center"
@@ -105,6 +115,7 @@
                                     <!-- Remove -->
                                     <form method="POST" action="{{ route('cart.remove') }}">
                                         @csrf
+                                        <input type="hidden" name="item_key" value="{{ $item['key'] }}">
                                         <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
                                         <button type="submit" class="text-slate-400 hover:text-[#991B1B] transition" title="Remove item">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,8 +171,22 @@
 
                     <div class="space-y-3 text-xs">
                         <div class="flex justify-between text-slate-600">
-                            <span>Subtotal (Items)</span>
+                            <span>Subtotal (Inclusive of GST)</span>
                             <span class="font-bold text-slate-900 font-mono">₹{{ number_format($cartDetails['subtotal'], 2) }}</span>
+                        </div>
+
+                        <div class="pl-2.5 py-1.5 border-l-2 border-amber-300 bg-amber-50/40 rounded-r-lg space-y-1 text-[11px] text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Taxable Base Value</span>
+                                <span class="font-mono font-medium">₹{{ number_format($cartDetails['total_taxable_amount'] ?? 0, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total GST Breakdown</span>
+                                <span class="font-mono font-medium text-slate-800">₹{{ number_format($cartDetails['total_gst_amount'] ?? 0, 2) }}</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+                                <span>(CGST: ₹{{ number_format(($cartDetails['total_gst_amount'] ?? 0) / 2, 2) }} + SGST: ₹{{ number_format(($cartDetails['total_gst_amount'] ?? 0) / 2, 2) }})</span>
+                            </div>
                         </div>
 
                         @if ($cartDetails['member_discount'] > 0)
@@ -179,12 +204,23 @@
                         @endif
 
                         <div class="flex justify-between text-slate-600">
-                            <span>Shipping (Shiprocket Logistics)</span>
-                            <span class="font-bold text-slate-900 font-mono">₹{{ number_format($cartDetails['shipping'], 2) }}</span>
+                            <span class="flex items-center gap-1.5">
+                                <span>Shipping (Shiprocket Logistics)</span>
+                                @if (!empty($cartDetails['is_member_shipping']))
+                                    <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">Member Rate</span>
+                                @endif
+                            </span>
+                            <span class="font-bold text-slate-900 font-mono">
+                                @if ($cartDetails['shipping'] <= 0 && $cartDetails['subtotal'] > 0)
+                                    <span class="text-emerald-700">FREE</span>
+                                @else
+                                    ₹{{ number_format($cartDetails['shipping'], 2) }}
+                                @endif
+                            </span>
                         </div>
 
                         <div class="pt-4 border-t border-slate-200 flex justify-between items-baseline">
-                            <span class="text-base font-bold text-slate-900 font-serif">Total Amount</span>
+                            <span class="text-base font-bold text-slate-900 font-serif">Total Payable</span>
                             <span class="text-2xl font-extrabold text-[#D97706] font-serif font-mono">
                                 ₹{{ number_format($cartDetails['total'], 2) }}
                             </span>

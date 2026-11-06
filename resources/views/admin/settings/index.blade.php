@@ -39,29 +39,41 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-medium text-slate-700 mb-1">Flat Shipping Rate per Order (INR) *</label>
+                        <label class="block font-medium text-slate-700 mb-1">Standard Shipping Rate per Order (INR) *</label>
                         <input type="number"
                                step="0.01"
+                               min="0"
                                name="shipping_charge"
                                value="{{ old('shipping_charge', $settings['shipping_charge']) }}"
                                required
                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
-                        <span class="text-[11px] text-slate-500 mt-1 block">Default flat fee: ₹149.00</span>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Default fee for non-members / guest orders (Default: ₹149.00)</span>
                     </div>
 
-                    <div class="flex items-center pt-2">
-                        <label class="w-full flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-slate-300 transition">
-                            <input type="checkbox"
-                                   name="free_first_bottle_enabled"
-                                   value="1"
-                                   {{ $settings['free_first_bottle_enabled'] === '1' ? 'checked' : '' }}
-                                   class="mt-0.5 rounded text-amber-600 focus:ring-amber-600 border-slate-300">
-                            <div>
-                                <span class="text-slate-900 block font-medium text-xs">1st Monthly Bottle Free</span>
-                                <span class="text-[11px] text-slate-500">Active 5-year members receive 1 bottle complimentary (₹0) per monthly cycle.</span>
-                            </div>
-                        </label>
+                    <div>
+                        <label class="block font-medium text-slate-700 mb-1">Member Shipping Rate per Order (INR)</label>
+                        <input type="number"
+                               step="0.01"
+                               min="0"
+                               name="member_shipping_charge"
+                               value="{{ old('member_shipping_charge', $settings['member_shipping_charge'] ?? '0') }}"
+                               class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
+                        <span class="text-[11px] text-slate-500 mt-1 block">Special rate for active 5-Year Members (Set ₹0.00 for Free Member Delivery)</span>
                     </div>
+                </div>
+
+                <div class="pt-1">
+                    <label class="w-full flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-slate-300 transition">
+                        <input type="checkbox"
+                               name="free_first_bottle_enabled"
+                               value="1"
+                               {{ $settings['free_first_bottle_enabled'] === '1' ? 'checked' : '' }}
+                               class="mt-0.5 rounded text-amber-600 focus:ring-amber-600 border-slate-300">
+                        <div>
+                            <span class="text-slate-900 block font-medium text-xs">1st Monthly Bottle Free</span>
+                            <span class="text-[11px] text-slate-500">Active 5-year members receive 1 bottle complimentary (₹0) per monthly cycle.</span>
+                        </div>
+                    </label>
                 </div>
             </div>
 

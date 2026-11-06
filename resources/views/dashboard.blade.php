@@ -58,6 +58,14 @@
                                     Days</strong>
                             </div>
                         </div>
+
+                        <div class="pt-3">
+                            <a href="{{ route('membership.invoice', $membership->id) }}" target="_blank"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-xs transition">
+                                <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                <span>Download Membership Tax Invoice</span>
+                            </a>
+                        </div>
                     @else
                         <div class="pt-4 border-t border-white/20 text-xs space-y-3">
                             <p class="text-amber-100">

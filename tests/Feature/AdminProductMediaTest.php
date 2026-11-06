@@ -37,10 +37,11 @@ class AdminProductMediaTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.products.create'));
         $response->assertOk();
-        $response->assertSee('1. General Info');
-        $response->assertSee('2. Pricing & Stock', false);
-        $response->assertSee('3. Media & Gallery', false);
-        $response->assertSee('4. Descriptions & Details', false);
+        $response->assertSee('1. General');
+        $response->assertSee('2. Pricing & GST', false);
+        $response->assertSee('3. Sizes & Variants', false);
+        $response->assertSee('4. Media & Gallery', false);
+        $response->assertSee('5. Descriptions & Details', false);
         $response->assertSee('admin_product_form_tab');
         $response->assertSee('gallery_files[]');
         $response->assertSee('gallery_urls');
@@ -61,10 +62,11 @@ class AdminProductMediaTest extends TestCase
 
         $editResponse = $this->actingAs($this->admin)->get(route('admin.products.edit', $product));
         $editResponse->assertOk();
-        $editResponse->assertSee('1. General Info');
-        $editResponse->assertSee('2. Pricing & Stock', false);
-        $editResponse->assertSee('3. Media & Gallery', false);
-        $editResponse->assertSee('4. Descriptions & Details', false);
+        $editResponse->assertSee('1. General');
+        $editResponse->assertSee('2. Pricing & GST', false);
+        $editResponse->assertSee('3. Sizes & Variants', false);
+        $editResponse->assertSee('4. Media & Gallery', false);
+        $editResponse->assertSee('5. Descriptions & Details', false);
         $editResponse->assertSee('admin_product_form_tab');
         $editResponse->assertSee('keep_gallery[]');
         $editResponse->assertSee('remove_video');

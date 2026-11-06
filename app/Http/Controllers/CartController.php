@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Models\SiteSetting;
 use App\Services\CartService;
 use Illuminate\Http\JsonResponse;
@@ -44,14 +45,14 @@ class CartController extends Controller
     }
 
     /**
-     * Add product to cart with strict membership validation.
+     * Add product to cart with strict membership validation and optional size variant.
      */
     public function add(Request $request): RedirectResponse|JsonResponse
     {
         $user = $request->user();
         $guestCheckoutEnabled = SiteSetting::get('guest_checkout_enabled', '0') === '1';
 
-        // Access Control as per SOW Section 3 (bypassable when guest checkout is enabled by admin)
+        // Access Control (bypassable when guest checkout is enabled by admin)
         if (! $user && ! $guestCheckoutEnabled) {
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
@@ -86,15 +87,36 @@ class CartController extends Controller
 
         $request->validate([
             'product_id' => 'required|exists:products,id',
+            'variant_id' => 'nullable|exists:product_variants,id',
             'quantity' => 'nullable|integer|min:1|max:50',
         ]);
 
         $productId = (int) $request->input('product_id');
+        $variantId = $request->filled('variant_id') ? (int) $request->input('variant_id') : null;
         $quantity = (int) $request->input('quantity', 1);
 
         $product = Product::findOrFail($productId);
 
-        if (! $product->is_active || ! $product->isInStock()) {
+        if (! $product->is_active) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'This product is currently unavailable.'], 422);
+            }
+
+            return back()->with('error', 'This product is currently unavailable.');
+        }
+
+        $variantName = null;
+        if ($variantId) {
+            $variant = ProductVariant::where('product_id', $productId)->find($variantId);
+            if (! $variant || ! $variant->is_active || $variant->stock <= 0) {
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json(['success' => false, 'message' => 'The selected size is currently out of stock.'], 422);
+                }
+
+                return back()->with('error', 'The selected size is currently out of stock.');
+            }
+            $variantName = $variant->name;
+        } elseif (! $product->isInStock()) {
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'This sacred product is currently out of stock.'], 422);
             }
@@ -102,19 +124,21 @@ class CartController extends Controller
             return back()->with('error', 'This sacred product is currently out of stock.');
         }
 
-        $this->cartService->add($productId, $quantity);
+        $this->cartService->add($productId, $quantity, $variantId);
+
+        $productLabel = $variantName ? "{$product->name} ({$variantName})" : $product->name;
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => "{$product->name} added to your cart.",
+                'message' => "{$productLabel} added to your cart.",
                 'cart' => $this->cartService->getDetails($user),
             ]);
         }
 
         return redirect()->route('cart.index')->with(
             'success',
-            "{$product->name} has been added to your sacred cart."
+            "{$productLabel} has been added to your sacred cart."
         );
     }
 
@@ -124,11 +148,13 @@ class CartController extends Controller
     public function update(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
+            'product_id' => 'nullable',
+            'item_key' => 'nullable|string',
             'quantity' => 'required|integer|min:0|max:50',
         ]);
 
-        $this->cartService->update((int) $request->input('product_id'), (int) $request->input('quantity'));
+        $key = $request->input('item_key') ?? $request->input('product_id');
+        $this->cartService->update((string) $key, (int) $request->input('quantity'));
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
@@ -146,10 +172,12 @@ class CartController extends Controller
     public function remove(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
-            'product_id' => 'required|integer',
+            'product_id' => 'nullable',
+            'item_key' => 'nullable|string',
         ]);
 
-        $this->cartService->remove((int) $request->input('product_id'));
+        $key = $request->input('item_key') ?? $request->input('product_id');
+        $this->cartService->remove((string) $key);
 
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([

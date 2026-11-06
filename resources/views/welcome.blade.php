@@ -20,8 +20,8 @@
                      this.activeSlide = idx;
                  }
              }">
-        <!-- Slides Wrapper -->
-        <div class="relative w-full min-h-[380px] sm:min-h-[460px] lg:min-h-[520px] flex items-center">
+        <!-- Slides Wrapper (Responsive for Desktop 1920x700, Tablet 1024x600, Mobile 750x1000) -->
+        <div class="relative w-full min-h-[440px] sm:min-h-[520px] lg:min-h-[620px] flex items-center">
             @foreach ($sliders as $index => $slide)
                 @php
                     $badgeBg = match($slide->badge_color) {
@@ -45,10 +45,41 @@
                      x-transition:leave-start="opacity-100 scale-100"
                      x-transition:leave-end="opacity-0 scale-95"
                      class="absolute inset-0 w-full h-full">
-                    <!-- Background Image & Gradient Overlay -->
-                    <img src="{{ $slide->image_url }}"
-                         alt="{{ $slide->title }}"
-                         class="w-full h-full object-cover object-center opacity-45">
+
+                    @if ($slide->is_video && $slide->resolved_video_url)
+                        <!-- Video Slide Background with Muted Autoplay and Unmute Toggle -->
+                        <div class="absolute inset-0 w-full h-full overflow-hidden" x-data="{ isMuted: true }">
+                            <video :muted="isMuted"
+                                   playsinline
+                                   autoplay
+                                   loop
+                                   poster="{{ $slide->image_url }}"
+                                   class="w-full h-full object-cover object-center opacity-50">
+                                <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
+                            </video>
+
+                            <!-- Devotee Unmute / Mute Toggle Button -->
+                            <button type="button"
+                                    @click="isMuted = !isMuted"
+                                    class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-amber-300 border border-white/20 text-xs font-bold backdrop-blur-xs shadow-lg transition touch-manipulation cursor-pointer">
+                                <span x-text="isMuted ? '🔇 Unmute Video' : '🔊 Mute Video'"></span>
+                            </button>
+                        </div>
+                    @else
+                        <!-- Responsive Media with Art Direction (Desktop, Tablet, Mobile) -->
+                        <picture class="w-full h-full absolute inset-0">
+                            @if ($slide->mobile_image)
+                                <source media="(max-width: 640px)" srcset="{{ $slide->mobile_image_url }}">
+                            @endif
+                            @if ($slide->tablet_image)
+                                <source media="(max-width: 1024px)" srcset="{{ $slide->tablet_image_url }}">
+                            @endif
+                            <img src="{{ $slide->image_url }}"
+                                 alt="{{ $slide->title }}"
+                                 class="w-full h-full object-cover object-center opacity-45">
+                        </picture>
+                    @endif
+
                     <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/80 to-transparent"></div>
 
                     <!-- Slide Content -->
@@ -61,9 +92,11 @@
                                 </div>
                             @endif
 
-                            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white">
-                                {{ $slide->title }}
-                            </h1>
+                            @if ($slide->title)
+                                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white">
+                                    {{ $slide->title }}
+                                </h1>
+                            @endif
 
                             @if ($slide->description)
                                 <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl">

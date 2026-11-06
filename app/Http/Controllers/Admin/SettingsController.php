@@ -16,6 +16,7 @@ class SettingsController extends Controller
             'membership_fee' => SiteSetting::get('membership_fee', '500'),
             'membership_validity_years' => SiteSetting::get('membership_validity_years', '5'),
             'shipping_charge' => SiteSetting::get('shipping_charge', '149'),
+            'member_shipping_charge' => SiteSetting::get('member_shipping_charge', '0'),
             'free_first_bottle_enabled' => SiteSetting::get('free_first_bottle_enabled', '1'),
             'guest_checkout_enabled' => SiteSetting::get('guest_checkout_enabled', '0'),
             'support_phone' => SiteSetting::get('support_phone', '+91 98765 43210'),
@@ -32,6 +33,7 @@ class SettingsController extends Controller
             'membership_fee' => 'required|numeric|min:1',
             'membership_validity_years' => 'required|integer|min:1|max:20',
             'shipping_charge' => 'required|numeric|min:0',
+            'member_shipping_charge' => 'nullable|numeric|min:0',
             'free_first_bottle_enabled' => 'nullable|boolean',
             'guest_checkout_enabled' => 'nullable|boolean',
             'support_phone' => 'required|string|max:50',
@@ -42,6 +44,10 @@ class SettingsController extends Controller
         SiteSetting::set('membership_fee', $validated['membership_fee']);
         SiteSetting::set('membership_validity_years', $validated['membership_validity_years']);
         SiteSetting::set('shipping_charge', $validated['shipping_charge']);
+        if ($request->has('member_shipping_charge')) {
+            $memberShipping = $request->input('member_shipping_charge');
+            SiteSetting::set('member_shipping_charge', ($memberShipping !== null && $memberShipping !== '') ? (string) $memberShipping : '0', 'Shipping rate in INR for active 5-year members');
+        }
         SiteSetting::set('free_first_bottle_enabled', $request->boolean('free_first_bottle_enabled') ? '1' : '0');
         SiteSetting::set('guest_checkout_enabled', $request->boolean('guest_checkout_enabled') ? '1' : '0', 'Enable guest checkout for non-logged-in customers');
         SiteSetting::set('support_phone', $validated['support_phone']);

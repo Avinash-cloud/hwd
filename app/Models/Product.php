@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\GstService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +31,8 @@ class Product extends Model
         'volume_ml',
         'stock',
         'sku',
+        'hsn_code',
+        'gst_percentage',
         'image',
         'gallery',
         'video_url',
@@ -55,6 +58,7 @@ class Product extends Model
             'stock' => 'integer',
             'gallery' => 'array',
             'specifications' => 'array',
+            'gst_percentage' => 'decimal:2',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'is_bestseller' => 'boolean',
@@ -277,5 +281,37 @@ class Product extends Model
         }
 
         return (float) $this->price;
+    }
+
+    /**
+     * Product size/option variants.
+     */
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Active variants for customer facing pages.
+     */
+    public function activeVariants(): HasMany
+    {
+        return $this->variants()->where('is_active', true);
+    }
+
+    /**
+     * Check if product has size/option variants.
+     */
+    public function getHasVariantsAttribute(): bool
+    {
+        return $this->variants()->exists();
+    }
+
+    /**
+     * Tax breakup from inclusive selling price.
+     */
+    public function getTaxBreakupAttribute(): array
+    {
+        return GstService::calculate((float) $this->price, (float) ($this->gst_percentage ?: 18.00));
     }
 }

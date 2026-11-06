@@ -13,7 +13,13 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'variant_id',
         'product_name',
+        'variant_name',
+        'hsn_code',
+        'gst_percentage',
+        'taxable_amount',
+        'gst_amount',
         'unit_price',
         'quantity',
         'total_price',
@@ -25,6 +31,9 @@ class OrderItem extends Model
         return [
             'unit_price' => 'decimal:2',
             'total_price' => 'decimal:2',
+            'taxable_amount' => 'decimal:2',
+            'gst_amount' => 'decimal:2',
+            'gst_percentage' => 'decimal:2',
             'quantity' => 'integer',
             'is_free_monthly_bottle' => 'boolean',
         ];
@@ -38,5 +47,10 @@ class OrderItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function variant(): BelongsTo
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id');
     }
 }
