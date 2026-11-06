@@ -13,10 +13,10 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Poppins', 'Figtree', ...defaultTheme.fontFamily.sans],
-                serif: ['Poppins', 'Georgia', 'Cambria', ...defaultTheme.fontFamily.serif],
+                serif: ['"Liberation Serif"', 'Georgia', 'Cambria', 'Times New Roman', 'Times', ...defaultTheme.fontFamily.serif],
                 bebas: ['"Bebas Neue"', 'sans-serif'],
                 poppins: ['Poppins', 'sans-serif'],
-                heading: ['"Bebas Neue"', 'sans-serif'],
+                heading: ['"Liberation Serif"', 'Georgia', 'serif'],
                 subheading: ['Poppins', 'sans-serif'],
             },
             colors: {

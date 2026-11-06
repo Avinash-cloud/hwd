@@ -1,3 +1,4 @@
+@import url('https://fonts.cdnfonts.com/css/liberation-serif');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
@@ -5,25 +6,16 @@
 @tailwind utilities;
 
 @layer base {
-    h1, h2, h1.font-serif, h2.font-serif, .font-heading, .font-bebas {
-        font-family: 'Bebas Neue', sans-serif !important;
-        letter-spacing: 0.03em;
-    }
-
-    h3, h4, h5, h6, h3.font-serif, h4.font-serif, h5.font-serif, h6.font-serif, .font-subheading, .font-poppins {
-        font-family: 'Poppins', sans-serif !important;
-        letter-spacing: normal;
-    }
-
+    h1, h2, h3, h4, h5, h6,
+    h1.font-serif, h2.font-serif, h3.font-serif, h4.font-serif, h5.font-serif, h6.font-serif,
     .admin-shell h1,
     .admin-shell h2,
     .admin-shell h3,
     .admin-shell h4,
     .admin-shell h5,
-    .admin-shell h6,
-    .admin-shell .font-serif {
-        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        letter-spacing: -0.01em;
+    .admin-shell h6 {
+        font-family: 'Liberation Serif', Georgia, Cambria, 'Times New Roman', Times, serif !important;
+        font-style: italic !important;
     }
 }
 
