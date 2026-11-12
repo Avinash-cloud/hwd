@@ -2,7 +2,7 @@
     <!-- Breadcrumb & Header Banner -->
     <div class="relative bg-stone-900 text-white overflow-hidden py-8 sm:py-12 border-b border-amber-200/60">
         <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-             alt="Har Ki Pauri Haridwar"
+             alt="Haridwar Ganga Temples"
              class="absolute inset-0 w-full h-full object-cover opacity-25 object-center">
         <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/90 to-stone-950/80"></div>
 
@@ -24,7 +24,7 @@
                         @if (request('category'))
                             {{ ucwords(str_replace('-', ' ', request('category'))) }}
                         @elseif (request('type') === 'gangajal')
-                            Sacred Brahmakund Gangajal Editions
+                            Sacred Haridwar Gangajal Editions
                         @elseif (request('search'))
                             Search Results for "{{ request('search') }}"
                         @else
@@ -32,7 +32,7 @@
                         @endif
                     </h1>
                     <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                        Explore authentic Brahmakund Gangajal, cow dung hawan cups, pure cotton battis, and temple utensils blessed at Har Ki Pauri.
+                        Explore authentic Haridwar Gangajal, cow dung hawan cups, pure cotton battis, and sacred temple utensils.
                     </p>
                 </div>
 
@@ -56,7 +56,7 @@
                             <span>Devotee Privilege</span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-[11px]">
-                            Join our 5-Year Membership (₹{{ number_format($membershipFee) }}) to receive your 1st Brahmakund bottle FREE every month and unlock member rates.
+                            Join our 5-Year Membership (₹{{ number_format($membershipFee) }}) to receive your 1st Gangajal bottle FREE every month and unlock member rates.
                         </p>
                         <a href="{{ route('membership.join') }}"
                            class="block text-center w-full py-2 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-[11px] shadow-xs transition">
@@ -143,14 +143,14 @@
                     </div>
                 </div>
 
-                <!-- Sourcing Trust Card with Brahmakund Photo -->
+                <!-- Sourcing Trust Card with Haridwar Photo -->
                 <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-xs group">
-                    <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-                         alt="Brahmakund Har Ki Pauri Haridwar"
+                    <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                         alt="Sacred Haridwar Ganga Ghat"
                          class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent p-4 flex flex-col justify-end text-white">
                         <span class="text-[10px] uppercase font-bold text-amber-300 font-mono">100% Genuine Origin</span>
-                        <h4 class="font-serif font-bold text-xs sm:text-sm text-white">Har Ki Pauri, Brahmakund</h4>
+                        <h4 class="font-serif font-bold text-xs sm:text-sm text-white">Sacred Haridwar Ghats</h4>
                         <p class="text-[11px] text-slate-300 mt-0.5">Sourced at Brahma Muhurta morning Aarti in Haridwar</p>
                     </div>
                 </div>

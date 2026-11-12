@@ -22,8 +22,8 @@
             <!-- Col 1 & 2: Membership Status Card -->
             <div
                 class="lg:col-span-2 bg-[#881337] rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
-                <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-                     alt="Har Ki Pauri Sanctum"
+                <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                     alt="Haridwar Ganga Temples"
                      class="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-overlay pointer-events-none">
                 <div class="relative z-10 space-y-4">
                     <div class="flex items-center justify-between">
@@ -70,7 +70,7 @@
                         <div class="pt-4 border-t border-white/20 text-xs space-y-3">
                             <p class="text-amber-100">
                                 You do not currently have an active 5-year membership. Join today to unlock free monthly
-                                Brahmakund Gangajal deliveries.
+                                Haridwar Gangajal deliveries.
                             </p>
                             <a href="{{ route('membership.join') }}"
                                 class="inline-block px-5 py-2.5 bg-white text-slate-900 hover:bg-[#FFFDF7] rounded-xl font-bold text-xs shadow transition">
@@ -82,8 +82,8 @@
 
                 <div
                     class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-200">
-                    <span>100% Hermetically Sealed · Direct from Har Ki Pauri</span>
-                    <span>Brahmakund Consecration</span>
+                    <span>100% Hermetically Sealed · Direct from Sacred Haridwar</span>
+                    <span>Ganga Aarti Consecration</span>
                 </div>
             </div>
 
@@ -94,7 +94,7 @@
                     <div class="relative h-28 rounded-2xl overflow-hidden mb-3 border border-amber-200/80">
                         <img src="{{ asset('images/ganga-holy-waters.jpg') }}" alt="Holy Ganga Waters" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-2.5">
-                            <span class="text-[10px] font-bold text-amber-300">Har Ki Pauri · Brahmakund Sourced</span>
+                            <span class="text-[10px] font-bold text-amber-300">Sacred Haridwar Sourced</span>
                         </div>
                     </div>
                     <span class="text-[11px] font-bold uppercase tracking-widest text-[#D97706] font-mono">Monthly
@@ -102,7 +102,7 @@
                     <h3 class="text-xl font-serif font-bold text-slate-900 mt-1">Claim Your Sacred Gangajal</h3>
                     <p class="text-xs text-slate-600 mt-2 leading-relaxed">
                         @if ($membership && $membership->isActive())
-                            Your first 500ml Brahmakund Gangajal bottle is <strong>₹0 product price</strong> (only a flat
+                            Your first 500ml Haridwar Gangajal bottle is <strong>₹0 product price</strong> (only a flat
                             ₹{{ number_format($shippingRate) }} shipping fee applies).
                         @else
                             Available exclusively to active 5-year members.
@@ -163,7 +163,7 @@
                                         </div>
                                         <p class="text-xs text-slate-500">
                                             {{ $order->created_at->format('M d, Y') }} · {{ $order->items->count() }} item(s) ·
-                                            Batch: {{ $order->batch?->batch_number ?? 'Har Ki Pauri' }}
+                                            Batch: {{ $order->batch?->batch_number ?? 'Haridwar Batch' }}
                                         </p>
                                     </div>
 

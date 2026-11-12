@@ -103,7 +103,7 @@
                 <div class="text-center max-w-xl mx-auto mb-8">
                     <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">Vedic Essentials</span>
                     <h2 class="font-serif font-bold text-2xl sm:text-3xl text-slate-900 mt-1">
-                        Consecrated Offerings from Brahmakund
+                        Consecrated Offerings from Sacred Haridwar
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">
                         Enhance your pooja ritual with certified authentic Ganga water collected at dawn.

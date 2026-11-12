@@ -173,7 +173,7 @@
         @endif
     </section>
 
-    <!-- 2. Sacred Consecrated Gangajal Sanctum & Bottle Editions (The Core Purpose) -->
+    <!-- 2. Sacred Consecrated Gangajal & Bottle Editions (The Core Purpose) -->
     <section class="py-12 sm:py-16 bg-[#F97316] border-b border-orange-600/40 relative overflow-hidden">
         <!-- Subtle sacred background water ripple aura -->
         <div class="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-sky-200/20 blur-3xl pointer-events-none"></div>
@@ -188,11 +188,11 @@
                 </div>
                 <div class="w-full flex justify-center">
                     <h2 class="inline-block whitespace-nowrap text-[11px] min-[360px]:text-[13px] min-[400px]:text-[15px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-3 min-[360px]:px-4 sm:px-8 py-1.5 min-[360px]:py-2 sm:py-3.5 rounded-full sm:rounded-3xl shadow-xl tracking-tight leading-tight max-w-full">
-                        Pure Haridwar Brahmakund Gangajal
+                        Pure Haridwar Holy Gangajal
                     </h2>
                 </div>
                 <p class="text-xs sm:text-sm text-white font-semibold mt-4 max-w-2xl mx-auto leading-relaxed drop-shadow-2xs">
-                    Collected directly from the sanctified Brahmakund at Har Ki Pauri during auspicious Brahma Muhurta (04:45 AM) morning Ganga Aarti. 100% untouched by human hands with verifiable batch QR video traceability.
+                    Collected directly from the sacred Ganga in Haridwar during auspicious Brahma Muhurta (04:45 AM) morning Ganga Aarti. 100% untouched by human hands with verifiable batch QR video traceability.
                 </p>
 
                 <!-- 4 Sacred Purity Pillars Micro-Row -->
@@ -230,7 +230,7 @@
                         </div>
                         <div class="min-w-0">
                             <span class="block text-[11px] font-extrabold text-emerald-800 truncate">Scannable Batch QR</span>
-                            <span class="block text-[10px] text-amber-900 font-semibold truncate">Har Ki Pauri Video Assay</span>
+                            <span class="block text-[10px] text-amber-900 font-semibold truncate">Haridwar Video Trace</span>
                         </div>
                     </div>
                 </div>
@@ -265,8 +265,8 @@
     <!-- 3. 5-Year Devotee Circle Membership (High-Conversion Devotee Call to Action) -->
     <section class="py-12 sm:py-16 bg-[#FFA028] text-white relative overflow-hidden border-b border-orange-600/40">
         <!-- Background authentic Haridwar ghat photo -->
-        <!-- <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-             alt="Har Ki Pauri Haridwar"
+        <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+             alt="Haridwar Ganga Temples"
              class="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-overlay pointer-events-none"> -->
         <div class="absolute -right-32 -bottom-32 w-96 h-96 rounded-full bg-amber-400/20 blur-3xl pointer-events-none"></div>
 
@@ -283,7 +283,7 @@
                     </h2>
                 </div>
                 <p class="text-xs sm:text-base text-amber-950 font-bold leading-relaxed mt-3.5 max-w-2xl mx-auto">
-                    Never worry about holy water for daily morning puja or abhishek. For a single one-time contribution of ₹{{ number_format($membershipFee) }} valid for 5 full years (60 months), receive 1 free 500ml bottle of authentic Brahmakund Gangajal every month directly from Har Ki Pauri.
+                    Never worry about holy water for daily morning puja or abhishek. For a single one-time contribution of ₹{{ number_format($membershipFee) }} valid for 5 full years (60 months), receive 1 free 500ml bottle of authentic Haridwar Gangajal every month directly from sacred Haridwar.
                 </p>
             </div>
 
@@ -355,7 +355,7 @@
                                         📱
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-white text-sm">Brahmakund Batch QR Video</h4>
+                                        <h4 class="font-bold text-white text-sm">Haridwar Batch QR Video</h4>
                                         <p class="text-amber-100 mt-1 leading-relaxed text-[11px]">
                                             Scan each bottle's unique QR code to view the morning Aarti video, sourcing timestamp, and lab analysis report.
                                         </p>
@@ -518,9 +518,9 @@
     <!-- 6. Sacred Gangajal & QR Traceability Seal (Core Brand USP) -->
     <section class="py-14 sm:py-20 bg-[#F97316] text-white relative overflow-hidden border-b border-orange-600/40">
         <!-- Ambient authentic holy water backdrop -->
-        <img src="{{ asset('images/ganga-holy-waters.jpg') }}"
+        <!-- <img src="{{ asset('images/ganga-holy-waters.jpg') }}"
              alt="Sacred Holy Maa Ganga Water"
-             class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay pointer-events-none">
+             class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay pointer-events-none"> -->
         <div class="absolute -right-32 -bottom-32 w-96 h-96 rounded-full bg-amber-200/20 blur-3xl pointer-events-none"></div>
         <div class="absolute -left-32 -top-32 w-96 h-96 rounded-full bg-sky-200/20 blur-3xl pointer-events-none"></div>
 
@@ -530,17 +530,17 @@
                 <div class="lg:col-span-7 space-y-6">
                     <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#881337] text-[#FDE68A] border border-amber-300/40 shadow-xs mb-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
-                        <span>Har Ki Pauri · Brahma Muhurta Sanctity</span>
+                        <span>Sacred Haridwar · Brahma Muhurta Sourced</span>
                     </div>
 
                     <div>
                         <h2 class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight">
-                            Untouched Brahmakund Gangajal With Complete QR Batch Traceability
+                            Untouched Haridwar Gangajal With Complete QR Batch Traceability
                         </h2>
                     </div>
 
                     <p class="text-xs sm:text-base text-white font-semibold leading-relaxed drop-shadow-2xs">
-                        Unlike ordinary tap-filled commercial bottles, Haridwar Bliss holy water is directly collected at the divine Brahma Muhurta (04:45 AM) during morning Ganga Aarti from the sanctified Brahmakund at Har Ki Pauri.
+                        Unlike ordinary tap-filled commercial bottles, Haridwar Bliss holy water is directly collected at the divine Brahma Muhurta (04:45 AM) during morning Ganga Aarti from the sacred Ganga Ghats in Haridwar.
                     </p>
 
                     <!-- Sacred Quality Badges -->
@@ -582,7 +582,7 @@
 
                     @php
                         $activeBatchCode = $latestBatch ? $latestBatch->batch_number : 'HB-VERIFY-2026-SAMPLE';
-                        $activeBatchGhat = $latestBatch ? $latestBatch->sourcing_ghat : 'Har Ki Pauri, Brahmakund, Haridwar';
+                        $activeBatchGhat = $latestBatch ? $latestBatch->sourcing_ghat : 'Sacred Ganga Ghat, Haridwar, Uttarakhand';
                         $activeBatchDate = $latestBatch && $latestBatch->collection_date ? $latestBatch->collection_date->format('d M Y') : 'Brahma Muhurta (04:45 AM)';
                     @endphp
 
@@ -603,25 +603,25 @@
 
                 <!-- Right: Interactive Batch Seal Card (Section 3 Style) -->
                 <div class="lg:col-span-5 bg-gradient-to-b from-[#FFFDF7] to-amber-50 rounded-3xl p-6 sm:p-8 text-[#881337] shadow-2xl flex flex-col justify-between border-2 border-amber-300">
-                    <!-- Photo preview of Brahmakund collection site -->
+                    <!-- Photo preview of Haridwar collection site -->
                     <div class="relative h-44 rounded-2xl overflow-hidden mb-5 border-2 border-amber-300 shadow-md group">
-                        <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-                             alt="Brahmakund Har Ki Pauri Haridwar"
+                        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                             alt="Sacred Haridwar Ganga Ghat"
                              class="w-full h-full object-cover transition transform duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
                         <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 backdrop-blur-xs">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                Brahmakund Consecration Sanctum
+                                Sacred Haridwar Consecration
                             </span>
-                            <span class="text-[10px] text-amber-300 font-mono font-bold">Har Ki Pauri</span>
+                            <span class="text-[10px] text-amber-300 font-mono font-bold">Haridwar Ghat</span>
                         </div>
                     </div>
                     <div class="flex items-center justify-between pb-4 border-b border-amber-200">
                         <div>
                             <span class="text-xs font-mono uppercase text-[#881337] font-extrabold bg-amber-200/60 px-2.5 py-0.5 rounded-full inline-block">Haridwar Bliss Traceability Seal</span>
                             <h3 class="text-base sm:text-lg font-serif font-bold text-[#881337] mt-1.5">
-                                Brahmakund Batch #{{ $activeBatchCode }}
+                                Haridwar Batch #{{ $activeBatchCode }}
                             </h3>
                         </div>
                         <div class="w-12 h-12 rounded-xl bg-[#881337] text-[#FDE68A] border border-amber-300/50 flex items-center justify-center shadow-md">
@@ -633,7 +633,7 @@
 
                     <div class="py-4 space-y-3 text-xs">
                         <div class="flex justify-between items-center">
-                            <span class="text-amber-900 font-semibold">Sourcing Ghat:</span>
+                            <span class="text-amber-900 font-semibold">Sourcing Location:</span>
                             <span class="font-extrabold text-[#881337] text-right">{{ $activeBatchGhat }}</span>
                         </div>
                         <div class="flex justify-between items-center">
@@ -674,11 +674,11 @@
             <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
                 <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
-                    <span>Direct From The Holy Source · Har Ki Pauri</span>
+                    <span>Direct From The Holy Source · Sacred Haridwar</span>
                 </div>
                 <div>
                     <h2 class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight">
-                        Sacred Haridwar Darshan & Brahmakund Sanctum
+                        Sacred Haridwar Darshan & Holy Ganga Ghats
                     </h2>
                 </div>
                 <p class="text-xs sm:text-base text-amber-950 font-bold mt-3.5 max-w-2xl mx-auto leading-relaxed">
@@ -692,11 +692,11 @@
                 <div class="group bg-[#FEF4CF] rounded-3xl border-2 border-amber-300/70 overflow-hidden shadow-lg hover:shadow-2xl hover:border-amber-400 transition-all duration-300 flex flex-col">
                     <div class="relative h-56 overflow-hidden">
                         <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-                             alt="Har Ki Pauri & Historic Clock Tower"
+                             alt="Historic Clock Tower & Ganga Ghats"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                         <span class="absolute bottom-3 left-3 text-xs font-bold text-[#FDE68A] bg-[#881337] border border-amber-300/40 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-md">
-                            Har Ki Pauri Ghat
+                            Historic Haridwar Ghat
                         </span>
                     </div>
                     <div class="p-5 flex-1 flex flex-col justify-between space-y-2">
@@ -705,7 +705,7 @@
                                 Historic Ghanta Ghar & Ghats
                             </h3>
                             <p class="text-xs text-amber-950 font-semibold mt-1.5 leading-relaxed">
-                                The iconic Har Ki Pauri where millions gather for morning & evening Maha Aarti amid glowing oil lamps and sacred bells.
+                                The iconic Haridwar riverside ghats where millions gather for morning & evening Maha Aarti amid glowing oil lamps and sacred bells.
                             </p>
                         </div>
                         <div class="pt-3 border-t border-amber-300/60 flex items-center justify-between text-[11px] text-amber-900 font-extrabold">
@@ -715,24 +715,24 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Brahmakund Sanctum -->
+                <!-- Card 2: Holy Sourcing Ghat -->
                 <div class="group bg-[#FEF4CF] rounded-3xl border-2 border-amber-300/70 overflow-hidden shadow-lg hover:shadow-2xl hover:border-amber-400 transition-all duration-300 flex flex-col">
                     <div class="relative h-56 overflow-hidden">
-                        <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-                             alt="Brahmakund Sanctum Sanctorum"
+                        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                             alt="Sacred Haridwar Sourcing Ghat"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                         <span class="absolute bottom-3 left-3 text-xs font-bold text-[#FDE68A] bg-[#881337] border border-amber-300/40 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-md">
-                            Brahmakund Sanctum
+                            Holy Haridwar Ghat
                         </span>
                     </div>
                     <div class="p-5 flex-1 flex flex-col justify-between space-y-2">
                         <div>
                             <h3 class="font-serif font-bold text-base text-[#881337] group-hover:text-[#D97706] transition">
-                                Brahmakund Sourcing Ghat
+                                Sacred Sourcing Ghat
                             </h3>
                             <p class="text-xs text-amber-950 font-semibold mt-1.5 leading-relaxed">
-                                The holiest epicenter where celestial nectar (Amrit) fell. Water is consecrated here during Brahma Muhurta morning Aarti.
+                                The holiest riverside location where celestial purity abounds. Water is consecrated here during Brahma Muhurta morning Aarti.
                             </p>
                         </div>
                         <div class="pt-3 border-t border-amber-300/60 flex items-center justify-between text-[11px] text-amber-900 font-extrabold">
@@ -791,7 +791,7 @@
                         </div>
                         <div class="pt-3 border-t border-amber-300/60 flex items-center justify-between text-[11px] text-amber-900 font-extrabold">
                             <span>Vedic Blessings</span>
-                            <span>Haridwar Sanctum</span>
+                            <span>Sacred Haridwar</span>
                         </div>
                     </div>
                 </div>
@@ -851,7 +851,7 @@
                     </h2>
                 </div>
                 <p class="text-xs sm:text-base text-amber-950 font-bold mt-3.5 max-w-2xl mx-auto leading-relaxed">
-                    Hear from blessed households receiving sanctified Brahmakund Gangajal & pure puja samagri across India.
+                    Hear from blessed households receiving sanctified Haridwar Gangajal & pure puja samagri across India.
                 </p>
             </div>
 
@@ -866,7 +866,7 @@
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         </div>
                         <p class="text-[#6B0E29] font-semibold leading-relaxed italic text-xs sm:text-sm mt-3">
-                            "Living in Chennai, getting fresh holy water from Har Ki Pauri every month seemed impossible until we joined Haridwar Bliss. The QR code showing the exact morning collection video brought tears of devotion to our family."
+                            "Living in Chennai, getting fresh holy water from sacred Haridwar every month seemed impossible until we joined Haridwar Bliss. The QR code showing the exact morning collection video brought tears of devotion to our family."
                         </p>
                     </div>
                     <div class="pt-3 border-t border-amber-400/40">
@@ -904,7 +904,7 @@
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         </div>
                         <p class="text-[#6B0E29] font-semibold leading-relaxed italic text-xs sm:text-sm mt-3">
-                            "The brass panchamukhi aarti diya and pure sandalwood dhoop sticks transform our pooja altar into Har Ki Pauri every evening. Truly authentic Vedic service and fast dispatch."
+                            "The brass panchamukhi aarti diya and pure sandalwood dhoop sticks transform our pooja altar into sacred Haridwar every evening. Truly authentic Vedic service and fast dispatch."
                         </p>
                     </div>
                     <div class="pt-3 border-t border-amber-400/40">
@@ -930,8 +930,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                         </svg>
                     </div>
-                    <h4 class="font-extrabold text-[#881337] text-xs sm:text-sm">100% Brahmakund</h4>
-                    <p class="text-[11px] text-amber-950 font-semibold mt-0.5">Sourced directly from Har Ki Pauri</p>
+                    <h4 class="font-extrabold text-[#881337] text-xs sm:text-sm">100% Pure Haridwar</h4>
+                    <p class="text-[11px] text-amber-950 font-semibold mt-0.5">Sourced directly from sacred Haridwar</p>
                 </div>
                 <div class="flex flex-col items-center text-center p-4 sm:p-5 rounded-2xl bg-[#FEF4CF] border-2 border-amber-300/80 shadow-md hover:shadow-xl transition transform hover:-translate-y-0.5">
                     <div class="w-12 h-12 rounded-2xl bg-[#881337] border border-amber-300/50 flex items-center justify-center text-[#FDE68A] shadow-md mb-2.5">

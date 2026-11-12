@@ -37,7 +37,7 @@
             @if ($product->is_gangajal)
                 <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-extrabold bg-[#0369A1] text-white shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span>
-                    <span>Brahmakund Certified</span>
+                    <span>Haridwar Certified</span>
                 </span>
             @endif
         </div>
@@ -73,8 +73,8 @@
             </div>
 
             <!-- Title -->
-            <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#881337] leading-snug line-clamp-2 group-hover:text-[#D97706] transition mb-1">
-                <a href="{{ route('products.show', $product->slug) }}">
+            <h3 class="font-serif italic font-bold text-xs sm:text-sm leading-snug line-clamp-2 mb-1">
+                <a href="{{ route('products.show', $product->slug) }}" class="text-[#881337] group-hover:text-[#D97706] hover:text-[#D97706] transition block">
                     {{ $product->name }}
                 </a>
             </h3>

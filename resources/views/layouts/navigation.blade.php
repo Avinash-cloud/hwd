@@ -11,7 +11,7 @@
                 </span>
                 <span class="font-bold text-amber-200 tracking-wide text-xs">हर हर गंगे!</span>
                 <span class="font-medium text-white/95 truncate">
-                    100% Authentic Brahmakund Gangajal & Vedic Essentials · Directly Sourced from Har Ki Pauri
+                    100% Authentic Haridwar Gangajal & Vedic Essentials · Sourced from Sacred Ganga
                 </span>
                 <span class="hidden md:inline text-white/40 shrink-0">|</span>
                 <a href="{{ route('membership.join') }}" class="hidden md:inline text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2 shrink-0">
@@ -21,7 +21,7 @@
 
             <!-- Right: Batch Verification & Support Links -->
             <div class="hidden lg:flex items-center gap-4 text-[11px] text-white/80 shrink-0">
-                <a href="{{ route('about') }}" class="hover:text-amber-200 transition">Brahmakund Sanctity</a>
+                <a href="{{ route('about') }}" class="hover:text-amber-200 transition">Sacred Sanctity</a>
                 <span>·</span>
                 <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
                 <span>·</span>
@@ -61,7 +61,7 @@
                                 BluBliss
                             </span>
                             <span class="hidden sm:block text-[9px] font-bold tracking-widest text-[#B45309] uppercase">
-                                Brahmakund Haridwar Gangajal
+                                Consecrated Haridwar Gangajal
                             </span>
                         </div>
                     </a>
@@ -458,7 +458,7 @@
                 5-Year Membership (₹500)
             </a>
             <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
-                Brahmakund Sanctity Story
+                Sacred Sanctity Story
             </a>
         </div>
     </div>

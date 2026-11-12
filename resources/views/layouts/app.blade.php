@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Haridwar Bliss') }} - Sacred Brahmakund Gangajal & Vedic Essentials</title>
+    <title>{{ config('app.name', 'Haridwar Bliss') }} - Sacred Haridwar Gangajal & Vedic Essentials</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <!-- Fonts -->
@@ -109,7 +109,7 @@
                     </div>
                     <p class="text-sm text-amber-200/80 leading-relaxed">
                         Pure Haridwar Gangajal (Packaged) collected at Brahma Muhurta directly from
-                        Brahmakund at Har Ki Pauri to your sacred altar.
+                        sacred Haridwar to your sacred altar.
                     </p>
                     <div class="text-xs text-amber-200/90 flex items-start gap-1.5">
                         <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -126,7 +126,7 @@
                         Offerings</h4>
                     <ul class="space-y-2.5 text-sm">
                         <li><a href="{{ route('products.index', ['type' => 'gangajal']) }}"
-                                class="hover:text-white transition">Brahmakund Gangajal (500ml)</a></li>
+                                class="hover:text-white transition">Haridwar Gangajal (500ml)</a></li>
                         <li><a href="{{ route('products.index', ['type' => 'gangajal']) }}"
                                 class="hover:text-white transition">Copper Cask Edition (1 Litre)</a></li>
                         <li><a href="{{ route('products.index', ['category' => 'brass-pooja-ware']) }}"
@@ -146,13 +146,13 @@
                         <li><a href="{{ route('blogs.index') }}"
                                 class="text-amber-300 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
                         <li><a href="{{ route('gallery.index') }}"
-                                class="text-amber-300 font-medium hover:text-white transition">Sacred Brahmakund Gallery</a></li>
+                                class="text-amber-300 font-medium hover:text-white transition">Sacred Haridwar Gallery</a></li>
                         <li><a href="{{ route('membership.join') }}"
                                 class="text-amber-300 font-bold hover:text-white transition">🌟 5-Year Sacred
                                 Membership (₹500)</a></li>
                         <li><a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
                                 class="hover:text-white transition">Batch QR Verification & Lab Tests</a></li>
-                        <li><a href="{{ route('about') }}" class="hover:text-white transition">Sanctity of Brahmakund
+                        <li><a href="{{ route('about') }}" class="hover:text-white transition">Sanctity of Sacred Ganga
                                 Water</a></li>
                         <li><a href="{{ route('faqs') }}" class="hover:text-white transition">Frequently Asked
                                 Questions</a></li>

@@ -6,9 +6,8 @@
         $gallery = !empty($productGallery) ? array_values(array_unique(array_merge([$imgUrl], $productGallery))) : [
             $imgUrl,
             asset('images/haridwar-panorama-clocktower.jpg'),
-            asset('images/har-ki-pauri-temples.jpg'),
-            asset('images/brahmakund-ghat-shrines.jpg'),
             asset('images/ganga-holy-waters.jpg'),
+            asset('images/evening-aarti-diyas.jpg'),
         ];
         $hasVideo = !empty($product->video_url);
         $activeVariants = $product->variants ? $product->variants->where('is_active', true)->values() : collect();
@@ -220,7 +219,7 @@
 
                         @if ($product->is_gangajal)
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-xl text-[10px] sm:text-[11px] font-extrabold bg-[#0369A1] text-white shadow-md">
-                                <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span> Brahmakund Certified
+                                <span class="w-1.5 h-1.5 rounded-full bg-sky-200"></span> Haridwar Certified
                             </span>
                         @endif
                     </div>
@@ -281,7 +280,7 @@
                             <span>Consecration & Sanctity Assurance</span>
                         </div>
                         <div class="flex gap-2.5 sm:gap-3 items-center">
-                            <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}" alt="Har Ki Pauri Sanctum" class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover shrink-0 border border-amber-300/60 shadow-xs">
+                            <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}" alt="Sacred Haridwar" class="w-12 h-12 sm:w-16 sm:h-16 rounded-xl object-cover shrink-0 border border-amber-300/60 shadow-xs">
                             <p class="text-slate-700 leading-relaxed text-[11px] sm:text-xs">
                                 {{ $product->purity_details }}
                             </p>
@@ -542,7 +541,7 @@
                             </svg>
                         </div>
                         <span class="font-bold text-slate-800 text-[10px] sm:text-[11px] block truncate">Consecrated</span>
-                        <span class="text-[9px] sm:text-[10px] text-slate-500 block truncate">Har Ki Pauri</span>
+                        <span class="text-[9px] sm:text-[10px] text-slate-500 block truncate">Sacred Haridwar</span>
                     </div>
                     <div class="p-2 sm:p-3 bg-stone-50 rounded-xl space-y-1">
                         <div class="w-6 h-6 sm:w-7 sm:h-7 mx-auto rounded-full bg-amber-100/70 text-[#D97706] flex items-center justify-center">
@@ -616,7 +615,7 @@
                             <span x-text="openTab === 3 ? '−' : '+'" class="text-base font-mono"></span>
                         </button>
                         <div x-show="openTab === 3" class="p-4 bg-white text-slate-700 leading-relaxed border-t border-amber-200/50 space-y-2">
-                            <p>• Dispatched within 24-48 hours directly from our Haridwar sanctum.</p>
+                            <p>• Dispatched within 24-48 hours directly from our Haridwar center.</p>
                             <p>• Pan-India express delivery typically arrives within 3-5 business days via Shiprocket insured couriers.</p>
                             <p>• Free shipping applied automatically on all orders over ₹499.</p>
                         </div>
@@ -740,7 +739,7 @@
                                        id="review_title"
                                        name="title"
                                        value="{{ old('title', $userReview?->title) }}"
-                                       placeholder="e.g. Sacred Brahmakund water of supreme purity"
+                                       placeholder="e.g. Sacred Haridwar water of supreme purity"
                                        class="w-full text-xs bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-400 focus:bg-white focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]" />
                                 @error('title')
                                     <p class="text-rose-600 text-[11px] mt-1">{{ $message }}</p>

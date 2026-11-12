@@ -122,7 +122,7 @@
                     <tr>
                         <td class="p-3 font-medium text-slate-900">
                             Haridwar Bliss 5-Year Sacred Membership
-                            <span class="block text-[11px] text-slate-500">60-Month Sacred Brahmakund Gangajal & Vedic Devotee Circle Privileges</span>
+                            <span class="block text-[11px] text-slate-500">60-Month Sacred Haridwar Gangajal & Vedic Devotee Circle Privileges</span>
                         </td>
                         <td class="p-3 text-center font-mono text-slate-600">9995</td>
                         <td class="p-3 text-center text-slate-700">1</td>

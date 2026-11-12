@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="relative bg-gradient-to-b from-[#4A0E17] via-[#5C1521] to-[#380B12] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-400/30">
         <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-             alt="Har Ki Pauri Haridwar"
+             alt="Haridwar Ganga Temples"
              class="absolute inset-0 w-full h-full object-cover opacity-25 object-center">
         <div class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-[#380B12]/80 to-transparent"></div>
 
@@ -14,7 +14,7 @@
                 Haridwar Bliss 5-Year Devotee Membership
             </h1>
             <p class="mt-4 text-sm sm:text-base text-amber-100/90 max-w-2xl mx-auto leading-relaxed">
-                Connect your household directly to the divine blessings of Maa Ganga at Har Ki Pauri with uninterrupted
+                Connect your household directly to the divine blessings of Maa Ganga in sacred Haridwar with uninterrupted
                 monthly sacred deliveries for 5 full years (60 months total).
             </p>
         </div>
@@ -114,7 +114,7 @@
                             <div>
                                 <h3 class="font-bold text-[#881337] text-base">Free Monthly Sacred Gangajal Bottle</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Each month, your first 500ml Brahmakund Gangajal bottle carries a <strong>₹0 product
+                                    Each month, your first 500ml Haridwar Gangajal bottle carries a <strong>₹0 product
                                     price</strong> (only a flat delivery fee of ₹{{ number_format($shippingRate) }} applies).
                                 </p>
                             </div>
@@ -141,7 +141,7 @@
                                 <h3 class="font-bold text-[#881337] text-base">Unbroken Batch Purity Verification</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
                                     Every dispatched bottle includes a scannable QR code encoding the exact collection
-                                    timestamp at Har Ki Pauri, Aarti video link, and laboratory test report.
+                                    timestamp in Haridwar, Aarti video link, and laboratory test report.
                                 </p>
                             </div>
                         </div>
@@ -326,8 +326,8 @@
 
                 <div class="text-xs text-slate-600 space-y-3 max-h-96 overflow-y-auto pr-2 leading-relaxed">
                     <p><strong>1. Membership Tenure:</strong> The Sacred Devotee Membership is valid for exactly 5 continuous calendar years (60 months) from the date of activation.</p>
-                    <p><strong>2. Monthly Sacred Gangajal Benefit:</strong> Active members are entitled to claim 1 complimentary (₹0 product cost) 500ml Brahmakund Gangajal bottle per calendar month. A flat subsidized packing, handling, and delivery charge (currently ₹{{ number_format($shippingRate) }}) applies per dispatch.</p>
-                    <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from Brahma Kund, Har Ki Pauri during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident sealing and a verifiable batch lab assay.</p>
+                    <p><strong>2. Monthly Sacred Gangajal Benefit:</strong> Active members are entitled to claim 1 complimentary (₹0 product cost) 500ml Haridwar Gangajal bottle per calendar month. A flat subsidized packing, handling, and delivery charge (currently ₹{{ number_format($shippingRate) }}) applies per dispatch.</p>
+                    <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident sealing and a verifiable batch lab assay.</p>
                     <p><strong>4. Fee & Invoicing:</strong> The ₹{{ number_format($membershipFee) }} one-time contribution is inclusive of 18% GST (SAC Code 9995). A downloadable digital tax invoice is generated upon confirmation. Formal legal terms PDF is provided with invoice.</p>
                     <p><strong>5. Non-Transferable:</strong> Membership privileges are attached to the registered devotee account and are non-transferable and non-refundable once activated.</p>
                 </div>

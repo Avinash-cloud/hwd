@@ -9,7 +9,7 @@
                 Spiritual Knowledge & Ganga Lore
             </h1>
             <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
-                Discover the sacred significance of Brahmakund at Har Ki Pauri, ancient Ayurvedic rituals, and authentic Vedic wisdom passed down through generations.
+                Discover the sacred significance of holy Maa Ganga in Haridwar, ancient Ayurvedic rituals, and authentic Vedic wisdom passed down through generations.
             </p>
 
             <!-- Search Bar -->

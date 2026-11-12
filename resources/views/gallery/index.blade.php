@@ -28,10 +28,10 @@
                     <span>Sacred Darshan & Provenance</span>
                 </span>
                 <h1 class="font-serif font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                    Haridwar Brahmakund Gallery
+                    Sacred Haridwar Darshan Gallery
                 </h1>
                 <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
-                    Witness the sacred beauty of Har Ki Pauri Maha Aarti, dawn Ganga water collection ceremonies, and our hermetically sealed bottling process.
+                    Witness the sacred beauty of Haridwar Maha Aarti, dawn Ganga water collection ceremonies, and our hermetically sealed bottling process.
                 </p>
 
                 <!-- Filter Tabs -->
@@ -149,12 +149,12 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
             <div class="bg-gradient-to-r from-amber-900 to-slate-900 rounded-3xl p-8 sm:p-12 text-white text-center relative overflow-hidden shadow-xl">
                 <div class="relative z-10 max-w-2xl mx-auto space-y-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-amber-300">Direct From Brahmakund</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-amber-300">Direct From Sacred Haridwar</span>
                     <h2 class="font-serif font-extrabold text-2xl sm:text-4xl leading-tight">
                         Experience Divine Sanctity at Your Home Altar
                     </h2>
                     <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                        Join our 5-Year Sacred Devotee Membership to receive regular ₹0 monthly shipments of certified, untouched Brahmakund Gangajal.
+                        Join our 5-Year Sacred Devotee Membership to receive regular ₹0 monthly shipments of certified, untouched Haridwar Gangajal.
                     </p>
                     <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
                         <a href="{{ route('membership.join') }}"

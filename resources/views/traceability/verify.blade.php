@@ -23,13 +23,13 @@
             <div
                 class="flex flex-col md:flex-row md:items-center justify-between pb-8 border-b border-[#D97706]/20 gap-6">
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Brahmakund
+                    <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Haridwar
                         Provenance</span>
                     <h2 class="text-2xl font-serif font-bold text-slate-900 mt-1">
                         Batch #{{ $batch?->batch_number ?? 'HB-GANG-VERIFIED' }}
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">
-                        Collected under continuous Vedic mantra chanting at Har Ki Pauri
+                        Collected under continuous Vedic mantra chanting in sacred Haridwar
                     </p>
                 </div>
 
@@ -51,7 +51,7 @@
                         <div class="flex justify-between">
                             <span class="text-slate-500">Holy Sourcing Ghat:</span>
                             <span
-                                class="font-bold text-slate-900 text-right">{{ $batch?->sourcing_ghat ?? 'Har Ki Pauri, Brahmakund, Haridwar' }}</span>
+                                class="font-bold text-slate-900 text-right">{{ $batch?->sourcing_ghat ?? 'Sacred Ganga Ghat, Haridwar, Uttarakhand' }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-slate-500">Water Collection Date:</span>
@@ -114,7 +114,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>Verified Collection Sanctum · Har Ki Pauri Brahmakund</span>
+                        <span>Verified Collection Origin · Sacred Haridwar Ghat</span>
                     </h3>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 w-fit">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -124,11 +124,11 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-sm group">
-                        <img src="{{ asset('images/har-ki-pauri-temples.jpg') }}"
-                             alt="Brahmakund Collection Sanctum"
+                        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                             alt="Sacred Haridwar Collection Ghat"
                              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute bottom-2 left-2 px-2.5 py-1 bg-slate-950/80 text-white text-[11px] font-bold rounded-lg backdrop-blur-xs">
-                            Brahmakund Sanctum (Har Ki Pauri)
+                            Sacred Haridwar Ghat
                         </div>
                     </div>
                     <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-sm group">
@@ -147,7 +147,7 @@
                 <div class="py-6 border-b border-[#D97706]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h4 class="font-serif font-bold text-sm text-slate-900">Consecration Aarti Video Recording</h4>
-                        <p class="text-xs text-slate-500">Witness the sacred water collection ceremony from Har Ki Pauri.
+                        <p class="text-xs text-slate-500">Witness the sacred water collection ceremony from Haridwar.
                         </p>
                     </div>
                     <a href="{{ $batch->video_url }}" target="_blank"

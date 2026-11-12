@@ -94,7 +94,7 @@
                                 </div>
                                 <h4 class="font-serif font-bold text-slate-800 text-base mb-1">Your cart is empty</h4>
                                 <p class="text-xs text-slate-500 max-w-xs mx-auto mb-6">
-                                    Explore pure Brahmakund holy water, cow dung hawan cups, and temple pooja essentials.
+                                    Explore pure Haridwar holy water, cow dung hawan cups, and temple pooja essentials.
                                 </p>
                                 <a href="{{ route('products.index') }}"
                                    @click="closeDrawer()"
