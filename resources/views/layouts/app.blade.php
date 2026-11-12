@@ -25,7 +25,7 @@
 </head>
 
 <body
-    class="font-sans text-slate-900 antialiased bg-stone-50 min-h-full flex flex-col selection:bg-[#D97706] selection:text-white overflow-x-hidden w-full max-w-full">
+    class="font-sans text-[#3B2314] antialiased bg-[#FFFDF7] min-h-full flex flex-col selection:bg-[#D97706] selection:text-white overflow-x-hidden w-full max-w-full">
     @include('layouts.navigation')
 
     <!-- Flash Messages -->
@@ -94,9 +94,9 @@
     </main>
 
     <!-- Sacred Footer -->
-    <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-20 pt-16 pb-12">
+    <footer class="bg-gradient-to-b from-[#4A0E17] via-[#380B12] to-[#25050A] text-amber-100/90 border-t border-amber-600/30 mt-20 pt-16 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-amber-900/50">
                 <!-- Col 1: Brand & Origin -->
                 <div class="space-y-4 md:col-span-1">
                     <div class="flex items-center gap-3">
@@ -104,14 +104,14 @@
                         <div>
                             <span class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss</span>
                             <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.</span>
-                            <span class="block text-[10px] text-slate-400 font-mono">CIN: U11040UT2025PTC019429</span>
+                            <span class="block text-[10px] text-amber-200/70 font-mono">CIN: U11040UT2025PTC019429</span>
                         </div>
                     </div>
-                    <p class="text-sm text-slate-400 leading-relaxed">
+                    <p class="text-sm text-amber-200/80 leading-relaxed">
                         Pure Haridwar Gangajal (Packaged) collected at Brahma Muhurta directly from
                         Brahmakund at Har Ki Pauri to your sacred altar.
                     </p>
-                    <div class="text-xs text-slate-300 flex items-start gap-1.5">
+                    <div class="text-xs text-amber-200/90 flex items-start gap-1.5">
                         <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -122,7 +122,7 @@
 
                 <!-- Col 2: Quick Links -->
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-[#D97706] mb-4 font-mono">Sacred
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 font-mono">Sacred
                         Offerings</h4>
                     <ul class="space-y-2.5 text-sm">
                         <li><a href="{{ route('products.index', ['type' => 'gangajal']) }}"
@@ -140,15 +140,15 @@
 
                 <!-- Col 3: Membership & Verification -->
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-[#D97706] mb-4 font-mono">Devotee Care
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 font-mono">Devotee Care
                     </h4>
                     <ul class="space-y-2.5 text-sm">
                         <li><a href="{{ route('blogs.index') }}"
-                                class="text-amber-400 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
+                                class="text-amber-300 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
                         <li><a href="{{ route('gallery.index') }}"
-                                class="text-amber-400 font-medium hover:text-white transition">Sacred Brahmakund Gallery</a></li>
+                                class="text-amber-300 font-medium hover:text-white transition">Sacred Brahmakund Gallery</a></li>
                         <li><a href="{{ route('membership.join') }}"
-                                class="text-[#D97706] font-semibold hover:text-white transition">5-Year Sacred
+                                class="text-amber-300 font-bold hover:text-white transition">🌟 5-Year Sacred
                                 Membership (₹500)</a></li>
                         <li><a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
                                 class="hover:text-white transition">Batch QR Verification & Lab Tests</a></li>
@@ -163,35 +163,35 @@
 
                 <!-- Col 4: Contact & Sanctity Assurance -->
                 <div class="space-y-3">
-                    <h4 class="text-xs font-bold uppercase tracking-widest text-[#D97706] mb-4 font-mono">Sanctity
+                    <h4 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 font-mono">Sanctity
                         Assurance</h4>
-                    <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700/80 space-y-2">
-                        <div class="flex items-center gap-2 text-xs font-bold text-[#D97706]">
-                            <svg class="w-4 h-4 text-[#0369A1]" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="bg-[#5C1521]/70 p-4 rounded-xl border border-amber-500/30 space-y-2">
+                        <div class="flex items-center gap-2 text-xs font-bold text-amber-300">
+                            <svg class="w-4 h-4 text-sky-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
                             </svg>
                             <span>100% Hermetically Sealed</span>
                         </div>
-                        <p class="text-xs text-slate-400 leading-normal">
+                        <p class="text-xs text-amber-200/80 leading-normal">
                             Untouched by human hands from sacred collection to tamper-evident capping. Every shipment
                             includes a verifiable batch QR code.
                         </p>
                     </div>
-                    <div class="text-xs text-slate-300 space-y-1.5">
+                    <div class="text-xs text-amber-200/90 space-y-1.5">
                         <div>Phone: <a href="tel:+917042482555" class="text-amber-300 hover:underline font-mono font-bold">+91 7042482555</a></div>
                         <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com" class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a></div>
                     </div>
                 </div>
             </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-amber-300/70">
                 <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED (CIN: U11040UT2025PTC019429). Pure Haridwar Gangajal (Packaged). All rights reserved.</p>
                 <div class="flex items-center gap-6">
-                    <a href="{{ route('terms') }}" class="hover:text-slate-300 transition">Terms & Conditions</a>
-                    <a href="{{ route('privacy') }}" class="hover:text-slate-300 transition">Privacy Policy</a>
-                    <a href="{{ route('faqs') }}" class="hover:text-slate-300 transition">FAQs</a>
+                    <a href="{{ route('terms') }}" class="hover:text-white transition">Terms & Conditions</a>
+                    <a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="{{ route('faqs') }}" class="hover:text-white transition">FAQs</a>
                 </div>
             </div>
         </div>

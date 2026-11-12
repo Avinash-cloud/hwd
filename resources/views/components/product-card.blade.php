@@ -73,7 +73,7 @@
             </div>
 
             <!-- Title -->
-            <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 group-hover:text-[#D97706] transition mb-1">
+            <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#701A28] leading-snug line-clamp-2 group-hover:text-[#D97706] transition mb-1">
                 <a href="{{ route('products.show', $product->slug) }}">
                     {{ $product->name }}
                 </a>
@@ -81,19 +81,32 @@
 
             <!-- Volume / Sourcing Badge if available -->
             @if ($product->volume_ml)
-                <span class="inline-block text-[11px] text-slate-500 mb-2">
+                <span class="inline-block text-[11px] text-amber-900/80 mb-2 font-medium">
                     {{ $product->volume_ml }} ml Hermetic Bottle
                 </span>
             @endif
         </div>
 
+        @if ($product->is_gangajal)
+            <!-- Devotee Member Benefit Callout on Gangajal Cards -->
+            <div class="my-1.5 py-1 px-2 rounded-lg bg-gradient-to-r from-amber-50 via-sky-50 to-amber-50 border border-amber-200/70 flex items-center justify-between text-[10px] sm:text-[11px]">
+                <span class="text-[#881337] font-extrabold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span>5-Yr Member:</span>
+                </span>
+                <span class="font-black text-[#0369A1] bg-white/90 border border-sky-300 px-1.5 py-0.5 rounded shadow-2xs">
+                    ₹0 Free Monthly
+                </span>
+            </div>
+        @endif
+
         <!-- Price & Quick Add Button Row (99Pandit Style) -->
-        <div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between gap-1.5">
+        <div class="pt-2.5 border-t border-amber-100 mt-1 flex items-center justify-between gap-1.5">
             @if ($product->isInStock())
                 <!-- Price Display -->
                 <div class="flex flex-col min-w-0">
                     <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
-                        <span class="font-extrabold text-sm sm:text-base text-slate-900 whitespace-nowrap">
+                        <span class="font-extrabold text-sm sm:text-base text-[#701A28] whitespace-nowrap">
                             ₹{{ number_format($product->price, 0) }}
                         </span>
                         @if ($product->compare_price && $product->compare_price > $product->price)

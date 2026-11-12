@@ -9,13 +9,14 @@
                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z" clip-rule="evenodd" />
                     </svg>
                 </span>
+                <span class="font-bold text-amber-200 tracking-wide text-xs">हर हर गंगे!</span>
                 <span class="font-medium text-white/95 truncate">
                     100% Authentic Brahmakund Gangajal & Vedic Essentials · Directly Sourced from Har Ki Pauri
                 </span>
                 <span class="hidden md:inline text-white/40 shrink-0">|</span>
-                <span class="hidden md:inline text-amber-200 font-semibold shrink-0">
-                    Free Sacred Delivery on orders above ₹499
-                </span>
+                <a href="{{ route('membership.join') }}" class="hidden md:inline text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2 shrink-0">
+                    🌟 5-Year Members Receive 1 Free Gangajal Bottle Every Month
+                </a>
             </div>
 
             <!-- Right: Batch Verification & Support Links -->
@@ -56,12 +57,12 @@
                     <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0">
                         <!-- <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" /> -->
                         <div class="leading-tight min-w-0">
-                            <span class="block font-serif font-extrabold italic text-base sm:text-2xl text-slate-900 tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#881337] transition truncate">
+                            <span class="block font-serif font-extrabold italic text-base sm:text-2xl text-[#701A28] tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#881337] transition truncate">
                                 BluBliss
                             </span>
-                            <!-- <span class="hidden sm:block text-[9px] sm:text-[10px] font-bold tracking-wider text-[#881337] truncate">
-                                Saaf Pani Swath Ke Nishani
-                            </span> -->
+                            <span class="hidden sm:block text-[9px] font-bold tracking-widest text-[#B45309] uppercase">
+                                Brahmakund Haridwar Gangajal
+                            </span>
                         </div>
                     </a>
                 </div>
@@ -78,7 +79,7 @@
                                    @focus="if(searchResults.length > 0) searchOpen = true"
                                    placeholder="Search pure gangajal, cotton wicks, hawan cups, rudraksha, dhoop..."
                                    autocomplete="off"
-                                   class="w-full pl-11 pr-24 py-2.5 bg-stone-50 hover:bg-white focus:bg-white border border-amber-300/80 focus:border-[#D97706] focus:ring-2 focus:ring-[#D97706]/20 rounded-full text-sm text-slate-900 placeholder:text-slate-400 transition shadow-inner">
+                                   class="w-full pl-11 pr-24 py-2.5 bg-amber-50/40 hover:bg-white focus:bg-white border border-amber-300/80 focus:border-[#D97706] focus:ring-2 focus:ring-[#D97706]/20 rounded-full text-sm text-[#3B2314] placeholder:text-stone-400 transition shadow-inner">
                             
                             <!-- Search Icon -->
                             <div class="absolute left-4 text-slate-400 pointer-events-none">
@@ -121,12 +122,12 @@
                                                 <span x-text="item.rating"></span>
                                             </span>
                                         </div>
-                                        <h6 class="text-xs font-bold text-slate-900 truncate group-hover:text-[#D97706] transition"
+                                        <h6 class="text-xs font-bold text-[#701A28] truncate group-hover:text-[#D97706] transition"
                                             x-text="item.name"></h6>
                                         <div class="flex items-center gap-2 mt-0.5">
                                             <template x-if="item.in_stock">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.price"></span>
+                                                    <span class="text-xs font-extrabold text-[#701A28]" x-text="'₹' + item.price"></span>
                                                     <template x-if="item.compare_price">
                                                         <span class="text-[10px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
                                                     </template>
@@ -160,20 +161,22 @@
                     <!-- 5-Year Devotee Membership Pill -->
                     @auth
                         @if (Auth::user()->hasActiveMembership())
-                            <span class="hidden xl:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/30">
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#D97706] animate-pulse"></span>
-                                <span>5-Yr Member</span>
-                            </span>
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#D97706]/15 text-[#881337] border border-[#D97706]/40 hover:bg-[#D97706]/25 transition">
+                                <span class="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></span>
+                                <span>🌟 5-Yr Devotee Pass (Active)</span>
+                            </a>
                         @else
                             <a href="{{ route('membership.join') }}"
-                               class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition">
-                                <span>Join Membership</span>
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-[#881337] via-[#991B1B] to-[#D97706] text-white hover:brightness-110 transition shadow-md shadow-amber-900/20 transform hover:-translate-y-0.5 animate-pulse">
+                                <span>🌟 5-Yr Devotee Pass</span>
+                                <span class="hidden md:inline text-amber-200 text-[11px] font-semibold">· Free Monthly Gangajal</span>
                             </a>
                         @endif
                     @else
                         <a href="{{ route('membership.join') }}"
-                           class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#881337] text-white hover:bg-[#D97706] transition shadow-xs">
-                            <span>Join Membership</span>
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-[#881337] via-[#991B1B] to-[#D97706] text-white hover:brightness-110 transition shadow-md shadow-amber-900/20 transform hover:-translate-y-0.5 animate-pulse">
+                            <span>🌟 5-Yr Devotee Pass</span>
+                            <span class="hidden md:inline text-amber-200 text-[11px] font-semibold">· Free Monthly Gangajal</span>
                         </a>
                     @endauth
 
@@ -205,7 +208,7 @@
                                  x-transition:leave-end="opacity-0 translate-y-1 scale-95"
                                  class="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-amber-200/80 py-1.5 z-50 text-xs">
                                 <div class="px-4 py-2.5 border-b border-slate-100 bg-amber-50/40 rounded-t-2xl">
-                                    <p class="font-bold text-slate-900 truncate">{{ Auth::user()->name }}</p>
+                                    <p class="font-bold text-[#701A28] truncate">{{ Auth::user()->name }}</p>
                                     <p class="text-[11px] text-slate-500 truncate">{{ Auth::user()->email }}</p>
                                 </div>
                                 <div class="py-1">
@@ -248,10 +251,10 @@
                     @endphp
                     <button type="button"
                             @click="$dispatch('open-cart-drawer')"
-                            class="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-slate-900 rounded-xl transition shadow-xs group touch-manipulation"
+                            class="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[#701A28] rounded-xl transition shadow-xs group touch-manipulation"
                             aria-label="Shopping Cart">
                         <div class="relative">
-                            <svg class="w-5 h-5 text-slate-800 group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-5 h-5 text-[#701A28] group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
@@ -270,7 +273,7 @@
                     <input type="search"
                            name="search"
                            placeholder="Search Gangajal, Wicks, Hawan Cups..."
-                           class="w-full pl-10 pr-4 py-2 bg-stone-50 border border-amber-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400">
+                           class="w-full pl-10 pr-4 py-2 bg-amber-50/50 border border-amber-200 rounded-xl text-xs text-[#3B2314] placeholder:text-stone-400">
                     <div class="absolute left-3 top-2.5 text-slate-400">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -411,7 +414,7 @@
          x-transition
          class="lg:hidden bg-white border-b border-amber-200 divide-y divide-slate-100 text-sm">
         <div class="p-4 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-slate-900 hover:bg-amber-50">
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-[#701A28] hover:bg-amber-50">
                 Home
             </a>
             @if (isset($navCategories))
@@ -442,7 +445,7 @@
                     </div>
                 @endforeach
             @endif
-            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-slate-900 hover:bg-amber-50">
+            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-[#701A28] hover:bg-amber-50">
                 All Products Catalog
             </a>
             <a href="{{ route('blogs.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">
