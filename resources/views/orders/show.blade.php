@@ -96,7 +96,7 @@
                         </svg>
                     </div>
                     <strong class="text-xs block">Batch Consecrated</strong>
-                    <span class="text-[10px] opacity-75">{{ $order->batch?->batch_number ?? 'Har Ki Pauri' }}</span>
+                    <span class="text-[10px] opacity-75">{{ $order->batch?->batch_number ?? 'Haridwar Batch' }}</span>
                 </div>
 
                 <div
@@ -225,7 +225,7 @@
 
                     <p class="text-xs text-slate-600 leading-relaxed">
                         This unique QR code is encoded onto your shipment packaging. Scan it with any smartphone camera
-                        to inspect the lab certificate and Har Ki Pauri collection video.
+                        to inspect the lab certificate and Haridwar collection video.
                     </p>
 
                     <div class="pt-2">

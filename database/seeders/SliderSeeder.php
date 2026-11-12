@@ -15,8 +15,8 @@ class SliderSeeder extends Seeder
         $slides = [
             [
                 'title' => 'Pure, Untouched Gangajal for Your Daily Abhishek',
-                'subtitle' => 'Directly from Har Ki Pauri · Brahmakund Consecration',
-                'description' => 'Collected at Brahma Muhurta during morning Ganga Aarti from Har Ki Pauri. Hermetically sealed, lab tested, and trackable via unique batch QR codes.',
+                'subtitle' => 'Directly from Sacred Haridwar · Dawn Consecration',
+                'description' => 'Collected at Brahma Muhurta during morning Ganga Aarti from sacred Haridwar ghats. Hermetically sealed, lab tested, and trackable via unique batch QR codes.',
                 'image' => 'images/haridwar-panorama-clocktower.jpg',
                 'button_text' => 'Join 5-Year Membership (₹500)',
                 'button_link' => '/membership/join',
@@ -30,7 +30,7 @@ class SliderSeeder extends Seeder
                 'title' => 'Ready-To-Use Hawan Cups & Pure Cotton Battis',
                 'subtitle' => '100% Charcoal-Free & Desi Cow Dung Base',
                 'description' => 'Infuse your home with sacred Vedic vibrations in just 15 minutes. Premium cow dung hawan cups with pure loban, guggal, and long-burning cotton wicks.',
-                'image' => 'images/brahmakund-ghat-shrines.jpg',
+                'image' => 'images/haridwar-ghat-shrines.jpg',
                 'button_text' => 'Shop Hawan Specials',
                 'button_link' => '/products?category=hawan-samagri',
                 'secondary_button_text' => 'Diya Wicks & Ghee',

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
             $table->string('batch_number')->unique();
-            $table->string('sourcing_ghat')->default('Har Ki Pauri, Brahmakund, Haridwar');
+            $table->string('sourcing_ghat')->default('Sacred Ganga Ghat, Haridwar');
             $table->date('collection_date');
             $table->date('packaging_date');
             $table->text('description')->nullable();

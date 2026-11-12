@@ -88,7 +88,7 @@ class CheckoutController extends Controller
             'currency' => $order['currency'] ?? 'INR',
             'key' => $this->razorpayService->getKeyId(),
             'name' => 'Haridwar Bliss',
-            'description' => 'Sacred Brahmakund Order',
+            'description' => 'Sacred Haridwar Order',
             'prefill' => [
                 'name' => $user?->name ?? '',
                 'email' => $user?->email ?? '',

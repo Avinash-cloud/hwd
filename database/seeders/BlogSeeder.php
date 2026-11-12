@@ -14,27 +14,27 @@ class BlogSeeder extends Seeder
     {
         $blogs = [
             [
-                'title' => 'The Sacred Significance of Brahmakund at Har Ki Pauri',
-                'slug' => 'sacred-significance-of-brahmakund-har-ki-pauri',
+                'title' => 'The Sacred Significance of Haridwar Ganga Aarti',
+                'slug' => 'sacred-significance-of-haridwar-ganga-aarti',
                 'category' => 'Ganga Sanctity',
                 'author_name' => 'Acharya Vidyadhar Shastri',
                 'reading_time_minutes' => 6,
                 'is_published' => true,
                 'is_featured' => true,
                 'published_at' => now()->subDays(5),
-                'image' => 'images/har-ki-pauri-temples.jpg',
-                'excerpt' => 'Discover why Brahmakund at Har Ki Pauri is revered as the epicenter of spiritual energy, where drops of divine Amrit spilled during Samudra Manthan.',
-                'content' => "<p class=\"lead\">For centuries, pilgrims from across the globe have journeyed to Haridwar with one burning aspiration: to touch and partake in the sanctified waters of Brahmakund at Har Ki Pauri. But what makes this specific ghat along Mother Ganga so exceptionally divine?</p>
+                'image' => 'images/haridwar-temples.jpg',
+                'excerpt' => 'Discover why Haridwar is revered as the epicenter of spiritual energy, where drops of divine Amrit spilled during Samudra Manthan.',
+                'content' => "<p class=\"lead\">For centuries, pilgrims from across the globe have journeyed to Haridwar with one burning aspiration: to touch and partake in the sanctified waters of Mother Ganga. But what makes these sacred ghats along Mother Ganga so exceptionally divine?</p>
 
 <h3>The Cosmic Legend of Amrit Drops</h3>
 <p>According to ancient Puranic texts, during the celestial churning of the ocean (Samudra Manthan), Lord Vishnu's vehicle Garuda flew across the heavens carrying the celestial pitcher of Amrit (the nectar of immortality). As the celestial forces pursued him, divine drops of nectar fell at four sacred spots on earth: Haridwar, Prayagraj, Ujjain, and Nashik.</p>
-<p>In Haridwar, the exact spot where the sacred nectar touched Mother Ganga is <strong>Brahmakund</strong>, nestled within Har Ki Pauri. Lord Brahma is also believed to have meditated here, leaving behind the imprint of Lord Vishnu's divine feet (Charan Paduka), carved into the stone wall of the ghat.</p>
+<p>In Haridwar, the exact spot where the sacred nectar touched Mother Ganga is the sacred pilgrimage ghat. Lord Brahma is also believed to have meditated here, leaving behind divine spiritual vibrations along the banks of the river.</p>
 
 <h3>Scientific Purity of Haridwar's Ganga Water</h3>
 <p>Modern scientific assays continue to corroborate what Vedic sages knew millennia ago. As the Ganga emerges from the high Himalayan glaciers of Gangotri through pristine quartzite and mineral-rich shale, the water at Haridwar possesses remarkable dissolved oxygen levels and bactericidal bacteriophages that prevent putrefaction.</p>
-<blockquote>\"Water collected from Brahmakund retains its purity, sweet taste, and ionic balance for years without spoiling or harboring coliform bacteria when stored in sealed copper or glass vessels.\"</blockquote>
+<blockquote>\"Water collected from Haridwar retains its purity, sweet taste, and ionic balance for years without spoiling or harboring coliform bacteria when stored in sealed copper or glass vessels.\"</blockquote>
 
-<h3>How to Honor Brahmakund Gangajal at Home</h3>
+<h3>How to Honor Haridwar Gangajal at Home</h3>
 <p>To preserve the spiritual potency of holy water:</p>
 <ul>
     <li>Always keep the bottle in your North-East (Ishanya) pooja altar.</li>
@@ -78,7 +78,7 @@ class BlogSeeder extends Seeder
                 'is_published' => true,
                 'is_featured' => false,
                 'published_at' => now()->subDays(18),
-                'image' => 'images/har-ki-pauri-temples.jpg',
+                'image' => 'images/haridwar-temples.jpg',
                 'excerpt' => 'At Brahma Muhurta (between 4:00 AM and 5:30 AM), the atmosphere at Haridwar is alive with transcendent serenity. Explore why our sacred batches are drawn exclusively during this auspicious window.',
                 'content' => "<p class=\"lead\">Every morning before sunrise, as darkness gently dissolves over the Shivalik foothills, Haridwar awakens to the solemn conch shells and sacred chants of Brahma Muhurta. At Blu Bliss, this is the exact divine moment when our sacred batch collection takes place.</p>
 
@@ -91,10 +91,10 @@ class BlogSeeder extends Seeder
 </ul>
 
 <h3>The Sacred Dawn Collection Ritual</h3>
-<p>Before drawing a single drop from Brahmakund, our ordained Vedic priests perform the dawn Ganga Stotram chanting and offering of fragrant earthen deepams. The water is collected at mid-stream where the swift current is purest and cleanest, immediately filtered through micro-fine hermetic screens, and preserved in sanitary tanks awaiting consecration.</p>
+<p>Before drawing a single drop from sacred Haridwar ghats, our ordained Vedic priests perform the dawn Ganga Stotram chanting and offering of fragrant earthen deepams. The water is collected at mid-stream where the swift current is purest and cleanest, immediately filtered through micro-fine hermetic screens, and preserved in sanitary tanks awaiting consecration.</p>
 
 <h3>Bringing the Dawn Energy into Your Home</h3>
-<p>Even if you live thousands of kilometers away from Haridwar, you can invoke the same dawn sanctity by performing your morning pooja between 5:00 AM and 6:30 AM, sprinkling three drops of certified Brahmakund Gangajal over your sacred altar.</p>",
+<p>Even if you live thousands of kilometers away from Haridwar, you can invoke the same dawn sanctity by performing your morning pooja between 5:00 AM and 6:30 AM, sprinkling three drops of certified Haridwar Gangajal over your sacred altar.</p>",
             ],
             [
                 'title' => 'Panchamrit & Hawan Samagri: Reviving Ancient Vedic Purification in Modern Homes',
@@ -130,7 +130,7 @@ class BlogSeeder extends Seeder
                 'is_published' => true,
                 'is_featured' => false,
                 'published_at' => now()->subDays(30),
-                'image' => 'images/har-ki-pauri-temples.jpg',
+                'image' => 'images/haridwar-temples.jpg',
                 'excerpt' => 'The epic tale of unwavering tapasya that brought the river of salvation down from Lord Shiva\'s matted locks to redeem humanity.',
                 'content' => "<p class=\"lead\">The sacred name 'Bhagirathi' is immortalized in every Hindu heart as the symbol of relentless devotion and filial piety. It commemorates King Bhagiratha, whose penance liberated sixty thousand ancestors.</p>
 

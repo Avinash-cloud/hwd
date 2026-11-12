@@ -64,7 +64,7 @@ class Category extends Model
     public function getImageUrlAttribute(): string
     {
         if (! $this->image) {
-            return asset('images/har-ki-pauri-temples.jpg');
+            return asset('images/haridwar-temples.jpg');
         }
 
         if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {

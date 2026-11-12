@@ -25,7 +25,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200 shrink-0">
                     <div>
                         <h1 class="font-semibold text-lg text-slate-900 leading-tight">Blu Bliss — Dispatch Slip</h1>
-                        <p class="text-xs text-slate-500">Brahmakund Sacred Bottling Unit · Har Ki Pauri</p>
+                        <p class="text-xs text-slate-500">Sacred Bottling Unit · Haridwar</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -47,7 +47,7 @@
                     <div class="space-y-1">
                         <span class="font-semibold text-slate-400 uppercase text-[10px] block">Traceability Batch:</span>
                         <strong class="font-mono text-slate-900 block font-semibold">{{ $order->batch?->batch_number ?? 'HB-GANG-001' }}</strong>
-                        <span class="text-[10px] text-slate-500 block">Har Ki Pauri Brahmakund</span>
+                        <span class="text-[10px] text-slate-500 block">Sacred Haridwar Ghat</span>
                     </div>
                     <div class="w-16 h-16 p-1 border border-slate-300 rounded-lg flex items-center justify-center">
                         <img src="{!! $qrSvg !!}" alt="Batch QR Code" class="w-full h-full object-contain">

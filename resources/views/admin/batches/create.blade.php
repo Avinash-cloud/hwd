@@ -40,7 +40,7 @@
                 <label class="block font-medium text-slate-700 mb-1">Holy Sourcing Ghat *</label>
                 <input type="text"
                        name="sourcing_ghat"
-                       value="Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand"
+                       value="Sacred Ganga Ghat, Haridwar, Uttarakhand"
                        required
                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
             </div>
@@ -69,7 +69,7 @@
                 <textarea name="description"
                           rows="3"
                           class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
-                          placeholder="Brahma Muhurta morning Aarti sacred collection at Har Ki Pauri..."></textarea>
+                          placeholder="Brahma Muhurta morning Aarti sacred collection at Haridwar..."></textarea>
             </div>
 
             <div>

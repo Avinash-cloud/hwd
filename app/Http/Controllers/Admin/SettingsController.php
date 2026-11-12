@@ -21,7 +21,7 @@ class SettingsController extends Controller
             'guest_checkout_enabled' => SiteSetting::get('guest_checkout_enabled', '0'),
             'support_phone' => SiteSetting::get('support_phone', '+91 7042482555'),
             'support_email' => SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com'),
-            'ghat_location_default' => SiteSetting::get('ghat_location_default', 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand'),
+            'ghat_location_default' => SiteSetting::get('ghat_location_default', 'Sacred Ganga Ghat, Haridwar, Uttarakhand'),
         ];
 
         return view('admin.settings.index', compact('settings'));

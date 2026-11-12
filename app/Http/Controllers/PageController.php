@@ -12,7 +12,7 @@ class PageController extends Controller
 {
     public function about(): View
     {
-        $ghatLocation = SiteSetting::get('ghat_location_default', 'Har Ki Pauri, Brahmakund, Haridwar');
+        $ghatLocation = SiteSetting::get('ghat_location_default', 'Sacred Ganga Ghat, Haridwar');
 
         return view('pages.about', compact('ghatLocation'));
     }

@@ -27,7 +27,7 @@ class BlogFactory extends Factory
             'slug' => Str::slug($title).'-'.fake()->unique()->randomNumber(4),
             'excerpt' => fake()->paragraph(2),
             'content' => fake()->paragraphs(5, true),
-            'image' => 'images/har-ki-pauri-temples.jpg',
+            'image' => 'images/haridwar-temples.jpg',
             'category' => fake()->randomElement(['Spiritual Wisdom', 'Rituals & Traditions', 'Ganga Sanctity', 'Vedic Health']),
             'author_name' => fake()->name(),
             'reading_time_minutes' => fake()->numberBetween(3, 10),

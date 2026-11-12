@@ -12,7 +12,7 @@
             <div class="mb-6 pb-5 border-b border-slate-100">
                 <h1 class="text-lg font-semibold text-slate-900">Add Sacred Media to Gallery</h1>
                 <p class="text-xs text-slate-500 mt-0.5">
-                    Upload holy Ganga Aarti photography, Brahmakund collection moments, and temple ceremony videos.
+                    Upload holy Ganga Aarti photography, sacred collection moments, and temple ceremony videos.
                 </p>
             </div>
 
@@ -41,7 +41,7 @@
                                name="title"
                                value="{{ old('title') }}"
                                required
-                               placeholder="e.g. Maha Sandhya Aarti at Har Ki Pauri"
+                               placeholder="e.g. Maha Sandhya Aarti at Haridwar"
                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
                         @error('title')
                             <p class="text-[11px] text-red-600 mt-1">{{ $message }}</p>
@@ -72,15 +72,15 @@
                             <input type="text"
                                    name="category"
                                    list="gallery-categories"
-                                   value="{{ old('category', 'Har Ki Pauri Aarti') }}"
+                                   value="{{ old('category', 'Ganga Aarti') }}"
                                    required
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
                             <datalist id="gallery-categories">
                                 @foreach ($existingCategories as $cat)
                                     <option value="{{ $cat }}">
                                 @endforeach
-                                <option value="Har Ki Pauri Aarti">
-                                <option value="Brahmakund Sourcing">
+                                <option value="Ganga Aarti">
+                                <option value="Ganga Sourcing">
                                 <option value="Temple Darshan">
                                 <option value="Sanctified Bottling">
                             </datalist>
@@ -90,7 +90,7 @@
                             <label class="block font-medium text-slate-700 mb-1">Holy Location</label>
                             <input type="text"
                                    name="location"
-                                   value="{{ old('location', 'Har Ki Pauri, Haridwar') }}"
+                                   value="{{ old('location', 'Haridwar, Uttarakhand') }}"
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
                         </div>
                     </div>
@@ -143,7 +143,7 @@
                                name="image_url"
                                x-model="previewUrl"
                                value="{{ old('image_url') }}"
-                               placeholder="https://... or images/har-ki-pauri-temples.jpg"
+                               placeholder="https://... or images/haridwar-temples.jpg"
                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
                     </div>
 

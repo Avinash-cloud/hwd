@@ -25,8 +25,8 @@ class GalleryItemFactory extends Factory
             'media_type' => 'image',
             'image' => 'images/haridwar-panorama-clocktower.jpg',
             'video_url' => null,
-            'category' => fake()->randomElement(['Har Ki Pauri Aarti', 'Brahmakund Sourcing', 'Temple Darshan', 'Sanctified Bottling']),
-            'location' => 'Har Ki Pauri, Haridwar',
+            'category' => fake()->randomElement(['Ganga Aarti', 'Ganga Sourcing', 'Temple Darshan', 'Sanctified Bottling']),
+            'location' => 'Haridwar, Uttarakhand',
             'sort_order' => fake()->numberBetween(1, 20),
             'is_active' => true,
         ];

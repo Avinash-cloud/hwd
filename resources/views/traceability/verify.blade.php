@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <!-- Sourcing Sanctum Photographic Proof -->
+            <!-- Sourcing Ghat Photographic Proof -->
             <div class="py-8 border-b border-[#D97706]/20">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
                     <h3 class="font-serif font-bold text-base text-slate-900 flex items-center gap-2">

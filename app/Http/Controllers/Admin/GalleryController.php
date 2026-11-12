@@ -86,7 +86,7 @@ class GalleryController extends Controller
 
         unset($validated['image_file'], $validated['image_url']);
 
-        $validated['location'] = $validated['location'] ?: 'Har Ki Pauri, Haridwar';
+        $validated['location'] = $validated['location'] ?: 'Sacred Ganga Ghat, Haridwar';
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
         $validated['is_active'] = $request->boolean('is_active', true);
 
@@ -134,7 +134,7 @@ class GalleryController extends Controller
 
         unset($validated['image_file'], $validated['image_url']);
 
-        $validated['location'] = $validated['location'] ?: 'Har Ki Pauri, Haridwar';
+        $validated['location'] = $validated['location'] ?: 'Sacred Ganga Ghat, Haridwar';
         $validated['sort_order'] = (int) ($validated['sort_order'] ?? 0);
         $validated['is_active'] = $request->boolean('is_active', true);
 

@@ -235,7 +235,7 @@
                                        name="name"
                                        value="{{ old('name') }}"
                                        required
-                                       placeholder="e.g. Pure Brahmakund Gangajal"
+                                       placeholder="e.g. Pure Haridwar Gangajal"
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                                 @error('name') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
@@ -636,7 +636,7 @@
                         <input type="text"
                                name="short_description"
                                value="{{ old('short_description') }}"
-                               placeholder="e.g. Direct Brahmakund collection hermetically sealed with batch QR verification."
+                               placeholder="e.g. Direct Haridwar collection hermetically sealed with batch QR verification."
                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                     </div>
 

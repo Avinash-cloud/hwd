@@ -282,7 +282,7 @@
                         Receive Fresh Consecrated Gangajal at Your Doorstep Every Single Month
                     </h2>
                 </div>
-                <p class="text-xs sm:text-base text-amber-950 font-bold leading-relaxed mt-3.5 max-w-2xl mx-auto">
+                <p class="text-xs sm:text-base text-white font-medium leading-relaxed mt-3.5 max-w-2xl mx-auto drop-shadow-2xs">
                     Never worry about holy water for daily morning puja or abhishek. For a single one-time contribution of ₹{{ number_format($membershipFee) }} valid for 5 full years (60 months), receive 1 free 500ml bottle of authentic Haridwar Gangajal every month directly from sacred Haridwar.
                 </p>
             </div>
@@ -681,7 +681,7 @@
                         Sacred Haridwar Darshan & Holy Ganga Ghats
                     </h2>
                 </div>
-                <p class="text-xs sm:text-base text-amber-950 font-bold mt-3.5 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-xs sm:text-base text-white font-medium mt-3.5 max-w-2xl mx-auto leading-relaxed drop-shadow-2xs">
                     Witness the divine riverside ghats and ancient temples of Haridwar where every drop of BluBliss Gangajal is collected during Brahma Muhurta.
                 </p>
             </div>
@@ -850,7 +850,7 @@
                         What Devotees Say Across India
                     </h2>
                 </div>
-                <p class="text-xs sm:text-base text-amber-950 font-bold mt-3.5 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-xs sm:text-base text-white font-medium mt-3.5 max-w-2xl mx-auto leading-relaxed drop-shadow-2xs">
                     Hear from blessed households receiving sanctified Haridwar Gangajal & pure puja samagri across India.
                 </p>
             </div>

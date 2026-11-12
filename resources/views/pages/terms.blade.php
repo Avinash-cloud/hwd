@@ -17,14 +17,14 @@
         <section class="space-y-2">
             <h2 class="text-sm font-serif font-bold text-slate-900">2. Monthly Gangajal Allocation</h2>
             <p>
-                Active members are entitled to receive one (1) 500ml bottle of certified Brahmakund Gangajal per calendar month at zero product charge (₹0). Shipping and logistic charges (₹149 flat) remain payable per dispatched order to cover packaging, cold handling, and express courier logistics.
+                Active members are entitled to receive one (1) 500ml bottle of certified Haridwar Gangajal per calendar month at zero product charge (₹0). Shipping and logistic charges (₹149 flat) remain payable per dispatched order to cover packaging, cold handling, and express courier logistics.
             </p>
         </section>
 
         <section class="space-y-2">
             <h2 class="text-sm font-serif font-bold text-slate-900">3. Sourcing & Sanctification Protocols</h2>
             <p>
-                Haridwar Bliss certifies that holy water is collected from Brahmakund at Har Ki Pauri during auspicious Brahma Muhurta Aarti hours. The water undergoes sediment micro-filtration and untouched hermetic sealing. Every dispatched package includes an authentic QR traceability code.
+                Haridwar Bliss certifies that holy water is collected from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta Aarti hours. The water undergoes sediment micro-filtration and untouched hermetic sealing. Every dispatched package includes an authentic QR traceability code.
             </p>
         </section>
 

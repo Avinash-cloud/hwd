@@ -50,7 +50,7 @@
                             <input type="text"
                                    name="subtitle"
                                    value="{{ old('subtitle', $slider->subtitle) }}"
-                                   placeholder="e.g. From Har Ki Pauri"
+                                   placeholder="e.g. From Sacred Haridwar"
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                             @error('subtitle') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>

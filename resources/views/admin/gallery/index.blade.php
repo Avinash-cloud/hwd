@@ -6,7 +6,7 @@
         <div>
             <h1 class="text-xl font-semibold text-slate-900">Sacred Media Gallery ({{ $items->total() }})</h1>
             <p class="text-xs text-slate-500 mt-0.5">
-                Manage high-resolution photography and Aarti ceremony videos of Har Ki Pauri and Brahmakund.
+                Manage high-resolution photography and Aarti ceremony videos of Haridwar.
             </p>
         </div>
         <div class="flex items-center gap-2">

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('video_url')->nullable();
             $table->string('category')->default('Aarti & Ceremonies')->index();
-            $table->string('location')->default('Har Ki Pauri, Haridwar');
+            $table->string('location')->default('Haridwar, Uttarakhand');
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true)->index();
             $table->timestamps();

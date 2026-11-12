@@ -160,7 +160,7 @@
                                name="image_url"
                                x-model="previewUrl"
                                value="{{ old('image_url', $blog->image) }}"
-                               placeholder="https://... or images/har-ki-pauri-temples.jpg"
+                               placeholder="https://... or images/haridwar-temples.jpg"
                                class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600" />
                     </div>
 

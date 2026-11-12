@@ -73,7 +73,7 @@
             </div>
 
             <!-- Title -->
-            <h3 class="font-serif italic font-bold text-xs sm:text-sm leading-snug line-clamp-2 mb-1">
+            <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#881337] leading-snug line-clamp-2 mb-1">
                 <a href="{{ route('products.show', $product->slug) }}" class="text-[#881337] group-hover:text-[#D97706] hover:text-[#D97706] transition block">
                     {{ $product->name }}
                 </a>

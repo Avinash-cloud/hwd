@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         SiteSetting::set('guest_checkout_enabled', '1', 'Enable guest checkout for non-logged-in customers');
         SiteSetting::set('support_phone', '+91 7042482555', 'Customer care phone');
         SiteSetting::set('support_email', 'sdenterprisesghaziabad@gmail.com', 'Customer care email');
-        SiteSetting::set('ghat_location_default', 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand', 'Default holy collection ghat');
+        SiteSetting::set('ghat_location_default', 'Sacred Ganga Ghat, Haridwar, Uttarakhand', 'Default holy collection ghat');
 
         // 2. Users
         $admin = User::firstOrCreate(
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
         $batch1 = Batch::firstOrCreate(
             ['batch_number' => 'HB-GANG-2026-001'],
             [
-                'sourcing_ghat' => 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand',
+                'sourcing_ghat' => 'Sacred Ganga Ghat, Haridwar, Uttarakhand',
                 'collection_date' => now()->subDays(15),
                 'packaging_date' => now()->subDays(13),
                 'description' => 'Sacred morning collection during Brahma Muhurta Ganga Aarti under continuous Vedic chanting.',
@@ -118,7 +118,7 @@ class DatabaseSeeder extends Seeder
         $batch2 = Batch::firstOrCreate(
             ['batch_number' => 'HB-GANG-2026-002'],
             [
-                'sourcing_ghat' => 'Har Ki Pauri, Brahmakund, Haridwar, Uttarakhand',
+                'sourcing_ghat' => 'Sacred Ganga Ghat, Haridwar, Uttarakhand',
                 'collection_date' => now()->subDays(5),
                 'packaging_date' => now()->subDays(3),
                 'description' => 'Evening Ganga Aarti auspicious batch collected during Sandhya Deepotsav.',
@@ -162,8 +162,8 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sacred Gangajal',
                 'slug' => 'sacred-gangajal',
-                'description' => 'Untouched, hermetically sealed holy water from Brahmakund at Har Ki Pauri with batch traceability QR codes.',
-                'image' => '/images/har-ki-pauri-temples.jpg',
+                'description' => 'Untouched, hermetically sealed holy water from sacred Haridwar ghats with batch traceability QR codes.',
+                'image' => '/images/haridwar-temples.jpg',
                 'icon' => '🌊',
                 'is_featured' => true,
                 'sort_order' => 3,
@@ -383,10 +383,10 @@ class DatabaseSeeder extends Seeder
             // SACRED GANGAJAL (USP Products)
             [
                 'category_slug' => 'sacred-gangajal',
-                'name' => 'Pure Brahmakund Gangajal (500ml Sacred Hermetic Bottle)',
-                'slug' => 'pure-brahmakund-gangajal-500ml',
-                'short_description' => '100% untouched holy water from Har Ki Pauri with batch QR verification.',
-                'description' => "Experience the divine sanctity of Maa Ganga at home. Sourced straight from the sacred Brahmakund at Har Ki Pauri during the auspicious Brahma Muhurta morning Aarti.\n\nIncluded FREE every month for 5-Year Haridwar Bliss members!",
+                'name' => 'Pure Haridwar Gangajal (500ml Sacred Hermetic Bottle)',
+                'slug' => 'pure-haridwar-gangajal-500ml',
+                'short_description' => '100% untouched holy water from sacred Haridwar with batch QR verification.',
+                'description' => "Experience the divine sanctity of Maa Ganga at home. Sourced straight from sacred Haridwar ghats during the auspicious Brahma Muhurta morning Aarti.\n\nIncluded FREE every month for 5-Year Haridwar Bliss members!",
                 'price' => 149.00,
                 'compare_price' => 199.00,
                 'member_price' => 0.00, // 1st bottle free for members!
@@ -399,30 +399,30 @@ class DatabaseSeeder extends Seeder
                 'stock' => 500,
                 'sku' => 'HB-GJ-500',
                 'image' => '/images/ganga-holy-waters.jpg',
-                'purity_details' => 'Sourced from Brahmakund, Haridwar. Lab Tested: pH 7.8, Zero microbial contamination, rich in natural Himalayan minerals.',
-                'specifications' => ['Origin' => 'Brahmakund, Haridwar', 'Volume' => '500 ml', 'Packaging' => 'Hermetically Sealed Glass Container'],
+                'purity_details' => 'Sourced from sacred Haridwar ghats. Lab Tested: pH 7.8, Zero microbial contamination, rich in natural Himalayan minerals.',
+                'specifications' => ['Origin' => 'Sacred Haridwar', 'Volume' => '500 ml', 'Packaging' => 'Hermetically Sealed Glass Container'],
                 'is_bestseller' => true,
                 'is_featured' => true,
             ],
             [
                 'category_slug' => 'sacred-gangajal',
-                'name' => 'Pure Brahmakund Gangajal 1 Litre — Handcrafted Copper Kalash Edition',
+                'name' => 'Pure Haridwar Gangajal 1 Litre — Handcrafted Copper Kalash Edition',
                 'slug' => 'pure-gangajal-1l-copper-cask',
                 'short_description' => 'Sacred holy Ganga water delivered inside a consecrated pure copper puja kalash.',
-                'description' => 'Combining the supreme spiritual holiness of Brahmakund Gangajal with the Ayurvedic and therapeutic virtues of pure Tamra (copper). Perfect for your home mandir and Shiva Abhishek.',
+                'description' => 'Combining the supreme spiritual holiness of Haridwar Gangajal with the Ayurvedic and therapeutic virtues of pure Tamra (copper). Perfect for your home mandir and Shiva Abhishek.',
                 'price' => 399.00,
                 'compare_price' => 599.00,
                 'member_price' => 299.00,
                 'rating' => 4.96,
                 'reviews_count' => 95,
-                'badge' => 'Copper Sanctum',
+                'badge' => 'Copper Edition',
                 'is_gangajal' => true,
                 'batch_id' => $batch2->id,
                 'volume_ml' => 1000,
                 'stock' => 120,
                 'sku' => 'HB-GJ-1000-CU',
-                'image' => '/images/brahmakund-ghat-shrines.jpg',
-                'purity_details' => '100% authentic Brahmakund water enriched inside an engraved pure copper vessel.',
+                'image' => '/images/haridwar-ghat-shrines.jpg',
+                'purity_details' => '100% authentic Haridwar water enriched inside an engraved pure copper vessel.',
                 'specifications' => ['Volume' => '1000 ml', 'Vessel' => '100% Pure Embossed Copper', 'Batch Traceability' => 'Verified on QR Portal'],
                 'is_bestseller' => true,
                 'is_featured' => true,
@@ -473,7 +473,7 @@ class DatabaseSeeder extends Seeder
                 'category_slug' => 'spiritual-items',
                 'name' => 'Consecrated 5-Mukhi Indonesian Rudraksha Japa Mala (108+1 Beads)',
                 'slug' => 'consecrated-5-mukhi-rudraksha-mala',
-                'short_description' => 'Purified in Brahmakund Gangajal at Har Ki Pauri with red knotted tassel.',
+                'short_description' => 'Purified in sacred Haridwar Gangajal with red knotted tassel.',
                 'description' => 'Authentic five-faced Rudraksha beads strung in traditional knotted thread. Blessed at the holy ghats of Haridwar for clarity of mind, cardiovascular wellness, and Japa meditation.',
                 'price' => 499.00,
                 'compare_price' => 899.00,
@@ -533,7 +533,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Complete Daily Griha Puja & Sandhya Aarti Box (18 Sacred Essentials)',
                 'slug' => 'complete-daily-griha-puja-kit',
                 'short_description' => 'All-in-one divine worship kit containing batti, ghee, Gangajal, chandan, dhoop, and roli.',
-                'description' => 'Takes away the hassle of finding separate puja ingredients. Contains certified pure Brahmakund Gangajal, desi cow ghee, kumkum, chandan, akshat, cotton wicks, dhoop cups, and camphor.',
+                'description' => 'Takes away the hassle of finding separate puja ingredients. Contains certified pure Haridwar Gangajal, desi cow ghee, kumkum, chandan, akshat, cotton wicks, dhoop cups, and camphor.',
                 'price' => 599.00,
                 'compare_price' => 999.00,
                 'member_price' => 499.00,
@@ -552,7 +552,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Maha Shivaratri & Rudra Abhishek Special Kit with Sacred Bilva Patra',
                 'slug' => 'maha-shivaratri-rudra-abhishek-kit',
                 'short_description' => 'Dedicated kit for Shiva Abhishek with Gangajal, Bhasma, Sandalwood, and Panchamrut cups.',
-                'description' => 'Prepared in consultation with senior Har Ki Pauri temple priests. Contains holy water straight from Brahmakund, pure Vibhuti bhasma, organic bilva powder, and honey.',
+                'description' => 'Prepared in consultation with senior Haridwar temple priests. Contains holy water straight from sacred Haridwar ghats, pure Vibhuti bhasma, organic bilva powder, and honey.',
                 'price' => 699.00,
                 'compare_price' => 1199.00,
                 'member_price' => 549.00,
@@ -572,7 +572,7 @@ class DatabaseSeeder extends Seeder
                 'category_slug' => 'brass-pooja-ware',
                 'name' => 'Handcrafted Brass Panchamukhi Aarti Diya with Peacock Handle',
                 'slug' => 'handcrafted-panchamukhi-brass-aarti-diya',
-                'short_description' => 'Solid brass five-faced Aarti lamp crafted after Har Ki Pauri priests’ lamps.',
+                'short_description' => 'Solid brass five-faced Aarti lamp crafted after Haridwar temple priests’ lamps.',
                 'description' => 'Cast in solid pure virgin brass with a heavy ergonomic handle. Designed for performing the traditional five-element Aarti worship during morning and evening prayers.',
                 'price' => 499.00,
                 'compare_price' => 749.00,

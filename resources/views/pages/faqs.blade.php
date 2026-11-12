@@ -19,7 +19,7 @@
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
                 The membership is a one-time sacred subscription of ₹{{ number_format($membershipFee) }} that gives your
-                family 5 full years (60 months) of direct access to consecrated Brahmakund holy water. Each month, your
+                family 5 full years (60 months) of direct access to consecrated Haridwar holy water. Each month, your
                 first bottle of Gangajal is provided at <strong>₹0 product price</strong>, and you pay only the flat
                 shipping delivery fee of ₹{{ number_format($shippingRate) }}.
             </p>
@@ -40,7 +40,7 @@
         <div class="bg-white rounded-2xl border border-amber-200 p-6 shadow-xs space-y-2">
             <h3 class="font-serif font-bold text-base text-slate-900">3. Can non-members buy products?</h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                Non-members are welcome to browse our entire catalog, inspect lab test reports, and view Brahmakund
+                Non-members are welcome to browse our entire catalog, inspect lab test reports, and view Haridwar
                 Aarti recordings. However, as per our sanctification guidelines and client SOW, ordering sacred
                 offerings is restricted exclusively to active members to preserve sacred accountability and priority
                 logistics.
@@ -52,7 +52,7 @@
                 bottle?</h3>
             <p class="text-xs text-slate-600 leading-relaxed">
                 Every bottle dispatched has a unique QR code on its label and tax invoice. Scan it with any smartphone
-                to view the exact date and Brahma Muhurta hour the batch was filled at Har Ki Pauri, the laboratory
+                to view the exact date and Brahma Muhurta hour the batch was filled at Haridwar Ganga Ghats, the laboratory
                 mineral assay certificate, and the consecration Aarti video.
             </p>
         </div>

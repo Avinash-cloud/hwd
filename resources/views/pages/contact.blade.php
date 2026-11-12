@@ -17,7 +17,7 @@
             <!-- Contact Info & Map Details -->
             <div class="space-y-8">
                 <div class="bg-white rounded-3xl border border-amber-200/80 p-8 shadow-xs space-y-6">
-                    <h2 class="text-xl font-serif font-bold text-slate-900">Headquarters & Holy Sourcing Sanctum</h2>
+                    <h2 class="text-xl font-serif font-bold text-slate-900">Headquarters & Holy Sourcing Location</h2>
 
                     <div class="space-y-4 text-xs">
                         <div class="flex items-start gap-3">
@@ -32,7 +32,7 @@
                                 <p class="text-slate-700 mt-0.5 font-medium">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>
                                 <p class="text-[11px] text-slate-500 font-mono">CIN: U11040UT2025PTC019429</p>
                                 <p class="text-slate-600 text-xs mt-1">G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403, India</p>
-                                <p class="text-[11px] text-amber-800 font-semibold mt-1">Holy Collection Sanctum: Brahmakund Ghat, Har Ki Pauri, Haridwar</p>
+                                <p class="text-[11px] text-amber-800 font-semibold mt-1">Holy Collection Location: Sacred Ganga Ghats, Haridwar, Uttarakhand</p>
                             </div>
                         </div>
 
@@ -63,26 +63,26 @@
                     </div>
                 </div>
 
-                <!-- Har Ki Pauri Map Embed Visual -->
+                <!-- Haridwar Map Embed Visual -->
                 <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 text-white text-center space-y-3">
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
                         <span class="inline-flex items-center gap-1.5 font-bold text-[#D97706] font-mono">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             </svg>
-                            <span>Sourcing Sanctum Visual Reference</span>
+                            <span>Sourcing Location Visual Reference</span>
                         </span>
-                        <span class="text-slate-400 text-[11px]">Brahmakund: 29.9567° N, 78.1708° E</span>
+                        <span class="text-slate-400 text-[11px]">Haridwar: 29.9567° N, 78.1708° E</span>
                     </div>
                     <div class="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-700 group shadow-md">
                         <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-                             alt="Har Ki Pauri Haridwar"
+                             alt="Sacred Haridwar Ganga Ghats"
                              class="w-full h-full object-cover transition transform duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent flex flex-col justify-end p-4 text-center">
-                            <p class="font-serif font-bold text-base text-amber-300">Har Ki Pauri, Brahmakund</p>
+                            <p class="font-serif font-bold text-base text-amber-300">Sacred Ganga Ghats</p>
                             <p class="text-xs text-slate-300 mt-0.5">Haridwar, Uttarakhand, India</p>
                             <div>
-                                <a href="https://maps.google.com/?q=Har+Ki+Pauri+Haridwar" target="_blank"
+                                <a href="https://maps.google.com/?q=Haridwar+Uttarakhand" target="_blank"
                                     class="mt-2.5 inline-block px-4 py-1.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-xs transition shadow-md">
                                     Open in Google Maps ↗
                                 </a>

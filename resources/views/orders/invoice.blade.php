@@ -60,7 +60,7 @@
                 </div>
                 <div class="text-right text-[11px] text-slate-600">
                     <span>Corporate Identity: <strong class="font-mono text-slate-800">U11040UT2025PTC019429</strong></span><br>
-                    <span>Sourcing Sanctum: <strong class="text-slate-800">{{ $order->batch?->sourcing_ghat ?? 'Brahmakund, Har Ki Pauri' }}</strong></span>
+                    <span>Sourcing Ghat: <strong class="text-slate-800">{{ $order->batch?->sourcing_ghat ?? 'Sacred Ganga Ghat, Haridwar' }}</strong></span>
                 </div>
             </div>
 
@@ -81,7 +81,7 @@
                     <div class="text-right space-y-1">
                         <h3 class="font-bold text-slate-400 uppercase tracking-wider text-[10px] mb-2">Batch Traceability QR</h3>
                         <p class="text-slate-500 text-[11px]">Batch: <strong class="text-slate-900 font-mono">{{ $order->batch?->batch_number ?? 'HB-GANG-001' }}</strong></p>
-                        <p class="text-slate-500 text-[11px]">Ghat: <strong class="text-slate-900">{{ $order->batch?->sourcing_ghat ?? 'Brahmakund, Har Ki Pauri' }}</strong></p>
+                        <p class="text-slate-500 text-[11px]">Ghat: <strong class="text-slate-900">{{ $order->batch?->sourcing_ghat ?? 'Sacred Ganga Ghat, Haridwar' }}</strong></p>
                         <p class="text-[10px] text-[#0369A1] font-bold">Scan QR for Lab Purity Verification →</p>
                     </div>
                     <div class="w-20 h-20 p-1 border border-slate-300 rounded-lg shrink-0 flex items-center justify-center">
