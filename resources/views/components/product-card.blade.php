@@ -73,7 +73,7 @@
             </div>
 
             <!-- Title -->
-            <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#701A28] leading-snug line-clamp-2 group-hover:text-[#D97706] transition mb-1">
+            <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#881337] leading-snug line-clamp-2 group-hover:text-[#D97706] transition mb-1">
                 <a href="{{ route('products.show', $product->slug) }}">
                     {{ $product->name }}
                 </a>
@@ -106,7 +106,7 @@
                 <!-- Price Display -->
                 <div class="flex flex-col min-w-0">
                     <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
-                        <span class="font-extrabold text-sm sm:text-base text-[#701A28] whitespace-nowrap">
+                        <span class="font-extrabold text-sm sm:text-base text-[#881337] whitespace-nowrap">
                             ₹{{ number_format($product->price, 0) }}
                         </span>
                         @if ($product->compare_price && $product->compare_price > $product->price)
@@ -126,7 +126,7 @@
                 <button type="button"
                         @click="addToCart()"
                         :disabled="adding"
-                        class="shrink-0 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-amber-50 hover:bg-[#D97706] text-[#D97706] hover:text-white border border-amber-300 hover:border-[#D97706] rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-50 whitespace-nowrap">
+                        class="shrink-0 inline-flex items-center justify-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-[#881337] hover:bg-[#9F1239] text-white border border-[#881337] rounded-xl text-xs font-bold transition shadow-xs disabled:opacity-50 whitespace-nowrap">
                     <template x-if="!adding">
                         <span class="inline-flex items-center gap-1">
                             <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -104,15 +104,15 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- Privileges Card -->
                 <div class="bg-white rounded-3xl border border-[#D97706]/20 p-8 shadow-xs space-y-6">
-                    <h2 class="text-2xl font-serif font-bold text-[#701A28]">Exclusive 5-Year Membership Benefits</h2>
+                    <h2 class="text-2xl font-serif font-bold text-[#881337]">Exclusive 5-Year Membership Benefits</h2>
 
                     <div class="space-y-4">
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#701A28] flex items-center justify-center shrink-0 font-bold">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
                                 1
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#701A28] text-base">Free Monthly Sacred Gangajal Bottle</h3>
+                                <h3 class="font-bold text-[#881337] text-base">Free Monthly Sacred Gangajal Bottle</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
                                     Each month, your first 500ml Brahmakund Gangajal bottle carries a <strong>₹0 product
                                     price</strong> (only a flat delivery fee of ₹{{ number_format($shippingRate) }} applies).
@@ -121,11 +121,11 @@
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#701A28] flex items-center justify-center shrink-0 font-bold">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
                                 2
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#701A28] text-base">5 Full Years of Validity (60 Months)</h3>
+                                <h3 class="font-bold text-[#881337] text-base">5 Full Years of Validity (60 Months)</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
                                     No recurring annual fees or monthly renewal charges. A single one-time contribution
                                     of ₹{{ number_format($membershipFee) }} covers your membership status for 5 years.
@@ -134,11 +134,11 @@
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#701A28] flex items-center justify-center shrink-0 font-bold">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
                                 3
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#701A28] text-base">Unbroken Batch Purity Verification</h3>
+                                <h3 class="font-bold text-[#881337] text-base">Unbroken Batch Purity Verification</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
                                     Every dispatched bottle includes a scannable QR code encoding the exact collection
                                     timestamp at Har Ki Pauri, Aarti video link, and laboratory test report.
@@ -147,11 +147,11 @@
                         </div>
 
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#701A28] flex items-center justify-center shrink-0 font-bold">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
                                 4
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#701A28] text-base">Member-Exclusive Pricing on Pooja Ware</h3>
+                                <h3 class="font-bold text-[#881337] text-base">Member-Exclusive Pricing on Pooja Ware</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
                                     Enjoy preferred member discounts on handcrafted brass diyas, pure copper kalash
                                     vessels, and natural temple dhoop sticks.
@@ -163,7 +163,7 @@
 
                 <!-- Terms & Transparency -->
                 <div class="bg-[#FFFDF7] rounded-3xl border border-[#D97706]/20 p-6 space-y-3 text-xs text-[#3B2314]/85">
-                    <h4 class="font-serif font-bold text-[#701A28] text-sm">Devotee Guarantee & Transparency</h4>
+                    <h4 class="font-serif font-bold text-[#881337] text-sm">Devotee Guarantee & Transparency</h4>
                     <p>
                         • <strong>Delivery Schedule:</strong> Once subscribed, you can claim your monthly bottle at any
                         time from your member portal, shipped directly via Shiprocket.
@@ -188,7 +188,7 @@
                     <div class="text-center pb-6 border-b border-amber-100">
                         <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">One-Time Contribution</span>
                         <div class="mt-2 flex items-baseline justify-center gap-1">
-                            <span class="text-4xl font-extrabold font-serif text-[#701A28]">₹{{ number_format($membershipFee) }}</span>
+                            <span class="text-4xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>
                             <span class="text-xs font-bold text-stone-600">/ 5 Years</span>
                         </div>
                         <span class="inline-block mt-2 text-[11px] font-semibold text-[#0369A1] bg-[#0369A1]/10 border border-[#0369A1]/30 px-3 py-0.5 rounded-full">
@@ -204,7 +204,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
-                                <h4 class="font-serif font-bold text-base text-[#701A28]">You Are Already a Sacred Member!</h4>
+                                <h4 class="font-serif font-bold text-base text-[#881337]">You Are Already a Sacred Member!</h4>
                                 <p class="text-xs text-slate-500">
                                     Your 5-Year Membership is currently active. You can claim your monthly Gangajal bottle right now.
                                 </p>
@@ -320,7 +320,7 @@
             <div @click.away="termsModalOpen = false"
                  class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-left space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-amber-200">
-                    <h3 class="font-serif font-bold text-lg text-[#701A28]">Haridwar Bliss 5-Year Membership Terms & Conditions</h3>
+                    <h3 class="font-serif font-bold text-lg text-[#881337]">Haridwar Bliss 5-Year Membership Terms & Conditions</h3>
                     <button type="button" @click="termsModalOpen = false" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
                 </div>
 

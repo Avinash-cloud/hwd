@@ -57,7 +57,7 @@
                     <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0">
                         <!-- <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" /> -->
                         <div class="leading-tight min-w-0">
-                            <span class="block font-serif font-extrabold italic text-base sm:text-2xl text-[#701A28] tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#881337] transition truncate">
+                            <span class="block font-serif font-extrabold italic text-base sm:text-2xl text-[#881337] tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#9F1239] transition truncate">
                                 BluBliss
                             </span>
                             <span class="hidden sm:block text-[9px] font-bold tracking-widest text-[#B45309] uppercase">
@@ -122,12 +122,12 @@
                                                 <span x-text="item.rating"></span>
                                             </span>
                                         </div>
-                                        <h6 class="text-xs font-bold text-[#701A28] truncate group-hover:text-[#D97706] transition"
+                                        <h6 class="text-xs font-bold text-[#881337] truncate group-hover:text-[#D97706] transition"
                                             x-text="item.name"></h6>
                                         <div class="flex items-center gap-2 mt-0.5">
                                             <template x-if="item.in_stock">
                                                 <div class="flex items-center gap-2">
-                                                    <span class="text-xs font-extrabold text-[#701A28]" x-text="'₹' + item.price"></span>
+                                                    <span class="text-xs font-extrabold text-[#881337]" x-text="'₹' + item.price"></span>
                                                     <template x-if="item.compare_price">
                                                         <span class="text-[10px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
                                                     </template>
@@ -208,7 +208,7 @@
                                  x-transition:leave-end="opacity-0 translate-y-1 scale-95"
                                  class="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-amber-200/80 py-1.5 z-50 text-xs">
                                 <div class="px-4 py-2.5 border-b border-slate-100 bg-amber-50/40 rounded-t-2xl">
-                                    <p class="font-bold text-[#701A28] truncate">{{ Auth::user()->name }}</p>
+                                    <p class="font-bold text-[#881337] truncate">{{ Auth::user()->name }}</p>
                                     <p class="text-[11px] text-slate-500 truncate">{{ Auth::user()->email }}</p>
                                 </div>
                                 <div class="py-1">
@@ -251,10 +251,10 @@
                     @endphp
                     <button type="button"
                             @click="$dispatch('open-cart-drawer')"
-                            class="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[#701A28] rounded-xl transition shadow-xs group touch-manipulation"
+                            class="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-[#881337] rounded-xl transition shadow-xs group touch-manipulation"
                             aria-label="Shopping Cart">
                         <div class="relative">
-                            <svg class="w-5 h-5 text-[#701A28] group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-5 h-5 text-[#881337] group-hover:text-[#D97706] transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                       d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                             </svg>
@@ -414,7 +414,7 @@
          x-transition
          class="lg:hidden bg-white border-b border-amber-200 divide-y divide-slate-100 text-sm">
         <div class="p-4 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-[#701A28] hover:bg-amber-50">
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50">
                 Home
             </a>
             @if (isset($navCategories))
@@ -445,7 +445,7 @@
                     </div>
                 @endforeach
             @endif
-            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-[#701A28] hover:bg-amber-50">
+            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50">
                 All Products Catalog
             </a>
             <a href="{{ route('blogs.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">

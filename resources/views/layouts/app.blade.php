@@ -25,7 +25,7 @@
 </head>
 
 <body
-    class="font-sans text-[#3B2314] antialiased bg-[#FFFDF7] min-h-full flex flex-col selection:bg-[#D97706] selection:text-white overflow-x-hidden w-full max-w-full">
+    class="font-sans text-white antialiased bg-[#F97316] min-h-full flex flex-col selection:bg-[#881337] selection:text-white overflow-x-hidden w-full max-w-full">
     @include('layouts.navigation')
 
     <!-- Flash Messages -->
