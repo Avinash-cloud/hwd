@@ -132,13 +132,39 @@ class DatabaseSeeder extends Seeder
         // 6. Categories (Inspired by 99Pandit with Parent & Child hierarchy)
         $categoriesData = [
             [
+                'name' => 'Sacred Gangajal',
+                'slug' => 'sacred-gangajal',
+                'description' => 'Untouched, hermetically sealed holy water from sacred Haridwar ghats with batch traceability QR codes.',
+                'image' => '/images/haridwar-temples.jpg',
+                'icon' => '🌊',
+                'is_featured' => true,
+                'sort_order' => 1,
+                'children' => [
+                    ['name' => 'Consecrated Bottles', 'slug' => 'gangajal-bottles', 'sort_order' => 1],
+                    ['name' => 'Copper & Brass Urns', 'slug' => 'gangajal-urns', 'sort_order' => 2],
+                ],
+            ],
+            [
+                'name' => 'Festival & Pooja Kit',
+                'slug' => 'puja-kits',
+                'description' => 'Comprehensive Vedic ritual boxes and festival-ready holy hampers.',
+                'image' => '/images/products/rudrabhishek-puja-kit.jpg',
+                'icon' => '🎁',
+                'is_featured' => true,
+                'sort_order' => 2,
+                'children' => [
+                    ['name' => 'Daily Worship Boxes', 'slug' => 'daily-kits', 'sort_order' => 1],
+                    ['name' => 'Festival Special Kits', 'slug' => 'festive-combos', 'sort_order' => 2],
+                ],
+            ],
+            [
                 'name' => 'Puja Essentials',
                 'slug' => 'puja-essentials',
                 'description' => 'Pure cotton batti, organic puja ghee, kalash, and sacred altar supplies.',
                 'image' => '/images/products/ghee-diya-batti.jpg',
                 'icon' => '🪔',
                 'is_featured' => true,
-                'sort_order' => 1,
+                'sort_order' => 3,
                 'children' => [
                     ['name' => 'Diya Batti & Wicks', 'slug' => 'diya-batti', 'sort_order' => 1],
                     ['name' => 'Puja Ghee & Camphor', 'slug' => 'puja-ghee', 'sort_order' => 2],
@@ -152,24 +178,11 @@ class DatabaseSeeder extends Seeder
                 'image' => '/images/products/hawan-cups.jpg',
                 'icon' => '🔥',
                 'is_featured' => true,
-                'sort_order' => 2,
+                'sort_order' => 4,
                 'children' => [
                     ['name' => 'Hawan Cups', 'slug' => 'hawan-cups', 'sort_order' => 1],
                     ['name' => 'Sambrani & Loban', 'slug' => 'sambrani-cup', 'sort_order' => 2],
                     ['name' => 'Organic Hawan Wood & Samagri', 'slug' => 'organic-samagri', 'sort_order' => 3],
-                ],
-            ],
-            [
-                'name' => 'Sacred Gangajal',
-                'slug' => 'sacred-gangajal',
-                'description' => 'Untouched, hermetically sealed holy water from sacred Haridwar ghats with batch traceability QR codes.',
-                'image' => '/images/haridwar-temples.jpg',
-                'icon' => '🌊',
-                'is_featured' => true,
-                'sort_order' => 3,
-                'children' => [
-                    ['name' => 'Consecrated Bottles', 'slug' => 'gangajal-bottles', 'sort_order' => 1],
-                    ['name' => 'Copper & Brass Urns', 'slug' => 'gangajal-urns', 'sort_order' => 2],
                 ],
             ],
             [
@@ -179,7 +192,7 @@ class DatabaseSeeder extends Seeder
                 'image' => '/images/products/dhoop-incense.jpg',
                 'icon' => '🌸',
                 'is_featured' => true,
-                'sort_order' => 4,
+                'sort_order' => 5,
                 'children' => [
                     ['name' => 'Bamboo-Less Dhoop', 'slug' => 'bamboo-less-dhoop', 'sort_order' => 1],
                     ['name' => 'Sandalwood & Kasturi Cones', 'slug' => 'dhoop-cones', 'sort_order' => 2],
@@ -192,24 +205,11 @@ class DatabaseSeeder extends Seeder
                 'image' => '/images/products/rudraksha-mala.jpg',
                 'icon' => '📿',
                 'is_featured' => true,
-                'sort_order' => 5,
+                'sort_order' => 6,
                 'children' => [
                     ['name' => 'Rudraksha Beads', 'slug' => 'rudraksha', 'sort_order' => 1],
                     ['name' => 'Japa Malas & Kanthi', 'slug' => 'japa-malas', 'sort_order' => 2],
                     ['name' => 'Energized Yantras', 'slug' => 'yantras', 'sort_order' => 3],
-                ],
-            ],
-            [
-                'name' => 'Festive & Puja Kits',
-                'slug' => 'puja-kits',
-                'description' => 'Comprehensive Vedic ritual boxes and festival-ready holy hampers.',
-                'image' => '/images/products/rudrabhishek-puja-kit.jpg',
-                'icon' => '🎁',
-                'is_featured' => true,
-                'sort_order' => 6,
-                'children' => [
-                    ['name' => 'Daily Worship Boxes', 'slug' => 'daily-kits', 'sort_order' => 1],
-                    ['name' => 'Festival Special Kits', 'slug' => 'festive-combos', 'sort_order' => 2],
                 ],
             ],
             [

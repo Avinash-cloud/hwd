@@ -187,12 +187,12 @@
                     <span class="font-serif tracking-normal sm:tracking-wider font-extrabold whitespace-nowrap">ॐ हर हर गंगे · नमामि गंगे तव पादपंकजम्</span>
                 </div>
                 <div class="w-full flex justify-center">
-                    <h2 class="inline-block whitespace-nowrap text-[11px] min-[360px]:text-[13px] min-[400px]:text-[15px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-3 min-[360px]:px-4 sm:px-8 py-1.5 min-[360px]:py-2 sm:py-3.5 rounded-full sm:rounded-3xl shadow-xl tracking-tight leading-tight max-w-full">
-                        Pure Haridwar Holy Gangajal
+                    <h2 class="inline-block whitespace-nowrap text-[11px] min-[360px]:text-[13px] min-[400px]:text-[15px] sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-3 min-[360px]:px-4 sm:px-8 py-1.5 min-[360px]:py-2 sm:py-3.5 rounded-full sm:rounded-3xl shadow-xl tracking-tight leading-tight max-w-full text-wrap">
+                       Uninterrupted Flow of Purity and Faith  <br> Now Delivered Straight to <br> Your Doorstep Every Month
                     </h2>
                 </div>
                 <p class="text-xs sm:text-sm text-white font-semibold mt-4 max-w-2xl mx-auto leading-relaxed drop-shadow-2xs">
-                    Collected directly from the sacred Ganga in Haridwar during auspicious Brahma Muhurta (04:45 AM) morning Ganga Aarti. 100% untouched by human hands with verifiable batch QR video traceability.
+                    Understanding the vital role of pure Gangajal in daily prayers and rituals, 'Blu Bliss' introduces a unique and convenient Membership Plan. By joining this plan, you ensure that you never run out of Gangajal for your rituals and worship at home.
                 </p>
 
                 <!-- 4 Sacred Purity Pillars Micro-Row -->
@@ -278,12 +278,14 @@
                     <span>🌟 Haridwar Bliss 5-Year Devotee Circle · Household Privilege</span>
                 </span>
                 <div>
-                    <h2 class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight">
-                        Receive Fresh Consecrated Gangajal at Your Doorstep Every Single Month
+                    <h2 class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                        Uninterrupted Flow of Purity and Faith <br> 
+                        Now Delivered Straight to <br> Your Doorstep Every Month!
+
                     </h2>
                 </div>
                 <p class="text-xs sm:text-base text-white font-medium leading-relaxed mt-3.5 max-w-2xl mx-auto drop-shadow-2xs">
-                    Never worry about holy water for daily morning puja or abhishek. For a single one-time contribution of ₹{{ number_format($membershipFee) }} valid for 5 full years (60 months), receive 1 free 500ml bottle of authentic Haridwar Gangajal every month directly from sacred Haridwar.
+                    Understanding the vital role of pure Gangajal in daily prayers and rituals, 'Blu Bliss' introduces a unique and convenient Membership Plan. By joining this plan, you ensure that you never run out of Gangajal for your rituals and worship at home.
                 </p>
             </div>
 
@@ -310,9 +312,9 @@
                                         🪷
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-white text-sm">60 Free Gangajal Bottles</h4>
+                                        <h4 class="font-bold text-white text-sm">A Monthly Blessing from the Holy Ganges</h4>
                                         <p class="text-amber-100 mt-1 leading-relaxed text-[11px]">
-                                            1 free 500ml bottle every 30 days (₹0 product price; nominal delivery applies). <strong class="text-[#FDE68A]">Real Market Value: ₹8,940+</strong>.
+                                           Receive a sacred 500ml bottle of authentic Haridwar Gangajal delivered directly to your home every month. Pay only a nominal shipping token of devotion.
                                         </p>
                                     </div>
                                 </div>
@@ -325,9 +327,9 @@
                                         🏷️
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-white text-sm">Member-Only Catalog Discounts</h4>
+                                        <h4 class="font-bold text-white text-sm">Sanctified Ritual Essentials</h4>
                                         <p class="text-amber-100 mt-1 leading-relaxed text-[11px]">
-                                            Save 15% to 20% on all handcrafted brassware, dhoop, and hawan samagri. <strong class="text-[#FDE68A]">Estimated Savings: ₹2,500+</strong>.
+                                            Enjoy exclusive devotee privileges with 15% to 20% off pure, handcrafted brassware, sacred dhoop, and authentic hawan samagri to elevate your daily worship.
                                         </p>
                                     </div>
                                 </div>
@@ -340,9 +342,9 @@
                                         ⚡
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-white text-sm">Priority Festive Dispatch</h4>
+                                        <h4 class="font-bold text-white text-sm">Uninterrupted Festival Blessings</h4>
                                         <p class="text-amber-100 mt-1 leading-relaxed text-[11px]">
-                                            Guaranteed priority shipping during Maha Shivratri, Ganga Dussehra, Navratri, Shravan Maas & Diwali.
+                                            Rest assured your sacred home celebrations are prioritized with guaranteed fast-track dispatch during holy periods like Maha Shivratri, Navratri, and Diwali.
                                         </p>
                                     </div>
                                 </div>
@@ -444,15 +446,15 @@
             <div class="text-center mb-8 sm:mb-10">
                 <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
-                    <span class="font-serif tracking-wider font-extrabold uppercase">Consecrated Collections & Puja Essentials</span>
+                    <span class="font-serif tracking-wider font-extrabold uppercase">DIVINE TREASURY OF SACRED OFFERINGS  </span>
                 </div>
                 <div class="w-full flex justify-center">
                     <h2 class="inline-block text-base sm:text-2xl md:text-3xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2 sm:py-2.5 rounded-full shadow-xl tracking-tight leading-tight">
-                        Sacred Collections
+                       Enter the Sacred Sanctum  
                     </h2>
                 </div>
                 <p class="text-xs sm:text-sm text-white font-semibold mt-3 max-w-xl mx-auto leading-relaxed drop-shadow-2xs">
-                    Select an auspicious category to discover consecrated offerings & daily pooja essentials
+                   Immerse your daily worship and home temple in pure, energized grace with consecrated treasures and divine puja essentials.
                 </p>
             </div>
 

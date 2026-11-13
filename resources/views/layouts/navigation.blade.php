@@ -163,19 +163,19 @@
                         @if (Auth::user()->hasActiveMembership())
                             <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#D97706]/15 text-[#881337] border border-[#D97706]/40 hover:bg-[#D97706]/25 transition">
                                 <span class="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></span>
-                                <span>🌟 5-Yr Devotee Pass (Active)</span>
+                                <span>🌟 5 years Blu Bliss Gangajal Membership (Active)</span>
                             </a>
                         @else
                             <a href="{{ route('membership.join') }}"
                                class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-[#881337] via-[#991B1B] to-[#D97706] text-white hover:brightness-110 transition shadow-md shadow-amber-900/20 transform hover:-translate-y-0.5 animate-pulse">
-                                <span>🌟 5-Yr Devotee Pass</span>
+                                <span>🌟 5 years Blu Bliss Gangajal Membership</span>
                                 <span class="hidden md:inline text-amber-200 text-[11px] font-semibold">· Free Monthly Gangajal</span>
                             </a>
                         @endif
                     @else
                         <a href="{{ route('membership.join') }}"
                            class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-[#881337] via-[#991B1B] to-[#D97706] text-white hover:brightness-110 transition shadow-md shadow-amber-900/20 transform hover:-translate-y-0.5 animate-pulse">
-                            <span>🌟 5-Yr Devotee Pass</span>
+                            <span>🌟 5 years Blu Bliss Gangajal Membership </span>
                             <span class="hidden md:inline text-amber-200 text-[11px] font-semibold">· Free Monthly Gangajal</span>
                         </a>
                     @endauth
@@ -285,122 +285,213 @@
     </div>
 
     <!-- 3. Category Horizontal Navigation Menu (Single Line, 99Pandit Style) -->
+    @php
+        $catsBySlug = isset($navCategories) ? $navCategories->keyBy('slug') : collect();
+        $gangajalCat = $catsBySlug->get('sacred-gangajal');
+        $kitsCat = $catsBySlug->get('puja-kits');
+        $essentialsCat = $catsBySlug->get('puja-essentials');
+        $prioritySlugs = ['sacred-gangajal', 'puja-kits', 'puja-essentials'];
+        $otherCats = isset($navCategories) ? $navCategories->reject(fn($c) => in_array($c->slug, $prioritySlugs)) : collect();
+
+        $currentCat = request()->get('category');
+        $isGangajalActive = $currentCat === 'sacred-gangajal' || ($gangajalCat && $gangajalCat->children && $gangajalCat->children->pluck('slug')->contains($currentCat));
+        $isKitsActive = $currentCat === 'puja-kits' || ($kitsCat && $kitsCat->children && $kitsCat->children->pluck('slug')->contains($currentCat));
+        $isEssentialsActive = $currentCat === 'puja-essentials' || ($essentialsCat && $essentialsCat->children && $essentialsCat->children->pluck('slug')->contains($currentCat));
+    @endphp
+
     <nav class="relative z-10 hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-11 text-xs">
-                <!-- Left: Category List with dropdowns in a single continuous line -->
+                <!-- Left: Navigation Links in Client-Specified Order -->
                 <div class="flex-1 min-w-0 flex items-center gap-0.5 xl:gap-1.5 font-medium text-slate-700 whitespace-nowrap overflow-visible py-1">
-                    <!-- Home -->
+                    <!-- 1. Home -->
                     <a href="{{ route('home') }}"
                        class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('home') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Home
                     </a>
 
-                    <!-- Dynamic Categories from navCategories -->
-                    @if (isset($navCategories) && $navCategories->count() > 0)
-                        @foreach ($navCategories->take(4) as $cat)
-                            <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
-                                <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                                   class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->get('category') === $cat->slug ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
-                                    <span>{{ $cat->name }}</span>
-                                    @if ($cat->children && $cat->children->count() > 0)
-                                        <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                        </svg>
-                                    @endif
-                                </a>
+                    <!-- 2. Sacred Gangajal -->
+                    <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
+                        <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}"
+                           class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isGangajalActive ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                            <span>Sacred Gangajal</span>
+                            @if ($gangajalCat && $gangajalCat->children && $gangajalCat->children->count() > 0)
+                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            @endif
+                        </a>
 
-                                <!-- Subcategories Dropdown -->
-                                @if ($cat->children && $cat->children->count() > 0)
-                                    <div x-show="catOpen"
-                                         x-cloak
-                                         x-transition:enter="transition ease-out duration-150"
-                                         x-transition:enter-start="opacity-0 translate-y-1"
-                                         x-transition:enter-end="opacity-100 translate-y-0"
-                                         x-transition:leave="transition ease-in duration-100"
-                                         x-transition:leave-start="opacity-100 translate-y-0"
-                                         x-transition:leave-end="opacity-0 translate-y-1"
-                                         class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
-                                        <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
-                                            {{ $cat->name }} Collections
-                                        </div>
-                                        <div class="py-1">
-                                            @foreach ($cat->children as $sub)
-                                                <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
-                                                   class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-medium transition">
-                                                    {{ $sub->name }}
-                                                </a>
-                                            @endforeach
-                                        </div>
-                                        <div class="pt-1 px-3">
-                                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                                               class="text-[11px] font-bold text-[#D97706] hover:underline">
-                                                All in {{ $cat->name }} →
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                        @endforeach
-
-                        <!-- More Categories Dropdown (if more than 4) -->
-                        @if ($navCategories->count() > 4)
-                            <div class="relative group shrink-0" x-data="{ moreCatOpen: false }" @mouseenter="moreCatOpen = true" @mouseleave="moreCatOpen = false">
-                                <button type="button"
-                                        @click="moreCatOpen = !moreCatOpen"
-                                        class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition text-slate-700">
-                                    <span>More Collections</span>
-                                    <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-
-                                <div x-show="moreCatOpen"
-                                     x-cloak
-                                     x-transition:enter="transition ease-out duration-150"
-                                     x-transition:enter-start="opacity-0 translate-y-1"
-                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                     x-transition:leave="transition ease-in duration-100"
-                                     x-transition:leave-start="opacity-100 translate-y-0"
-                                     x-transition:leave-end="opacity-0 translate-y-1"
-                                     class="absolute left-0 top-full mt-0 w-60 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
-                                    <div class="py-1">
-                                        @foreach ($navCategories->slice(4) as $moreCat)
-                                            <a href="{{ route('products.index', ['category' => $moreCat->slug]) }}"
-                                               class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
-                                                {{ $moreCat->name }}
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                    <div class="pt-1.5 px-3">
-                                        <a href="{{ route('products.index') }}" class="text-[11px] font-bold text-[#D97706] hover:underline">
-                                            View Complete Catalog →
+                        @if ($gangajalCat && $gangajalCat->children && $gangajalCat->children->count() > 0)
+                            <div x-show="catOpen"
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                                <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
+                                    Sacred Gangajal Collections
+                                </div>
+                                <div class="py-1">
+                                    @foreach ($gangajalCat->children as $sub)
+                                        <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                                           class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-medium transition">
+                                            {{ $sub->name }}
                                         </a>
-                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="pt-1 px-3">
+                                    <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}"
+                                       class="text-[11px] font-bold text-[#D97706] hover:underline">
+                                        All in Sacred Gangajal →
+                                    </a>
                                 </div>
                             </div>
                         @endif
-                    @else
-                        <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Puja Essentials</a>
-                        <a href="{{ route('products.index', ['category' => 'hawan-samagri']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Hawan & Samagri</a>
-                        <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}" class="whitespace-nowrap px-2.5 py-1.5 rounded-lg text-xs font-semibold hover:text-[#D97706] transition">Sacred Gangajal</a>
-                    @endif
+                    </div>
 
-                    <!-- All Sacred Catalog -->
+                    <!-- 3. Festival & Pooja Kit -->
+                    <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
+                        <a href="{{ route('products.index', ['category' => 'puja-kits']) }}"
+                           class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isKitsActive ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                            <span>Festival & Pooja Kit</span>
+                            @if ($kitsCat && $kitsCat->children && $kitsCat->children->count() > 0)
+                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            @endif
+                        </a>
+
+                        @if ($kitsCat && $kitsCat->children && $kitsCat->children->count() > 0)
+                            <div x-show="catOpen"
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                                <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
+                                    Festival & Pooja Kit Collections
+                                </div>
+                                <div class="py-1">
+                                    @foreach ($kitsCat->children as $sub)
+                                        <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                                           class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-medium transition">
+                                            {{ $sub->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="pt-1 px-3">
+                                    <a href="{{ route('products.index', ['category' => 'puja-kits']) }}"
+                                       class="text-[11px] font-bold text-[#D97706] hover:underline">
+                                        All in Festival & Pooja Kit →
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- 4. Puja Essentials -->
+                    <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true" @mouseleave="catOpen = false">
+                        <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
+                           class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isEssentialsActive ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                            <span>Puja Essentials</span>
+                            @if ($essentialsCat && $essentialsCat->children && $essentialsCat->children->count() > 0)
+                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            @endif
+                        </a>
+
+                        @if ($essentialsCat && $essentialsCat->children && $essentialsCat->children->count() > 0)
+                            <div x-show="catOpen"
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                                <div class="px-3 py-1.5 text-[10px] uppercase font-bold text-slate-400">
+                                    Puja Essentials Collections
+                                </div>
+                                <div class="py-1">
+                                    @foreach ($essentialsCat->children as $sub)
+                                        <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                                           class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-medium transition">
+                                            {{ $sub->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="pt-1 px-3">
+                                    <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
+                                       class="text-[11px] font-bold text-[#D97706] hover:underline">
+                                        All in Puja Essentials →
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- 5. Complete Catalog -->
                     <a href="{{ route('products.index') }}"
-                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold' : '' }}">
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Complete Catalog
                     </a>
 
-                    <!-- Spiritual Wisdom Blogs (hidden on lg, visible on xl) -->
+                    <!-- 6. Spiritual Blogs -->
                     <a href="{{ route('blogs.index') }}"
-                       class="hidden xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('blogs.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                       class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('blogs.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Spiritual Blogs
                     </a>
 
-                    <!-- Sacred Gallery (hidden on lg/xl, visible on 2xl) -->
+                    <!-- 7. etc... (More Collections Dropdown & Sacred Gallery) -->
+                    @if ($otherCats->count() > 0)
+                        <div class="relative group shrink-0" x-data="{ moreCatOpen: false }" @mouseenter="moreCatOpen = true" @mouseleave="moreCatOpen = false">
+                            <button type="button"
+                                    @click="moreCatOpen = !moreCatOpen"
+                                    class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition text-slate-700">
+                                <span>More Collections</span>
+                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="moreCatOpen"
+                                 x-cloak
+                                 x-transition:enter="transition ease-out duration-150"
+                                 x-transition:enter-start="opacity-0 translate-y-1"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-100"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-1"
+                                 class="absolute left-0 top-full mt-0 w-60 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                                <div class="py-1">
+                                    @foreach ($otherCats as $moreCat)
+                                        <a href="{{ route('products.index', ['category' => $moreCat->slug]) }}"
+                                           class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
+                                            {{ $moreCat->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <div class="pt-1.5 px-3">
+                                    <a href="{{ route('gallery.index') }}" class="text-[11px] font-bold text-[#881337] hover:underline block py-1">
+                                        Sacred Gallery →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Sacred Gallery (Direct Link on wider screens) -->
                     <a href="{{ route('gallery.index') }}"
-                       class="hidden 2xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
+                       class="hidden xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Sacred Gallery
                     </a>
                 </div>
@@ -414,44 +505,119 @@
          x-transition
          class="lg:hidden bg-white border-b border-amber-200 divide-y divide-slate-100 text-sm">
         <div class="p-4 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50">
+            <!-- 1. Home -->
+            <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50 {{ request()->routeIs('home') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
                 Home
             </a>
-            @if (isset($navCategories))
-                @foreach ($navCategories as $cat)
-                    <div x-data="{ subOpen: false }">
-                        <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg">
-                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}" class="flex-1">
+
+            <!-- 2. Sacred Gangajal -->
+            <div x-data="{ subOpen: false }">
+                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isGangajalActive ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                    <a href="{{ route('products.index', ['category' => 'sacred-gangajal']) }}" class="flex-1 font-bold text-[#881337]">
+                        Sacred Gangajal
+                    </a>
+                    @if ($gangajalCat && $gangajalCat->children && $gangajalCat->children->count() > 0)
+                        <button type="button" @click="subOpen = !subOpen" class="p-1 text-slate-400">
+                            <svg class="w-4 h-4 transition transform" :class="subOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+                @if ($gangajalCat && $gangajalCat->children && $gangajalCat->children->count() > 0)
+                    <div x-show="subOpen" x-cloak class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
+                        @foreach ($gangajalCat->children as $sub)
+                            <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                               class="block py-1.5 text-slate-600 hover:text-[#D97706]">
+                                {{ $sub->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- 3. Festival & Pooja Kit -->
+            <div x-data="{ subOpen: false }">
+                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isKitsActive ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                    <a href="{{ route('products.index', ['category' => 'puja-kits']) }}" class="flex-1 font-bold text-[#881337]">
+                        Festival & Pooja Kit
+                    </a>
+                    @if ($kitsCat && $kitsCat->children && $kitsCat->children->count() > 0)
+                        <button type="button" @click="subOpen = !subOpen" class="p-1 text-slate-400">
+                            <svg class="w-4 h-4 transition transform" :class="subOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+                @if ($kitsCat && $kitsCat->children && $kitsCat->children->count() > 0)
+                    <div x-show="subOpen" x-cloak class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
+                        @foreach ($kitsCat->children as $sub)
+                            <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                               class="block py-1.5 text-slate-600 hover:text-[#D97706]">
+                                {{ $sub->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- 4. Puja Essentials -->
+            <div x-data="{ subOpen: false }">
+                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isEssentialsActive ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                    <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}" class="flex-1 font-bold text-[#881337]">
+                        Puja Essentials
+                    </a>
+                    @if ($essentialsCat && $essentialsCat->children && $essentialsCat->children->count() > 0)
+                        <button type="button" @click="subOpen = !subOpen" class="p-1 text-slate-400">
+                            <svg class="w-4 h-4 transition transform" :class="subOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+                @if ($essentialsCat && $essentialsCat->children && $essentialsCat->children->count() > 0)
+                    <div x-show="subOpen" x-cloak class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
+                        @foreach ($essentialsCat->children as $sub)
+                            <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
+                               class="block py-1.5 text-slate-600 hover:text-[#D97706]">
+                                {{ $sub->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- 5. Complete Catalog -->
+            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50 {{ request()->routeIs('products.index') && !request()->has('category') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                Complete Catalog
+            </a>
+
+            <!-- 6. Spiritual Blogs -->
+            <a href="{{ route('blogs.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50 {{ request()->routeIs('blogs.*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                Spiritual Blogs
+            </a>
+
+            <!-- 7. etc... (More Collections Accordion & Other Links) -->
+            @if ($otherCats->count() > 0)
+                <div x-data="{ moreOpen: false }" class="pt-1">
+                    <button type="button" @click="moreOpen = !moreOpen" class="w-full flex items-center justify-between px-3 py-2 text-slate-700 font-semibold hover:bg-amber-50 rounded-lg">
+                        <span>More Collections</span>
+                        <svg class="w-4 h-4 transition transform" :class="moreOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="moreOpen" x-cloak class="pl-4 py-1 space-y-1 bg-amber-50/40 rounded-lg text-xs">
+                        @foreach ($otherCats as $cat)
+                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}" class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
                                 {{ $cat->name }}
                             </a>
-                            @if ($cat->children && $cat->children->count() > 0)
-                                <button type="button" @click="subOpen = !subOpen" class="p-1 text-slate-400">
-                                    <svg class="w-4 h-4 transition transform" :class="subOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-                            @endif
-                        </div>
-                        @if ($cat->children && $cat->children->count() > 0)
-                            <div x-show="subOpen" x-cloak class="pl-6 py-1 space-y-1 bg-amber-50/50 rounded-lg text-xs">
-                                @foreach ($cat->children as $sub)
-                                    <a href="{{ route('products.index', ['category' => $sub->slug]) }}"
-                                       class="block py-1.5 text-slate-600 hover:text-[#D97706]">
-                                        {{ $sub->name }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endif
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
             @endif
-            <a href="{{ route('products.index') }}" class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50">
-                All Products Catalog
-            </a>
-            <a href="{{ route('blogs.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">
-                Spiritual Blogs & Wisdom
-            </a>
-            <a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50">
+
+            <a href="{{ route('gallery.index') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50 {{ request()->routeIs('gallery.*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
                 Sacred Haridwar Gallery
             </a>
             <a href="{{ route('membership.join') }}" class="block px-3 py-2 rounded-lg font-bold text-[#D97706] hover:bg-amber-50">
@@ -459,6 +625,9 @@
             </a>
             <a href="{{ route('about') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
                 Sacred Sanctity Story
+            </a>
+            <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
+                Devotee Support & Contact
             </a>
         </div>
     </div>
