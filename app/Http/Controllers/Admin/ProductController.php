@@ -19,7 +19,11 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Product::with(['category', 'categories', 'batch', 'variants']);
+        $relations = ['category', 'batch', 'variants'];
+        if (Product::hasCategoryProductTable()) {
+            $relations[] = 'categories';
+        }
+        $query = Product::with($relations);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search): void {
@@ -31,8 +35,10 @@ class ProductController extends Controller
 
         if ($categoryId = $request->get('category_id')) {
             $query->where(function ($q) use ($categoryId): void {
-                $q->where('category_id', $categoryId)
-                    ->orWhereHas('categories', fn ($cq) => $cq->where('categories.id', $categoryId));
+                $q->where('category_id', $categoryId);
+                if (Product::hasCategoryProductTable()) {
+                    $q->orWhereHas('categories', fn ($cq) => $cq->where('categories.id', $categoryId));
+                }
             });
         }
 
@@ -192,7 +198,9 @@ class ProductController extends Controller
         $validated['reviews_count'] = $validated['reviews_count'] ?? 15;
 
         $product = Product::create($validated);
-        $product->categories()->sync($categoryIds);
+        if (Product::hasCategoryProductTable()) {
+            $product->categories()->sync($categoryIds);
+        }
 
         // Save Variants
         if (! empty($variantsData)) {
@@ -224,7 +232,11 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        $product->load(['variants', 'categories']);
+        $relations = ['variants'];
+        if (Product::hasCategoryProductTable()) {
+            $relations[] = 'categories';
+        }
+        $product->load($relations);
         $categories = Category::with('children')->whereNull('parent_id')->orderBy('sort_order')->orderBy('name')->get();
         $orphanCategories = Category::whereNotNull('parent_id')->whereNotIn('parent_id', $categories->pluck('id'))->get();
         if ($orphanCategories->isNotEmpty()) {
@@ -410,7 +422,9 @@ class ProductController extends Controller
         $validated['is_bestseller'] = $request->boolean('is_bestseller');
 
         $product->update($validated);
-        $product->categories()->sync($categoryIds);
+        if (Product::hasCategoryProductTable()) {
+            $product->categories()->sync($categoryIds);
+        }
 
         // Sync Variants
         $submittedVariantIds = [];

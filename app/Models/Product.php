@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -67,10 +68,24 @@ class Product extends Model
         ];
     }
 
+    public static function hasCategoryProductTable(): bool
+    {
+        static $hasTable = null;
+        if ($hasTable === null) {
+            try {
+                $hasTable = Schema::hasTable('category_product');
+            } catch (\Throwable) {
+                $hasTable = false;
+            }
+        }
+
+        return $hasTable;
+    }
+
     protected static function booted(): void
     {
         static::saved(function (Product $product): void {
-            if ($product->category_id && ! $product->categories()->where('categories.id', $product->category_id)->exists()) {
+            if (static::hasCategoryProductTable() && $product->category_id && ! $product->categories()->where('categories.id', $product->category_id)->exists()) {
                 $product->categories()->attach($product->category_id);
             }
         });
@@ -228,6 +243,10 @@ class Product extends Model
      */
     public function getCategoryIdsAttribute(): array
     {
+        if (! static::hasCategoryProductTable()) {
+            return $this->category_id ? [(int) $this->category_id] : [];
+        }
+
         $ids = $this->relationLoaded('categories')
             ? $this->categories->pluck('id')->all()
             : $this->categories()->pluck('categories.id')->all();

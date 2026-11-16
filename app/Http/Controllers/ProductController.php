@@ -17,18 +17,26 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Product::with(['category', 'categories', 'batch', 'activeVariants'])->where('is_active', true);
+        $relations = ['category', 'batch', 'activeVariants'];
+        if (Product::hasCategoryProductTable()) {
+            $relations[] = 'categories';
+        }
+        $query = Product::with($relations)->where('is_active', true);
 
         if ($categorySlug = $request->get('category')) {
             $matchedCategory = Category::with('children')->where('slug', $categorySlug)->first();
             if ($matchedCategory) {
                 $categoryIds = $matchedCategory->children->pluck('id')->push($matchedCategory->id)->all();
-                $query->where(function ($q) use ($categoryIds): void {
-                    $q->whereIn('category_id', $categoryIds)
-                        ->orWhereHas('categories', function ($catQ) use ($categoryIds): void {
-                            $catQ->whereIn('categories.id', $categoryIds);
-                        });
-                });
+                if (Product::hasCategoryProductTable()) {
+                    $query->where(function ($q) use ($categoryIds): void {
+                        $q->whereIn('category_id', $categoryIds)
+                            ->orWhereHas('categories', function ($catQ) use ($categoryIds): void {
+                                $catQ->whereIn('categories.id', $categoryIds);
+                            });
+                    });
+                } else {
+                    $query->whereIn('category_id', $categoryIds);
+                }
             }
         }
 
@@ -97,20 +105,30 @@ class ProductController extends Controller
             return response()->json([]);
         }
 
-        $rawResults = Product::with(['category', 'categories', 'activeVariants'])
+        $hasPivot = Product::hasCategoryProductTable();
+        $relations = ['category', 'activeVariants'];
+        if ($hasPivot) {
+            $relations[] = 'categories';
+        }
+
+        $rawResults = Product::with($relations)
             ->where('is_active', true)
-            ->where(function ($q) use ($term): void {
+            ->where(function ($q) use ($term, $hasPivot): void {
                 $q->where('name', 'like', "%{$term}%")
                     ->orWhere('short_description', 'like', "%{$term}%")
                     ->orWhereHas('category', function ($catQ) use ($term): void {
                         $catQ->where('name', 'like', "%{$term}%");
-                    })
-                    ->orWhereHas('categories', function ($catQ) use ($term): void {
-                        $catQ->where('name', 'like', "%{$term}%");
-                    })
-                    ->orWhereHas('activeVariants', function ($varQ) use ($term): void {
-                        $varQ->where('name', 'like', "%{$term}%");
                     });
+
+                if ($hasPivot) {
+                    $q->orWhereHas('categories', function ($catQ) use ($term): void {
+                        $catQ->where('name', 'like', "%{$term}%");
+                    });
+                }
+
+                $q->orWhereHas('activeVariants', function ($varQ) use ($term): void {
+                    $varQ->where('name', 'like', "%{$term}%");
+                });
             })
             ->take(8)
             ->get();
@@ -146,13 +164,18 @@ class ProductController extends Controller
      */
     public function show(string $slug): View
     {
-        $product = Product::with([
+        $hasPivot = Product::hasCategoryProductTable();
+        $relations = [
             'category',
-            'categories',
             'batch',
             'approvedReviews.user',
             'variants' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order'),
-        ])
+        ];
+        if ($hasPivot) {
+            $relations[] = 'categories';
+        }
+
+        $product = Product::with($relations)
             ->where('slug', $slug)
             ->where('is_active', true)
             ->firstOrFail();
@@ -160,8 +183,8 @@ class ProductController extends Controller
         $catIds = $product->category_ids;
         $relatedProducts = Product::where('id', '!=', $product->id)
             ->where('is_active', true)
-            ->where(function ($q) use ($catIds, $product): void {
-                if (! empty($catIds)) {
+            ->where(function ($q) use ($catIds, $product, $hasPivot): void {
+                if ($hasPivot && ! empty($catIds)) {
                     $q->whereIn('category_id', $catIds)
                         ->orWhereHas('categories', fn ($cq) => $cq->whereIn('categories.id', $catIds));
                 } else {

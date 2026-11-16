@@ -182,9 +182,11 @@ class CategoryController extends Controller
     public function destroy(Category $category): RedirectResponse
     {
         // Safety check: protect products from accidental cascade deletion
-        $productsCount = Product::where('category_id', $category->id)
-            ->orWhereHas('categories', fn ($q) => $q->where('categories.id', $category->id))
-            ->count();
+        $productsQuery = Product::where('category_id', $category->id);
+        if (Product::hasCategoryProductTable()) {
+            $productsQuery->orWhereHas('categories', fn ($q) => $q->where('categories.id', $category->id));
+        }
+        $productsCount = $productsQuery->count();
 
         if ($productsCount > 0) {
             return back()->with('error', "Cannot delete category '{$category->name}' because it contains {$productsCount} products. Please reassign or delete these products first.");
