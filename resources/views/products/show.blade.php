@@ -13,6 +13,20 @@
         $activeVariants = $product->variants ? $product->variants->where('is_active', true)->values() : collect();
         $hasVariants = $activeVariants->count() > 0;
         $defaultVariant = $activeVariants->first();
+
+        $selectedVariant = null;
+        if (request()->filled('variant')) {
+            $variantParam = request('variant');
+            $selectedVariant = $activeVariants->first(function ($v) use ($variantParam) {
+                return (string) $v->id === (string) $variantParam
+                    || (string) $v->volume_ml === (string) $variantParam
+                    || strtolower(str_replace(' ', '', $v->name)) === strtolower(str_replace(' ', '', $variantParam));
+            });
+        }
+        if (!$selectedVariant && $hasVariants) {
+            $selectedVariant = $defaultVariant;
+        }
+        $selectedVariantId = $selectedVariant ? $selectedVariant->id : ($defaultVariant ? $defaultVariant->id : null);
     @endphp
 
     <!-- Breadcrumb -->
@@ -38,7 +52,7 @@
              quantity: 1,
              adding: false,
              hasVariants: {{ $hasVariants ? 'true' : 'false' }},
-             activeVariantId: {{ $defaultVariant ? $defaultVariant->id : 'null' }},
+             activeVariantId: {{ $selectedVariantId ? $selectedVariantId : 'null' }},
              variants: {{ Js::from($activeVariants) }},
              basePrice: {{ (float) $product->price }},
              baseComparePrice: {{ $product->compare_price ? (float) $product->compare_price : 'null' }},
@@ -109,6 +123,11 @@
 
              selectVariant(id) {
                  this.activeVariantId = id;
+                 try {
+                     const url = new URL(window.location.href);
+                     url.searchParams.set('variant', id);
+                     window.history.replaceState({}, '', url.toString());
+                 } catch (e) {}
              },
 
              setMainImage(url, index) {
@@ -351,8 +370,8 @@
                     <!-- Price Block (Shop.99Pandit Style with GST Breakdown) -->
                     <div class="bg-[#FFFDF7] border border-amber-200/80 rounded-2xl p-4 sm:p-6 shadow-xs space-y-3">
                         <div class="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
-                            <span class="text-2xl sm:text-4xl font-extrabold text-slate-900">
-                                ₹<span x-text="Math.round(currentPrice)">{{ number_format($product->price, 0) }}</span>
+                            <span class="text-2xl sm:text-4xl font-extrabold text-slate-900" x-text="'₹' + Math.round(currentPrice)">
+                                ₹{{ number_format($selectedVariant ? $selectedVariant->price : ($defaultVariant ? $defaultVariant->price : $product->price), 0) }}
                             </span>
 
                             <template x-if="currentComparePrice && currentComparePrice > currentPrice">
@@ -483,6 +502,19 @@
                             </button>
                         </div>
 
+                        <!-- Bulk Product Inquiry Button -->
+                        <div class="pt-2">
+                            <button type="button"
+                                    @click="window.dispatchEvent(new CustomEvent('open-bulk-inquiry', { detail: { productId: {{ $product->id }} } }))"
+                                    class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 hover:from-amber-100 hover:to-orange-100 border border-amber-300/90 hover:border-amber-400 text-amber-900 rounded-xl font-bold text-xs sm:text-sm shadow-xs transition hover:shadow-sm active:scale-98 touch-manipulation">
+                                <svg class="w-4 h-4 text-amber-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                                <span>Bulk Product Inquiry</span>
+                                <span class="hidden sm:inline-flex items-center text-[10px] font-semibold text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full ml-1">Wholesale & Temple Orders</span>
+                            </button>
+                        </div>
+
                         @php
                             $guestCheckoutActive = \App\Models\SiteSetting::get('guest_checkout_enabled', '0') === '1';
                         @endphp
@@ -528,6 +560,19 @@
                                 disabled
                                 class="w-full py-3.5 px-4 bg-slate-200 text-slate-500 rounded-xl font-bold text-xs sm:text-sm cursor-not-allowed text-center shadow-xs">
                             Out of Stock
+                        </button>
+                    </div>
+
+                    <!-- Bulk Product Inquiry for Out of Stock items -->
+                    <div class="pt-2">
+                        <button type="button"
+                                @click="window.dispatchEvent(new CustomEvent('open-bulk-inquiry', { detail: { productId: {{ $product->id }} } }))"
+                                class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 hover:from-amber-100 hover:to-orange-100 border border-amber-300/90 hover:border-amber-400 text-amber-900 rounded-xl font-bold text-xs sm:text-sm shadow-xs transition hover:shadow-sm active:scale-98 touch-manipulation">
+                            <svg class="w-4 h-4 text-amber-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            <span>Bulk Product Inquiry</span>
+                            <span class="text-[10px] font-semibold text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded-full ml-1">Pre-order for Events & Temples</span>
                         </button>
                     </div>
                 @endif
@@ -892,8 +937,8 @@
                     <div class="min-w-0">
                         <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Price</span>
                         <div class="flex items-baseline gap-1.5">
-                            <span class="text-xl font-extrabold text-slate-900 leading-none">
-                                ₹{{ number_format($product->price, 0) }}
+                            <span class="text-xl font-extrabold text-slate-900 leading-none" x-text="'₹' + Math.round(currentPrice)">
+                                ₹{{ number_format($selectedVariant ? $selectedVariant->price : ($defaultVariant ? $defaultVariant->price : $product->price), 0) }}
                             </span>
                             @if ($product->compare_price && $product->compare_price > $product->price)
                                 <del class="text-xs text-slate-400">
@@ -945,4 +990,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Bulk Product Inquiry Modal -->
+    <x-bulk-inquiry-modal :products="$allProducts ?? collect([$product])" :currentProductId="$product->id" />
 </x-app-layout>

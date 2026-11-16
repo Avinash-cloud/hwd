@@ -141,6 +141,22 @@
                 @endif
             </a>
 
+            <a href="{{ route('admin.bulk-inquiries.index') }}"
+               class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.bulk-inquiries.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.bulk-inquiries.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    <span>Bulk Enquiries</span>
+                </div>
+                @php
+                    $navPendingBulk = \App\Models\BulkOrderInquiry::where('status', 'pending')->count();
+                @endphp
+                @if($navPendingBulk > 0)
+                    <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-600 text-white leading-none">{{ $navPendingBulk }}</span>
+                @endif
+            </a>
+
             <a href="{{ route('admin.settings.index') }}"
                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.settings.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -6,7 +6,9 @@ use App\Services\GstService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -63,6 +65,15 @@ class Product extends Model
             'is_featured' => 'boolean',
             'is_bestseller' => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function (Product $product): void {
+            if ($product->category_id && ! $product->categories()->where('categories.id', $product->category_id)->exists()) {
+                $product->categories()->attach($product->category_id);
+            }
+        });
     }
 
     /**
@@ -202,6 +213,32 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * All categories assigned to this product (multi-category).
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_product');
+    }
+
+    /**
+     * Get array of all category IDs (combining pivot and primary category_id).
+     *
+     * @return array<int, int>
+     */
+    public function getCategoryIdsAttribute(): array
+    {
+        $ids = $this->relationLoaded('categories')
+            ? $this->categories->pluck('id')->all()
+            : $this->categories()->pluck('categories.id')->all();
+
+        if ($this->category_id && ! in_array($this->category_id, $ids)) {
+            $ids[] = (int) $this->category_id;
+        }
+
+        return array_values(array_unique($ids));
+    }
+
     public function batch(): BelongsTo
     {
         return $this->belongsTo(Batch::class);
@@ -313,5 +350,141 @@ class Product extends Model
     public function getTaxBreakupAttribute(): array
     {
         return GstService::calculate((float) $this->price, (float) ($this->gst_percentage ?: 18.00));
+    }
+
+    /**
+     * Active variant context for listing display.
+     */
+    public ?ProductVariant $active_variant = null;
+
+    /**
+     * Clone product instance bound to a specific variant.
+     */
+    public function withVariant(ProductVariant $variant): static
+    {
+        $clone = clone $this;
+        $clone->active_variant = $variant;
+
+        return $clone;
+    }
+
+    /**
+     * Display name (includes variant name if not already in product title).
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        if ($this->active_variant) {
+            $vName = trim($this->active_variant->name);
+            if (! str_contains(strtolower($this->name), strtolower($vName))) {
+                return "{$this->name} ({$vName})";
+            }
+        }
+
+        return $this->name;
+    }
+
+    /**
+     * Display price taking active variant into account.
+     */
+    public function getDisplayPriceAttribute(): float
+    {
+        if ($this->active_variant) {
+            return (float) $this->active_variant->price;
+        }
+
+        return (float) $this->price;
+    }
+
+    /**
+     * Display compare price taking active variant into account.
+     */
+    public function getDisplayComparePriceAttribute(): ?float
+    {
+        if ($this->active_variant) {
+            return $this->active_variant->compare_price ? (float) $this->active_variant->compare_price : null;
+        }
+
+        return $this->compare_price ? (float) $this->compare_price : null;
+    }
+
+    /**
+     * Display discount percentage taking active variant into account.
+     */
+    public function getDisplayDiscountAttribute(): ?int
+    {
+        $price = $this->display_price;
+        $compare = $this->display_compare_price;
+
+        if ($compare && $compare > $price) {
+            return (int) round((($compare - $price) / $compare) * 100);
+        }
+
+        return null;
+    }
+
+    /**
+     * Display stock taking active variant into account.
+     */
+    public function getDisplayStockAttribute(): int
+    {
+        if ($this->active_variant) {
+            return (int) $this->active_variant->stock;
+        }
+
+        return (int) $this->stock;
+    }
+
+    /**
+     * Display URL linking to single product page with active variant pre-selected.
+     */
+    public function getDisplayUrlAttribute(): string
+    {
+        $url = route('products.show', $this->slug);
+        if ($this->active_variant) {
+            $url .= '?variant='.$this->active_variant->id;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Check if item is in stock for display.
+     */
+    public function isDisplayInStock(): bool
+    {
+        if ($this->active_variant) {
+            return $this->active_variant->is_active && $this->active_variant->stock > 0;
+        }
+
+        return $this->isInStock();
+    }
+
+    /**
+     * Expand products that have active variants into distinct listings for archive & homepage streams.
+     * Products without active variants are left as-is.
+     *
+     * @return Collection<int, static>
+     */
+    public static function expandVariantsForListing(iterable $products): Collection
+    {
+        $expanded = collect();
+
+        foreach ($products as $product) {
+            $variants = $product->relationLoaded('activeVariants')
+                ? $product->activeVariants
+                : ($product->relationLoaded('variants')
+                    ? $product->variants->where('is_active', true)
+                    : $product->activeVariants()->get());
+
+            if ($variants && $variants->count() > 0) {
+                foreach ($variants as $variant) {
+                    $expanded->push($product->withVariant($variant));
+                }
+            } else {
+                $expanded->push($product);
+            }
+        }
+
+        return $expanded;
     }
 }

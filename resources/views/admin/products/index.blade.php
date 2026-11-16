@@ -110,8 +110,8 @@
                                     @endif
                                 </div>
 
-                                <div class="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500">
-                                    <span>{{ $p->category->name }}</span>
+                                <div class="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500 flex-wrap">
+                                    <span class="text-amber-800 font-medium">{{ $p->categories->isNotEmpty() ? $p->categories->pluck('name')->join(', ') : ($p->category?->name ?? 'Uncategorized') }}</span>
                                     @if ($p->sku)
                                         <span>·</span>
                                         <span class="font-mono text-slate-400">{{ $p->sku }}</span>

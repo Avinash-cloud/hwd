@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -181,7 +182,10 @@ class CategoryController extends Controller
     public function destroy(Category $category): RedirectResponse
     {
         // Safety check: protect products from accidental cascade deletion
-        $productsCount = $category->products()->count();
+        $productsCount = Product::where('category_id', $category->id)
+            ->orWhereHas('categories', fn ($q) => $q->where('categories.id', $category->id))
+            ->count();
+
         if ($productsCount > 0) {
             return back()->with('error', "Cannot delete category '{$category->name}' because it contains {$productsCount} products. Please reassign or delete these products first.");
         }

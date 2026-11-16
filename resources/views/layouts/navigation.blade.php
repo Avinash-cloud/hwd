@@ -320,13 +320,15 @@
         $gangajalCat = $catsBySlug->get('sacred-gangajal');
         $kitsCat = $catsBySlug->get('puja-kits');
         $essentialsCat = $catsBySlug->get('puja-essentials');
-        $prioritySlugs = ['sacred-gangajal', 'puja-kits', 'puja-essentials'];
-        $otherCats = isset($navCategories) ? $navCategories->reject(fn($c) => in_array($c->slug, $prioritySlugs)) : collect();
+        $astroCat = $catsBySlug->get('spiritual-items') ?? $catsBySlug->first(fn($c) => str_contains(strtolower($c->name), 'astro') || $c->slug === 'spiritual-astro' || $c->slug === 'spiritual-items');
+        $prioritySlugs = ['sacred-gangajal', 'puja-kits', 'puja-essentials', $astroCat?->slug ?? 'spiritual-items'];
+        $otherCats = isset($navCategories) ? $navCategories->reject(fn($c) => in_array($c->slug, $prioritySlugs) || str_contains(strtolower($c->name), 'astro')) : collect();
 
         $currentCat = request()->get('category');
         $isGangajalActive = $currentCat === 'sacred-gangajal' || ($gangajalCat && $gangajalCat->children && $gangajalCat->children->pluck('slug')->contains($currentCat));
         $isKitsActive = $currentCat === 'puja-kits' || ($kitsCat && $kitsCat->children && $kitsCat->children->pluck('slug')->contains($currentCat));
         $isEssentialsActive = $currentCat === 'puja-essentials' || ($essentialsCat && $essentialsCat->children && $essentialsCat->children->pluck('slug')->contains($currentCat));
+        $isAstroActive = ($astroCat && $currentCat === $astroCat->slug) || ($astroCat && $astroCat->children && $astroCat->children->pluck('slug')->contains($currentCat));
     @endphp
 
     <nav class="relative z-10 hidden lg:block bg-[#FFFDF7] border-b border-[#D97706]/20">
@@ -430,7 +432,7 @@
                     </div>
 
                     <!-- 4. Puja Essentials -->
-                    <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true"
+                    <!-- <div class="relative group shrink-0" x-data="{ catOpen: false }" @mouseenter="catOpen = true"
                         @mouseleave="catOpen = false">
                         <a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
                             class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isEssentialsActive ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
@@ -471,13 +473,54 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
+                    </div> -->
 
                     <!-- 5. Complete Catalog -->
                     <a href="{{ route('products.index') }}"
                         class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
-                        Complete Catalog
+                       Puja Essentials
                     </a>
+
+                    <!-- Spiritual & Astro (Online Puja & Astrology Consultation) -->
+                    <div class="relative group shrink-0" x-data="{ astroOpen: false }" @mouseenter="astroOpen = true"
+                        @mouseleave="astroOpen = false">
+                        <button type="button" @click="astroOpen = !astroOpen"
+                            class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isAstroActive ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
+                            <span>Spiritual & Astro</span>
+                            <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div x-show="astroOpen" x-cloak x-transition:enter="transition ease-out duration-150"
+                            x-transition:enter-start="opacity-0 translate-y-1"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-start="opacity-100 translate-y-0"
+                            x-transition:leave-end="opacity-0 translate-y-1"
+                            class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
+                            <div class="py-1">
+                                <a href="#"
+                                    class="block px-3.5 py-2 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
+                                    Online Puja
+                                </a>
+                                <a href="#"
+                                    class="block px-3.5 py-2 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
+                                    Astrology Consultation
+                                </a>
+                            </div>
+                            @if ($astroCat)
+                                <div class="pt-1.5 px-3">
+                                    <a href="{{ route('products.index', ['category' => $astroCat->slug]) }}"
+                                        class="text-[11px] font-bold text-[#881337] hover:underline block py-1">
+                                        All Spiritual & Astro Items →
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
 
                     <!-- 6. Spiritual Blogs -->
                     <a href="{{ route('blogs.index') }}"
@@ -636,6 +679,37 @@
                 class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50 {{ request()->routeIs('products.index') && !request()->has('category') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
                 Complete Catalog
             </a>
+
+            <!-- Spiritual & Astro (with dropdown: Online Puja & Astrology Consultation) -->
+            <div x-data="{ astroMobileOpen: false }">
+                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isAstroActive ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                    <span class="flex-1 font-bold text-[#881337]">
+                        Spiritual & Astro
+                    </span>
+                    <button type="button" @click="astroMobileOpen = !astroMobileOpen" class="p-1 text-slate-400">
+                        <svg class="w-4 h-4 transition transform" :class="astroMobileOpen ? 'rotate-180' : ''" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
+                <div x-show="astroMobileOpen" x-cloak class="pl-4 py-1 space-y-1 bg-amber-50/40 rounded-lg text-xs">
+                    <a href="#"
+                        class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
+                        Online Puja
+                    </a>
+                    <a href="#"
+                        class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
+                        Astrology Consultation
+                    </a>
+                    @if ($astroCat)
+                        <a href="{{ route('products.index', ['category' => $astroCat->slug]) }}"
+                            class="block py-1.5 px-2 font-bold text-[#881337] hover:underline">
+                            All Spiritual & Astro Items →
+                        </a>
+                    @endif
+                </div>
+            </div>
 
             <!-- 6. Spiritual Blogs -->
             <a href="{{ route('blogs.index') }}"

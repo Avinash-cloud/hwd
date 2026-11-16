@@ -30,6 +30,8 @@
                  videoUrl: '{{ old('video_url', '') }}',
                  galleryPreviews: [],
                  galleryUrlsText: '{{ old('gallery_urls', '') }}',
+                 catSearch: '',
+                 selectedCats: {{ json_encode(array_map('intval', (array) old('category_ids', old('category_id') ? [(int) old('category_id')] : []))) }},
 
                  taxableValue() {
                      const p = parseFloat(this.price) || 0;
@@ -111,7 +113,7 @@
                          savedTab = localStorage.getItem('admin_product_form_tab') || '';
                      } catch (e) {}
 
-                     @if ($errors->hasAny(['name', 'sku', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
+                     @if ($errors->hasAny(['name', 'sku', 'category_ids', 'category_ids.*', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
                          this.setTab('general');
                      @elseif ($errors->hasAny(['price', 'compare_price', 'member_price', 'stock', 'hsn_code', 'gst_percentage', 'badge', 'volume_ml', 'is_gangajal', 'is_member_free_eligible']))
                          this.setTab('pricing');
@@ -143,7 +145,7 @@
                             class="flex items-center gap-1.5 py-3 px-3 border-b-2 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap">
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                         <span>1. General</span>
-                        @if ($errors->hasAny(['name', 'sku', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
+                        @if ($errors->hasAny(['name', 'sku', 'category_ids', 'category_ids.*', 'category_id', 'batch_id', 'is_active', 'is_featured', 'is_bestseller']))
                             <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                         @endif
                     </button>
@@ -200,35 +202,9 @@
                 <div x-show="activeTab === 'general'" x-cloak class="space-y-6">
                     <div>
                         <h2 class="text-sm font-semibold text-slate-900 mb-1">General Information</h2>
-                        <p class="text-xs text-slate-500 mb-4">Set product category, identity name, SKU identifier, and store visibility.</p>
+                        <p class="text-xs text-slate-500 mb-4">Set product name, categories (multiple), SKU identifier, batch assignment, and store visibility.</p>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Category *</label>
-                                <select name="category_id" required class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
-                                    @foreach ($categories as $cat)
-                                        <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
-                                            {{ $cat->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('category_id') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Batch Assignment (Optional)</label>
-                                <select name="batch_id" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
-                                    <option value="">None / Non-liquid item</option>
-                                    @foreach ($batches as $batch)
-                                        <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
-                                            {{ $batch->batch_number }} ({{ $batch->sourcing_ghat }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                             <div class="sm:col-span-2">
                                 <label class="block text-sm font-medium text-slate-700 mb-1.5">Product Name *</label>
                                 <input type="text"
@@ -247,6 +223,96 @@
                                        value="{{ old('sku') }}"
                                        placeholder="HB-GJ-500"
                                        class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                            <!-- Multiple Categories Checkboxes (Takes 2 cols) -->
+                            <div class="lg:col-span-2">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label class="block text-sm font-medium text-slate-700">
+                                        Categories * <span class="text-xs font-normal text-slate-500">(Check all that apply)</span>
+                                    </label>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button"
+                                                @click="selectedCats = []"
+                                                x-show="selectedCats.length > 0"
+                                                class="text-[11px] text-slate-500 hover:text-rose-600 transition">
+                                            Clear
+                                        </button>
+                                        <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900"
+                                              x-text="selectedCats.length + ' selected'"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Filter input -->
+                                <div class="relative mb-2">
+                                    <input type="text"
+                                           x-model="catSearch"
+                                           placeholder="Quick search categories..."
+                                           class="w-full px-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition" />
+                                    <svg class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-2.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </div>
+
+                                <!-- Categories Tree Checklist -->
+                                <div class="border border-slate-300 rounded-xl bg-white p-3 max-h-60 overflow-y-auto space-y-2.5 divide-y divide-slate-100">
+                                    @foreach ($categories as $root)
+                                        @php
+                                            $childNames = $root->children ? $root->children->pluck('name')->map(fn($n) => strtolower($n))->all() : [];
+                                        @endphp
+                                        <div x-show="!catSearch || '{{ strtolower(addslashes($root->name)) }}'.includes(catSearch.toLowerCase()) || {{ json_encode($childNames) }}.some(c => c.includes(catSearch.toLowerCase()))"
+                                             class="pt-2 first:pt-0">
+                                            <!-- Parent Category -->
+                                            <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-amber-50/70 cursor-pointer transition select-none">
+                                                <input type="checkbox"
+                                                       name="category_ids[]"
+                                                       value="{{ $root->id }}"
+                                                       :value="{{ $root->id }}"
+                                                       x-model.number="selectedCats"
+                                                       {{ in_array($root->id, old('category_ids', old('category_id') ? [(int)old('category_id')] : [])) ? 'checked' : '' }}
+                                                       class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                                <span class="text-xs font-semibold text-slate-800">{{ $root->name }}</span>
+                                                <span class="text-[10px] text-slate-400 font-mono">({{ $root->slug }})</span>
+                                            </label>
+
+                                            <!-- Subcategories / Children -->
+                                            @if ($root->children && $root->children->isNotEmpty())
+                                                <div class="ml-6 pl-2.5 border-l-2 border-amber-200/60 mt-1 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                                    @foreach ($root->children as $child)
+                                                        <label x-show="!catSearch || '{{ strtolower(addslashes($child->name)) }}'.includes(catSearch.toLowerCase()) || '{{ strtolower(addslashes($root->name)) }}'.includes(catSearch.toLowerCase())"
+                                                               class="flex items-center gap-2 p-1 rounded-md hover:bg-amber-50/50 cursor-pointer transition select-none">
+                                                            <input type="checkbox"
+                                                                   name="category_ids[]"
+                                                                   value="{{ $child->id }}"
+                                                                   :value="{{ $child->id }}"
+                                                                   x-model.number="selectedCats"
+                                                                   {{ in_array($child->id, old('category_ids', old('category_id') ? [(int)old('category_id')] : [])) ? 'checked' : '' }}
+                                                                   class="w-3.5 h-3.5 rounded text-amber-600 focus:ring-amber-500 border-slate-300">
+                                                            <span class="text-xs text-slate-700">{{ $child->name }}</span>
+                                                        </label>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('category_ids') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                @error('category_ids.*') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                @error('category_id') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Batch Assignment (Takes 1 col) -->
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1.5">Batch Assignment (Optional)</label>
+                                <select name="batch_id" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                                    <option value="">None / Non-liquid item</option>
+                                    @foreach ($batches as $batch)
+                                        <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
+                                            {{ $batch->batch_number }} ({{ $batch->sourcing_ghat }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <p class="text-[11px] text-slate-400 mt-1.5">Attach sacred collection batch & ghat traceability data.</p>
                             </div>
                         </div>
                     </div>

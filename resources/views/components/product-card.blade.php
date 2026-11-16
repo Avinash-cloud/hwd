@@ -1,18 +1,27 @@
-@props(['product'])
+@props(['product', 'variant' => null])
 
 @php
-    $discount = $product->discount_percentage;
+    if ($variant && ! $product->active_variant) {
+        $product = $product->withVariant($variant);
+    }
+    $discount = $product->display_discount;
     $imgUrl = $product->image_url;
+    $url = $product->display_url;
+    $displayName = $product->display_name;
+    $displayPrice = $product->display_price;
+    $displayComparePrice = $product->display_compare_price;
+    $inStock = $product->isDisplayInStock();
+    $variantId = $product->active_variant ? $product->active_variant->id : null;
 @endphp
 
-<div x-data="productCard({{ $product->id }})"
+<div x-data="productCard({{ $product->id }}, {{ $variantId ? $variantId : 'null' }})"
      class="product-card group relative bg-white border border-amber-200/70 hover:border-[#D97706]/70 rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
     
     <!-- Top Image Container -->
     <div class="relative w-full aspect-square bg-[#FFFDF7] overflow-hidden">
-        <a href="{{ route('products.show', $product->slug) }}" class="block w-full h-full">
+        <a href="{{ $url }}" class="block w-full h-full">
             <img src="{{ $imgUrl }}"
-                 alt="{{ $product->name }}"
+                 alt="{{ $displayName }}"
                  loading="lazy"
                  onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\' fill=\'%23fffbeb\'><rect width=\'400\' height=\'400\' fill=\'%23fef3c7\'/><circle cx=\'200\' cy=\'200\' r=\'80\' fill=\'%23d97706\' opacity=\'0.15\'/><path d=\'M200 130 C185 170 160 200 160 230 C160 262 178 285 200 285 C222 285 240 262 240 230 C240 200 215 170 200 130 Z\' fill=\'%23d97706\'/><text x=\'50%25\' y=\'80%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'16\' fill=\'%23b45309\' font-family=\'sans-serif\' font-weight=\'bold\'>Haridwar Bliss</text></svg>';"
                  class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
@@ -20,7 +29,7 @@
 
         <!-- Discount / Offer Badge (Top Left) -->
         <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10 pointer-events-none">
-            @if (!$product->isInStock())
+            @if (! $inStock)
                 <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-rose-700 text-white shadow-xs">
                     Out of Stock
                 </span>
@@ -74,13 +83,17 @@
 
             <!-- Title -->
             <h3 class="font-serif italic font-bold text-xs sm:text-sm text-[#881337] leading-snug line-clamp-2 mb-1">
-                <a href="{{ route('products.show', $product->slug) }}" class="text-[#881337] group-hover:text-[#D97706] hover:text-[#D97706] transition block">
-                    {{ $product->name }}
+                <a href="{{ $url }}" class="text-[#881337] group-hover:text-[#D97706] hover:text-[#D97706] transition block">
+                    {{ $displayName }}
                 </a>
             </h3>
 
             <!-- Volume / Sourcing Badge if available -->
-            @if ($product->volume_ml)
+            @if ($product->active_variant)
+                <span class="inline-block text-[11px] text-amber-900/80 mb-2 font-medium">
+                    {{ $product->active_variant->volume_ml ? $product->active_variant->volume_ml . ' ml' : $product->active_variant->name }}
+                </span>
+            @elseif ($product->volume_ml)
                 <span class="inline-block text-[11px] text-amber-900/80 mb-2 font-medium">
                     {{ $product->volume_ml }} ml Hermetic Bottle
                 </span>
@@ -102,16 +115,16 @@
 
         <!-- Price & Quick Add Button Row (99Pandit Style) -->
         <div class="pt-2.5 border-t border-amber-100 mt-1 flex items-center justify-between gap-1.5">
-            @if ($product->isInStock())
+            @if ($inStock)
                 <!-- Price Display -->
                 <div class="flex flex-col min-w-0">
                     <div class="flex items-baseline gap-1 sm:gap-1.5 flex-wrap">
                         <span class="font-extrabold text-sm sm:text-base text-[#881337] whitespace-nowrap">
-                            ₹{{ number_format($product->price, 0) }}
+                            ₹{{ number_format($displayPrice, 0) }}
                         </span>
-                        @if ($product->compare_price && $product->compare_price > $product->price)
+                        @if ($displayComparePrice && $displayComparePrice > $displayPrice)
                             <del class="text-[11px] sm:text-xs text-slate-400 whitespace-nowrap">
-                                ₹{{ number_format($product->compare_price, 0) }}
+                                ₹{{ number_format($displayComparePrice, 0) }}
                             </del>
                         @endif
                     </div>
@@ -161,7 +174,7 @@
 
 <script>
 if (typeof window.productCard === 'undefined') {
-    window.productCard = function(productId) {
+    window.productCard = function(productId, variantId = null) {
         return {
             adding: false,
             addToCart() {
@@ -176,7 +189,7 @@ if (typeof window.productCard === 'undefined') {
                         'X-CSRF-TOKEN': csrfToken,
                         'X-Requested-With': 'XMLHttpRequest'
                     },
-                    body: JSON.stringify({ product_id: productId, quantity: 1 })
+                    body: JSON.stringify({ product_id: productId, variant_id: variantId, quantity: 1 })
                 })
                 .then(res => {
                     if (res.status === 401 || res.status === 403) {

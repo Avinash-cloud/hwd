@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\BatchController as AdminBatchController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\BulkOrderInquiryController as AdminBulkOrderInquiryController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContactInquiryController as AdminContactInquiryController;
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BulkOrderInquiryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerDashboardController;
@@ -71,6 +73,10 @@ Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->nam
 
 // Predictive Search API
 Route::get('/api/search', [ProductController::class, 'apiSearch'])->name('api.search');
+
+// Bulk Order Inquiries API
+Route::post('/api/bulk-inquiry', [BulkOrderInquiryController::class, 'store'])->name('bulk-inquiry.store');
+Route::post('/bulk-inquiry', [BulkOrderInquiryController::class, 'store']);
 
 // Checkout (Accessible by members, or guests when guest checkout is enabled)
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -144,6 +150,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->only(['index', 'show', 'update', 'destroy'])
         ->parameters(['contact-inquiries' => 'inquiry'])
         ->names('contact-inquiries');
+
+    Route::resource('/bulk-inquiries', AdminBulkOrderInquiryController::class)
+        ->only(['index', 'show', 'update', 'destroy'])
+        ->parameters(['bulk-inquiries' => 'inquiry'])
+        ->names('bulk-inquiries');
 
     // Customer Reviews Moderation
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');

@@ -27,7 +27,7 @@ class HomeController extends Controller
         }
 
         // 2. Best Sellers & Featured Offerings
-        $bestSellers = Product::with(['category', 'batch'])
+        $bestSellersQuery = Product::with(['category', 'batch', 'activeVariants'])
             ->where('is_active', true)
             ->where(function ($q): void {
                 $q->where('is_bestseller', true)
@@ -38,70 +38,93 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
-        if ($bestSellers->isEmpty()) {
-            $bestSellers = Product::with(['category', 'batch'])
+        if ($bestSellersQuery->isEmpty()) {
+            $bestSellersQuery = Product::with(['category', 'batch', 'activeVariants'])
                 ->where('is_active', true)
                 ->latest('id')
                 ->take(8)
                 ->get();
         }
+        $bestSellers = Product::expandVariantsForListing($bestSellersQuery)->take(12);
 
         // 3. Puja & Hawan Essentials
-        $pujaEssentials = Product::with(['category', 'batch'])
+        $pujaEssentialsQuery = Product::with(['category', 'categories', 'batch', 'activeVariants'])
             ->where('is_active', true)
-            ->whereHas('category', function ($q): void {
-                $q->where('slug', 'puja-essentials')
-                    ->orWhere('slug', 'diya-batti')
-                    ->orWhere('slug', 'daily-kits');
+            ->where(function ($q): void {
+                $q->whereHas('category', function ($cq): void {
+                    $cq->where('slug', 'puja-essentials')
+                        ->orWhere('slug', 'diya-batti')
+                        ->orWhere('slug', 'daily-kits');
+                })->orWhereHas('categories', function ($cq): void {
+                    $cq->where('slug', 'puja-essentials')
+                        ->orWhere('slug', 'diya-batti')
+                        ->orWhere('slug', 'daily-kits');
+                });
             })
             ->take(6)
             ->get();
 
-        if ($pujaEssentials->isEmpty()) {
-            $pujaEssentials = Product::with(['category', 'batch'])
+        if ($pujaEssentialsQuery->isEmpty()) {
+            $pujaEssentialsQuery = Product::with(['category', 'categories', 'batch', 'activeVariants'])
                 ->where('is_active', true)
                 ->where('is_gangajal', false)
                 ->take(6)
                 ->get();
         }
+        $pujaEssentials = Product::expandVariantsForListing($pujaEssentialsQuery)->take(8);
 
         // 4. Hawan Samagri
-        $hawanSamagri = Product::with(['category', 'batch'])
+        $hawanSamagriQuery = Product::with(['category', 'categories', 'batch', 'activeVariants'])
             ->where('is_active', true)
-            ->whereHas('category', function ($q): void {
-                $q->where('slug', 'hawan-samagri')
-                    ->orWhere('slug', 'hawan-cups')
-                    ->orWhere('slug', 'sambrani-cup');
+            ->where(function ($q): void {
+                $q->whereHas('category', function ($cq): void {
+                    $cq->where('slug', 'hawan-samagri')
+                        ->orWhere('slug', 'hawan-cups')
+                        ->orWhere('slug', 'sambrani-cup');
+                })->orWhereHas('categories', function ($cq): void {
+                    $cq->where('slug', 'hawan-samagri')
+                        ->orWhere('slug', 'hawan-cups')
+                        ->orWhere('slug', 'sambrani-cup');
+                });
             })
             ->take(6)
             ->get();
+        $hawanSamagri = Product::expandVariantsForListing($hawanSamagriQuery)->take(8);
 
         // 5. Spiritual Items & Metal Ware
-        $spiritualItems = Product::with(['category', 'batch'])
+        $spiritualItemsQuery = Product::with(['category', 'categories', 'batch', 'activeVariants'])
             ->where('is_active', true)
-            ->whereHas('category', function ($q): void {
-                $q->where('slug', 'spiritual-items')
-                    ->orWhere('slug', 'brass-pooja-ware')
-                    ->orWhere('slug', 'rudraksha');
+            ->where(function ($q): void {
+                $q->whereHas('category', function ($cq): void {
+                    $cq->where('slug', 'spiritual-items')
+                        ->orWhere('slug', 'brass-pooja-ware')
+                        ->orWhere('slug', 'rudraksha');
+                })->orWhereHas('categories', function ($cq): void {
+                    $cq->where('slug', 'spiritual-items')
+                        ->orWhere('slug', 'brass-pooja-ware')
+                        ->orWhere('slug', 'rudraksha');
+                });
             })
             ->take(6)
             ->get();
 
-        if ($spiritualItems->isEmpty()) {
-            $spiritualItems = Product::with(['category', 'batch'])
+        if ($spiritualItemsQuery->isEmpty()) {
+            $spiritualItemsQuery = Product::with(['category', 'categories', 'batch', 'activeVariants'])
                 ->where('is_active', true)
                 ->where('is_gangajal', false)
                 ->skip(6)
                 ->take(6)
                 ->get();
         }
+        $spiritualItems = Product::expandVariantsForListing($spiritualItemsQuery)->take(8);
 
         // 6. Sacred Gangajal Editions
-        $featuredGangajal = Product::with(['category', 'batch'])
+        $featuredGangajalQuery = Product::with(['category', 'batch', 'activeVariants'])
             ->where('is_gangajal', true)
             ->where('is_active', true)
             ->orderBy('price')
             ->get();
+        $featuredGangajal = Product::expandVariantsForListing($featuredGangajalQuery);
 
         // 7. Categories & Navigation
         $rootCategories = Category::with('children')

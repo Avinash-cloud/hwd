@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Product::with(['category', 'batch', 'variants']);
+        $query = Product::with(['category', 'categories', 'batch', 'variants']);
 
         if ($search = $request->get('search')) {
             $query->where(function ($q) use ($search): void {
@@ -30,7 +30,10 @@ class ProductController extends Controller
         }
 
         if ($categoryId = $request->get('category_id')) {
-            $query->where('category_id', $categoryId);
+            $query->where(function ($q) use ($categoryId): void {
+                $q->where('category_id', $categoryId)
+                    ->orWhereHas('categories', fn ($cq) => $cq->where('categories.id', $categoryId));
+            });
         }
 
         if ($request->filled('is_gangajal')) {
@@ -60,7 +63,11 @@ class ProductController extends Controller
      */
     public function create(): View
     {
-        $categories = Category::all();
+        $categories = Category::with('children')->whereNull('parent_id')->orderBy('sort_order')->orderBy('name')->get();
+        $orphanCategories = Category::whereNotNull('parent_id')->whereNotIn('parent_id', $categories->pluck('id'))->get();
+        if ($orphanCategories->isNotEmpty()) {
+            $categories = $categories->concat($orphanCategories);
+        }
         $batches = Batch::where('status', 'ready')->get();
 
         return view('admin.products.create', compact('categories', 'batches'));
@@ -71,8 +78,17 @@ class ProductController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $categoryIds = $request->input('category_ids');
+        if (empty($categoryIds) && $request->filled('category_id')) {
+            $categoryIds = [$request->input('category_id')];
+        }
+        $categoryIds = is_array($categoryIds) ? array_values(array_filter(array_map('intval', $categoryIds))) : [];
+        $request->merge(['category_ids' => $categoryIds]);
+
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'required|array|min:1',
+            'category_ids.*' => 'exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'batch_id' => 'nullable|exists:batches,id',
             'name' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
@@ -153,6 +169,7 @@ class ProductController extends Controller
         $variantsData = $validated['variants'] ?? [];
 
         unset(
+            $validated['category_ids'],
             $validated['image_file'],
             $validated['image_url'],
             $validated['gallery_files'],
@@ -162,6 +179,7 @@ class ProductController extends Controller
             $validated['variants']
         );
 
+        $validated['category_id'] = $categoryIds[0];
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::lower(Str::random(5));
         $validated['hsn_code'] = $validated['hsn_code'] ?? '22019010';
         $validated['gst_percentage'] = $validated['gst_percentage'] ?? 18.00;
@@ -174,6 +192,7 @@ class ProductController extends Controller
         $validated['reviews_count'] = $validated['reviews_count'] ?? 15;
 
         $product = Product::create($validated);
+        $product->categories()->sync($categoryIds);
 
         // Save Variants
         if (! empty($variantsData)) {
@@ -205,8 +224,12 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
-        $product->load('variants');
-        $categories = Category::all();
+        $product->load(['variants', 'categories']);
+        $categories = Category::with('children')->whereNull('parent_id')->orderBy('sort_order')->orderBy('name')->get();
+        $orphanCategories = Category::whereNotNull('parent_id')->whereNotIn('parent_id', $categories->pluck('id'))->get();
+        if ($orphanCategories->isNotEmpty()) {
+            $categories = $categories->concat($orphanCategories);
+        }
         $batches = Batch::all();
 
         return view('admin.products.edit', compact('product', 'categories', 'batches'));
@@ -217,8 +240,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
+        $categoryIds = $request->input('category_ids');
+        if (empty($categoryIds) && $request->filled('category_id')) {
+            $categoryIds = [$request->input('category_id')];
+        }
+        $categoryIds = is_array($categoryIds) ? array_values(array_filter(array_map('intval', $categoryIds))) : [];
+        $request->merge(['category_ids' => $categoryIds]);
+
         $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_ids' => 'required|array|min:1',
+            'category_ids.*' => 'exists:categories,id',
+            'category_id' => 'nullable|exists:categories,id',
             'batch_id' => 'nullable|exists:batches,id',
             'name' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
@@ -351,6 +383,7 @@ class ProductController extends Controller
         $variantsData = $validated['variants'] ?? [];
 
         unset(
+            $validated['category_ids'],
             $validated['image_file'],
             $validated['image_url'],
             $validated['keep_gallery'],
@@ -362,6 +395,12 @@ class ProductController extends Controller
             $validated['variants']
         );
 
+        if ($product->category_id && in_array((int) $product->category_id, $categoryIds, true)) {
+            $validated['category_id'] = (int) $product->category_id;
+        } else {
+            $validated['category_id'] = $categoryIds[0];
+        }
+
         $validated['hsn_code'] = $validated['hsn_code'] ?? $product->hsn_code ?? '22019010';
         $validated['gst_percentage'] = $validated['gst_percentage'] ?? $product->gst_percentage ?? 18.00;
         $validated['is_gangajal'] = $request->boolean('is_gangajal');
@@ -371,6 +410,7 @@ class ProductController extends Controller
         $validated['is_bestseller'] = $request->boolean('is_bestseller');
 
         $product->update($validated);
+        $product->categories()->sync($categoryIds);
 
         // Sync Variants
         $submittedVariantIds = [];
