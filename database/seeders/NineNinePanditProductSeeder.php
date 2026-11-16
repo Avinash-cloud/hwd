@@ -226,7 +226,7 @@ class NineNinePanditProductSeeder extends Seeder
                 'is_active' => true,
                 'is_featured' => true,
                 'is_bestseller' => true,
-                'purity_details' => '100% authentic Nepalese Elaeocarpus Ganitrus. Tested for natural density, seed compartments, and unbroken contours.',
+                'purity_details' => 'Pure authentic Nepalese Elaeocarpus Ganitrus. Tested for natural density, seed compartments, and unbroken contours.',
                 'benefits' => 'Neutralizes negative planetary influences, unlocks career and financial opportunities, and reduces stress and anxiety.',
                 'specifications' => [
                     'Origin' => 'Nepal Himalayas (High Altitude)',

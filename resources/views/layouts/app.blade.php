@@ -102,7 +102,7 @@
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <span class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss</span>
+                            <span class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
                             <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.</span>
                             <span class="block text-[10px] text-amber-200/70 font-mono">CIN: U11040UT2025PTC019429</span>
                         </div>
@@ -116,7 +116,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403</span>
+                        <span>G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand, India - 249403</span>
                     </div>
                 </div>
 
@@ -125,16 +125,16 @@
                     <h4 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 font-mono">Sacred
                         Offerings</h4>
                     <ul class="space-y-2.5 text-sm">
-                        <li><a href="{{ route('products.index', ['type' => 'gangajal']) }}"
-                                class="hover:text-white transition">Haridwar Gangajal (500ml)</a></li>
-                        <li><a href="{{ route('products.index', ['type' => 'gangajal']) }}"
-                                class="hover:text-white transition">Copper Cask Edition (1 Litre)</a></li>
-                        <li><a href="{{ route('products.index', ['category' => 'brass-pooja-ware']) }}"
-                                class="hover:text-white transition">Handcrafted Brass Aarti Diya</a></li>
-                        <li><a href="{{ route('products.index', ['category' => 'dhoop-incense']) }}"
-                                class="hover:text-white transition">Vedic Temple Dhoop & Havan Samagri</a></li>
-                        <li><a href="{{ route('products.index', ['category' => 'divine-gifts-prasad']) }}"
-                                class="hover:text-white transition">Consecrated Rudraksha Mala</a></li>
+                        <li><a href="{{ route('products.index', ['type' => 'puja-essentials']) }}"
+                                class="hover:text-white transition">BluBliss Gangajal </a></li>
+                        <li><a href="{{ route('products.index', ['type' => 'puja-essentials']) }}"
+                                class="hover:text-white transition">Brass Puja Bell </a></li>
+                        <li><a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
+                                class="hover:text-white transition">Gulab Jal </a></li>
+                        <li><a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
+                                class="hover:text-white transition">Brass Puja Combo</a></li>
+                        <li><a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"
+                                class="hover:text-white transition">Attar </a></li>
                     </ul>
                 </div>
 
@@ -149,7 +149,7 @@
                                 class="text-amber-300 font-medium hover:text-white transition">Sacred Haridwar Gallery</a></li>
                         <li><a href="{{ route('membership.join') }}"
                                 class="text-amber-300 font-bold hover:text-white transition">🌟 5-Year Sacred
-                                Membership (₹500)</a></li>
+                                Membership</a></li>
                         <li><a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
                                 class="hover:text-white transition">Batch QR Verification & Lab Tests</a></li>
                         <li><a href="{{ route('about') }}" class="hover:text-white transition">Sanctity of Sacred Ganga
@@ -172,7 +172,7 @@
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span>100% Hermetically Sealed</span>
+                            <span> Hermetically Sealed</span>
                         </div>
                         <p class="text-xs text-amber-200/80 leading-normal">
                             Untouched by human hands from sacred collection to tamper-evident capping. Every shipment

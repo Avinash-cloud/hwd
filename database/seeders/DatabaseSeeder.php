@@ -422,7 +422,7 @@ class DatabaseSeeder extends Seeder
                 'stock' => 120,
                 'sku' => 'HB-GJ-1000-CU',
                 'image' => '/images/haridwar-ghat-shrines.jpg',
-                'purity_details' => '100% authentic Haridwar water enriched inside an engraved pure copper vessel.',
+                'purity_details' => 'Pure authentic Haridwar water enriched inside an engraved pure copper vessel.',
                 'specifications' => ['Volume' => '1000 ml', 'Vessel' => '100% Pure Embossed Copper', 'Batch Traceability' => 'Verified on QR Portal'],
                 'is_bestseller' => true,
                 'is_featured' => true,
