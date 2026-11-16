@@ -134,7 +134,9 @@
                     <span>Contact Queries</span>
                 </div>
                 @php
-                    $navUnreadInquiries = \App\Models\ContactInquiry::where('status', 'unread')->count();
+                    $navUnreadInquiries = \Illuminate\Support\Facades\Schema::hasTable('contact_inquiries')
+                        ? \App\Models\ContactInquiry::where('status', 'unread')->count()
+                        : 0;
                 @endphp
                 @if($navUnreadInquiries > 0)
                     <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-600 text-white leading-none">{{ $navUnreadInquiries }}</span>
@@ -150,7 +152,9 @@
                     <span>Bulk Enquiries</span>
                 </div>
                 @php
-                    $navPendingBulk = \App\Models\BulkOrderInquiry::where('status', 'pending')->count();
+                    $navPendingBulk = \App\Models\BulkOrderInquiry::hasTable()
+                        ? \App\Models\BulkOrderInquiry::where('status', 'pending')->count()
+                        : 0;
                 @endphp
                 @if($navPendingBulk > 0)
                     <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-600 text-white leading-none">{{ $navPendingBulk }}</span>

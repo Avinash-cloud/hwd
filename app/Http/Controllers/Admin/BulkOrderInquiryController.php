@@ -6,12 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\BulkOrderInquiry;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 
 class BulkOrderInquiryController extends Controller
 {
     public function index(Request $request): View
     {
+        if (! BulkOrderInquiry::hasTable()) {
+            $inquiries = new LengthAwarePaginator([], 0, 15);
+            $pendingCount = 0;
+            $totalCount = 0;
+
+            return view('admin.bulk-inquiries.index', compact('inquiries', 'pendingCount', 'totalCount'));
+        }
+
         $query = BulkOrderInquiry::with('product')->latest();
 
         if ($status = $request->get('status')) {

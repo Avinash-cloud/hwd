@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 
 class BulkOrderInquiry extends Model
 {
@@ -29,6 +30,20 @@ class BulkOrderInquiry extends Model
         return [
             'quantity' => 'integer',
         ];
+    }
+
+    public static function hasTable(): bool
+    {
+        static $has = null;
+        if ($has === null) {
+            try {
+                $has = Schema::hasTable('bulk_order_inquiries');
+            } catch (\Throwable) {
+                $has = false;
+            }
+        }
+
+        return $has;
     }
 
     /**
