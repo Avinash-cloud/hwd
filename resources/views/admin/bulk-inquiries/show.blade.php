@@ -166,6 +166,26 @@
                         </div>
                     @endif
 
+                    @if($inquiry->address || $inquiry->city || $inquiry->state || $inquiry->pincode)
+                        <div class="pt-2 border-t border-slate-100">
+                            <span class="text-[11px] text-slate-400 uppercase font-semibold">Delivery Destination</span>
+                            @if($inquiry->address)
+                                <p class="text-slate-900 text-xs mt-0.5 whitespace-pre-line leading-relaxed">{{ $inquiry->address }}</p>
+                            @endif
+                            <div class="text-slate-600 text-xs mt-1 font-medium flex items-center gap-1.5 flex-wrap">
+                                @if($inquiry->city)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-slate-800">{{ $inquiry->city }}</span>
+                                @endif
+                                @if($inquiry->state)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded bg-slate-100 text-slate-800">{{ $inquiry->state }}</span>
+                                @endif
+                                @if($inquiry->pincode)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200 font-mono text-[11px]">{{ $inquiry->pincode }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
                     @if($inquiry->ip_address)
                         <div>
                             <span class="text-[11px] text-slate-400 uppercase font-semibold">Submission IP</span>

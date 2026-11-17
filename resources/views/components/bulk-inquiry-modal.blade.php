@@ -104,7 +104,7 @@
                 </div>
 
                 <!-- Form State -->
-                <form x-show="!submitted" @submit.prevent="submitForm()" class="space-y-4 space-x-4 gap-4">
+                <form x-show="!submitted" @submit.prevent="submitForm()" class="space-y-4">
                     <!-- Global Error Alert -->
                     <div x-show="errorMessage" x-transition
                         class="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-start gap-2">
@@ -208,14 +208,69 @@
                         </template>
                     </div>
 
+                    <!-- Delivery Address & Destination Details (Address, City, State, Pincode) -->
+                    <div class="pt-2 border-t border-slate-100 space-y-3">
+                        <!-- Full Address -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                Delivery Address <span class="text-slate-400 font-normal">(Optional)</span>
+                            </label>
+                            <textarea x-model="form.address" rows="2"
+                                placeholder="Street address, building, landmark, temple/ashram or organization name..."
+                                class="w-full px-3.5 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs"></textarea>
+                            <template x-if="errors.address">
+                                <p class="text-[11px] text-rose-600 mt-1" x-text="errors.address[0]"></p>
+                            </template>
+                        </div>
+
+                        <!-- City, State, Pincode Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- City -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    City <span class="text-slate-400 font-normal">(Optional)</span>
+                                </label>
+                                <input type="text" x-model="form.city" placeholder="e.g. Haridwar"
+                                    class="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs" />
+                                <template x-if="errors.city">
+                                    <p class="text-[11px] text-rose-600 mt-1" x-text="errors.city[0]"></p>
+                                </template>
+                            </div>
+
+                            <!-- State -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    State <span class="text-slate-400 font-normal">(Optional)</span>
+                                </label>
+                                <input type="text" x-model="form.state" placeholder="e.g. Uttarakhand"
+                                    class="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs" />
+                                <template x-if="errors.state">
+                                    <p class="text-[11px] text-rose-600 mt-1" x-text="errors.state[0]"></p>
+                                </template>
+                            </div>
+
+                            <!-- Pincode -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                                    Pincode <span class="text-slate-400 font-normal">(Optional)</span>
+                                </label>
+                                <input type="text" x-model="form.pincode" maxlength="10" placeholder="e.g. 249401"
+                                    class="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs font-mono" />
+                                <template x-if="errors.pincode">
+                                    <p class="text-[11px] text-rose-600 mt-1" x-text="errors.pincode[0]"></p>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Message / Requirements (Optional) -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">
                             Message / Specific Requirements <span class="text-slate-400 font-normal">(Optional)</span>
                         </label>
-                        <textarea x-model="form.message" rows="3"
-                            placeholder="Mention delivery city/state, event date, custom branding/labels, or special temple requirements..."
-                            class="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs"></textarea>
+                        <textarea x-model="form.message" rows="2"
+                            placeholder="Mention target date, custom branding/labels, GST requirements, or temple instructions..."
+                            class="w-full px-3.5 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition shadow-2xs"></textarea>
                         <template x-if="errors.message">
                             <p class="text-[11px] text-rose-600 mt-1" x-text="errors.message[0]"></p>
                         </template>
@@ -296,6 +351,10 @@
                 phone: config.userPhone || '',
                 productId: config.initialProductId || '',
                 quantity: 50,
+                address: '',
+                city: '',
+                state: '',
+                pincode: '',
                 message: ''
             },
 
@@ -319,6 +378,10 @@
                 this.submitting = false;
                 this.errorMessage = null;
                 this.errors = {};
+                this.form.address = '';
+                this.form.city = '';
+                this.form.state = '';
+                this.form.pincode = '';
                 this.form.message = '';
                 this.form.quantity = 50;
             },
@@ -348,6 +411,10 @@
                             phone: this.form.phone,
                             product_id: this.form.productId,
                             quantity: this.form.quantity,
+                            address: this.form.address,
+                            city: this.form.city,
+                            state: this.form.state,
+                            pincode: this.form.pincode,
                             message: this.form.message
                         })
                     });

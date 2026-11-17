@@ -44,6 +44,10 @@ class BulkOrderInquiryTest extends TestCase
         $response->assertSee('Bulk Product Inquiry');
         $response->assertSee('open-bulk-inquiry');
         $response->assertSee('Wholesale');
+        $response->assertSee('Delivery Address');
+        $response->assertSee('City');
+        $response->assertSee('State');
+        $response->assertSee('Pincode');
     }
 
     public function test_api_can_submit_bulk_product_inquiry_and_persists_to_database(): void
@@ -56,6 +60,10 @@ class BulkOrderInquiryTest extends TestCase
             'phone' => '+91 98765 43210',
             'product_id' => $product->id,
             'quantity' => 200,
+            'address' => 'Shri Ganga Mandir Ashram, Kankhal Ghat',
+            'city' => 'Haridwar',
+            'state' => 'Uttarakhand',
+            'pincode' => '249408',
             'message' => 'Need 200 consecrated brass bottles for annual temple maha-abhishekam.',
         ]);
 
@@ -71,6 +79,10 @@ class BulkOrderInquiryTest extends TestCase
             'email' => 'rajesh.sharma@temple.org',
             'phone' => '+91 98765 43210',
             'quantity' => 200,
+            'address' => 'Shri Ganga Mandir Ashram, Kankhal Ghat',
+            'city' => 'Haridwar',
+            'state' => 'Uttarakhand',
+            'pincode' => '249408',
             'status' => 'pending',
         ]);
     }
@@ -106,6 +118,10 @@ class BulkOrderInquiryTest extends TestCase
             'email' => 'manoj@ashram.in',
             'phone' => '9876500000',
             'quantity' => 500,
+            'address' => 'Plot 45, Temple Road, Kankhal',
+            'city' => 'Haridwar',
+            'state' => 'Uttarakhand',
+            'pincode' => '249401',
             'message' => 'Bulk supply for Haridwar pilgrimage camp.',
             'status' => 'pending',
         ]);
@@ -116,6 +132,7 @@ class BulkOrderInquiryTest extends TestCase
         $listRes->assertSee('Manoj Gupta');
         $listRes->assertSee('500 units');
         $listRes->assertSee($product->name);
+        $listRes->assertSee('Haridwar');
 
         // 2. Admin can filter by status
         $filterRes = $this->actingAs($admin)->get('/admin/bulk-inquiries?status=pending');
@@ -127,6 +144,10 @@ class BulkOrderInquiryTest extends TestCase
         $showRes->assertStatus(200);
         $showRes->assertSee('Bulk supply for Haridwar pilgrimage camp.');
         $showRes->assertSee('9876500000');
+        $showRes->assertSee('Plot 45, Temple Road, Kankhal');
+        $showRes->assertSee('Haridwar');
+        $showRes->assertSee('Uttarakhand');
+        $showRes->assertSee('249401');
 
         // 4. Admin updates status and adds internal notes
         $updateRes = $this->actingAs($admin)->put("/admin/bulk-inquiries/{$inquiry->id}", [

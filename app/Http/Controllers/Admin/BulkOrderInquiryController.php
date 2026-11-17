@@ -33,6 +33,10 @@ class BulkOrderInquiryController extends Controller
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
                     ->orWhere('product_name', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhere('state', 'like', "%{$search}%")
+                    ->orWhere('pincode', 'like', "%{$search}%")
                     ->orWhere('message', 'like', "%{$search}%");
             });
         }

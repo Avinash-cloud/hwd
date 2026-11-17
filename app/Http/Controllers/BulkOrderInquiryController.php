@@ -21,6 +21,10 @@ class BulkOrderInquiryController extends Controller
             'phone' => ['required', 'string', 'min:7', 'max:25'],
             'product_id' => ['required', 'exists:products,id'],
             'quantity' => ['required', 'integer', 'min:1', 'max:1000000'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'state' => ['nullable', 'string', 'max:100'],
+            'pincode' => ['nullable', 'string', 'max:20'],
             'message' => ['nullable', 'string', 'max:3000'],
         ]);
 
@@ -33,6 +37,10 @@ class BulkOrderInquiryController extends Controller
             'email' => ! empty($validated['email']) ? trim($validated['email']) : null,
             'phone' => trim($validated['phone']),
             'quantity' => (int) $validated['quantity'],
+            'address' => ! empty($validated['address']) ? trim($validated['address']) : null,
+            'city' => ! empty($validated['city']) ? trim($validated['city']) : null,
+            'state' => ! empty($validated['state']) ? trim($validated['state']) : null,
+            'pincode' => ! empty($validated['pincode']) ? trim($validated['pincode']) : null,
             'message' => ! empty($validated['message']) ? trim($validated['message']) : null,
             'status' => 'pending',
             'ip_address' => $request->ip(),
