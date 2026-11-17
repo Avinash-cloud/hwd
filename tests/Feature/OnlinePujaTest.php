@@ -15,6 +15,7 @@ class OnlinePujaTest extends TestCase
         $response = $this->get('/online-puja');
 
         $response->assertStatus(200);
+        // Hindi text & pricing assertions
         $response->assertSee('हरिद्वार पावन घाट ऑनलाइन पूजा एवं वैदिक अनुष्ठान');
         $response->assertSee('मंगल उत्सव एवं आयुष्मान संकल्प पूजा');
         $response->assertSee('5,100');
@@ -24,6 +25,14 @@ class OnlinePujaTest extends TestCase
         $response->assertSee('Blu Bliss 500ml');
         $response->assertSee('100% Non-Refundable');
         $response->assertSee('100% गैर-वापसी योग्य');
+
+        // English text & language switcher assertions
+        $response->assertSee('Sacred Haridwar Ghats Online Puja &amp; Vedic Rituals', false);
+        $response->assertSee('Package 1: "Mangal Utsav &amp; Ayushman Sankalp Puja"', false);
+        $response->assertSee('Package 2: "Maha-Tithi &amp; Divine Festival Special Ritual"', false);
+        $response->assertSee('Language');
+        $response->assertSee('English');
+        $response->assertSee('हिन्दी');
     }
 
     public function test_navigation_menu_links_to_online_puja_page(): void
