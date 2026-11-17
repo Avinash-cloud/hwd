@@ -1,13 +1,25 @@
 <x-app-layout>
     <!-- 1. Hero Promotional Slideshow (Shop.99Pandit Style - Dynamic from Admin Panel) -->
-    <section class="relative overflow-hidden bg-[#25050A] text-white" x-data="{
+    <section class="relative overflow-hidden bg-[#25050A] text-white"
+             @mouseenter="pauseTimer()"
+             @mouseleave="startTimer()"
+             x-data="{
                  activeSlide: 0,
                  totalSlides: {{ max(1, $sliders->count()) }},
                  timer: null,
-                 init() {
-                     if (this.totalSlides > 1) {
+                 startTimer() {
+                     if (this.totalSlides > 1 && !this.timer) {
                          this.timer = setInterval(() => { this.nextSlide(); }, 6000);
                      }
+                 },
+                 pauseTimer() {
+                     if (this.timer) {
+                         clearInterval(this.timer);
+                         this.timer = null;
+                     }
+                 },
+                 init() {
+                     this.startTimer();
                  },
                  nextSlide() {
                      this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
@@ -39,27 +51,97 @@
                         || !empty(trim($slide->subtitle ?? ''))
                         || !empty(trim($slide->description ?? ''))
                         || !empty(trim($slide->button_text ?? ''))
-                        || !empty(trim($slide->secondary_button_text ?? ''));
+                        || !empty(trim($slide->secondary_button_text ?? ''))
+                        || !empty($slide->right_image_url);
                 @endphp
                 <div x-show="activeSlide === {{ $index }}" x-transition:enter="transition ease-out duration-700"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-500" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95" class="absolute inset-0 w-full h-full">
 
-                    @if ($slide->is_video && $slide->resolved_video_url)
-                        <!-- Video Slide Background with Muted Autoplay and Unmute Toggle -->
-                        <div class="absolute inset-0 w-full h-full overflow-hidden" x-data="{ isMuted: true }">
-                            <video :muted="isMuted" playsinline autoplay loop poster="{{ $slide->image_url }}"
-                                class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
-                                <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
-                            </video>
+                    @if ($slide->is_video && ($slide->is_video_embed || $slide->resolved_video_url))
+                        @if ($slide->is_video_embed)
+                            <!-- YouTube / Vimeo Video Slide Background with Autoplay -->
+                            <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                                <iframe src="{{ $slide->video_embed_url }}"
+                                    class="w-full h-full object-cover scale-125 md:scale-110 pointer-events-none border-0 {{ $hasText ? 'opacity-90' : 'opacity-100' }}"
+                                    allow="autoplay; encrypted-media; picture-in-picture"
+                                    loading="eager"></iframe>
+                            </div>
+                        @else
+                            <!-- MP4/WebM Video Slide Background with Muted Autoplay, Loop, and Unmute Toggle -->
+                            <div class="absolute inset-0 w-full h-full overflow-hidden"
+                                 x-data="{
+                                     isMuted: true,
+                                     init() {
+                                         this.playVideo();
+                                         this.$watch('activeSlide', (val) => {
+                                             if (val === {{ $index }}) {
+                                                 this.playVideo();
+                                             } else {
+                                                 this.pauseVideo();
+                                             }
+                                         });
+                                         const startVideo = () => {
+                                             if (this.activeSlide === {{ $index }}) {
+                                                 this.playVideo();
+                                             }
+                                         };
+                                         window.addEventListener('touchstart', startVideo, { once: true, passive: true });
+                                         window.addEventListener('click', startVideo, { once: true, passive: true });
+                                     },
+                                     playVideo() {
+                                         this.$nextTick(() => {
+                                             const vid = this.$refs.heroVideo;
+                                             if (vid) {
+                                                 vid.muted = this.isMuted;
+                                                 const p = vid.play();
+                                                 if (p !== undefined) {
+                                                     p.catch(() => {
+                                                         vid.muted = true;
+                                                         this.isMuted = true;
+                                                         vid.play().catch(() => {});
+                                                     });
+                                                 }
+                                             }
+                                         });
+                                     },
+                                     pauseVideo() {
+                                         const vid = this.$refs.heroVideo;
+                                         if (vid && !vid.paused) {
+                                             vid.pause();
+                                         }
+                                     },
+                                     toggleMute() {
+                                         this.isMuted = !this.isMuted;
+                                         const vid = this.$refs.heroVideo;
+                                         if (vid) {
+                                             vid.muted = this.isMuted;
+                                             if (vid.paused) {
+                                                 vid.play().catch(() => {});
+                                             }
+                                         }
+                                     }
+                                 }">
+                                <video x-ref="heroVideo"
+                                    autoplay
+                                    muted
+                                    playsinline
+                                    webkit-playsinline
+                                    loop
+                                    preload="auto"
+                                    poster="{{ $slide->image_url }}"
+                                    class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
+                                    <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
+                                </video>
 
-                            <!-- Devotee Unmute / Mute Toggle Button -->
-                            <button type="button" @click="isMuted = !isMuted"
-                                class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-amber-300 border border-white/20 text-xs font-bold backdrop-blur-xs shadow-lg transition touch-manipulation cursor-pointer">
-                                <span x-text="isMuted ? '🔇 Unmute Video' : '🔊 Mute Video'"></span>
-                            </button>
-                        </div>
+                                <!-- Devotee Unmute / Mute Toggle Button -->
+                                <button type="button" @click="toggleMute()"
+                                    class="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-900 text-amber-300 border border-white/20 text-xs font-bold backdrop-blur-xs shadow-lg transition touch-manipulation cursor-pointer">
+                                    <span x-text="isMuted ? '🔇 Unmute Video' : '🔊 Mute Video'"></span>
+                                </button>
+                            </div>
+                        @endif
                     @else
                         <!-- Responsive Media with Art Direction (Desktop, Tablet, Mobile) -->
                         <picture class="w-full h-full absolute inset-0">
@@ -82,48 +164,62 @@
 
                         <!-- Slide Content -->
                         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-                            <div class="max-w-2xl space-y-4 sm:space-y-6 py-12">
-                                @if ($slide->subtitle)
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
-                                        <span class="w-2 h-2 rounded-full animate-pulse {{ $dotBg }}"></span>
-                                        <span>{{ $slide->subtitle }}</span>
+                            <div class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 py-10 lg:py-12">
+                                <div class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'max-w-2xl' }} space-y-4 sm:space-y-6">
+                                    @if ($slide->subtitle)
+                                        <div
+                                            class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
+                                            <span class="w-2 h-2 rounded-full animate-pulse {{ $dotBg }}"></span>
+                                            <span>{{ $slide->subtitle }}</span>
+                                        </div>
+                                    @endif
+
+                                    @if ($slide->title)
+                                        <h1
+                                            class="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-snug sm:leading-snug lg:leading-[1.22] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                                            {{ $slide->title }}
+                                        </h1>
+                                    @endif
+
+                                    @if ($slide->description)
+                                        <p
+                                            class="text-sm sm:text-base text-amber-100/90 leading-relaxed max-w-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                                            {{ $slide->description }}
+                                        </p>
+                                    @endif
+
+                                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                                        @if ($slide->button_text && $slide->button_link)
+                                            <a href="{{ $slide->button_link }}"
+                                                class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5">
+                                                <span>{{ $slide->button_text }}</span>
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                </svg>
+                                            </a>
+                                        @endif
+
+                                        @if ($slide->secondary_button_text && $slide->secondary_button_link)
+                                            <a href="{{ $slide->secondary_button_link }}"
+                                                class="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-bold text-sm backdrop-blur-xs transition">
+                                                <span>{{ $slide->secondary_button_text }}</span>
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                @if ($slide->right_image_url)
+                                    <!-- Right-Side Showcase Image -->
+                                    <div class="w-full lg:w-2/5 xl:w-1/3 flex justify-center lg:justify-end items-center mt-4 lg:mt-0">
+                                        <div class="relative group max-w-xs sm:max-w-sm lg:max-w-md w-full flex justify-center lg:justify-end">
+                                            <div class="absolute -inset-4 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                                            <img src="{{ $slide->right_image_url }}"
+                                                 alt="{{ $slide->title ?: 'Featured Sacred Offering' }}"
+                                                 class="relative z-10 max-h-[240px] sm:max-h-[320px] lg:max-h-[400px] w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-105">
+                                        </div>
                                     </div>
                                 @endif
-
-                                @if ($slide->title)
-                                    <h1
-                                        class="text-3xl sm:text-5xl lg:text-6xl font-serif font-extrabold tracking-tight leading-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                                        {{ $slide->title }}
-                                    </h1>
-                                @endif
-
-                                @if ($slide->description)
-                                    <p
-                                        class="text-sm sm:text-base text-amber-100/90 leading-relaxed max-w-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
-                                        {{ $slide->description }}
-                                    </p>
-                                @endif
-
-                                <div class="flex flex-wrap items-center gap-3 pt-2">
-                                    @if ($slide->button_text && $slide->button_link)
-                                        <a href="{{ $slide->button_link }}"
-                                            class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                                            <span>{{ $slide->button_text }}</span>
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                            </svg>
-                                        </a>
-                                    @endif
-
-                                    @if ($slide->secondary_button_text && $slide->secondary_button_link)
-                                        <a href="{{ $slide->secondary_button_link }}"
-                                            class="inline-flex items-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-bold text-sm backdrop-blur-xs transition">
-                                            <span>{{ $slide->secondary_button_text }}</span>
-                                        </a>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     @else
@@ -436,7 +532,7 @@
                                 Auspicious Devotee Offering
                             </span>
                             <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider">One-Time 5-Year
-                                Dakshina</h4>
+                                </h4>
                             <div class="mt-1 flex items-baseline justify-center gap-1">
                                 <span
                                     class="text-4xl sm:text-5xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>

@@ -20,7 +20,7 @@
 
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-serif font-extrabold text-white tracking-tight">
+                    <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight leading-snug">
                         @if (request('category'))
                             {{ ucwords(str_replace('-', ' ', request('category'))) }}
                         @elseif (request('type') === 'gangajal')
@@ -56,7 +56,7 @@
                             <span>Devotee Privilege</span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-[11px]">
-                            Join our 5-Year Membership (₹{{ number_format($membershipFee) }}) to receive your 1st Gangajal bottle FREE every month and unlock member rates.
+                            Join our 5-Year Membership (₹{{ number_format($membershipFee) }}) and receive your 1st Gangajal bottle FREE! Thereafter, enjoy uninterrupted doorstep delivery of a pure 500ml Gangajal bottle every month at just ₹199/month.
                         </p>
                         <a href="{{ route('membership.join') }}"
                            class="block text-center w-full py-2 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-[11px] shadow-xs transition">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Slider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -47,6 +48,8 @@ class SliderController extends Controller
             'tablet_image_url' => 'nullable|string|max:1000',
             'mobile_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'mobile_image_url' => 'nullable|string|max:1000',
+            'right_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
+            'right_image_url' => 'nullable|string|max:1000',
             'video_file' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
             'video_url' => 'nullable|string|max:1000',
             'button_text' => 'nullable|string|max:100',
@@ -81,6 +84,13 @@ class SliderController extends Controller
             $validated['mobile_image'] = $validated['mobile_image_url'];
         }
 
+        // Handle right side showcase image
+        if ($request->hasFile('right_image_file')) {
+            $validated['right_image'] = $request->file('right_image_file')->store('sliders', 'public');
+        } elseif (! empty($validated['right_image_url'])) {
+            $validated['right_image'] = $validated['right_image_url'];
+        }
+
         // Handle video
         if ($request->hasFile('video_file')) {
             $validated['video_file'] = $request->file('video_file')->store('sliders/videos', 'public');
@@ -89,8 +99,13 @@ class SliderController extends Controller
         unset(
             $validated['image_file'], $validated['image_url'],
             $validated['tablet_image_file'], $validated['tablet_image_url'],
-            $validated['mobile_image_file'], $validated['mobile_image_url']
+            $validated['mobile_image_file'], $validated['mobile_image_url'],
+            $validated['right_image_file'], $validated['right_image_url']
         );
+
+        if (! Schema::hasColumn('sliders', 'right_image')) {
+            unset($validated['right_image']);
+        }
 
         $validated['media_type'] = $mediaType;
         $validated['is_active'] = $request->boolean('is_active', true);
@@ -126,6 +141,8 @@ class SliderController extends Controller
             'tablet_image_url' => 'nullable|string|max:1000',
             'mobile_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
             'mobile_image_url' => 'nullable|string|max:1000',
+            'right_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
+            'right_image_url' => 'nullable|string|max:1000',
             'video_file' => 'nullable|file|mimes:mp4,mov,webm|max:51200',
             'video_url' => 'nullable|string|max:1000',
             'button_text' => 'nullable|string|max:100',
@@ -164,6 +181,20 @@ class SliderController extends Controller
             $validated['mobile_image'] = $validated['mobile_image_url'];
         }
 
+        if ($request->hasFile('right_image_file')) {
+            if ($slider->right_image && Storage::disk('public')->exists($slider->right_image)) {
+                Storage::disk('public')->delete($slider->right_image);
+            }
+            $validated['right_image'] = $request->file('right_image_file')->store('sliders', 'public');
+        } elseif ($request->filled('right_image_url')) {
+            $validated['right_image'] = $validated['right_image_url'];
+        } elseif ($request->boolean('remove_right_image')) {
+            if ($slider->right_image && Storage::disk('public')->exists($slider->right_image)) {
+                Storage::disk('public')->delete($slider->right_image);
+            }
+            $validated['right_image'] = null;
+        }
+
         if ($request->hasFile('video_file')) {
             if ($slider->video_file && Storage::disk('public')->exists($slider->video_file)) {
                 Storage::disk('public')->delete($slider->video_file);
@@ -174,8 +205,14 @@ class SliderController extends Controller
         unset(
             $validated['image_file'], $validated['image_url'],
             $validated['tablet_image_file'], $validated['tablet_image_url'],
-            $validated['mobile_image_file'], $validated['mobile_image_url']
+            $validated['mobile_image_file'], $validated['mobile_image_url'],
+            $validated['right_image_file'], $validated['right_image_url'],
+            $validated['remove_right_image']
         );
+
+        if (! Schema::hasColumn('sliders', 'right_image')) {
+            unset($validated['right_image']);
+        }
 
         $validated['media_type'] = $request->input('media_type', $slider->media_type ?? 'image');
         $validated['is_active'] = $request->boolean('is_active');
@@ -194,6 +231,22 @@ class SliderController extends Controller
     {
         if ($slider->image && Storage::disk('public')->exists($slider->image)) {
             Storage::disk('public')->delete($slider->image);
+        }
+
+        if ($slider->tablet_image && Storage::disk('public')->exists($slider->tablet_image)) {
+            Storage::disk('public')->delete($slider->tablet_image);
+        }
+
+        if ($slider->mobile_image && Storage::disk('public')->exists($slider->mobile_image)) {
+            Storage::disk('public')->delete($slider->mobile_image);
+        }
+
+        if ($slider->right_image && Storage::disk('public')->exists($slider->right_image)) {
+            Storage::disk('public')->delete($slider->right_image);
+        }
+
+        if ($slider->video_file && Storage::disk('public')->exists($slider->video_file)) {
+            Storage::disk('public')->delete($slider->video_file);
         }
 
         $slider->delete();

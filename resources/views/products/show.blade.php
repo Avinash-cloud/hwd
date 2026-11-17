@@ -619,7 +619,15 @@
                             <span x-text="openTab === 1 ? '−' : '+'" class="text-base font-mono"></span>
                         </button>
                         <div x-show="openTab === 1" class="p-4 bg-white text-slate-700 leading-relaxed border-t border-amber-200/50 space-y-3">
-                            <p class="whitespace-pre-line">{{ $product->description }}</p>
+                            @if ($product->description)
+                                <div class="wysiwyg-content text-slate-700 text-xs sm:text-sm">
+                                    @if (strip_tags($product->description) !== $product->description)
+                                        {!! $product->description !!}
+                                    @else
+                                        <p class="whitespace-pre-line">{{ $product->description }}</p>
+                                    @endif
+                                </div>
+                            @endif
                             @if ($product->benefits)
                                 <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200/50">
                                     <strong class="font-bold text-[#881337] block mb-1">Spiritual & Domestic Benefits:</strong>
@@ -993,4 +1001,83 @@
 
     <!-- Bulk Product Inquiry Modal -->
     <x-bulk-inquiry-modal :products="$allProducts ?? collect([$product])" :currentProductId="$product->id" />
+
+    <style>
+        .wysiwyg-content {
+            line-height: 1.65;
+        }
+        .wysiwyg-content p {
+            margin-bottom: 0.75rem;
+        }
+        .wysiwyg-content p:last-child {
+            margin-bottom: 0;
+        }
+        .wysiwyg-content h2 {
+            font-family: 'Liberation Serif', Georgia, serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.35;
+        }
+        .wysiwyg-content h3 {
+            font-family: 'Liberation Serif', Georgia, serif;
+            font-size: 1.025rem;
+            font-weight: 600;
+            color: #334155;
+            margin-top: 1rem;
+            margin-bottom: 0.375rem;
+            line-height: 1.4;
+        }
+        .wysiwyg-content ul {
+            list-style-type: disc !important;
+            padding-left: 1.25rem !important;
+            margin-top: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .wysiwyg-content ol {
+            list-style-type: decimal !important;
+            padding-left: 1.25rem !important;
+            margin-top: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .wysiwyg-content li {
+            margin-bottom: 0.25rem;
+            line-height: 1.55;
+        }
+        .wysiwyg-content strong,
+        .wysiwyg-content b {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .wysiwyg-content em,
+        .wysiwyg-content i {
+            font-style: italic;
+        }
+        .wysiwyg-content u {
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .wysiwyg-content s {
+            text-decoration: line-through;
+        }
+        .wysiwyg-content a {
+            color: #b45309;
+            text-decoration: underline;
+            font-weight: 500;
+            text-underline-offset: 2px;
+            transition: color 0.15s ease;
+        }
+        .wysiwyg-content a:hover {
+            color: #78350f;
+        }
+        .wysiwyg-content blockquote {
+            border-left: 3px solid #d97706;
+            padding-left: 0.85rem;
+            margin: 0.75rem 0;
+            color: #475569;
+            font-style: italic;
+        }
+    </style>
 </x-app-layout>

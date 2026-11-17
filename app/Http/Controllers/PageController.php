@@ -33,6 +33,57 @@ class PageController extends Controller
         return view('pages.contact', compact('supportPhone', 'supportEmail'));
     }
 
+    public function onlinePuja(): View
+    {
+        $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
+        $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');
+
+        return view('pages.online-puja', compact('supportPhone', 'supportEmail'));
+    }
+
+    public function submitOnlinePujaBooking(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'package' => 'required|string|max:255',
+            'devotee_name' => 'required|string|max:255',
+            'gotra' => 'required|string|max:100',
+            'puja_date' => 'required|date',
+            'phone' => 'required|string|max:25',
+            'email' => 'nullable|email|max:255',
+            'occasion' => 'nullable|string|max:255',
+            'shipping_address' => 'required|string|max:500',
+            'special_instructions' => 'nullable|string|max:1000',
+            'terms_agreed' => 'accepted',
+        ]);
+
+        $message = "Online Puja Booking Details:\n"
+            ."Package: {$validated['package']}\n"
+            ."Devotee Name: {$validated['devotee_name']}\n"
+            ."Gotra: {$validated['gotra']}\n"
+            ."Auspicious Date: {$validated['puja_date']}\n"
+            .'Occasion: '.($validated['occasion'] ?? 'General Auspicious Blessing')."\n"
+            ."Prasad Delivery Address: {$validated['shipping_address']}\n"
+            .'Special Notes / Sankalp: '.($validated['special_instructions'] ?? 'None')."\n"
+            ."Agreement: Devotee agreed to 100% Non-Refundable online puja terms.\n";
+
+        ContactInquiry::create([
+            'name' => $validated['devotee_name'],
+            'email' => $validated['email'] ?? 'devotee@haridwarbliss.com',
+            'phone' => $validated['phone'],
+            'subject' => 'Online Puja Booking: '.$validated['package'],
+            'message' => $message,
+            'status' => 'unread',
+        ]);
+
+        return back()->with('booking_success', [
+            'package' => $validated['package'],
+            'devotee_name' => $validated['devotee_name'],
+            'gotra' => $validated['gotra'],
+            'puja_date' => $validated['puja_date'],
+            'phone' => $validated['phone'],
+        ]);
+    }
+
     public function submitContact(Request $request): RedirectResponse
     {
         $validated = $request->validate([

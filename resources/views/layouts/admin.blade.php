@@ -15,6 +15,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('styles')
     </head>
     <body class="admin-shell font-sans antialiased text-slate-800 bg-slate-50 min-h-full flex selection:bg-amber-600 selection:text-white"
           x-data="{ mobileSidebarOpen: false }">
@@ -207,5 +208,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @stack('scripts')
     </body>
 </html>

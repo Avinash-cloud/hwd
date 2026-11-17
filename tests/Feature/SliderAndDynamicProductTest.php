@@ -282,4 +282,106 @@ class SliderAndDynamicProductTest extends TestCase
         // Non-admin user
         $this->actingAs($this->regularUser)->get(route('admin.sliders.index'))->assertStatus(403);
     }
+
+    public function test_hero_banner_renders_autoplay_video_slide(): void
+    {
+        Slider::query()->delete();
+
+        Slider::create([
+            'title' => 'Sacred Ganga Aarti Live',
+            'subtitle' => 'Har Ki Pauri Ghat',
+            'media_type' => 'video',
+            'video_url' => 'https://example.com/ganga_aarti.mp4',
+            'image' => 'images/test_poster.jpg',
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee('x-ref="heroVideo"', false);
+        $response->assertSee('autoplay', false);
+        $response->assertSee('muted', false);
+        $response->assertSee('playsinline', false);
+        $response->assertSee('webkit-playsinline', false);
+        $response->assertSee('loop', false);
+        $response->assertSee('https://example.com/ganga_aarti.mp4', false);
+        $response->assertSee('Unmute Video', false);
+    }
+
+    public function test_admin_can_create_slider_with_right_side_image_upload(): void
+    {
+        Storage::fake('public');
+
+        $bgFile = UploadedFile::fake()->image('hero_bg.jpg', 1920, 700);
+        $rightFile = UploadedFile::fake()->image('bottle_showcase.png', 500, 500);
+
+        $response = $this->actingAs($this->admin)->post(route('admin.sliders.store'), [
+            'title' => 'Pure Haridwar Gangajal Bottle',
+            'subtitle' => 'Special Edition',
+            'description' => 'Divine water blessed at Brahmakund.',
+            'image_file' => $bgFile,
+            'right_image_file' => $rightFile,
+            'button_text' => 'Order Now',
+            'button_link' => '/products',
+            'is_active' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin.sliders.index'));
+
+        $slider = Slider::where('title', 'Pure Haridwar Gangajal Bottle')->first();
+        $this->assertNotNull($slider);
+        $this->assertNotNull($slider->right_image);
+        Storage::disk('public')->assertExists($slider->right_image);
+    }
+
+    public function test_admin_can_update_and_remove_right_side_image(): void
+    {
+        Storage::fake('public');
+
+        $rightFile = UploadedFile::fake()->image('initial_right.png', 400, 400);
+        $storedPath = $rightFile->store('sliders', 'public');
+
+        $slider = Slider::create([
+            'title' => 'Test Slider with Right Image',
+            'image' => 'images/test_bg.jpg',
+            'right_image' => $storedPath,
+            'is_active' => true,
+        ]);
+
+        Storage::disk('public')->assertExists($storedPath);
+
+        // Update with remove_right_image = 1
+        $response = $this->actingAs($this->admin)->put(route('admin.sliders.update', $slider->id), [
+            'title' => 'Test Slider with Right Image',
+            'remove_right_image' => '1',
+            'is_active' => '1',
+        ]);
+
+        $response->assertRedirect(route('admin.sliders.index'));
+        $slider->refresh();
+        $this->assertNull($slider->right_image);
+        Storage::disk('public')->assertMissing($storedPath);
+    }
+
+    public function test_homepage_renders_slider_with_right_side_image(): void
+    {
+        Slider::query()->delete();
+
+        Slider::create([
+            'title' => 'Sacred Brass Abhishek Kalash',
+            'subtitle' => 'Handcrafted Aarti Samagri',
+            'description' => 'Pure copper and brass utensils for temple seva.',
+            'image' => 'images/haridwar-panorama-clocktower.jpg',
+            'right_image' => 'https://example.com/brass_kalash.png',
+            'button_text' => 'View Kalash Collection',
+            'button_link' => '/products',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee('Sacred Brass Abhishek Kalash');
+        $response->assertSee('https://example.com/brass_kalash.png', false);
+    }
 }

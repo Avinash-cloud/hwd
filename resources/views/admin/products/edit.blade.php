@@ -788,10 +788,14 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Full Product Description</label>
-                        <textarea name="description"
-                                  rows="4"
-                                  class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">{{ old('description', $product->description) }}</textarea>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-sm font-medium text-slate-700">Full Product Description</label>
+                            <span class="text-[11px] text-slate-400 font-normal">Rich Text Editor (Headings, Lists, Bold, Links)</span>
+                        </div>
+                        <x-wysiwyg-editor name="description"
+                                          :value="old('description', $product->description)"
+                                          placeholder="Provide detailed description, Vedic significance, and origin details..." />
+                        @error('description') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

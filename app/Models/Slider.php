@@ -20,6 +20,7 @@ class Slider extends Model
         'image',
         'tablet_image',
         'mobile_image',
+        'right_image',
         'video_url',
         'video_file',
         'button_text',
@@ -66,6 +67,54 @@ class Slider extends Model
     public function getMobileImageUrlAttribute(): string
     {
         return $this->mobile_image ? $this->resolvePath($this->mobile_image) : $this->image_url;
+    }
+
+    /**
+     * Resolve right-side showcase image URL.
+     */
+    public function getRightImageUrlAttribute(): ?string
+    {
+        $path = $this->attributes['right_image'] ?? null;
+
+        return $path ? $this->resolvePath($path) : null;
+    }
+
+    /**
+     * Check if slider video is an embeddable iframe (YouTube or Vimeo).
+     */
+    public function getIsVideoEmbedAttribute(): bool
+    {
+        if (! $this->video_url) {
+            return false;
+        }
+
+        return (bool) preg_match('/(youtube\.com|youtu\.be|vimeo\.com)/i', $this->video_url);
+    }
+
+    /**
+     * Get YouTube/Vimeo embed URL with background autoplay, mute, and loop parameters.
+     */
+    public function getVideoEmbedUrlAttribute(): ?string
+    {
+        if (! $this->video_url) {
+            return null;
+        }
+
+        $url = trim($this->video_url);
+
+        // YouTube: https://www.youtube.com/watch?v=XYZ, https://youtu.be/XYZ, etc.
+        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]+)/i', $url, $matches)) {
+            $id = $matches[1];
+
+            return 'https://www.youtube.com/embed/'.$id.'?autoplay=1&mute=1&loop=1&playlist='.$id.'&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1';
+        }
+
+        // Vimeo: https://vimeo.com/123456789
+        if (preg_match('/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/i', $url, $matches)) {
+            return 'https://player.vimeo.com/video/'.$matches[3].'?autoplay=1&muted=1&loop=1&background=1';
+        }
+
+        return $this->resolved_video_url;
     }
 
     /**

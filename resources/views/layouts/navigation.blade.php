@@ -485,7 +485,7 @@
                     <div class="relative group shrink-0" x-data="{ astroOpen: false }" @mouseenter="astroOpen = true"
                         @mouseleave="astroOpen = false">
                         <button type="button" @click="astroOpen = !astroOpen"
-                            class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isAstroActive ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
+                            class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isAstroActive || request()->routeIs('online-puja*') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
                             <span>Spiritual & Astro</span>
                             <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -502,11 +502,11 @@
                             x-transition:leave-end="opacity-0 translate-y-1"
                             class="absolute left-0 top-full mt-0 w-56 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
                             <div class="py-1">
-                                <a href="#"
-                                    class="block px-3.5 py-2 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
+                                <a href="{{ route('online-puja') }}"
+                                    class="block px-3.5 py-2 text-xs hover:text-[#D97706] hover:bg-amber-50 font-semibold transition {{ request()->routeIs('online-puja*') ? 'text-[#D97706] font-bold bg-amber-50/80' : 'text-slate-700' }}">
                                     Online Puja
                                 </a>
-                                <a href="#"
+                                <a href="{{ route('contact') }}?subject=Astrology+Consultation"
                                     class="block px-3.5 py-2 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
                                     Astrology Consultation
                                 </a>
@@ -682,7 +682,7 @@
 
             <!-- Spiritual & Astro (with dropdown: Online Puja & Astrology Consultation) -->
             <div x-data="{ astroMobileOpen: false }">
-                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isAstroActive ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isAstroActive || request()->routeIs('online-puja*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
                     <span class="flex-1 font-bold text-[#881337]">
                         Spiritual & Astro
                     </span>
@@ -694,11 +694,11 @@
                     </button>
                 </div>
                 <div x-show="astroMobileOpen" x-cloak class="pl-4 py-1 space-y-1 bg-amber-50/40 rounded-lg text-xs">
-                    <a href="#"
-                        class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
+                    <a href="{{ route('online-puja') }}"
+                        class="block py-1.5 px-2 hover:text-[#D97706] font-medium {{ request()->routeIs('online-puja*') ? 'text-[#D97706] font-bold bg-amber-100/60 rounded' : 'text-slate-700' }}">
                         Online Puja
                     </a>
-                    <a href="#"
+                    <a href="{{ route('contact') }}?subject=Astrology+Consultation"
                         class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
                         Astrology Consultation
                     </a>

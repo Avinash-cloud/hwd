@@ -43,10 +43,19 @@
                             <tr class="hover:bg-slate-50/60 transition">
                                 <!-- Image Preview -->
                                 <td class="py-3 px-4">
-                                    <div class="w-16 h-10 rounded-md overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
-                                        <img src="{{ $slide->image_url }}"
-                                             alt="{{ $slide->title }}"
-                                             class="w-full h-full object-cover">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="w-16 h-10 rounded-md overflow-hidden bg-slate-100 border border-slate-200 shrink-0" title="Banner Background">
+                                            <img src="{{ $slide->image_url }}"
+                                                 alt="{{ $slide->title }}"
+                                                 class="w-full h-full object-cover">
+                                        </div>
+                                        @if ($slide->right_image_url)
+                                            <div class="w-8 h-10 rounded-md overflow-hidden bg-slate-100 border border-amber-300 p-0.5 shrink-0 flex items-center justify-center" title="Right-Side Showcase Image">
+                                                <img src="{{ $slide->right_image_url }}"
+                                                     alt="Right Graphic"
+                                                     class="max-h-full max-w-full object-contain">
+                                            </div>
+                                        @endif
                                     </div>
                                 </td>
 

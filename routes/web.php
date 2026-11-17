@@ -46,6 +46,10 @@ Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show')
 // Sacred Haridwar Gallery
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 
+// Sacred Online Puja & Vedic Rituals
+Route::get('/online-puja', [PageController::class, 'onlinePuja'])->name('online-puja');
+Route::post('/online-puja/book', [PageController::class, 'submitOnlinePujaBooking'])->name('online-puja.book');
+
 Route::get('/about-us', [PageController::class, 'about'])->name('about');
 Route::get('/faqs', [PageController::class, 'faqs'])->name('faqs');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');

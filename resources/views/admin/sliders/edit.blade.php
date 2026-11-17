@@ -216,6 +216,76 @@
                     </div>
                 </div>
 
+                <!-- Section: Right-Side Showcase Image (Optional) -->
+                <div class="pt-5 border-t border-slate-200"
+                     x-data="{
+                         rightImageSource: 'file',
+                         rightPreviewUrl: '{{ $slider->right_image_url ?? '' }}',
+                         removeRightImage: false,
+                         handleRightFileSelect(e) {
+                             const file = e.target.files[0];
+                             if (file) {
+                                 this.rightPreviewUrl = URL.createObjectURL(file);
+                                 this.removeRightImage = false;
+                             }
+                         }
+                     }">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
+                                <span>Right-Side Showcase Image</span>
+                                <span class="text-[11px] font-normal text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">Optional</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">
+                                Displays on the right side of the banner text on the website (e.g., Gangajal bottle mockup, brass Diya, transparent PNG cutout).
+                            </p>
+                        </div>
+                        <div class="flex rounded-md bg-slate-100 p-0.5 text-xs">
+                            <button type="button" @click="rightImageSource = 'file'" :class="rightImageSource === 'file' ? 'bg-white font-bold text-slate-900 shadow-xs' : 'text-slate-600'" class="px-2.5 py-1 rounded">Upload</button>
+                            <button type="button" @click="rightImageSource = 'url'" :class="rightImageSource === 'url' ? 'bg-white font-bold text-slate-900 shadow-xs' : 'text-slate-600'" class="px-2.5 py-1 rounded">URL</button>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-amber-50/40 border border-amber-200/60 rounded-xl space-y-3">
+                        <div x-show="rightImageSource === 'file'">
+                            <input type="file"
+                                   name="right_image_file"
+                                   accept="image/*"
+                                   @change="handleRightFileSelect($event)"
+                                   class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border file:border-slate-300 file:text-xs file:font-medium file:bg-white file:text-slate-700 hover:file:bg-slate-50 file:cursor-pointer" />
+                            <p class="text-[11px] text-slate-500 mt-1">Recommended: PNG / WebP with transparent background, around 500×500 to 800×800 px.</p>
+                        </div>
+
+                        <div x-show="rightImageSource === 'url'">
+                            <input type="text"
+                                   name="right_image_url"
+                                   x-model="rightPreviewUrl"
+                                   value="{{ old('right_image_url', $slider->right_image) }}"
+                                   placeholder="https://... or images/products/gangajal-bottle.png"
+                                   class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-mono text-slate-900 focus:outline-none focus:border-amber-500" />
+                            @if ($slider->right_image)
+                                <p class="text-xs text-slate-500 mt-1">Current stored path: <code>{{ $slider->right_image }}</code></p>
+                            @endif
+                        </div>
+
+                        @if ($slider->right_image)
+                            <div class="flex items-center gap-2 pt-1">
+                                <label class="inline-flex items-center gap-2 text-xs text-rose-700 cursor-pointer">
+                                    <input type="checkbox" name="remove_right_image" value="1" x-model="removeRightImage" class="rounded text-rose-600 focus:ring-rose-500 border-slate-300">
+                                    <span>Remove current right-side image</span>
+                                </label>
+                            </div>
+                        @endif
+
+                        <div x-show="rightPreviewUrl && !removeRightImage" class="pt-2">
+                            <span class="block text-[11px] text-slate-500 mb-1">Preview:</span>
+                            <div class="h-28 w-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-900/10 p-1 flex items-center justify-center">
+                                <img :src="rightPreviewUrl" alt="Right Image Preview" class="max-h-full max-w-full object-contain">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Section: CTA Buttons -->
                 <div class="pt-5 border-t border-slate-200">
                     <h2 class="text-sm font-semibold text-slate-900 mb-3">Call to Action Buttons</h2>

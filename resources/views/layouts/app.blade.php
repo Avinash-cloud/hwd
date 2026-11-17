@@ -108,8 +108,8 @@
                         </div>
                     </div>
                     <p class="text-sm text-amber-200/80 leading-relaxed">
-                        Pure Haridwar Gangajal (Packaged) collected at Brahma Muhurta directly from
-                        sacred Haridwar to your sacred altar.
+                         Experience the divine purity of Haridwar Gangajal, collected at Brahma Muhurta, alongside Vedic Puja Essentials — delivered directly from the holy ghats to your sacred altar.
+                         
                     </p>
                     <div class="text-xs text-amber-200/90 flex items-start gap-1.5">
                         <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,6 +143,8 @@
                     <h4 class="text-xs font-bold uppercase tracking-widest text-amber-400 mb-4 font-mono">Devotee Care
                     </h4>
                     <ul class="space-y-2.5 text-sm">
+                        <li><a href="{{ route('online-puja') }}"
+                                class="text-amber-300 font-semibold hover:text-white transition">🪔 Online Puja & Vedic Rituals</a></li>
                         <li><a href="{{ route('blogs.index') }}"
                                 class="text-amber-300 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
                         <li><a href="{{ route('gallery.index') }}"
