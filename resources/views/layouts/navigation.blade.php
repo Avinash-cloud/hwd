@@ -24,7 +24,7 @@
 
             <!-- Right: Batch Verification & Support Links -->
             <div class="hidden lg:flex items-center gap-4 text-[11px] text-white/80 shrink-0">
-                <a href="{{ route('about') }}" class="hover:text-amber-200 transition">Sacred Sanctity</a>
+                <a href="{{ route('about') }}" class="hover:text-amber-200 transition font-medium">About Us</a>
                 <span>·</span>
                 <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
                 <span>·</span>
@@ -61,7 +61,7 @@
                 <div class="min-w-0 flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 group min-w-0">
                         <!-- <x-application-logo class="block h-9 w-9 sm:h-12 sm:w-12 rounded-xl object-cover shadow-sm ring-1 ring-amber-400/40 transition transform group-hover:scale-105 shrink-0" /> -->
-                        <div class="leading-tight text-center min-w-0">
+                        <div class="leading-tight text-center min-w-0 hidden">
                             <!-- <span
                                 class="block font-serif font-extrabold text-base sm:text-2xl text-sky-500 tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#9F1239] transition truncate">
                                 BluBliss<sup>™</sup>
@@ -79,6 +79,8 @@
                                 Haridwar Bliss Food & Bevarages Pvt. Ltd.
                             </span>
                         </div>
+
+                        <img src="{{ asset('/images/blubliss-logo.png') }}" alt="Logo" class="h-20 lg:h-20">
 
                     </a>
                 </div>
@@ -478,7 +480,7 @@
                     <!-- 5. Complete Catalog -->
                     <a href="{{ route('products.index') }}"
                         class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('products.index') && !request()->has('category') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
-                       Puja Essentials
+                        Puja Essentials
                     </a>
 
                     <!-- Spiritual & Astro (Online Puja & Astrology Consultation) -->
@@ -571,6 +573,12 @@
                     <a href="{{ route('gallery.index') }}"
                         class="hidden xl:inline-block whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('gallery.*') ? 'text-[#D97706] font-bold bg-amber-100/60' : '' }}">
                         Sacred Gallery
+                    </a>
+
+                    <!-- About Us -->
+                    <a href="{{ route('about') }}"
+                        class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('about') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
+                        About Us
                     </a>
                 </div>
             </div>
@@ -682,13 +690,14 @@
 
             <!-- Spiritual & Astro (with dropdown: Online Puja & Astrology Consultation) -->
             <div x-data="{ astroMobileOpen: false }">
-                <div class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isAstroActive || request()->routeIs('online-puja*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                <div
+                    class="flex items-center justify-between px-3 py-2 text-slate-800 font-semibold hover:bg-amber-50 rounded-lg {{ $isAstroActive || request()->routeIs('online-puja*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
                     <span class="flex-1 font-bold text-[#881337]">
                         Spiritual & Astro
                     </span>
                     <button type="button" @click="astroMobileOpen = !astroMobileOpen" class="p-1 text-slate-400">
-                        <svg class="w-4 h-4 transition transform" :class="astroMobileOpen ? 'rotate-180' : ''" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-4 h-4 transition transform" :class="astroMobileOpen ? 'rotate-180' : ''"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
@@ -748,8 +757,8 @@
                 5-Year Membership (₹500)
             </a>
             <a href="{{ route('about') }}"
-                class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">
-                Sacred Sanctity Story
+                class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50 {{ request()->routeIs('about') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                About Us
             </a>
             <a href="{{ route('contact') }}"
                 class="block px-3 py-2 rounded-lg font-semibold text-slate-700 hover:bg-amber-50">

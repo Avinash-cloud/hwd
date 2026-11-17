@@ -384,4 +384,26 @@ class SliderAndDynamicProductTest extends TestCase
         $response->assertSee('Sacred Brass Abhishek Kalash');
         $response->assertSee('https://example.com/brass_kalash.png', false);
     }
+
+    public function test_homepage_renders_slider_title_with_html_tags_unencoded(): void
+    {
+        Slider::query()->delete();
+
+        Slider::create([
+            'title' => 'Pure, Untouched <b>Gangajal</b><br><u class="underline decoration-amber-400">Haridwar Bliss</u>',
+            'subtitle' => 'Sacred Collection',
+            'image' => 'images/haridwar-panorama-clocktower.jpg',
+            'button_text' => 'Order Now',
+            'button_link' => '/products',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        // HTML tags should be rendered unescaped ({!! !!})
+        $response->assertSee('Pure, Untouched <b>Gangajal</b><br><u class="underline decoration-amber-400">Haridwar Bliss</u>', false);
+        // HTML entities should NOT be escaped
+        $response->assertDontSee('&lt;b&gt;Gangajal&lt;/b&gt;', false);
+        $response->assertDontSee('&lt;br&gt;', false);
+    }
 }

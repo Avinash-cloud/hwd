@@ -34,6 +34,15 @@ class OnlinePujaTest extends TestCase
         $response->assertSee(route('online-puja'), false);
     }
 
+    public function test_header_and_footer_link_to_about_us_page(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee(route('about'), false);
+        $response->assertSee('About Us');
+    }
+
     public function test_devotee_can_submit_online_puja_booking_form(): void
     {
         $bookingData = [

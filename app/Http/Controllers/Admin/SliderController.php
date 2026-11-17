@@ -87,7 +87,7 @@ class SliderController extends Controller
         // Handle right side showcase image
         if ($request->hasFile('right_image_file')) {
             $validated['right_image'] = $request->file('right_image_file')->store('sliders', 'public');
-        } elseif (! empty($validated['right_image_url'])) {
+        } elseif (! empty($validated['right_image_url']) && ! str_starts_with($validated['right_image_url'], 'blob:')) {
             $validated['right_image'] = $validated['right_image_url'];
         }
 
@@ -186,7 +186,7 @@ class SliderController extends Controller
                 Storage::disk('public')->delete($slider->right_image);
             }
             $validated['right_image'] = $request->file('right_image_file')->store('sliders', 'public');
-        } elseif ($request->filled('right_image_url')) {
+        } elseif ($request->filled('right_image_url') && ! str_starts_with($request->input('right_image_url'), 'blob:')) {
             $validated['right_image'] = $validated['right_image_url'];
         } elseif ($request->boolean('remove_right_image')) {
             if ($slider->right_image && Storage::disk('public')->exists($slider->right_image)) {

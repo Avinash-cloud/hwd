@@ -313,7 +313,7 @@
                 <div>
                     <!-- Category & Ratings -->
                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
+                        <span class="text-xs font-bold uppercase tracking-widest text-[#eb9d44] font-mono">
                             {{ $product->category->name }}
                         </span>
 
@@ -331,7 +331,7 @@
                     </div>
 
                     <!-- Title -->
-                    <h1 class="text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-slate-900 leading-tight">
+                    <h1 class="text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white<!--  --> leading-tight">
                         {{ $product->name }}
                     </h1>
 

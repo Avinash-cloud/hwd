@@ -1,9 +1,7 @@
 <x-app-layout>
     <!-- 1. Hero Promotional Slideshow (Shop.99Pandit Style - Dynamic from Admin Panel) -->
-    <section class="relative overflow-hidden bg-[#25050A] text-white"
-             @mouseenter="pauseTimer()"
-             @mouseleave="startTimer()"
-             x-data="{
+    <section class="relative overflow-hidden bg-[#25050A] text-white" @mouseenter="pauseTimer()"
+        @mouseleave="startTimer()" x-data="{
                  activeSlide: 0,
                  totalSlides: {{ max(1, $sliders->count()) }},
                  timer: null,
@@ -65,71 +63,63 @@
                             <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
                                 <iframe src="{{ $slide->video_embed_url }}"
                                     class="w-full h-full object-cover scale-125 md:scale-110 pointer-events-none border-0 {{ $hasText ? 'opacity-90' : 'opacity-100' }}"
-                                    allow="autoplay; encrypted-media; picture-in-picture"
-                                    loading="eager"></iframe>
+                                    allow="autoplay; encrypted-media; picture-in-picture" loading="eager"></iframe>
                             </div>
                         @else
                             <!-- MP4/WebM Video Slide Background with Muted Autoplay, Loop, and Unmute Toggle -->
-                            <div class="absolute inset-0 w-full h-full overflow-hidden"
-                                 x-data="{
-                                     isMuted: true,
-                                     init() {
-                                         this.playVideo();
-                                         this.$watch('activeSlide', (val) => {
-                                             if (val === {{ $index }}) {
-                                                 this.playVideo();
-                                             } else {
-                                                 this.pauseVideo();
-                                             }
-                                         });
-                                         const startVideo = () => {
-                                             if (this.activeSlide === {{ $index }}) {
-                                                 this.playVideo();
-                                             }
-                                         };
-                                         window.addEventListener('touchstart', startVideo, { once: true, passive: true });
-                                         window.addEventListener('click', startVideo, { once: true, passive: true });
-                                     },
-                                     playVideo() {
-                                         this.$nextTick(() => {
-                                             const vid = this.$refs.heroVideo;
-                                             if (vid) {
-                                                 vid.muted = this.isMuted;
-                                                 const p = vid.play();
-                                                 if (p !== undefined) {
-                                                     p.catch(() => {
-                                                         vid.muted = true;
-                                                         this.isMuted = true;
-                                                         vid.play().catch(() => {});
+                            <div class="absolute inset-0 w-full h-full overflow-hidden" x-data="{
+                                                 isMuted: true,
+                                                 init() {
+                                                     this.playVideo();
+                                                     this.$watch('activeSlide', (val) => {
+                                                         if (val === {{ $index }}) {
+                                                             this.playVideo();
+                                                         } else {
+                                                             this.pauseVideo();
+                                                         }
                                                      });
+                                                     const startVideo = () => {
+                                                         if (this.activeSlide === {{ $index }}) {
+                                                             this.playVideo();
+                                                         }
+                                                     };
+                                                     window.addEventListener('touchstart', startVideo, { once: true, passive: true });
+                                                     window.addEventListener('click', startVideo, { once: true, passive: true });
+                                                 },
+                                                 playVideo() {
+                                                     this.$nextTick(() => {
+                                                         const vid = this.$refs.heroVideo;
+                                                         if (vid) {
+                                                             vid.muted = this.isMuted;
+                                                             const p = vid.play();
+                                                             if (p !== undefined) {
+                                                                 p.catch(() => {
+                                                                     vid.muted = true;
+                                                                     this.isMuted = true;
+                                                                     vid.play().catch(() => {});
+                                                                 });
+                                                             }
+                                                         }
+                                                     });
+                                                 },
+                                                 pauseVideo() {
+                                                     const vid = this.$refs.heroVideo;
+                                                     if (vid && !vid.paused) {
+                                                         vid.pause();
+                                                     }
+                                                 },
+                                                 toggleMute() {
+                                                     this.isMuted = !this.isMuted;
+                                                     const vid = this.$refs.heroVideo;
+                                                     if (vid) {
+                                                         vid.muted = this.isMuted;
+                                                         if (vid.paused) {
+                                                             vid.play().catch(() => {});
+                                                         }
+                                                     }
                                                  }
-                                             }
-                                         });
-                                     },
-                                     pauseVideo() {
-                                         const vid = this.$refs.heroVideo;
-                                         if (vid && !vid.paused) {
-                                             vid.pause();
-                                         }
-                                     },
-                                     toggleMute() {
-                                         this.isMuted = !this.isMuted;
-                                         const vid = this.$refs.heroVideo;
-                                         if (vid) {
-                                             vid.muted = this.isMuted;
-                                             if (vid.paused) {
-                                                 vid.play().catch(() => {});
-                                             }
-                                         }
-                                     }
-                                 }">
-                                <video x-ref="heroVideo"
-                                    autoplay
-                                    muted
-                                    playsinline
-                                    webkit-playsinline
-                                    loop
-                                    preload="auto"
+                                             }">
+                                <video x-ref="heroVideo" autoplay muted playsinline webkit-playsinline loop preload="auto"
                                     poster="{{ $slide->image_url }}"
                                     class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
                                     <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
@@ -151,7 +141,7 @@
                             @if ($slide->tablet_image)
                                 <source media="(max-width: 1024px)" srcset="{{ $slide->tablet_image_url }}">
                             @endif
-                            <img src="{{ $slide->image_url }}" alt="{{ $slide->title ?: 'Sacred Hero Banner' }}"
+                            <img src="{{ $slide->image_url }}" alt="{{ strip_tags($slide->title ?: 'Sacred Hero Banner') }}"
                                 class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-95' : 'opacity-100' }}">
                         </picture>
                     @endif
@@ -165,7 +155,8 @@
                         <!-- Slide Content -->
                         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                             <div class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 py-10 lg:py-12">
-                                <div class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'max-w-2xl' }} space-y-4 sm:space-y-6">
+                                <div
+                                    class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'max-w-2xl' }} space-y-4 sm:space-y-6">
                                     @if ($slide->subtitle)
                                         <div
                                             class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
@@ -177,7 +168,7 @@
                                     @if ($slide->title)
                                         <h1
                                             class="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-snug sm:leading-snug lg:leading-[1.22] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                                            {{ $slide->title }}
+                                            {!! $slide->title !!}
                                         </h1>
                                     @endif
 
@@ -211,12 +202,16 @@
 
                                 @if ($slide->right_image_url)
                                     <!-- Right-Side Showcase Image -->
-                                    <div class="w-full lg:w-2/5 xl:w-1/3 flex justify-center lg:justify-end items-center mt-4 lg:mt-0">
-                                        <div class="relative group max-w-xs sm:max-w-sm lg:max-w-md w-full flex justify-center lg:justify-end">
-                                            <div class="absolute -inset-4 bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                                    <div
+                                        class="w-full lg:w-2/5 xl:w-1/3 flex justify-center lg:justify-end items-center mt-4 lg:mt-0">
+                                        <div
+                                            class="relative group max-w-xs sm:max-w-sm lg:max-w-md w-full flex justify-center lg:justify-end">
+                                            <div
+                                                class="absolute -inset-4 bg-amber-500/20 rounded-full blur-2xl pointer-events-none">
+                                            </div>
                                             <img src="{{ $slide->right_image_url }}"
-                                                 alt="{{ $slide->title ?: 'Featured Sacred Offering' }}"
-                                                 class="relative z-10 max-h-[240px] sm:max-h-[320px] lg:max-h-[400px] w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-105">
+                                                alt="{{ strip_tags($slide->title ?: 'Featured Sacred Offering') }}"
+                                                class="relative z-10 max-h-[240px] sm:max-h-[320px] lg:max-h-[400px] w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-105">
                                         </div>
                                     </div>
                                 @endif
@@ -531,8 +526,9 @@
                                 class="inline-block px-3 py-1 bg-[#881337] text-white text-[10px] font-extrabold uppercase tracking-widest rounded-full mb-2">
                                 Auspicious Devotee Offering
                             </span>
-                            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider">One-Time 5-Year
-                                </h4>
+                            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider">One-Time 5-Year 
+                                (handling & processing charges)
+                            </h4>
                             <div class="mt-1 flex items-baseline justify-center gap-1">
                                 <span
                                     class="text-4xl sm:text-5xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>

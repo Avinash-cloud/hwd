@@ -31,12 +31,16 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                         <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Slide Title</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                                Slide Title
+                                <span class="text-xs text-amber-700 font-normal ml-1 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">HTML supported (&lt;br&gt;, &lt;b&gt;, &lt;u&gt;, etc.)</span>
+                            </label>
                             <input type="text"
                                    name="title"
                                    value="{{ old('title') }}"
-                                   placeholder="e.g. Pure, Untouched Gangajal for Your Daily Abhishek"
+                                   placeholder="e.g. Pure, Untouched <b>Gangajal</b><br>for Your Daily Abhishek"
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+                            <p class="text-[11px] text-slate-500 mt-1">You can use HTML tags like <code>&lt;br&gt;</code> for line breaks, <code>&lt;b&gt;</code> for bold, or <code>&lt;u&gt;</code> for underline.</p>
                             @error('title') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -206,11 +210,17 @@
                 <div class="pt-5 border-t border-slate-200"
                      x-data="{
                          rightImageSource: 'file',
+                         rightImageUrl: @js((string) old('right_image_url', '')),
                          rightPreviewUrl: '',
                          handleRightFileSelect(e) {
                              const file = e.target.files[0];
                              if (file) {
                                  this.rightPreviewUrl = URL.createObjectURL(file);
+                             }
+                         },
+                         handleUrlChange() {
+                             if (this.rightImageUrl.trim()) {
+                                 this.rightPreviewUrl = this.rightImageUrl.trim();
                              }
                          }
                      }">
@@ -243,8 +253,8 @@
                         <div x-show="rightImageSource === 'url'">
                             <input type="text"
                                    name="right_image_url"
-                                   x-model="rightPreviewUrl"
-                                   value="{{ old('right_image_url') }}"
+                                   x-model="rightImageUrl"
+                                   @input="handleUrlChange()"
                                    placeholder="https://... or images/products/gangajal-bottle.png"
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-mono text-slate-900 focus:outline-none focus:border-amber-500" />
                         </div>

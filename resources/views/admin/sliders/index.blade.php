@@ -46,7 +46,7 @@
                                     <div class="flex items-center gap-1.5">
                                         <div class="w-16 h-10 rounded-md overflow-hidden bg-slate-100 border border-slate-200 shrink-0" title="Banner Background">
                                             <img src="{{ $slide->image_url }}"
-                                                 alt="{{ $slide->title }}"
+                                                 alt="{{ strip_tags($slide->title) }}"
                                                  class="w-full h-full object-cover">
                                         </div>
                                         @if ($slide->right_image_url)
@@ -67,7 +67,7 @@
                                         </span>
                                     @endif
                                     <h2 class="font-medium text-slate-900 text-xs leading-snug line-clamp-1">
-                                        {{ $slide->title ?: 'Untitled Slide #' . $slide->id }}
+                                        {!! $slide->title ?: 'Untitled Slide #' . $slide->id !!}
                                     </h2>
                                     @if ($slide->description)
                                         <p class="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
@@ -121,7 +121,7 @@
                                         @method('DELETE')
                                         <button type="submit"
                                                 class="text-red-600 hover:text-red-700 font-medium"
-                                                onclick="return confirm('Are you sure you want to delete slide: {{ addslashes($slide->title) }}?')">
+                                                onclick="return confirm('Are you sure you want to delete slide: {{ addslashes(strip_tags($slide->title)) }}?')">
                                             Delete
                                         </button>
                                     </form>

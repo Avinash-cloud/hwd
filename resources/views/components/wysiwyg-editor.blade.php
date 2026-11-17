@@ -87,13 +87,24 @@
 
 <div x-data="{
         editorInstance: null,
+        editorReady: false,
+        fallbackMode: false,
         initialHtml: @js((string) old($name, $value ?? '')),
         initEditor() {
             if (this.editorInstance) return;
 
+            let attempts = 0;
+            const maxAttempts = 25; // ~1.5s max wait for CDN
+
             const startQuill = () => {
                 if (typeof Quill === 'undefined') {
-                    setTimeout(startQuill, 60);
+                    attempts++;
+                    if (attempts < maxAttempts) {
+                        setTimeout(startQuill, 60);
+                    } else {
+                        // CDN blocked or failed, fallback to native textarea seamlessly
+                        this.fallbackMode = true;
+                    }
                     return;
                 }
 
@@ -106,49 +117,63 @@
                     ['link', 'clean']
                 ];
 
-                this.editorInstance = new Quill(this.$refs.quillDiv, {
-                    theme: 'snow',
-                    placeholder: '{{ addslashes($placeholder) }}',
-                    modules: {
-                        toolbar: toolbarOptions
+                try {
+                    this.editorInstance = new Quill(this.$refs.quillDiv, {
+                        theme: 'snow',
+                        placeholder: '{{ addslashes($placeholder) }}',
+                        modules: {
+                            toolbar: toolbarOptions
+                        }
+                    });
+
+                    this.editorReady = true;
+
+                    // Populate initial content if present
+                    if (this.initialHtml && this.initialHtml.trim() !== '') {
+                        this.editorInstance.clipboard.dangerouslyPasteHTML(this.initialHtml);
                     }
-                });
 
-                // Populate initial content if present
-                if (this.initialHtml && this.initialHtml.trim() !== '') {
-                    this.editorInstance.clipboard.dangerouslyPasteHTML(this.initialHtml);
-                }
-
-                // Sync to hidden textarea on change
-                this.editorInstance.on('text-change', () => {
-                    const html = this.editorInstance.root.innerHTML;
-                    const val = (html === '<p><br></p>' ? '' : html);
-                    if (this.$refs.rawInput) {
-                        this.$refs.rawInput.value = val;
-                    }
-                });
-
-                // Ensure latest content is captured on form submission
-                const form = this.$el.closest('form');
-                if (form) {
-                    form.addEventListener('submit', () => {
+                    // Sync to native textarea on change
+                    this.editorInstance.on('text-change', () => {
                         const html = this.editorInstance.root.innerHTML;
                         const val = (html === '<p><br></p>' ? '' : html);
                         if (this.$refs.rawInput) {
                             this.$refs.rawInput.value = val;
                         }
                     });
+
+                    // Ensure latest content is captured on form submission
+                    const form = this.$el.closest('form');
+                    if (form && !form.dataset.quillAttached) {
+                        form.dataset.quillAttached = 'true';
+                        form.addEventListener('submit', () => {
+                            if (this.editorInstance && this.editorReady) {
+                                const html = this.editorInstance.root.innerHTML;
+                                const val = (html === '<p><br></p>' ? '' : html);
+                                if (this.$refs.rawInput) {
+                                    this.$refs.rawInput.value = val;
+                                }
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('Quill init error:', e);
+                    this.fallbackMode = true;
                 }
             };
 
             startQuill();
 
-            // Refresh layout when switching between tabs
+            // Refresh layout or re-initialize when switching between tabs
             if (typeof this.activeTab !== 'undefined') {
                 this.$watch('activeTab', (tab) => {
-                    if (tab === 'details' && this.editorInstance) {
+                    if (tab === 'details') {
                         this.$nextTick(() => {
-                            this.editorInstance.update();
+                            if (!this.editorInstance && !this.fallbackMode) {
+                                startQuill();
+                            } else if (this.editorInstance) {
+                                this.editorInstance.update();
+                            }
                         });
                     }
                 });
@@ -158,13 +183,14 @@
     x-init="initEditor()"
     class="wysiwyg-container w-full">
 
-    <div wire:ignore>
+    <div wire:ignore x-show="editorReady && !fallbackMode">
         <div x-ref="quillDiv" class="{{ $height }}"></div>
     </div>
 
-    <!-- Hidden native textarea submitted with standard form post -->
+    <!-- Native textarea: visible fallback if CDN is blocked/failed, otherwise hidden and synced with Quill -->
     <textarea x-ref="rawInput"
               name="{{ $name }}"
               id="{{ $editorId }}"
-              class="hidden">{!! old($name, $value ?? '') !!}</textarea>
+              :class="fallbackMode ? 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 min-h-[200px]' : 'hidden'"
+              placeholder="{{ $placeholder }}">{!! old($name, $value ?? '') !!}</textarea>
 </div>

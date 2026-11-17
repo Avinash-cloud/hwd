@@ -11,16 +11,22 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=bebas-neue:400|poppins:400,500,600,700,800|figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.bunny.net/css?family=bebas-neue:400|poppins:400,500,600,700,800|figtree:400,500,600,700,800&display=swap"
+        rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link href="https://fonts.cdnfonts.com/css/liberation-serif" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -94,7 +100,8 @@
     </main>
 
     <!-- Sacred Footer -->
-    <footer class="bg-gradient-to-b from-[#4A0E17] via-[#380B12] to-[#25050A] text-amber-100/90 border-t border-amber-600/30 mt-20 pt-16 pb-12">
+    <footer
+        class="bg-gradient-to-b from-[#4A0E17] via-[#380B12] to-[#25050A] text-amber-100/90 border-t border-amber-600/30 mt-20 pt-16 pb-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-amber-900/50">
                 <!-- Col 1: Brand & Origin -->
@@ -102,19 +109,25 @@
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <span class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
-                            <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.</span>
-                            <span class="block text-[10px] text-amber-200/70 font-mono">CIN: U11040UT2025PTC019429</span>
+                            <span
+                                class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
+                            <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR
+                                BLISS FOOD & BEVERAGES PVT. LTD.</span>
+                            <span class="block text-[11px] text-amber-200/70 ">CIN: U11040UT2025PTC019429</span>
                         </div>
                     </div>
                     <p class="text-sm text-amber-200/80 leading-relaxed">
-                         Experience the divine purity of Haridwar Gangajal, collected at Brahma Muhurta, alongside Vedic Puja Essentials — delivered directly from the holy ghats to your sacred altar.
-                         
+                        Experience the divine purity of Haridwar Gangajal, collected at Brahma Muhurta, alongside Vedic
+                        Puja Essentials — delivered directly from the holy ghats to your sacred altar.
+
                     </p>
                     <div class="text-xs text-amber-200/90 flex items-start gap-1.5">
-                        <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg class="w-4 h-4 shrink-0 text-[#D97706] mt-0.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         <span>G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand, India - 249403</span>
                     </div>
@@ -144,18 +157,22 @@
                     </h4>
                     <ul class="space-y-2.5 text-sm">
                         <li><a href="{{ route('online-puja') }}"
-                                class="text-amber-300 font-semibold hover:text-white transition">🪔 Online Puja & Vedic Rituals</a></li>
+                                class="text-amber-300 font-semibold hover:text-white transition">🪔 Online Puja & Vedic
+                                Rituals</a></li>
                         <li><a href="{{ route('blogs.index') }}"
-                                class="text-amber-300 font-medium hover:text-white transition">Spiritual Blogs & Wisdom</a></li>
+                                class="text-amber-300 font-medium hover:text-white transition">Spiritual Blogs &
+                                Wisdom</a></li>
                         <li><a href="{{ route('gallery.index') }}"
-                                class="text-amber-300 font-medium hover:text-white transition">Sacred Haridwar Gallery</a></li>
+                                class="text-amber-300 font-medium hover:text-white transition">Sacred Haridwar
+                                Gallery</a></li>
                         <li><a href="{{ route('membership.join') }}"
                                 class="text-amber-300 font-bold hover:text-white transition">🌟 5-Year Sacred
                                 Membership</a></li>
+                        <li><a href="{{ route('about') }}"
+                                class="text-amber-300 font-medium hover:text-white transition">About Us (Our Sacred
+                                Sanctity)</a></li>
                         <li><a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
                                 class="hover:text-white transition">Batch QR Verification & Lab Tests</a></li>
-                        <li><a href="{{ route('about') }}" class="hover:text-white transition">Sanctity of Sacred Ganga
-                                Water</a></li>
                         <li><a href="{{ route('faqs') }}" class="hover:text-white transition">Frequently Asked
                                 Questions</a></li>
                         <li><a href="{{ route('contact') }}" class="hover:text-white transition">Contact Haridwar
@@ -182,15 +199,20 @@
                         </p>
                     </div>
                     <div class="text-xs text-amber-200/90 space-y-1.5">
-                        <div>Phone: <a href="tel:+917042482555" class="text-amber-300 hover:underline font-mono font-bold">+91 7042482555</a></div>
-                        <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com" class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a></div>
+                        <div>Phone: <a href="tel:+917042482555"
+                                class="text-amber-300 hover:underline font-mono font-bold">+91 7042482555</a></div>
+                        <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com"
+                                class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-amber-300/70">
-                <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED (CIN: U11040UT2025PTC019429). Pure Haridwar Gangajal (Packaged). All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED (CIN: U11040UT2025PTC019429).
+                    Pure Haridwar Gangajal (Packaged). All rights reserved.</p>
                 <div class="flex items-center gap-6">
+
                     <a href="{{ route('terms') }}" class="hover:text-white transition">Terms & Conditions</a>
                     <a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a>
                     <a href="{{ route('faqs') }}" class="hover:text-white transition">FAQs</a>
