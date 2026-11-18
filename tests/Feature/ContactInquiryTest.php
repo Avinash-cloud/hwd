@@ -16,7 +16,7 @@ class ContactInquiryTest extends TestCase
         $response = $this->post('/contact', [
             'name' => 'Aarav Sharma',
             'email' => 'aarav@example.com',
-            'phone' => '+91 98765 43210',
+            'phone' => '+91 70424 82555',
             'subject' => 'Holy Ganga Jal Delivery Question',
             'message' => 'Can you please confirm if this Gangajal is sourced directly from Brahmakund Haridwar?',
         ]);
@@ -25,7 +25,7 @@ class ContactInquiryTest extends TestCase
         $this->assertDatabaseHas('contact_inquiries', [
             'name' => 'Aarav Sharma',
             'email' => 'aarav@example.com',
-            'phone' => '+91 98765 43210',
+            'phone' => '+91 70424 82555',
             'subject' => 'Holy Ganga Jal Delivery Question',
             'status' => 'unread',
         ]);

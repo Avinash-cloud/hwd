@@ -30,7 +30,7 @@ class GuestCheckoutFlowTest extends TestCase
         SiteSetting::set('membership_validity_years', '5');
         SiteSetting::set('shipping_charge', '149');
         SiteSetting::set('free_first_bottle_enabled', '1');
-        SiteSetting::set('support_phone', '+91 98765 43210');
+        SiteSetting::set('support_phone', '+91 70424 82555');
         SiteSetting::set('support_email', 'bliss@haridwarbliss.com');
         SiteSetting::set('ghat_location_default', 'Har Ki Pauri, Haridwar');
 
@@ -70,7 +70,7 @@ class GuestCheckoutFlowTest extends TestCase
             'shipping_charge' => '149',
             'free_first_bottle_enabled' => '1',
             'guest_checkout_enabled' => '1',
-            'support_phone' => '+91 98765 43210',
+            'support_phone' => '+91 70424 82555',
             'support_email' => 'bliss@haridwarbliss.com',
             'ghat_location_default' => 'Har Ki Pauri, Haridwar',
         ]);
@@ -85,7 +85,7 @@ class GuestCheckoutFlowTest extends TestCase
             'shipping_charge' => '149',
             'free_first_bottle_enabled' => '1',
             // guest_checkout_enabled omitted (unchecked checkbox)
-            'support_phone' => '+91 98765 43210',
+            'support_phone' => '+91 70424 82555',
             'support_email' => 'bliss@haridwarbliss.com',
             'ghat_location_default' => 'Har Ki Pauri, Haridwar',
         ]);

@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@haridwarbliss.com'],
             [
                 'name' => 'Admin Haridwar Bliss',
-                'phone' => '+91 9876543210',
+                'phone' => '+91 7042482555',
                 'password' => Hash::make('password'),
                 'is_admin' => true,
                 'email_verified_at' => now(),

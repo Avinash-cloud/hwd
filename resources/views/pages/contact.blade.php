@@ -21,25 +21,33 @@
 
                     <div class="space-y-4 text-xs">
                         <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             </div>
                             <div>
                                 <strong class="font-bold text-slate-900 block">Registered Office:</strong>
-                                <p class="text-slate-700 mt-0.5 font-medium">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>
+                                <p class="text-slate-700 mt-0.5 font-medium">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE
+                                    LIMITED</p>
                                 <p class="text-[11px] text-slate-500 font-mono">CIN: U11040UT2025PTC019429</p>
-                                <p class="text-slate-600 text-xs mt-1">G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403, India</p>
-                                <p class="text-[11px] text-amber-800 font-semibold mt-1">Holy Collection Location: Sacred Ganga Ghats, Haridwar, Uttarakhand</p>
+                                <p class="text-slate-600 text-xs mt-1">G-46, Shivalik Nagar, BHEL, Ranipur More,
+                                    Haridwar, Uttarakhand - 249403, India</p>
+                                <p class="text-[11px] text-amber-800 font-semibold mt-1">Holy Collection Location:
+                                    Sacred Ganga Ghats, Haridwar, Uttarakhand</p>
                             </div>
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                 </svg>
                             </div>
                             <div>
@@ -50,9 +58,11 @@
                         </div>
 
                         <div class="flex items-start gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
+                            <div
+                                class="w-8 h-8 rounded-xl bg-amber-100/70 text-[#D97706] flex items-center justify-center shrink-0">
                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </div>
                             <div>
@@ -68,17 +78,20 @@
                     <div class="flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
                         <span class="inline-flex items-center gap-1.5 font-bold text-[#D97706] font-mono">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             </svg>
                             <span>Sourcing Location Visual Reference</span>
                         </span>
                         <span class="text-slate-400 text-[11px]">Haridwar: 29.9567° N, 78.1708° E</span>
                     </div>
-                    <div class="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-700 group shadow-md">
+                    <div
+                        class="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-700 group shadow-md">
                         <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-                             alt="Sacred Haridwar Ganga Ghats"
-                             class="w-full h-full object-cover transition transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent flex flex-col justify-end p-4 text-center">
+                            alt="Sacred Haridwar Ganga Ghats"
+                            class="w-full h-full object-cover transition transform duration-500 group-hover:scale-105">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent flex flex-col justify-end p-4 text-center">
                             <p class="font-serif font-bold text-base text-amber-300">Sacred Ganga Ghats</p>
                             <p class="text-xs text-slate-300 mt-0.5">Haridwar, Uttarakhand, India</p>
                             <div>
@@ -112,9 +125,8 @@
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Phone Number (Optional)</label>
-                        <input type="text" name="phone"
-                            class="w-full px-3 py-2 border border-slate-300 rounded-xl"
-                            placeholder="+91 98765 43210" />
+                        <input type="text" name="phone" class="w-full px-3 py-2 border border-slate-300 rounded-xl"
+                            placeholder="+91 70424 82555" />
                     </div>
 
                     <div>

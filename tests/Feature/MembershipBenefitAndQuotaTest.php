@@ -190,7 +190,7 @@ class MembershipBenefitAndQuotaTest extends TestCase
             'member_shipping_charge' => '49.00',
             'free_first_bottle_enabled' => '1',
             'guest_checkout_enabled' => '1',
-            'support_phone' => '+91 98765 43210',
+            'support_phone' => '+91 70424 82555',
             'support_email' => 'bliss@haridwarbliss.com',
             'ghat_location_default' => 'Har Ki Pauri, Haridwar',
         ]);

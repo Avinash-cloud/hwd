@@ -33,6 +33,12 @@ class OnlinePujaTest extends TestCase
         $response->assertSee('Language');
         $response->assertSee('English');
         $response->assertSee('हिन्दी');
+
+        // Modal popup structure assertions
+        $response->assertSee('openBookingModal', false);
+        $response->assertSee('isBookingModalOpen', false);
+        $response->assertSee('closeBookingModal', false);
+        $response->assertSee('Vedic Sankalp &amp; Online Puja Booking', false);
     }
 
     public function test_navigation_menu_links_to_online_puja_page(): void
@@ -60,7 +66,7 @@ class OnlinePujaTest extends TestCase
             'gotra' => 'कश्यप',
             'puja_date' => now()->addDays(3)->format('Y-m-d'),
             'occasion' => 'विवाह की 10वीं वर्षगांठ',
-            'phone' => '+91 9876543210',
+            'phone' => '+91 7042482555',
             'email' => 'devotee@example.com',
             'shipping_address' => '102, गंगा एन्क्लेव, निकट हर की पौड़ी, हरिद्वार, उत्तराखंड - 249401',
             'special_instructions' => 'सुख-शांति एवं उत्तम स्वास्थ्य की विशेष प्रार्थना',
@@ -74,7 +80,7 @@ class OnlinePujaTest extends TestCase
 
         $this->assertDatabaseHas('contact_inquiries', [
             'name' => 'आदित्य एवं नेहा शर्मा',
-            'phone' => '+91 9876543210',
+            'phone' => '+91 7042482555',
             'email' => 'devotee@example.com',
             'subject' => 'Online Puja Booking: पैकेज 1: मंगल उत्सव एवं आयुष्मान संकल्प पूजा (₹5,100/-)',
         ]);
@@ -91,7 +97,7 @@ class OnlinePujaTest extends TestCase
             'devotee_name' => 'आदित्य शर्मा',
             'gotra' => 'कश्यप',
             'puja_date' => now()->addDays(3)->format('Y-m-d'),
-            'phone' => '+91 9876543210',
+            'phone' => '+91 7042482555',
             'shipping_address' => 'हरिद्वार',
             // terms_agreed missing
         ];

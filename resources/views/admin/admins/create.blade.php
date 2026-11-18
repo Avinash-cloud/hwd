@@ -49,7 +49,7 @@
                             <input type="text"
                                    name="phone"
                                    value="{{ old('phone') }}"
-                                   placeholder="+91 9876543210"
+                                   placeholder="+91 7042482555"
                                    class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
                             @error('phone') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>

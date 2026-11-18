@@ -102,18 +102,18 @@
     <!-- Sacred Footer -->
     <footer
         class="bg-gradient-to-b from-[#4A0E17] via-[#380B12] to-[#25050A] text-amber-100/90 border-t border-amber-600/30 mt-20 pt-16 pb-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-amber-900/50">
+        <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-12 border-b border-amber-900/50">
                 <!-- Col 1: Brand & Origin -->
-                <div class="space-y-4 md:col-span-1">
+                <div class="space-y-4">
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
                             <span
-                                class="block font-serif font-extrabold italic text-2xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
-                            <span class="block text-[10px] font-bold tracking-wider text-amber-300 uppercase">HARIDWAR
+                                class="block font-serif font-extrabold italic text-3xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
+                            <span class="block text-sm font-medium tracking-wider text-amber-300 uppercase">HARIDWAR
                                 BLISS FOOD & BEVERAGES PVT. LTD.</span>
-                            <span class="block text-[11px] text-amber-200/70 ">CIN: U11040UT2025PTC019429</span>
+                            <span class="block text-xs text-amber-200/70 ">CIN: U11040UT2025PTC019429</span>
                         </div>
                     </div>
                     <p class="text-sm text-amber-200/80 leading-relaxed">

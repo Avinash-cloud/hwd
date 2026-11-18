@@ -57,7 +57,7 @@ class BulkOrderInquiryTest extends TestCase
         $response = $this->postJson('/api/bulk-inquiry', [
             'name' => 'Pandit Rajesh Sharma',
             'email' => 'rajesh.sharma@temple.org',
-            'phone' => '+91 98765 43210',
+            'phone' => '+91 70424 82555',
             'product_id' => $product->id,
             'quantity' => 200,
             'address' => 'Shri Ganga Mandir Ashram, Kankhal Ghat',
@@ -77,7 +77,7 @@ class BulkOrderInquiryTest extends TestCase
             'product_name' => $product->name,
             'name' => 'Pandit Rajesh Sharma',
             'email' => 'rajesh.sharma@temple.org',
-            'phone' => '+91 98765 43210',
+            'phone' => '+91 70424 82555',
             'quantity' => 200,
             'address' => 'Shri Ganga Mandir Ashram, Kankhal Ghat',
             'city' => 'Haridwar',
