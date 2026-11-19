@@ -11,7 +11,7 @@
                 <span>🌟 Sacred 5-Year Devotee Circle · Household Privilege</span>
             </span>
             <h1 class="text-3xl sm:text-5xl font-serif font-extrabold text-white">
-                Haridwar Bliss 5-Year Devotee Membership
+                Blu Bliss 5-Year Sacred Devotee Membership
             </h1>
             <p class="mt-4 text-sm sm:text-base text-amber-100/90 max-w-2xl mx-auto leading-relaxed">
                 Connect your household directly to the divine blessings of Maa Ganga in sacred Haridwar with uninterrupted
@@ -104,57 +104,95 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- Privileges Card -->
                 <div class="bg-white rounded-3xl border border-[#D97706]/20 p-8 shadow-xs space-y-6">
-                    <h2 class="text-2xl font-serif font-bold text-[#881337]">Exclusive 5-Year Membership Benefits</h2>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-[#D97706] font-mono">Sacred Devotee Privilege</span>
+                        <h2 class="text-2xl font-serif font-bold text-[#881337] mt-1">Benefits of Blu Bliss 5-Year Sacred Membership</h2>
+                        <p class="text-xs text-slate-500 mt-1">
+                            An auspicious 60-month commitment ensuring sacred purity, unbroken supply, and temple-grade sanctity for your home altar.
+                        </p>
+                    </div>
 
                     <div class="space-y-4">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
+                        <!-- 1. Uninterrupted Monthly Supply -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/40 border border-amber-200/50 hover:bg-amber-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
                                 1
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#881337] text-base">Free Monthly Sacred Gangajal Bottle</h3>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">Uninterrupted Monthly Supply</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Each month, your first 500ml Haridwar Gangajal bottle carries a <strong>₹0 product
-                                    price</strong> (only a flat delivery fee of ₹{{ number_format($shippingRate) }} applies).
+                                    Receive a fresh 500ml bottle of pure Haridwar Gangajal delivered directly to your doorstep every single month for 5 years (60 months total)—ensuring your home altar never runs out of sacred water. (Each month, your bottle carries <strong>₹0 product price</strong>, with only flat subsidized logistics applied.)
                                 </p>
                             </div>
                         </div>
 
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
+                        <!-- 2. Brahma Muhurta Purity Guaranteed -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/40 border border-amber-200/50 hover:bg-amber-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
                                 2
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#881337] text-base">5 Full Years of Validity (60 Months)</h3>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">Brahma Muhurta Purity Guaranteed</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    No recurring annual fees or monthly renewal charges. A single one-time contribution
-                                    of ₹{{ number_format($membershipFee) }} covers your membership status for 5 years.
+                                    Every drop is sacredly collected during the auspicious hours of Brahma Muhurta in Haridwar and sealed hygienically with zero chemical interference under continuous Vedic recitation.
                                 </p>
                             </div>
                         </div>
 
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
+                        <!-- 3. 5-Year Price Lock & Convenience -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/40 border border-amber-200/50 hover:bg-amber-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
                                 3
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#881337] text-base">Unbroken Batch Purity Verification</h3>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">5-Year Price Lock & Convenience</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Every dispatched bottle includes a scannable QR code encoding the exact collection
-                                    timestamp in Haridwar, Aarti video link, and laboratory test report.
+                                    A one-time nominal registration fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months, saving you the hassle of repeatedly ordering or searching for authentic Gangajal.
+                                    <span class="block text-[11px] text-amber-900/80 font-medium mt-1">
+                                        *(Note: In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.)*
+                                    </span>
                                 </p>
                             </div>
                         </div>
 
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-xl bg-[#881337]/10 text-[#881337] flex items-center justify-center shrink-0 font-bold">
+                        <!-- 4. Special Member Privileges on Sacred Kits -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/40 border border-amber-200/50 hover:bg-amber-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
                                 4
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#881337] text-base">Member-Exclusive Pricing on Pooja Ware</h3>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">Special Member Privileges on Sacred Kits</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Enjoy preferred member discounts on handcrafted brass diyas, pure copper kalash
-                                    vessels, and natural temple dhoop sticks.
+                                    Receive exclusive member benefits and early access to consecrated Vedic Puja Essentials, festive kits, handcrafted brass diyas, and Haridwar Ghat Prasadam with special devotee discount pricing.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 5. Contribute to Maa Ganga Cleanliness -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-emerald-50/40 border border-emerald-200/60 hover:bg-emerald-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
+                                5
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-emerald-900 text-sm sm:text-base flex items-center gap-1.5">
+                                    <span>Contribute to Maa Ganga Cleanliness</span>
+                                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full uppercase">Eco-Clean</span>
+                                </h3>
+                                <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
+                                    Every monthly delivery directly supports our <strong>Eco-Clean Ganga Pledge</strong>, contributing toward river waste removal, ghat maintenance, and environmental conservation in Haridwar.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 6. Tamper-Proof & Safe Doorstep Delivery -->
+                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-amber-50/40 border border-amber-200/50 hover:bg-amber-50/80 transition">
+                            <div class="w-10 h-10 rounded-xl bg-[#881337] text-white flex items-center justify-center shrink-0 font-bold shadow-xs">
+                                6
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">Tamper-Proof & Safe Doorstep Delivery</h3>
+                                <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
+                                    Your sacred Gangajal is packed in leak-proof, food-grade protective packaging and shipped reliably with unbroken batch QR code tracking from Haridwar straight to your sacred altar anywhere in India.
                                 </p>
                             </div>
                         </div>
@@ -165,15 +203,18 @@
                 <div class="bg-[#FFFDF7] rounded-3xl border border-[#D97706]/20 p-6 space-y-3 text-xs text-[#3B2314]/85">
                     <h4 class="font-serif font-bold text-[#881337] text-sm">Devotee Guarantee & Transparency</h4>
                     <p>
-                        • <strong>Delivery Schedule:</strong> Once subscribed, you can claim your monthly bottle at any
-                        time from your member portal, shipped directly via Shiprocket.
+                        • <strong>Delivery Schedule:</strong> Once subscribed, you can claim your monthly 500ml bottle at any
+                        time from your member portal, shipped directly via express courier with real-time tracking updates.
                     </p>
                     <p>
                         • <strong>Sanctity Assurance:</strong> Collected during Brahma Muhurta morning Aarti under
-                        continuous Vedic recitation. Untouched by human hands.
+                        continuous Vedic recitation. Untouched by human hands and hermetically sealed.
                     </p>
                     <p>
-                        • <strong>Tax Invoicing:</strong> A formal GST invoice with SAC Code 9995 is generated immediately upon payment and available for download.
+                        • <strong>Eco-Clean Ganga Pledge:</strong> Your monthly deliveries directly aid our local Haridwar river waste removal and ghat conservation initiatives.
+                    </p>
+                    <p>
+                        • <strong>Tax Invoicing:</strong> A formal GST invoice with SAC Code 9995 is generated immediately upon registration and available for download.
                     </p>
                 </div>
             </div>
@@ -192,7 +233,7 @@
                             <span class="text-xs font-bold text-stone-600">/ 5 Years</span>
                         </div>
                         <span class="inline-block mt-2 text-[11px] font-semibold text-[#0369A1] bg-[#0369A1]/10 border border-[#0369A1]/30 px-3 py-0.5 rounded-full">
-                            Equivalent to ₹8.33 / month • GST Included
+                            Equivalent to ₹{{ number_format($membershipFee / 60, 2) }} / month • GST Included
                         </span>
                     </div>
 
@@ -320,16 +361,17 @@
             <div @click.away="termsModalOpen = false"
                  class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-left space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-amber-200">
-                    <h3 class="font-serif font-bold text-lg text-[#881337]">Haridwar Bliss 5-Year Membership Terms & Conditions</h3>
+                    <h3 class="font-serif font-bold text-lg text-[#881337]">Blu Bliss 5-Year Membership Terms & Conditions</h3>
                     <button type="button" @click="termsModalOpen = false" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
                 </div>
 
                 <div class="text-xs text-slate-600 space-y-3 max-h-96 overflow-y-auto pr-2 leading-relaxed">
-                    <p><strong>1. Membership Tenure:</strong> The Sacred Devotee Membership is valid for exactly 5 continuous calendar years (60 months) from the date of activation.</p>
-                    <p><strong>2. Monthly Sacred Gangajal Benefit:</strong> Active members are entitled to claim 1 complimentary (₹0 product cost) 500ml Haridwar Gangajal bottle per calendar month. A flat subsidized packing, handling, and delivery charge (currently ₹{{ number_format($shippingRate) }}) applies per dispatch.</p>
-                    <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident sealing and a verifiable batch lab assay.</p>
-                    <p><strong>4. Fee & Invoicing:</strong> The ₹{{ number_format($membershipFee) }} one-time contribution is inclusive of 18% GST (SAC Code 9995). A downloadable digital tax invoice is generated upon confirmation. Formal legal terms PDF is provided with invoice.</p>
-                    <p><strong>5. Non-Transferable:</strong> Membership privileges are attached to the registered devotee account and are non-transferable and non-refundable once activated.</p>
+                    <p><strong>1. Membership Tenure:</strong> The Blu Bliss Sacred Devotee Membership is valid for exactly 5 continuous calendar years (60 months) from the date of activation.</p>
+                    <p><strong>2. Monthly Sacred Gangajal Benefit:</strong> Active members are entitled to claim 1 complimentary (₹0 product cost) 500ml Haridwar Gangajal bottle per calendar month. A flat subsidized packing, handling, and delivery charge (currently ₹{{ number_format($shippingRate) }}) applies per dispatch. In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.</p>
+                    <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident, leak-proof protective packaging and a verifiable batch lab assay.</p>
+                    <p><strong>4. Fee & Invoicing:</strong> The ₹{{ number_format($membershipFee) }} one-time registration contribution is inclusive of 18% GST (SAC Code 9995). A downloadable digital tax invoice is generated upon confirmation.</p>
+                    <p><strong>5. Sacred Kits & Cleanliness Pledge:</strong> Members receive preferred pricing and early access privileges on consecrated Vedic Puja Essentials, festive kits, and Haridwar Ghat Prasadam. Every monthly delivery directly supports our Eco-Clean Ganga Pledge toward river waste removal and environmental conservation in Haridwar.</p>
+                    <p><strong>6. Non-Transferable:</strong> Membership privileges are attached to the registered devotee account and are non-transferable and non-refundable once activated.</p>
                 </div>
 
                 <div class="pt-3 border-t border-slate-200 flex justify-end">

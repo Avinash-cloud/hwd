@@ -10,7 +10,7 @@
                 <div
                     class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/30 text-xs font-bold">
                     <span class="w-2 h-2 rounded-full bg-[#0369A1] animate-pulse"></span>
-                    <span>5-Year Sacred Membership Active</span>
+                    <span>Blu Bliss 5-Year Sacred Membership Active</span>
                 </div>
             @endif
         </div>
@@ -82,8 +82,8 @@
 
                 <div
                     class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-amber-200">
-                    <span>100% Hermetically Sealed · Direct from Sacred Haridwar</span>
-                    <span>Ganga Aarti Consecration</span>
+                    <span>100% Hermetically Sealed · Sacred Haridwar · Eco-Clean Pledge</span>
+                    <span>Brahma Muhurta Consecration</span>
                 </div>
             </div>
 
