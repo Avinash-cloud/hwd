@@ -26,6 +26,16 @@
         },
         isBookingModalOpen: {{ ($errors->any() || session('booking_success')) ? 'true' : 'false' }},
         selectedPackage: '{{ old('package', 'पैकेज 1: मंगल उत्सव एवं आयुष्मान संकल्प पूजा (₹5,100/-)') }}',
+        pujaPaymentMethod: '{{ old('payment_method', 'razorpay') }}',
+        isPujaProcessing: false,
+        pujaPaymentId: '',
+        pujaOrderId: '',
+        pujaSignature: '',
+
+        get currentPujaAmount() {
+            return (this.selectedPackage.includes('11,000') || this.selectedPackage.includes('11000') || this.selectedPackage.includes('पैकेज 2')) ? 11000 : 5100;
+        },
+
         openBookingModal(pkgName = null) {
             if (pkgName) {
                 this.selectedPackage = pkgName;
@@ -36,6 +46,82 @@
         closeBookingModal() {
             this.isBookingModalOpen = false;
             document.body.classList.remove('overflow-hidden');
+        },
+
+        initiatePujaPayment() {
+            const form = document.getElementById('puja-booking-form');
+            if (!form) return;
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            this.isPujaProcessing = true;
+
+            const devoteeName = form.querySelector('[name=devotee_name]')?.value || '';
+            const phone = form.querySelector('[name=phone]')?.value || '';
+            const email = form.querySelector('[name=email]')?.value || '';
+
+            fetch('{{ route('online-puja.razorpay.order') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    package: this.selectedPackage,
+                    devotee_name: devoteeName,
+                    phone: phone,
+                    email: email
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Order creation failed');
+                return res.json();
+            })
+            .then(data => {
+                if (data.is_mock || typeof Razorpay === 'undefined') {
+                    this.pujaPaymentId = 'pay_PUJA_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                    this.pujaOrderId = data.order_id || 'order_mock';
+                    this.pujaSignature = 'mock_signature';
+                    this.$nextTick(() => {
+                        form.submit();
+                    });
+                    return;
+                }
+
+                const options = {
+                    key: data.key,
+                    amount: data.amount,
+                    currency: data.currency || 'INR',
+                    name: data.name || 'Haridwar Bliss - Vedic Puja',
+                    description: data.description || this.selectedPackage,
+                    order_id: data.order_id,
+                    prefill: data.prefill,
+                    theme: { color: '#881337' },
+                    handler: (response) => {
+                        this.pujaPaymentId = response.razorpay_payment_id;
+                        this.pujaOrderId = response.razorpay_order_id;
+                        this.pujaSignature = response.razorpay_signature;
+                        this.$nextTick(() => {
+                            form.submit();
+                        });
+                    },
+                    modal: {
+                        ondismiss: () => {
+                            this.isPujaProcessing = false;
+                        }
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            })
+            .catch(err => {
+                console.error('Puja Razorpay Error:', err);
+                this.isPujaProcessing = false;
+                alert('Razorpay payment gateway failed to initialize. Please try again.');
+            });
         }
     }" @open-puja-booking.window="openBookingModal($event.detail?.package)"
         @keydown.escape.window="if(isBookingModalOpen) closeBookingModal()">
@@ -1054,10 +1140,8 @@
                                     <span class="text-2xl">🕉️</span>
                                     <div>
                                         <h4 class="font-bold text-base">
-                                            <span x-show="lang === 'en'">Your Online Puja Sankalp has been registered
-                                                successfully!</span>
-                                            <span x-show="lang === 'hi'" x-cloak>आपका ऑनलाइन पूजा संकल्प सफलतापूर्वक दर्ज कर
-                                                लिया गया है!</span>
+                                            <span x-show="lang === 'en'">Your Online Puja Sankalp has been registered successfully!</span>
+                                            <span x-show="lang === 'hi'" x-cloak>आपका ऑनलाइन पूजा संकल्प सफलतापूर्वक दर्ज कर लिया गया है!</span>
                                         </h4>
                                         <p class="text-xs text-emerald-700 mt-0.5">
                                             <span x-show="lang === 'en'">Devotee:
@@ -1069,6 +1153,11 @@
                                                 {{ session('booking_success')['gotra'] }}) · संकल्प तिथि:
                                                 {{ session('booking_success')['puja_date'] }}</span>
                                         </p>
+                                        @if(!empty(session('booking_success')['payment_id']))
+                                            <p class="text-[11px] text-emerald-800 font-mono mt-1">
+                                                <span>✓ Paid Online via Razorpay · Payment ID: <strong>{{ session('booking_success')['payment_id'] }}</strong></span>
+                                            </p>
+                                        @endif
                                     </div>
                                 </div>
                                 <p class="text-xs text-slate-700 leading-relaxed">
@@ -1094,8 +1183,14 @@
                         @endif
 
                         <!-- Booking Form -->
-                        <form method="POST" action="{{ route('online-puja.book') }}" class="space-y-5 text-sm">
+                        <form id="puja-booking-form" method="POST" action="{{ route('online-puja.book') }}" class="space-y-5 text-sm">
                             @csrf
+
+                            <!-- Hidden Payment Fields -->
+                            <input type="hidden" name="payment_method" :value="pujaPaymentMethod">
+                            <input type="hidden" name="razorpay_payment_id" :value="pujaPaymentId">
+                            <input type="hidden" name="razorpay_order_id" :value="pujaOrderId">
+                            <input type="hidden" name="razorpay_signature" :value="pujaSignature">
 
                             <!-- 1. Package Selection -->
                             <div>
@@ -1336,6 +1431,24 @@
                                         </p>
                                     </div>
                                 </label>
+                                <!-- Payment Method Section -->
+                                <div class="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-xl space-y-2">
+                                    <label class="block text-xs font-bold text-slate-800">
+                                        <span x-show="lang === 'en'">Payment Gateway (Razorpay)</span>
+                                        <span x-show="lang === 'hi'" x-cloak>भुगतान माध्यम (रेज़रपे गेटवे)</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-2.5 rounded-lg border-2 border-[#D97706] bg-white cursor-pointer shadow-2xs">
+                                        <input type="radio" x-model="pujaPaymentMethod" value="razorpay" class="text-[#D97706] focus:ring-[#D97706]">
+                                        <div class="flex-1 flex items-center justify-between text-xs">
+                                            <div>
+                                                <span class="font-bold text-slate-900 block">Razorpay Gateway (UPI, Cards, NetBanking)</span>
+                                                <span class="text-[11px] text-slate-500">100% Secure 256-bit encrypted transaction</span>
+                                            </div>
+                                            <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full uppercase">Instant</span>
+                                        </div>
+                                    </label>
+                                </div>
+
                                 @error('terms_agreed')
                                 <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
                             </div>
@@ -1344,15 +1457,27 @@
                             <div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div class="flex items-center gap-2 text-xs text-slate-600">
                                     <span class="text-base text-emerald-600">🔒</span>
-                                    <span x-show="lang === 'en'">Secure Vedic Sankalp Registration &amp; Haridwar Tirtha
-                                        Service</span>
-                                    <span x-show="lang === 'hi'" x-cloak class="hindi-text">सुरक्षित संकल्प पंजीकरण एवं
-                                        हरिद्वार तीर्थ सेवा</span>
+                                    <span x-show="lang === 'en'">Secure Vedic Sankalp Registration &amp; Haridwar Tirtha Service</span>
+                                    <span x-show="lang === 'hi'" x-cloak class="hindi-text">सुरक्षित संकल्प पंजीकरण एवं हरिद्वार तीर्थ सेवा</span>
                                 </div>
-                                <button type="submit"
-                                    class="w-full sm:w-auto px-8 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white font-bold text-sm rounded-xl shadow-xl transition transform hover:-translate-y-0.5 cursor-pointer">
-                                    <span x-show="lang === 'en'">Confirm Vedic Sankalp &amp; Book Puja →</span>
-                                    <span x-show="lang === 'hi'" x-cloak>वैदिक संकल्प व पूजा बुक करें →</span>
+                                <button type="button"
+                                    @click="initiatePujaPayment()"
+                                    :disabled="isPujaProcessing"
+                                    :class="isPujaProcessing ? 'opacity-70 cursor-not-allowed bg-slate-400' : 'bg-[#D97706] hover:bg-[#F97316] shadow-xl'"
+                                    class="w-full sm:w-auto px-8 py-3.5 text-white font-bold text-sm rounded-xl transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2">
+                                    <template x-if="!isPujaProcessing">
+                                        <span>
+                                            <span x-show="lang === 'en'">Pay ₹<span x-text="currentPujaAmount.toLocaleString()"></span> via Razorpay &amp; Book →</span>
+                                            <span x-show="lang === 'hi'" x-cloak>₹<span x-text="currentPujaAmount.toLocaleString()"></span> रेज़रपे से भुगतान कर संकल्प बुक करें →</span>
+                                        </span>
+                                    </template>
+                                    <template x-if="isPujaProcessing">
+                                        <span class="flex items-center gap-2">
+                                            <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                                            <span x-show="lang === 'en'">Connecting to Razorpay...</span>
+                                            <span x-show="lang === 'hi'" x-cloak>रेज़रपे से जुड़ रहे हैं...</span>
+                                        </span>
+                                    </template>
                                 </button>
                             </div>
                         </form>
@@ -1363,4 +1488,7 @@
         </div>
 
     </div>
+
+    <!-- Razorpay Checkout Library -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </x-app-layout>

@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
+use App\Http\Controllers\Admin\WaterCollectionLeadController as AdminWaterCollectionLeadController;
+use App\Http\Controllers\Admin\WaterCollectionPackageController as AdminWaterCollectionPackageController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BulkOrderInquiryController;
 use App\Http\Controllers\CartController;
@@ -32,6 +34,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RazorpayWebhookController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TraceabilityController;
+use App\Http\Controllers\WaterCollectionController;
 use Illuminate\Support\Facades\Route;
 
 // Public Pages
@@ -48,7 +51,14 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 
 // Sacred Online Puja & Vedic Rituals
 Route::get('/online-puja', [PageController::class, 'onlinePuja'])->name('online-puja');
+Route::post('/online-puja/razorpay-order', [PageController::class, 'createRazorpayOrder'])->name('online-puja.razorpay.order');
 Route::post('/online-puja/book', [PageController::class, 'submitOnlinePujaBooking'])->name('online-puja.book');
+
+// Haridwar Kumbh Water Collection Service
+Route::get('/water-collection', [WaterCollectionController::class, 'index'])->name('water-collection');
+Route::post('/water-collection/razorpay-order', [WaterCollectionController::class, 'createRazorpayOrder'])->name('water-collection.razorpay.order');
+Route::post('/water-collection', [WaterCollectionController::class, 'store'])->name('water-collection.store');
+Route::get('/water-collection/confirmed/{lead_number}', [WaterCollectionController::class, 'confirmed'])->name('water-collection.confirmed');
 
 Route::get('/about-us', [PageController::class, 'about'])->name('about');
 Route::get('/faqs', [PageController::class, 'faqs'])->name('faqs');
@@ -159,6 +169,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ->only(['index', 'show', 'update', 'destroy'])
         ->parameters(['bulk-inquiries' => 'inquiry'])
         ->names('bulk-inquiries');
+
+    // Haridwar Kumbh Water Collection Leads & Dynamic Pricing Packages
+    Route::resource('/water-collection-leads', AdminWaterCollectionLeadController::class)
+        ->only(['index', 'show', 'update', 'destroy'])
+        ->parameters(['water-collection-leads' => 'lead'])
+        ->names('water-collection-leads');
+
+    Route::resource('/water-collection-packages', AdminWaterCollectionPackageController::class)
+        ->except(['show', 'create', 'edit'])
+        ->parameters(['water-collection-packages' => 'package'])
+        ->names('water-collection-packages');
+    Route::post('/water-collection-packages/{package}/toggle', [AdminWaterCollectionPackageController::class, 'toggleActive'])->name('water-collection-packages.toggle');
 
     // Customer Reviews Moderation
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');

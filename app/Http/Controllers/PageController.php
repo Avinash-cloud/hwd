@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactInquiry;
 use App\Models\SiteSetting;
+use App\Services\RazorpayService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PageController extends Controller
 {
+    public function __construct(protected RazorpayService $razorpayService) {}
+
     public function about(): View
     {
         $ghatLocation = SiteSetting::get('ghat_location_default', 'Sacred Ganga Ghat, Haridwar');
@@ -37,8 +42,51 @@ class PageController extends Controller
     {
         $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
         $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');
+        $razorpayKeyId = $this->razorpayService->getKeyId();
 
-        return view('pages.online-puja', compact('supportPhone', 'supportEmail'));
+        return view('pages.online-puja', compact('supportPhone', 'supportEmail', 'razorpayKeyId'));
+    }
+
+    /**
+     * Create a Razorpay order for online puja booking.
+     */
+    public function createRazorpayOrder(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'package' => ['required', 'string', 'max:255'],
+            'devotee_name' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:25'],
+            'email' => ['nullable', 'email', 'max:255'],
+        ]);
+
+        $packageName = $validated['package'];
+        $amount = (str_contains($packageName, '11,000') || str_contains($packageName, '11000') || str_contains($packageName, 'पैकेज 2'))
+            ? 11000.00
+            : 5100.00;
+
+        $receipt = 'puja_'.time().'_'.Str::random(6);
+
+        $order = $this->razorpayService->createOrder($amount, $receipt, [
+            'type' => 'online_puja_booking',
+            'package' => $packageName,
+            'devotee_name' => $validated['devotee_name'] ?? '',
+            'phone' => $validated['phone'] ?? '',
+        ]);
+
+        return response()->json([
+            'order_id' => $order['id'],
+            'amount' => $order['amount'],
+            'currency' => $order['currency'] ?? 'INR',
+            'key' => $this->razorpayService->getKeyId(),
+            'name' => 'Haridwar Bliss - Vedic Puja',
+            'description' => $packageName,
+            'prefill' => [
+                'name' => $validated['devotee_name'] ?? '',
+                'email' => $validated['email'] ?? '',
+                'contact' => $validated['phone'] ?? '',
+            ],
+            'is_mock' => $order['is_mock'] ?? false,
+        ]);
     }
 
     public function submitOnlinePujaBooking(Request $request): RedirectResponse
@@ -54,7 +102,37 @@ class PageController extends Controller
             'shipping_address' => 'required|string|max:500',
             'special_instructions' => 'nullable|string|max:1000',
             'terms_agreed' => 'accepted',
+            'payment_method' => 'nullable|string',
+            'razorpay_payment_id' => 'nullable|string',
+            'razorpay_order_id' => 'nullable|string',
+            'razorpay_signature' => 'nullable|string',
         ]);
+
+        $packageName = $validated['package'];
+        $amount = (str_contains($packageName, '11,000') || str_contains($packageName, '11000') || str_contains($packageName, 'पैकेज 2'))
+            ? 11000.00
+            : 5100.00;
+
+        $paymentMethod = $validated['payment_method'] ?? 'razorpay';
+        $razorpayPaymentId = $request->input('razorpay_payment_id');
+        $razorpayOrderId = $request->input('razorpay_order_id');
+        $razorpaySignature = $request->input('razorpay_signature');
+
+        if ($paymentMethod === 'razorpay') {
+            if ($razorpayOrderId && $razorpaySignature && $razorpayPaymentId) {
+                $isValid = $this->razorpayService->verifyPaymentSignature($razorpayOrderId, $razorpayPaymentId, $razorpaySignature);
+                if (! $isValid) {
+                    return back()->withInput()->with('error', 'Razorpay payment signature verification failed. Please try again.');
+                }
+                $paymentStatus = 'paid';
+            } elseif ($this->razorpayService->isDummy() && $razorpayPaymentId) {
+                $paymentStatus = 'paid';
+            } else {
+                $paymentStatus = 'pending';
+            }
+        } else {
+            $paymentStatus = 'unpaid';
+        }
 
         $message = "Online Puja Booking Details:\n"
             ."Package: {$validated['package']}\n"
@@ -64,6 +142,9 @@ class PageController extends Controller
             .'Occasion: '.($validated['occasion'] ?? 'General Auspicious Blessing')."\n"
             ."Prasad Delivery Address: {$validated['shipping_address']}\n"
             .'Special Notes / Sankalp: '.($validated['special_instructions'] ?? 'None')."\n"
+            ."Payment Method: {$paymentMethod}\n"
+            ."Payment Status: {$paymentStatus}\n"
+            .($razorpayPaymentId ? "Razorpay Payment ID: {$razorpayPaymentId}\n" : '')
             ."Agreement: Devotee agreed to 100% Non-Refundable online puja terms.\n";
 
         ContactInquiry::create([
@@ -71,6 +152,12 @@ class PageController extends Controller
             'email' => $validated['email'] ?? 'devotee@haridwarbliss.com',
             'phone' => $validated['phone'],
             'subject' => 'Online Puja Booking: '.$validated['package'],
+            'amount' => $amount,
+            'payment_method' => $paymentMethod,
+            'payment_status' => $paymentStatus,
+            'razorpay_payment_id' => $razorpayPaymentId,
+            'razorpay_order_id' => $razorpayOrderId,
+            'razorpay_signature' => $razorpaySignature,
             'message' => $message,
             'status' => 'unread',
         ]);
@@ -81,6 +168,9 @@ class PageController extends Controller
             'gotra' => $validated['gotra'],
             'puja_date' => $validated['puja_date'],
             'phone' => $validated['phone'],
+            'amount' => $amount,
+            'payment_status' => $paymentStatus,
+            'payment_id' => $razorpayPaymentId,
         ]);
     }
 
@@ -91,7 +181,7 @@ class PageController extends Controller
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:25',
             'subject' => 'required|string|max:255',
-            'message' => 'required|string|max:2000',
+            'message' => 'required|string|max:3000',
         ]);
 
         ContactInquiry::create([
@@ -103,7 +193,7 @@ class PageController extends Controller
             'status' => 'unread',
         ]);
 
-        return back()->with('success', 'Thank you for contacting Haridwar Bliss. Our team will reach out to you shortly.');
+        return back()->with('success', 'Jai Gange! Your message has been received. Our sewa team will respond within 24 hours.');
     }
 
     public function terms(): View

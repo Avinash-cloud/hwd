@@ -580,6 +580,10 @@
                         class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('about') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
                         About Us
                     </a>
+                    <a href="{{ route('water-collection') }}"
+                        class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('water-collection*') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
+                        Water collection
+                    </a>
                 </div>
             </div>
         </div>
@@ -755,6 +759,13 @@
             <a href="{{ route('membership.join') }}"
                 class="block px-3 py-2 rounded-lg font-bold text-[#D97706] hover:bg-amber-50">
                 5-Year Membership (₹500)
+            </a>
+            <a href="{{ route('water-collection') }}"
+                class="block px-3 py-2 rounded-lg font-bold text-[#881337] hover:bg-amber-50 {{ request()->routeIs('water-collection*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
+                <span class="flex items-center justify-between">
+                    <span>Kumbh Water Collection</span>
+                    <span class="text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">Kumbh Sewa</span>
+                </span>
             </a>
             <a href="{{ route('about') }}"
                 class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50 {{ request()->routeIs('about') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">

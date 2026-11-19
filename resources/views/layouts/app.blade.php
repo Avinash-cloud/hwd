@@ -209,7 +209,7 @@
             </div>
 
             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-amber-300/70">
-                <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED (CIN: U11040UT2025PTC019429).
+                <p>&copy; {{ date('Y') }} HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD. (CIN: U11040UT2025PTC019429).
                     Pure Haridwar Gangajal (Packaged). All rights reserved.</p>
                 <div class="flex items-center gap-6">
 

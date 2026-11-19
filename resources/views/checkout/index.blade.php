@@ -218,8 +218,7 @@
                                         <input type="checkbox" name="create_account" value="1" x-model="createAccount"
                                             class="mt-1 text-[#D97706] focus:ring-[#D97706] rounded border-slate-300">
                                         <div>
-                                            <strong class="font-bold text-slate-900 block text-xs">Create an account for faster
-                                                checkout & live tracking</strong>
+                                            <strong class="font-bold text-slate-900 block text-xs">Create an account for faster checkout & live tracking</strong>
                                             <p class="text-[11px] text-slate-500 mt-0.5">
                                                 Easily view tracking updates, save addresses, and earn devotee member rewards on
                                                 future purchases.

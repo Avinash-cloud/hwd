@@ -14,6 +14,12 @@ class ContactInquiry extends Model
         'email',
         'phone',
         'subject',
+        'amount',
+        'payment_method',
+        'payment_status',
+        'razorpay_payment_id',
+        'razorpay_order_id',
+        'razorpay_signature',
         'message',
         'status',
         'admin_notes',
@@ -23,6 +29,7 @@ class ContactInquiry extends Model
     protected function casts(): array
     {
         return [
+            'amount' => 'decimal:2',
             'replied_at' => 'datetime',
         ];
     }

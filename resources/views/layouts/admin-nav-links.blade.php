@@ -161,6 +161,32 @@
                 @endif
             </a>
 
+            <a href="{{ route('admin.water-collection-leads.index') }}"
+               class="flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.water-collection-leads.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.water-collection-leads.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                    <span>Kumbh Water Leads</span>
+                </div>
+                @php
+                    $navPendingKumbhLeads = \App\Models\WaterCollectionLead::hasTable()
+                        ? \App\Models\WaterCollectionLead::where('status', 'pending')->count()
+                        : 0;
+                @endphp
+                @if($navPendingKumbhLeads > 0)
+                    <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-600 text-white leading-none">{{ $navPendingKumbhLeads }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.water-collection-packages.index') }}"
+               class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.water-collection-packages.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.water-collection-packages.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Water Pricing & Tiers</span>
+            </a>
+
             <a href="{{ route('admin.settings.index') }}"
                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.settings.*') ? 'bg-amber-50 text-amber-900 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                 <svg class="w-4 h-4 shrink-0 {{ request()->routeIs('admin.settings.*') ? 'text-amber-600' : 'text-slate-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
