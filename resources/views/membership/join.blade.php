@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="relative bg-gradient-to-b from-[#4A0E17] via-[#5C1521] to-[#380B12] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-400/30">
-        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+        <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
              alt="Haridwar Ganga Temples"
-             class="absolute inset-0 w-full h-full object-cover opacity-25 object-center">
+             class="absolute inset-0 w-full h-full object-cover opacity-25 object-center"> -->
         <div class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-[#380B12]/80 to-transparent"></div>
 
         <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
          x-data="{
              termsAccepted: false,
              termsModalOpen: false,
