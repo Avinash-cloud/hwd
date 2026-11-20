@@ -109,13 +109,12 @@
                     </div>
                     <span class="text-[11px] font-bold uppercase tracking-widest text-[#D97706] font-mono">Monthly
                         Privilege</span>
-                    <h3 class="text-xl font-serif font-bold text-slate-900 mt-1">Claim Your Sacred Gangajal</h3>
+                    <h3 class="text-xl font-serif font-bold text-slate-900 mt-1">Monthly Gangajal Supply</h3>
                     <p class="text-xs text-slate-600 mt-2 leading-relaxed">
                         @if ($membership && $membership->isActive())
-                            Your first 500ml Haridwar Gangajal bottle is <strong>₹0 product price</strong> (only a flat
-                            ₹{{ number_format($shippingRate) }} shipping fee applies).
+                            Your monthly 500ml pure Haridwar Gangajal supply is billed at <strong>₹{{ number_format($shippingRate) }}/month</strong> (including GST).
                         @else
-                            Available exclusively to active 5-year members.
+                            Available to 5-year members with dedicated monthly doorstep delivery.
                         @endif
                     </p>
                 </div>

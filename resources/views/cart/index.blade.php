@@ -91,13 +91,28 @@
 
                                 <div class="flex items-center justify-between sm:justify-end gap-6">
                                     <!-- Quantity Update Form -->
-                                    <form method="POST" action="{{ route('cart.update') }}" class="flex items-center gap-2">
+                                    <form method="POST" action="{{ route('cart.update') }}" class="flex items-center" x-data="{ qty: {{ (int) $item['quantity'] }} }">
                                         @csrf
                                         <input type="hidden" name="item_key" value="{{ $item['key'] }}">
                                         <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
-                                        <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="20"
-                                            class="w-16 px-2 py-1 text-xs border border-slate-300 rounded-lg text-center text-black font-mono"
-                                            onchange="this.form.submit()">
+                                        <div class="inline-flex items-center border border-slate-300 rounded-xl overflow-hidden bg-white shadow-xs">
+                                            <button type="button"
+                                                    @click="if(qty > 1) { qty--; $nextTick(() => $el.closest('form').submit()); }"
+                                                    class="w-8 h-8 flex items-center justify-center text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-bold text-sm transition select-none">
+                                                −
+                                            </button>
+                                            <input type="number"
+                                                   name="quantity"
+                                                   x-model.number="qty"
+                                                   min="1" max="50"
+                                                   class="w-10 h-8 text-center border-0 text-xs font-bold text-slate-900 bg-white focus:ring-0 p-0 select-all"
+                                                   @change="$el.closest('form').submit()">
+                                            <button type="button"
+                                                    @click="qty++; $nextTick(() => $el.closest('form').submit());"
+                                                    class="w-8 h-8 flex items-center justify-center text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-bold text-sm transition select-none">
+                                                +
+                                            </button>
+                                        </div>
                                     </form>
 
                                     <!-- Price -->
@@ -153,7 +168,7 @@
                                            name="coupon_code"
                                            required
                                            placeholder="Coupon Code"
-                                           class="w-40 px-3 py-1.5 text-xs font-mono uppercase bg-slate-50 border border-slate-300 rounded-lg focus:border-amber-600 focus:ring-1 focus:ring-amber-600">
+                                           class="w-40 px-3 py-1.5 text-xs font-mono uppercase bg-slate-50 text-slate-900 border border-slate-300 rounded-lg focus:border-amber-600 focus:ring-1 focus:ring-amber-600">
                                     <button type="submit" class="px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg text-xs transition">
                                         Apply
                                     </button>

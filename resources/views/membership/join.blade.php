@@ -151,7 +151,7 @@
                             <div>
                                 <h3 class="font-bold text-[#881337] text-sm sm:text-base">Uninterrupted Monthly Supply</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Receive a fresh 500ml bottle of pure Haridwar Gangajal delivered directly to your doorstep every single month for 5 years (60 months total)—ensuring your home altar never runs out of sacred water. (Each month, your bottle carries <strong>₹0 product price</strong>, with only flat subsidized logistics applied.)
+                                    Receive a fresh 500ml bottle of pure Haridwar Gangajal delivered directly to your doorstep every single month for 5 years (60 months total)—ensuring your home altar never runs out of sacred water at the monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST).
                                 </p>
                             </div>
                         </div>
@@ -175,11 +175,11 @@
                                 3
                             </div>
                             <div>
-                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">5-Year Price Lock & Convenience</h3>
+                                <h3 class="font-bold text-[#881337] text-sm sm:text-base">5-Year Commitment & Price Lock</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    A one-time nominal registration fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months, saving you the hassle of repeatedly ordering or searching for authentic Gangajal.
+                                    A one-time commitment fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months. The monthly delivery charge of ₹{{ number_format($shippingRate) }}/month per bottle is payable by the 5th of every month.
                                     <span class="block text-[11px] text-amber-900/80 font-medium mt-1">
-                                        *(Note: In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.)*
+                                        *(Note: Service rate of ₹{{ number_format($shippingRate) }} ensured for the agreement period. In case of any future price revision, 30 days prior written notice will be provided.)*
                                     </span>
                                 </p>
                             </div>
@@ -231,20 +231,21 @@
 
                 <!-- Terms & Transparency -->
                 <div class="bg-[#FFFDF7] rounded-3xl border border-[#D97706]/20 p-6 space-y-3 text-xs text-[#3B2314]/85">
-                    <h4 class="font-serif font-bold text-[#881337] text-sm">Devotee Guarantee & Transparency</h4>
+                    <h4 class="font-serif font-bold text-[#881337] text-sm">Agreement Summary & Devotee Assurance</h4>
                     <p>
-                        • <strong>Delivery Schedule:</strong> Once subscribed, you can claim your monthly 500ml bottle at any
-                        time from your member portal, shipped directly via express courier with real-time tracking updates.
+                        • <strong>Agreement Period:</strong> 60 Months (5 Continuous Years) of monthly 500ml pure Haridwar Gangajal delivered to your address.
                     </p>
                     <p>
-                        • <strong>Sanctity Assurance:</strong> Collected during Brahma Muhurta morning Aarti under
-                        continuous Vedic recitation. Untouched by human hands and hermetically sealed.
+                        • <strong>Financial Terms:</strong> One-time commitment fee of ₹{{ number_format($membershipFee) }} (non-refundable) + monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST) payable by the 5th of every month.
+                    </p>
+                    <p>
+                        • <strong>Sanctity Assurance:</strong> Sacred water collected during Brahma Muhurta morning Aarti under continuous Vedic recitation. Untouched by human hands and hermetically sealed.
+                    </p>
+                    <p>
+                        • <strong>Tax Invoicing:</strong> A formal GST invoice (SAC 9995 / HSN 22019010) is generated upon confirmation and downloadable from your member portal.
                     </p>
                     <p>
                         • <strong>Eco-Clean Ganga Pledge:</strong> Your monthly deliveries directly aid our local Haridwar river waste removal and ghat conservation initiatives.
-                    </p>
-                    <p>
-                        • <strong>Tax Invoicing:</strong> A formal GST invoice with SAC Code 9995 is generated immediately upon registration and available for download.
                     </p>
                 </div>
             </div>
@@ -463,13 +464,73 @@
                     <button type="button" @click="termsModalOpen = false" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
                 </div>
 
-                <div class="text-xs text-slate-600 space-y-3 max-h-96 overflow-y-auto pr-2 leading-relaxed">
-                    <p><strong>1. Membership Tenure & Auto-Renewal:</strong> The Blu Bliss Sacred Devotee Membership is valid for 5 continuous calendar years (60 months) from the date of activation. Upon recurring monthly fulfillment, the 5-year membership tenure automatically renews so your sacred household connection remains uninterrupted.</p>
-                    <p><strong>2. Monthly Sacred Gangajal Benefit & Auto-Debit:</strong> Active members receive 1 fresh 500ml Haridwar Gangajal bottle every month (₹0 product cost). A recurring subsidized delivery charge (currently ₹{{ number_format($shippingRate) }}/month) is auto-debited via your authorized payment mandate to ensure seamless monthly dispatch. In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.</p>
-                    <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident, leak-proof protective packaging and a verifiable batch lab assay.</p>
-                    <p><strong>4. Fee & Invoicing:</strong> The ₹{{ number_format($membershipFee) }} one-time registration contribution is inclusive of 18% GST (SAC Code 9995). A downloadable digital tax invoice is generated upon confirmation.</p>
-                    <p><strong>5. Sacred Kits & Cleanliness Pledge:</strong> Members receive preferred pricing and early access privileges on consecrated Vedic Puja Essentials, festive kits, and Haridwar Ghat Prasadam. Every monthly delivery directly supports our Eco-Clean Ganga Pledge toward river waste removal and environmental conservation in Haridwar.</p>
-                    <p><strong>6. Non-Transferable:</strong> Membership privileges are attached to the registered devotee account and are non-transferable and non-refundable once activated.</p>
+                <div class="text-xs text-slate-700 space-y-4 max-h-[28rem] overflow-y-auto pr-2 leading-relaxed divide-y divide-slate-100 font-sans">
+                    <div class="pt-1">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">1. Description of Service</h4>
+                        <p class="mt-1 text-slate-600">The Company shall provide pure Ganga Jal sourced from Haridwar, packed in a 500ml PET bottle, and delivered monthly to the Customer's address mentioned above.</p>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">2. Agreement Period</h4>
+                        <p class="mt-1 text-slate-600">The term of this Agreement shall be <strong>60 Months [5 Years]</strong>, commencing from the date of membership joining.</p>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">3. Financial Terms & Payment</h4>
+                        <ul class="mt-1 space-y-1.5 text-slate-600">
+                            <li><strong>A] One Time Commitment Fee:</strong> ₹{{ number_format($membershipFee) }}/- (This fee is charged as a one-time charge for the 5-year service commitment. This fee is <strong>Non-Refundable</strong> and shall not be refunded under any circumstances).</li>
+                            <li><strong>B] Monthly Charge:</strong> ₹{{ number_format($shippingRate) }}/- per bottle per month (Including GST).</li>
+                            <li><strong>C] Payment:</strong> The Commitment Fee is payable in advance at the time of signing the Agreement. The Monthly Charge is payable by the 5th of every month.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">4. Customer Obligations</h4>
+                        <ul class="mt-1 space-y-1 text-slate-600">
+                            <li><strong>4.1</strong> The Customer is committed to availing the monthly service continuously for 60 months.</li>
+                            <li><strong>4.2</strong> If the Customer discontinues the service before the expiry of the Agreement period, the Commitment Fee deposited shall be forfeited.</li>
+                            <li><strong>4.3</strong> The Customer must provide 15 days prior written notice for any change of address.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">5. Company Obligations</h4>
+                        <ul class="mt-1 space-y-1 text-slate-600">
+                            <li><strong>5.1</strong> The Company shall ensure service at the rate of ₹{{ number_format($shippingRate) }} for the Agreement period.</li>
+                            <li><strong>5.2</strong> In case of a price revision, the Company shall provide 30 days prior written notice. The Customer shall have the right to terminate the Agreement in case of disagreement; however, the Commitment Fee shall remain non-refundable.</li>
+                            <li><strong>5.3</strong> Service may be interrupted due to natural calamities/legal restrictions, for which the Company shall not be liable.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">6. Taxation & Accounting</h4>
+                        <ul class="mt-1 space-y-1 text-slate-600">
+                            <li><strong>6.1</strong> GST applicable on all charges as per law. SAC Code: 9995 / HSN Code: 22019010.</li>
+                            <li><strong>6.2</strong> A valid Tax Invoice shall be issued by the Company.</li>
+                            <li><strong>6.3</strong> The Commitment Fee shall be treated as "Deferred Revenue" in the Company's books of accounts.</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">7. Termination of Agreement</h4>
+                        <p class="mt-1 text-slate-600">This Agreement shall automatically terminate upon completion of 60 months. Renewal shall be at the Customer's discretion.</p>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">8. Dispute Resolution</h4>
+                        <p class="mt-1 text-slate-600">All disputes related to this Agreement shall be subject to the jurisdiction of Haridwar District Court.</p>
+                    </div>
+
+                    <div class="pt-3">
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">9. Service Cancellation Policy</h4>
+                        <ul class="mt-1 space-y-1 text-slate-600">
+                            <li><strong>A.</strong> The Customer may discontinue the service in any month by giving written notice or e-mail.</li>
+                            <li><strong>B.</strong> The Commitment Fee of ₹{{ number_format($membershipFee) }} is non-refundable under any circumstances.</li>
+                            <li><strong>C.</strong> Any monthly fee paid in advance shall be adjusted in the subsequent month's bill.</li>
+                            <li><strong>D.</strong> After completion of 60 months, no further Commitment Fee shall be charged.</li>
+                            <li><strong>E.</strong> For renewal after 5 years, a fresh Agreement may be executed if required.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-200 flex justify-end">
