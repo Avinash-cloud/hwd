@@ -9,6 +9,8 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\SubscriptionLog;
 use App\Services\GstService;
+use App\Services\NimbusPostService;
+use App\Services\OrderMailService;
 use App\Services\RazorpayService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +20,9 @@ use Illuminate\Support\Str;
 class RazorpayWebhookController extends Controller
 {
     public function __construct(
-        protected RazorpayService $razorpayService
+        protected RazorpayService $razorpayService,
+        protected NimbusPostService $nimbusPostService,
+        protected OrderMailService $orderMailService
     ) {}
 
     /**
@@ -218,6 +222,14 @@ class RazorpayWebhookController extends Controller
             'payment_id' => $paymentId,
             'details' => ['order_number' => $orderNumber],
         ]);
+
+        // Auto-book shipment with NimbusPost for recurring membership delivery
+        if (config('services.nimbuspost.auto_create_shipment', true)) {
+            $this->nimbusPostService->createShipment($order);
+        }
+
+        // Send order placed confirmation email to subscriber
+        $this->orderMailService->sendOrderPlaced($order);
     }
 
     /**

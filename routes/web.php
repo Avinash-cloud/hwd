@@ -27,6 +27,7 @@ use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\NimbusPostWebhookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
@@ -97,11 +98,13 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout/razorpay-order', [CheckoutController::class, 'createRazorpayOrder'])->name('checkout.razorpay.order');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::post('/webhooks/razorpay', [RazorpayWebhookController::class, 'handle'])->name('webhooks.razorpay');
+Route::post('/webhooks/nimbuspost', [NimbusPostWebhookController::class, 'handle'])->name('webhooks.nimbuspost');
 
-// Order Confirmation & Invoices (Supports authenticated devotees and guest orders)
+// Order Confirmation, Invoices & Devotee Cancellation (Supports authenticated devotees and guest orders)
 Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/orders/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
 Route::post('/orders/{orderNumber}/create-account', [OrderController::class, 'createAccountFromGuestOrder'])->name('orders.createAccount');
+Route::post('/orders/{orderNumber}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
 // Customer Protected Routes
 Route::middleware(['auth'])->group(function () {
@@ -148,8 +151,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/bulk-update', [AdminOrderController::class, 'bulkUpdate'])->name('orders.bulkUpdate');
+    Route::post('/orders/bulk-nimbus-ship', [AdminOrderController::class, 'bulkNimbusShip'])->name('orders.bulkNimbusShip');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/orders/{order}/nimbus-ship', [AdminOrderController::class, 'createNimbusShipment'])->name('orders.nimbusShip');
+    Route::post('/orders/{order}/nimbus-cancel', [AdminOrderController::class, 'cancelNimbusShipment'])->name('orders.nimbusCancel');
+    Route::get('/orders/{order}/nimbus-track', [AdminOrderController::class, 'refreshTracking'])->name('orders.nimbusTrack');
+    Route::get('/orders/{order}/label', [AdminOrderController::class, 'downloadLabel'])->name('orders.downloadLabel');
     Route::get('/orders/{order}/packing-slip', [AdminOrderController::class, 'packingSlip'])->name('orders.packingSlip');
 
     Route::get('/memberships', [AdminMembershipController::class, 'index'])->name('memberships.index');

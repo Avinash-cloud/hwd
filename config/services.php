@@ -47,4 +47,14 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback'),
     ],
 
+    'nimbuspost' => [
+        'base_url' => rtrim((string) env('NIMBUSPOST_BASE_URL', 'https://api.nimbuspost.com/v1'), '/'),
+        'api_key' => env('NIMBUSPOST_API_KEY', env('NIMBUSPOST_API_TOKEN')),
+        'api_secret' => env('NIMBUSPOST_API_SECRET'),
+        'warehouse_name' => env('NIMBUSPOST_WAREHOUSE_NAME', 'Haridwar Bliss Warehouse'),
+        'webhook_secret' => env('NIMBUSPOST_WEBHOOK_SECRET'),
+        'auto_create_shipment' => env('NIMBUSPOST_AUTO_CREATE_SHIPMENT', true),
+        'mock_mode' => env('NIMBUSPOST_MOCK_MODE', false),
+    ],
+
 ];

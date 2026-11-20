@@ -23,6 +23,34 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+        @if ($order->isCancelled())
+            <!-- Order Cancelled Banner -->
+            <div class="bg-rose-50 border-2 border-rose-300 rounded-3xl p-6 sm:p-8 shadow-sm space-y-2">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 text-xl font-bold">
+                        ✕
+                    </div>
+                    <div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-200 text-rose-800 uppercase tracking-wider mb-1">
+                            Cancelled
+                        </span>
+                        <h3 class="font-serif font-bold text-lg text-rose-950">This sacred order has been cancelled</h3>
+                        <p class="text-xs text-rose-700 mt-1 leading-relaxed">
+                            Cancelled on {{ ($order->cancelled_at ?? $order->updated_at)->format('M d, Y \a\t h:i A') }}.
+                            @if($order->cancellation_reason)
+                                <br><strong>Reason:</strong> {{ $order->cancellation_reason }}
+                            @endif
+                        </p>
+                        @if(in_array($order->payment_method, ['razorpay', 'mock']) && $order->payment_status === 'paid')
+                            <p class="text-xs text-rose-800 font-medium mt-2 bg-rose-100/70 p-3 rounded-xl border border-rose-200">
+                                ℹ️ Your online payment of ₹{{ number_format($order->total_amount, 2) }} will be refunded to your original payment method within 5–7 business days.
+                            </p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @if ($order->isGuest() && !Auth::check())
             <!-- Guest Account Creation Callout -->
             <div class="bg-gradient-to-r from-amber-50 to-[#FFFDF7] border-2 border-amber-300 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
@@ -107,7 +135,7 @@
                         </svg>
                     </div>
                     <strong class="text-xs block">Dispatched</strong>
-                    <span class="text-[10px] opacity-75">{{ $order->tracking_number ?? 'Shiprocket' }}</span>
+                    <span class="text-[10px] opacity-75">{{ $order->awb_number ?: ($order->tracking_number ?: 'NimbusPost Partner') }}</span>
                 </div>
 
                 <div
@@ -122,6 +150,34 @@
                         class="text-[10px] opacity-75">{{ $order->delivered_at ? $order->delivered_at->format('M d') : 'Pending' }}</span>
                 </div>
             </div>
+
+            @if($order->hasNimbusPostShipment() || $order->tracking_number)
+                <!-- Live Courier Tracking Section -->
+                <div class="mt-6 pt-6 border-t border-[#D97706]/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FFFDF7] p-5 rounded-2xl border border-amber-200">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg shrink-0">
+                            🚚
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Courier Partner</span>
+                            <div class="text-sm font-bold text-slate-900">{{ $order->courier_name ?? 'NimbusPost Express Partner' }}</div>
+                            <div class="text-xs text-slate-600 font-mono mt-0.5">
+                                AWB / Tracking: <span class="font-bold text-slate-900">{{ $order->awb_number ?: $order->tracking_number }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        @if($order->tracking_url)
+                            <a href="{{ $order->tracking_url }}" target="_blank"
+                               class="px-4 py-2 bg-[#D97706] hover:bg-[#F97316] text-white text-xs font-bold rounded-xl shadow-xs transition inline-flex items-center gap-1.5">
+                                <span>Track on Courier Network</span>
+                                <span>↗</span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -258,6 +314,40 @@
                                 <span
                                     class="font-bold text-slate-900">{{ $order->batch->packaging_date->format('M d, Y') }}</span>
                             </div>
+                        </div>
+                    </div>
+                @endif
+                @if ($order->canCancel())
+                    <!-- Customer Order Cancellation Option -->
+                    <div x-data="{ showCancelConfirm: false }" class="bg-white border border-slate-200 rounded-3xl p-6 shadow-xs text-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-800">Need to Cancel this Order?</span>
+                            <button type="button" @click="showCancelConfirm = !showCancelConfirm"
+                                class="text-rose-600 hover:text-rose-700 font-semibold underline text-xs">
+                                Cancel Order
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500">
+                            You may cancel this order before it is dispatched for holy bottling and courier handover.
+                        </p>
+
+                        <div x-show="showCancelConfirm" x-cloak class="pt-3 border-t border-slate-100 space-y-3">
+                            <form method="POST" action="{{ route('orders.cancel', $order->order_number) }}" onsubmit="return confirm('Are you sure you want to cancel this sacred order?');">
+                                @csrf
+                                <label class="block text-[11px] font-medium text-slate-700 mb-1">Reason for cancellation (optional):</label>
+                                <input type="text" name="reason" placeholder="e.g. Changed mind, ordered by mistake"
+                                    class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl mb-3 focus:border-rose-500 focus:ring-1 focus:ring-rose-500">
+                                <div class="flex items-center gap-2">
+                                    <button type="submit"
+                                        class="w-full py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition">
+                                        Confirm Cancellation
+                                    </button>
+                                    <button type="button" @click="showCancelConfirm = false"
+                                        class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl text-xs transition">
+                                        Keep
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 @endif

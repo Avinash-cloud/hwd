@@ -10,6 +10,8 @@ use App\Models\OrderItem;
 use App\Models\SiteSetting;
 use App\Models\User;
 use App\Services\CartService;
+use App\Services\NimbusPostService;
+use App\Services\OrderMailService;
 use App\Services\RazorpayService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +26,9 @@ class CheckoutController extends Controller
 {
     public function __construct(
         protected CartService $cartService,
-        protected RazorpayService $razorpayService
+        protected RazorpayService $razorpayService,
+        protected NimbusPostService $nimbusPostService,
+        protected OrderMailService $orderMailService
     ) {}
 
     /**
@@ -306,6 +310,14 @@ class CheckoutController extends Controller
                 'is_free_monthly_bottle' => $item['has_free_bottle'],
             ]);
         }
+
+        // Auto-book shipment with NimbusPost aggregator if configured
+        if (config('services.nimbuspost.auto_create_shipment', true)) {
+            $this->nimbusPostService->createShipment($order);
+        }
+
+        // Dispatch sacred order placed confirmation email to devotee
+        $this->orderMailService->sendOrderPlaced($order);
 
         // Store session authorization for guest to view their order confirmation page
         session()->put('guest_order_access_'.$order->order_number, true);

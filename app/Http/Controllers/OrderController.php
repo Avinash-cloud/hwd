@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\InventoryService;
+use App\Services\NimbusPostService;
+use App\Services\OrderMailService;
 use App\Services\QrCodeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +19,10 @@ use Illuminate\View\View;
 class OrderController extends Controller
 {
     public function __construct(
-        protected QrCodeService $qrCodeService
+        protected QrCodeService $qrCodeService,
+        protected NimbusPostService $nimbusPostService,
+        protected OrderMailService $orderMailService,
+        protected InventoryService $inventoryService
     ) {}
 
     /**
@@ -161,5 +167,62 @@ class OrderController extends Controller
         $qrSvg = $this->qrCodeService->renderSvg($verificationUrl);
 
         return view('orders.invoice', compact('order', 'qrSvg', 'verificationUrl'));
+    }
+
+    /**
+     * Cancel order as requested by devotee (if not yet dispatched/delivered).
+     */
+    public function cancel(string $orderNumber, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $order = Order::with(['items.product', 'batch', 'user'])
+            ->where('order_number', $orderNumber)
+            ->firstOrFail();
+
+        $hasGuestSession = session('guest_order_access_'.$order->order_number, false);
+
+        if ($order->user_id) {
+            if (! $user && ! $hasGuestSession) {
+                return redirect()->route('login')->with('info', 'Please sign in to manage your order.');
+            }
+
+            if ($user && $user->id !== $order->user_id && ! $user->is_admin) {
+                abort(403, 'Unauthorized to cancel this order.');
+            }
+        } else {
+            $allowed = $hasGuestSession
+                || ($user && ($user->is_admin || strtolower($user->email) === strtolower((string) $order->guest_email)));
+
+            if (! $allowed) {
+                abort(403, 'Unauthorized to cancel this guest order.');
+            }
+        }
+
+        if (! in_array($order->order_status, ['new', 'placed', 'confirmed'])) {
+            return back()->with('error', 'Orders that have already been batched, dispatched, or delivered cannot be cancelled.');
+        }
+
+        $reason = $request->input('reason', 'Cancelled at devotee request.');
+
+        // Cancel on NimbusPost logistics if shipment was created
+        if ($order->hasNimbusPostShipment()) {
+            $this->nimbusPostService->cancelShipment($order, $reason);
+        }
+
+        // Reversible inventory restoration
+        $this->inventoryService->syncStatus($order, 'cancelled');
+
+        $order->update([
+            'order_status' => 'cancelled',
+            'cancelled_at' => now(),
+            'cancellation_reason' => $reason,
+            'nimbuspost_status' => 'cancelled',
+        ]);
+
+        // Send order cancellation email
+        $this->orderMailService->sendOrderCancelled($order, $reason);
+
+        return back()->with('success', "Order #{$order->order_number} has been cancelled successfully.");
     }
 }

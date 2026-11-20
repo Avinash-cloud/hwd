@@ -16,7 +16,22 @@
                         NEW
                     </span>
                 @endif
-                @if ($order->hasFreeMonthlyItem())
+                @if ($order->isCancelled())
+        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-xs text-rose-900 shadow-xs">
+            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm shrink-0">✕</span>
+            <div>
+                <strong class="font-bold text-rose-950 text-sm block">Order Cancelled</strong>
+                <span class="text-rose-700">
+                    Cancelled on {{ ($order->cancelled_at ?? $order->updated_at)->format('M d, Y \a\t h:i A') }}.
+                    @if($order->cancellation_reason)
+                        <span class="block mt-0.5"><strong>Reason:</strong> {{ $order->cancellation_reason }}</span>
+                    @endif
+                </span>
+            </div>
+        </div>
+    @endif
+
+    @if ($order->hasFreeMonthlyItem())
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-300">
                         ★ Monthly Member Subscription Order
                     </span>
@@ -26,6 +41,17 @@
         </div>
 
         <div class="flex items-center gap-2">
+            @if($order->hasNimbusPostShipment())
+                <a href="{{ route('admin.orders.downloadLabel', $order->id) }}"
+                   target="_blank"
+                   class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-xs">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+                    </svg>
+                    <span>Print Shipping Label ↗</span>
+                </a>
+            @endif
+
             <a href="{{ route('admin.orders.packingSlip', $order->id) }}"
                target="_blank"
                class="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-medium transition inline-flex items-center gap-1.5 shadow-xs">
@@ -36,6 +62,21 @@
             </a>
         </div>
     </div>
+
+    @if ($order->isCancelled())
+        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3 text-xs text-rose-900 shadow-xs">
+            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm shrink-0">✕</span>
+            <div>
+                <strong class="font-bold text-rose-950 text-sm block">Order Cancelled</strong>
+                <span class="text-rose-700">
+                    Cancelled on {{ ($order->cancelled_at ?? $order->updated_at)->format('M d, Y \a\t h:i A') }}.
+                    @if($order->cancellation_reason)
+                        <span class="block mt-0.5"><strong>Reason:</strong> {{ $order->cancellation_reason }}</span>
+                    @endif
+                </span>
+            </div>
+        </div>
+    @endif
 
     @if ($order->hasFreeMonthlyItem())
         <div class="mb-6 p-4 bg-sky-50 border border-sky-200 rounded-2xl flex items-center gap-3 text-xs text-sky-900 shadow-xs">
@@ -132,6 +173,133 @@
                         </button>
                     </div>
                 </form>
+            </div>
+
+            <!-- NimbusPost Multi-Courier Fulfillment & Logistics Card -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold">
+                            🚚
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-semibold text-slate-900">NimbusPost Logistics Integration</h2>
+                            <p class="text-[11px] text-slate-500">Automated multi-courier booking, real-time tracking, labels & manifests.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        @if($order->hasNimbusPostShipment())
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase
+                                {{ $order->nimbuspost_status === 'cancelled' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
+                                ● {{ $order->nimbuspost_status ?? 'Active Shipment' }}
+                            </span>
+                        @else
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase bg-slate-100 text-slate-600">
+                                ○ Not Booked on NimbusPost
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                @if($order->hasNimbusPostShipment())
+                    <!-- Active Shipment Info Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <div>
+                            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Air Waybill (AWB)</span>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="font-mono font-bold text-slate-900 text-xs">{{ $order->awb_number ?: $order->tracking_number }}</span>
+                                @if($order->tracking_url)
+                                    <a href="{{ $order->tracking_url }}" target="_blank" class="text-amber-600 hover:text-amber-800" title="Open Tracking Portal">
+                                        ↗
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Courier Partner</span>
+                            <span class="font-semibold text-slate-800 text-xs mt-0.5 block">{{ $order->courier_name ?? 'NimbusPost Express' }}</span>
+                        </div>
+
+                        <div>
+                            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Shipment Reference</span>
+                            <span class="font-mono text-slate-600 text-xs mt-0.5 block">{{ $order->nimbuspost_shipment_id ?? 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- NimbusPost Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                        <a href="{{ route('admin.orders.downloadLabel', $order->id) }}"
+                           target="_blank"
+                           class="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 shadow-xs">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                            </svg>
+                            <span>Print Shipping Label ↗</span>
+                        </a>
+
+                        <a href="{{ route('admin.orders.nimbusTrack', $order->id) }}"
+                           class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-lg text-xs font-medium transition inline-flex items-center gap-1.5 shadow-xs">
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            <span>Refresh Live Status</span>
+                        </a>
+
+                        @if($order->nimbuspost_status !== 'cancelled' && $order->order_status !== 'delivered')
+                            <form method="POST" action="{{ route('admin.orders.nimbusCancel', $order->id) }}" onsubmit="return confirm('Are you sure you want to cancel this shipment on NimbusPost?')">
+                                @csrf
+                                <button type="submit" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-xs font-medium transition inline-flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                    <span>Cancel NimbusPost Shipment</span>
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+
+                    <!-- Tracking Checkpoints Timeline -->
+                    @if(!empty($order->tracking_history))
+                        <div class="pt-2">
+                            <span class="text-xs font-bold text-slate-800 uppercase tracking-wider block mb-3 font-mono">Live Checkpoint Scans</span>
+                            <div class="space-y-3 pl-3 border-l-2 border-amber-300/80 ml-2">
+                                @foreach(array_reverse($order->tracking_history) as $scan)
+                                    <div class="relative pl-3">
+                                        <div class="absolute -left-[19px] top-1 w-2.5 h-2.5 rounded-full bg-amber-500 border-2 border-white"></div>
+                                        <div class="flex items-baseline justify-between gap-2">
+                                            <span class="font-bold text-slate-800 text-xs">{{ $scan['status'] ?? 'Milestone Scan' }}</span>
+                                            <span class="text-[10px] text-slate-400 font-mono">
+                                                {{ !empty($scan['timestamp']) ? \Carbon\Carbon::parse($scan['timestamp'])->format('M d, h:i A') : '' }}
+                                            </span>
+                                        </div>
+                                        @if(!empty($scan['location']))
+                                            <div class="text-[11px] text-slate-600 mt-0.5">Location: {{ $scan['location'] }}</div>
+                                        @endif
+                                        @if(!empty($scan['remarks']))
+                                            <div class="text-[11px] text-slate-500 italic mt-0.5">{{ $scan['remarks'] }}</div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <div class="flex items-center justify-between p-4 bg-amber-50/60 border border-amber-200 rounded-xl">
+                        <div>
+                            <strong class="text-slate-800 block text-xs">Ready to book courier handover?</strong>
+                            <span class="text-slate-500 text-[11px]">Pushing to NimbusPost generates the Air Waybill (AWB), assigns the best courier, and generates the shipping label.</span>
+                        </div>
+                        <form method="POST" action="{{ route('admin.orders.nimbusShip', $order->id) }}">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-lg text-xs shadow-xs transition flex items-center gap-1.5 shrink-0">
+                                <span>Book with NimbusPost</span>
+                                <span>→</span>
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
 
             <!-- Ordered Items List -->

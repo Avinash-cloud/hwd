@@ -34,6 +34,14 @@ class Order extends Model
         'inventory_deducted',
         'tracking_number',
         'courier_name',
+        'nimbuspost_order_id',
+        'nimbuspost_shipment_id',
+        'awb_number',
+        'courier_id',
+        'label_url',
+        'manifest_url',
+        'nimbuspost_status',
+        'tracking_history',
         'qr_token',
         'shipping_address',
         'billing_address',
@@ -41,6 +49,8 @@ class Order extends Model
         'admin_notes',
         'dispatched_at',
         'delivered_at',
+        'cancelled_at',
+        'cancellation_reason',
     ];
 
     protected function casts(): array
@@ -59,8 +69,10 @@ class Order extends Model
             'inventory_deducted' => 'boolean',
             'shipping_address' => 'array',
             'billing_address' => 'array',
+            'tracking_history' => 'array',
             'dispatched_at' => 'datetime',
             'delivered_at' => 'datetime',
+            'cancelled_at' => 'datetime',
         ];
     }
 
@@ -129,5 +141,43 @@ class Order extends Model
     public function getVerificationUrlAttribute(): string
     {
         return url('/verify/'.$this->qr_token);
+    }
+
+    /**
+     * Determine if order has an associated NimbusPost shipment booked.
+     */
+    public function hasNimbusPostShipment(): bool
+    {
+        return ! empty($this->nimbuspost_shipment_id) || ! empty($this->awb_number);
+    }
+
+    /**
+     * Determine if order can be cancelled.
+     */
+    public function canCancel(): bool
+    {
+        return ! in_array($this->order_status, ['cancelled', 'delivered']);
+    }
+
+    /**
+     * Determine if order is cancelled.
+     */
+    public function isCancelled(): bool
+    {
+        return $this->order_status === 'cancelled';
+    }
+
+    /**
+     * Get public tracking URL for devotee.
+     */
+    public function getTrackingUrlAttribute(): ?string
+    {
+        $awb = $this->awb_number ?: $this->tracking_number;
+
+        if (! $awb) {
+            return null;
+        }
+
+        return 'https://ship.nimbuspost.com/shipping/tracking/'.$awb;
     }
 }

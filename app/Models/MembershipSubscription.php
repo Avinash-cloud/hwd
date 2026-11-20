@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\GstService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,7 +45,6 @@ class MembershipSubscription extends Model
      * Resolve monthly billing details:
      * Auto-debit amount every month = Product Price + Delivery Charge.
      *
-     * @param  Product|null  $specificProduct
      * @return array{product: ?Product, product_price: float, delivery_charge: float, total_monthly_charge: float}
      */
     public static function getMonthlyBillingDetails(?Product $specificProduct = null): array

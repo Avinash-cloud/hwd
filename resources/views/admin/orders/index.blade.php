@@ -164,6 +164,20 @@
                     </button>
                 </form>
 
+                <span class="text-amber-300 hidden sm:inline">|</span>
+
+                <!-- Bulk Book NimbusPost Form -->
+                <form method="POST" action="{{ route('admin.orders.bulkNimbusShip') }}" class="flex items-center gap-1.5">
+                    @csrf
+                    <template x-for="id in selectedOrders" :key="'np_'+id">
+                        <input type="hidden" name="order_ids[]" :value="id">
+                    </template>
+                    <button type="submit"
+                        class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition shadow-xs flex items-center gap-1">
+                        <span>🚚 Book NimbusPost</span>
+                    </button>
+                </form>
+
                 <button type="button" @click="selectedOrders = []"
                     class="text-slate-500 hover:text-slate-800 underline text-xs">
                     Clear
@@ -293,9 +307,22 @@
                                             {{ $o->batch->batch_number }}
                                         </span>
                                     @else
-                                        <span class="text-slate-400 italic block">No batch</span>
+                                        <span class="text-slate-400 italic block text-[10px]">No batch</span>
                                     @endif
-                                    <span class="text-slate-500 mt-1 block">AWB: {{ $o->tracking_number ?? '—' }}</span>
+
+                                    @if($o->hasNimbusPostShipment())
+                                        <div class="mt-1">
+                                            <span class="text-[9px] font-bold uppercase text-amber-700 bg-amber-50 px-1 py-0.2 rounded border border-amber-200">
+                                                NP
+                                            </span>
+                                            <span class="text-slate-800 font-bold ml-0.5">{{ $o->awb_number ?: $o->tracking_number }}</span>
+                                        </div>
+                                        @if($o->courier_name)
+                                            <span class="text-[10px] text-slate-400 block truncate max-w-[130px]">{{ $o->courier_name }}</span>
+                                        @endif
+                                    @else
+                                        <span class="text-slate-400 mt-1 block text-[10px]">AWB: {{ $o->tracking_number ?? '—' }}</span>
+                                    @endif
                                 </td>
 
                                 <!-- Status -->

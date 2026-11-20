@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Batch;
 use App\Models\Order;
 use App\Services\InventoryService;
+use App\Services\NimbusPostService;
+use App\Services\OrderMailService;
 use App\Services\QrCodeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +17,9 @@ class OrderController extends Controller
 {
     public function __construct(
         protected QrCodeService $qrCodeService,
-        protected InventoryService $inventoryService
+        protected InventoryService $inventoryService,
+        protected NimbusPostService $nimbusPostService,
+        protected OrderMailService $orderMailService
     ) {}
 
     public function index(Request $request): View
@@ -93,18 +97,157 @@ class OrderController extends Controller
             'admin_notes' => 'nullable|string',
         ]);
 
-        if ($validated['order_status'] === 'dispatched' && ! $order->dispatched_at) {
+        $previousStatus = $order->order_status;
+        $newStatus = $validated['order_status'];
+
+        if ($newStatus === 'dispatched' && ! $order->dispatched_at) {
             $validated['dispatched_at'] = now();
-        } elseif ($validated['order_status'] === 'delivered' && ! $order->delivered_at) {
+        } elseif ($newStatus === 'delivered' && ! $order->delivered_at) {
             $validated['delivered_at'] = now();
+        } elseif ($newStatus === 'cancelled') {
+            $validated['cancelled_at'] = now();
+            $validated['cancellation_reason'] = $validated['admin_notes'] ?? 'Cancelled by administrator.';
+
+            // Cancel on NimbusPost if active shipment exists
+            if ($order->hasNimbusPostShipment()) {
+                $this->nimbusPostService->cancelShipment($order, $validated['cancellation_reason']);
+                $validated['nimbuspost_status'] = 'cancelled';
+            }
         }
 
         // Automatic and reversible inventory sync
-        $this->inventoryService->syncStatus($order, $validated['order_status']);
+        $this->inventoryService->syncStatus($order, $newStatus);
 
         $order->update($validated);
 
+        // Send appropriate customer emails based on status change
+        if ($newStatus === 'dispatched' && $previousStatus !== 'dispatched') {
+            $this->orderMailService->sendOrderDispatched($order);
+        } elseif ($newStatus === 'delivered' && $previousStatus !== 'delivered') {
+            $this->orderMailService->sendOrderDelivered($order);
+        } elseif ($newStatus === 'cancelled' && $previousStatus !== 'cancelled') {
+            $this->orderMailService->sendOrderCancelled($order, $validated['cancellation_reason'] ?? null);
+        }
+
         return back()->with('success', "Order #{$order->order_number} status updated to {$order->order_status}.");
+    }
+
+    /**
+     * Book order shipment with NimbusPost.
+     */
+    public function createNimbusShipment(Order $order): RedirectResponse
+    {
+        $result = $this->nimbusPostService->createShipment($order);
+
+        if ($result['success']) {
+            if ($order->order_status === 'new') {
+                $order->update(['order_status' => 'confirmed']);
+            }
+
+            return back()->with(
+                'success',
+                "Shipment successfully booked with NimbusPost! AWB: {$order->fresh()->awb_number} ({$order->fresh()->courier_name})."
+            );
+        }
+
+        return back()->with('error', 'NimbusPost Error: '.($result['error'] ?? 'Could not create shipment.'));
+    }
+
+    /**
+     * Cancel an active NimbusPost shipment from admin.
+     */
+    public function cancelNimbusShipment(Request $request, Order $order): RedirectResponse
+    {
+        $reason = $request->input('reason', 'Cancelled by administrator in store panel.');
+        $result = $this->nimbusPostService->cancelShipment($order, $reason);
+
+        if ($result['success']) {
+            return back()->with('success', "NimbusPost shipment for AWB {$order->awb_number} has been cancelled.");
+        }
+
+        return back()->with('error', 'NimbusPost Error: '.($result['error'] ?? 'Failed to cancel shipment.'));
+    }
+
+    /**
+     * Refresh real-time tracking checkpoints from NimbusPost.
+     */
+    public function refreshTracking(Order $order): RedirectResponse
+    {
+        $awb = $order->awb_number ?: $order->tracking_number;
+
+        if (! $awb) {
+            return back()->with('error', 'No AWB or tracking number exists for this order.');
+        }
+
+        $result = $this->nimbusPostService->trackShipment($awb);
+
+        if ($result['success']) {
+            $checkpoints = $result['checkpoints'] ?? [];
+            if (! empty($checkpoints)) {
+                $order->update([
+                    'tracking_history' => $checkpoints,
+                    'nimbuspost_status' => $result['current_status'] ?? $order->nimbuspost_status,
+                ]);
+            }
+
+            return back()->with(
+                'success',
+                "Tracking updated for AWB {$awb}. Current Status: ".($result['current_status'] ?? 'Updated')
+            );
+        }
+
+        return back()->with('error', 'Tracking Error: '.($result['error'] ?? 'Unable to retrieve tracking information.'));
+    }
+
+    /**
+     * Redirect to shipping label or fallback packing slip.
+     */
+    public function downloadLabel(Order $order): RedirectResponse|View
+    {
+        if ($order->label_url && filter_var($order->label_url, FILTER_VALIDATE_URL)) {
+            return redirect()->away($order->label_url);
+        }
+
+        $awb = $order->awb_number ?: $order->tracking_number;
+        if ($awb) {
+            $labelUrl = $this->nimbusPostService->getShippingLabel($awb);
+            if ($labelUrl && filter_var($labelUrl, FILTER_VALIDATE_URL)) {
+                $order->update(['label_url' => $labelUrl]);
+
+                return redirect()->away($labelUrl);
+            }
+        }
+
+        return $this->packingSlip($order);
+    }
+
+    /**
+     * Bulk create NimbusPost shipments for selected orders.
+     */
+    public function bulkNimbusShip(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'order_ids' => 'required|array|min:1',
+            'order_ids.*' => 'exists:orders,id',
+        ]);
+
+        $orders = Order::whereIn('id', $validated['order_ids'])->get();
+        $successCount = 0;
+        $failedCount = 0;
+
+        foreach ($orders as $order) {
+            $result = $this->nimbusPostService->createShipment($order);
+            if ($result['success']) {
+                $successCount++;
+            } else {
+                $failedCount++;
+            }
+        }
+
+        return back()->with(
+            'success',
+            "Bulk NimbusPost booking completed: {$successCount} order(s) booked successfully".($failedCount > 0 ? ", {$failedCount} failed." : '.')
+        );
     }
 
     /**
