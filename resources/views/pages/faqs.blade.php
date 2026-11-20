@@ -18,7 +18,7 @@
             <h3 class="font-serif font-bold text-base text-slate-900">1. What is the 5-Year Haridwar Bliss Membership?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                The membership is a 5-year (60 months) service commitment with a one-time non-refundable commitment fee of ₹{{ number_format($membershipFee) }}. The primary benefit of the membership is the automatic monthly ordering and delivery of the active 500ml pure Haridwar Gangajal from our membership catalog directly to your doorstep at the set monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST).
+                The membership is a 5-year (60 months) service commitment with a one-time non-refundable commitment fee of ₹{{ number_format($membershipFee) }}. The primary benefit of the membership is the automatic monthly ordering and delivery of the active 500ml pure Haridwar Gangajal from our membership catalog directly to your doorstep at the set monthly charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, including GST).
             </p>
         </div>
 
@@ -26,7 +26,7 @@
             <h3 class="font-serif font-bold text-base text-slate-900">2. How does the monthly auto-delivery work?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                For active members, the system automatically creates and schedules your monthly 500ml pure Gangajal bottle dispatch every 30 days at the set monthly charge of ₹{{ number_format($shippingRate) }}/month via your authorized payment mandate. You can also order additional bottles and items from our store catalog anytime at exclusive member prices.
+                For active members, the system automatically creates and schedules your monthly 500ml pure Gangajal bottle dispatch every 30 days at the set monthly auto-debit charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}) via your authorized recurring payment mandate. You can also order additional bottles and items from our store catalog anytime at exclusive member prices.
             </p>
         </div>
 

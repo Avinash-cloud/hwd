@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         SiteSetting::set('shipping_charge', '149', 'Flat shipping rate in INR per order');
         SiteSetting::set('member_shipping_charge', '0', 'Discounted or free shipping rate in INR for active 5-year members');
         SiteSetting::set('free_shipping_threshold', '499', 'Free shipping on orders above INR 499');
-        SiteSetting::set('free_first_bottle_enabled', '1', 'Enable free monthly 1st Gangajal bottle for active members');
+        SiteSetting::set('free_first_bottle_enabled', '0', 'Enable free monthly 1st Gangajal bottle for active members');
         SiteSetting::set('guest_checkout_enabled', '1', 'Enable guest checkout for non-logged-in customers');
         SiteSetting::set('support_phone', '+91 7042482555', 'Customer care phone');
         SiteSetting::set('support_email', 'sdenterprisesghaziabad@gmail.com', 'Customer care email');
@@ -386,10 +386,10 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Pure Haridwar Gangajal (500ml Sacred Hermetic Bottle)',
                 'slug' => 'pure-haridwar-gangajal-500ml',
                 'short_description' => '100% untouched holy water from sacred Haridwar with batch QR verification.',
-                'description' => "Experience the divine sanctity of Maa Ganga at home. Sourced straight from sacred Haridwar ghats during the auspicious Brahma Muhurta morning Aarti.\n\nIncluded FREE every month for 5-Year Haridwar Bliss members!",
+                'description' => "Experience the divine sanctity of Maa Ganga at home. Sourced straight from sacred Haridwar ghats during the auspicious Brahma Muhurta morning Aarti.\n\nAutomated monthly recurring delivery available for 5-Year Blu Bliss members!",
                 'price' => 149.00,
                 'compare_price' => 199.00,
-                'member_price' => 0.00, // 1st bottle free for members!
+                'member_price' => 50.00,
                 'rating' => 5.00,
                 'reviews_count' => 312,
                 'badge' => 'Devotee Favorite',
@@ -663,8 +663,8 @@ class DatabaseSeeder extends Seeder
                     'product_name' => $gangajalProd->name,
                     'unit_price' => 149.00,
                     'quantity' => 1,
-                    'total_price' => 0.00,
-                    'is_free_monthly_bottle' => true,
+                    'total_price' => 149.00,
+                    'is_free_monthly_bottle' => false,
                 ]
             );
         }

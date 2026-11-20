@@ -21,7 +21,7 @@ class MembershipSubscriptionRecurringTest extends TestCase
     {
         parent::setUp();
         SiteSetting::set('membership_fee', '797');
-        SiteSetting::set('shipping_charge', '199');
+        SiteSetting::set('shipping_charge', '149');
         SiteSetting::set('membership_validity_years', '5');
 
         Batch::create([
@@ -41,7 +41,7 @@ class MembershipSubscriptionRecurringTest extends TestCase
             'category_id' => $category->id,
             'name' => 'Sacred Haridwar Gangajal 500ml',
             'slug' => 'sacred-gangajal-500ml',
-            'price' => 199.00,
+            'price' => 50.00,
             'volume_ml' => 500,
             'is_gangajal' => true,
             'is_active' => true,
@@ -118,13 +118,16 @@ class MembershipSubscriptionRecurringTest extends TestCase
         $order = Order::where('user_id', $user->id)->latest()->first();
         $this->assertNotNull($order);
         $this->assertEquals(199.00, (float) $order->total_amount);
+        $this->assertEquals(50.00, (float) $order->subtotal);
+        $this->assertEquals(149.00, (float) $order->shipping_amount);
         $this->assertEquals('House 108, Sacred Vihar, Kankhal', $order->shipping_address['address_line1']);
         $this->assertEquals('Haridwar', $order->shipping_address['city']);
 
-        // Assert OrderItem has is_free_monthly_bottle = true
+        // Assert OrderItem has is_free_monthly_bottle = false (not free, charged at product price)
         $item = $order->items->first();
         $this->assertNotNull($item);
-        $this->assertTrue((bool) $item->is_free_monthly_bottle);
+        $this->assertFalse((bool) $item->is_free_monthly_bottle);
+        $this->assertEquals(50.00, (float) $item->unit_price);
 
         // Assert subscription log recorded
         $this->assertDatabaseHas('subscription_logs', [
@@ -209,7 +212,7 @@ class MembershipSubscriptionRecurringTest extends TestCase
 
         $item = $order->items->first();
         $this->assertNotNull($item);
-        $this->assertTrue((bool) $item->is_free_monthly_bottle);
+        $this->assertFalse((bool) $item->is_free_monthly_bottle);
 
         // Verify next billing date moved forward
         $sub->refresh();
@@ -381,6 +384,6 @@ class MembershipSubscriptionRecurringTest extends TestCase
         $order = Order::where('user_id', $user->id)->latest()->first();
         $this->assertNotNull($order);
         $this->assertEquals(199.00, (float) $order->total_amount);
-        $this->assertTrue((bool) $order->items->first()->is_free_monthly_bottle);
+        $this->assertFalse((bool) $order->items->first()->is_free_monthly_bottle);
     }
 }

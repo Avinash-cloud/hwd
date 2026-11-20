@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactInquiry;
+use App\Models\MembershipSubscription;
 use App\Models\SiteSetting;
 use App\Services\RazorpayService;
 use Illuminate\Http\JsonResponse;
@@ -26,8 +27,12 @@ class PageController extends Controller
     {
         $membershipFee = SiteSetting::get('membership_fee', '500');
         $shippingRate = SiteSetting::get('shipping_charge', '149');
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
 
-        return view('pages.faqs', compact('membershipFee', 'shippingRate'));
+        return view('pages.faqs', compact('membershipFee', 'shippingRate', 'monthlyAutoDebit', 'monthlyProductPrice', 'monthlyDeliveryCharge'));
     }
 
     public function contact(): View

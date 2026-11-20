@@ -151,7 +151,7 @@
                             <div>
                                 <h3 class="font-bold text-[#881337] text-sm sm:text-base">Uninterrupted Monthly Supply</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    Receive a fresh 500ml bottle of pure Haridwar Gangajal delivered directly to your doorstep every single month for 5 years (60 months total)—ensuring your home altar never runs out of sacred water at the monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST).
+                                    Receive a fresh 500ml bottle of pure Haridwar Gangajal delivered directly to your doorstep every single month for 5 years (60 months total)—ensuring your home altar never runs out of sacred water at the monthly charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, including GST).
                                 </p>
                             </div>
                         </div>
@@ -177,9 +177,9 @@
                             <div>
                                 <h3 class="font-bold text-[#881337] text-sm sm:text-base">5-Year Commitment & Price Lock</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    A one-time commitment fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months. The monthly delivery charge of ₹{{ number_format($shippingRate) }}/month per bottle is payable by the 5th of every month.
+                                    A one-time commitment fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months. The monthly auto-debit charge of <strong>₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month</strong> (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}) per bottle is payable by the 5th of every month.
                                     <span class="block text-[11px] text-amber-900/80 font-medium mt-1">
-                                        *(Note: Service rate of ₹{{ number_format($shippingRate) }} ensured for the agreement period. In case of any future price revision, 30 days prior written notice will be provided.)*
+                                        *(Note: Service rate of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }} ensured for the agreement period. In case of any future price revision, 30 days prior written notice will be provided.)*
                                     </span>
                                 </p>
                             </div>
@@ -264,8 +264,11 @@
                             <span class="text-xs font-bold text-stone-600">Registration</span>
                         </div>
                         <div class="mt-2 flex items-center justify-center gap-1.5 text-xs text-amber-900 font-medium">
-                            <span>+ ₹{{ number_format($shippingRate) }}/month</span>
+                            <span>+ ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month</span>
                             <span class="text-emerald-700 font-bold bg-emerald-100/80 px-2 py-0.5 rounded-full text-[10px]">Auto-Debit Mandate</span>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mt-1 font-mono">
+                            Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}
                         </div>
                         <span class="inline-block mt-2 text-[11px] font-semibold text-[#0369A1] bg-[#0369A1]/10 border border-[#0369A1]/30 px-3 py-0.5 rounded-full">
                             5 Years (60 Months) Uninterrupted Doorstep Delivery • Auto-Renews
@@ -408,7 +411,7 @@
                                             <button type="button" @click="termsModalOpen = true" class="text-[#D97706] font-bold underline hover:text-[#B45309]">
                                                 Membership Terms & Conditions
                                             </button>
-                                            governing the 5-year tenure, monthly recurring auto-debit of ₹{{ number_format($shippingRate) }}/month, and sacred digital delivery.
+                                            governing the 5-year tenure, monthly recurring auto-debit of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}), and sacred digital delivery.
                                         </span>
                                     </label>
                                     @error('terms_accepted')
@@ -422,7 +425,7 @@
                                             :disabled="!termsAccepted || isProcessing"
                                             :class="(!termsAccepted || isProcessing) ? 'opacity-60 cursor-not-allowed bg-slate-400' : 'bg-[#D97706] hover:bg-[#F97316] shadow-lg'"
                                             class="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-white transition flex items-center justify-center gap-2">
-                                        <span x-show="!isProcessing">Pay ₹{{ number_format($membershipFee) }} & Authorize Monthly Auto-Debit</span>
+                                        <span x-show="!isProcessing">Pay ₹{{ number_format($membershipFee) }} & Authorize Monthly Auto-Debit (₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/mo)</span>
                                         <span x-show="isProcessing" class="flex items-center gap-2">
                                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                                             <span>Processing Mandate...</span>
@@ -479,7 +482,7 @@
                         <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">3. Financial Terms & Payment</h4>
                         <ul class="mt-1 space-y-1.5 text-slate-600">
                             <li><strong>A] One Time Commitment Fee:</strong> ₹{{ number_format($membershipFee) }}/- (This fee is charged as a one-time charge for the 5-year service commitment. This fee is <strong>Non-Refundable</strong> and shall not be refunded under any circumstances).</li>
-                            <li><strong>B] Monthly Charge:</strong> ₹{{ number_format($shippingRate) }}/- per bottle per month (Including GST).</li>
+                            <li><strong>B] Monthly Charge:</strong> ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/- per bottle per month (Product Price: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, Including GST).</li>
                             <li><strong>C] Payment:</strong> The Commitment Fee is payable in advance at the time of signing the Agreement. The Monthly Charge is payable by the 5th of every month.</li>
                         </ul>
                     </div>
@@ -496,7 +499,7 @@
                     <div class="pt-3">
                         <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">5. Company Obligations</h4>
                         <ul class="mt-1 space-y-1 text-slate-600">
-                            <li><strong>5.1</strong> The Company shall ensure service at the rate of ₹{{ number_format($shippingRate) }} for the Agreement period.</li>
+                            <li><strong>5.1</strong> The Company shall ensure service at the rate of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }} for the Agreement period.</li>
                             <li><strong>5.2</strong> In case of a price revision, the Company shall provide 30 days prior written notice. The Customer shall have the right to terminate the Agreement in case of disagreement; however, the Commitment Fee shall remain non-refundable.</li>
                             <li><strong>5.3</strong> Service may be interrupted due to natural calamities/legal restrictions, for which the Company shall not be liable.</li>
                         </ul>

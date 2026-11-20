@@ -125,26 +125,44 @@ class RazorpayWebhookController extends Controller
         $amountPaid = isset($payment['amount']) ? ((float) $payment['amount'] / 100) : (float) $subscription->billing_amount;
         $paymentId = $payment['id'] ?? ('pay_sub_'.Str::random(10));
 
+        $billing = MembershipSubscription::getMonthlyBillingDetails($product);
+        $productPrice = $billing['product_price'];
+        $deliveryCharge = $billing['delivery_charge'];
+
+        if ($amountPaid > 0) {
+            if ($amountPaid >= $deliveryCharge) {
+                $productPrice = round($amountPaid - $deliveryCharge, 2);
+            } else {
+                $deliveryCharge = $amountPaid;
+                $productPrice = 0.00;
+            }
+        }
+
         // Create Automated Order for this monthly cycle
         $batch = Batch::where('status', 'ready')->latest('collection_date')->first();
         $orderNumber = 'HB-SUB-'.date('Ymd').'-'.strtoupper(Str::random(4));
         $qrToken = 'HB-QR-'.Str::uuid()->toString();
 
         $gstRate = (float) ($variant?->gst_percentage ?? $product?->gst_percentage ?? 18.00);
-        $tax = GstService::calculate($amountPaid, $gstRate);
+        $productTax = GstService::calculate($productPrice, $gstRate);
+        $shippingTax = GstService::calculate($deliveryCharge, 18.00);
+
+        $totalTaxable = round($productTax['taxable'] + $shippingTax['taxable'], 2);
+        $totalGst = round($productTax['gst'] + $shippingTax['gst'], 2);
+        $halfGst = round($totalGst / 2, 2);
 
         $order = Order::create([
             'order_number' => $orderNumber,
             'user_id' => $user->id,
             'batch_id' => $batch?->id,
-            'subtotal' => $amountPaid,
-            'total_taxable_amount' => $tax['taxable'],
-            'total_gst_amount' => $tax['gst'],
-            'cgst_amount' => $tax['cgst'],
-            'sgst_amount' => $tax['sgst'],
-            'igst_amount' => $tax['igst'],
+            'subtotal' => $productPrice,
+            'total_taxable_amount' => $totalTaxable,
+            'total_gst_amount' => $totalGst,
+            'cgst_amount' => $halfGst,
+            'sgst_amount' => $halfGst,
+            'igst_amount' => $totalGst,
             'discount_amount' => 0.00,
-            'shipping_amount' => 0.00,
+            'shipping_amount' => $deliveryCharge,
             'total_amount' => $amountPaid,
             'payment_method' => 'razorpay_subscription',
             'payment_status' => 'paid',
@@ -162,7 +180,7 @@ class RazorpayWebhookController extends Controller
                 'postal_code' => '249401',
                 'country' => 'India',
             ],
-            'customer_notes' => 'Automated monthly 500ml Gangajal auto-debit subscription delivery (Plan: '.$subId.').',
+            'customer_notes' => "Automated monthly 500ml Gangajal auto-debit subscription delivery (Plan: {$subId}, Product: ₹{$productPrice} + Delivery: ₹{$deliveryCharge}).",
         ]);
 
         if ($product) {
@@ -174,12 +192,12 @@ class RazorpayWebhookController extends Controller
                 'variant_name' => $variant?->name,
                 'hsn_code' => $variant?->hsn_code ?? $product->hsn_code ?? '22019010',
                 'gst_percentage' => $gstRate,
-                'taxable_amount' => $tax['taxable'],
-                'gst_amount' => $tax['gst'],
-                'unit_price' => $amountPaid,
+                'taxable_amount' => $productTax['taxable'],
+                'gst_amount' => $productTax['gst'],
+                'unit_price' => $productPrice,
                 'quantity' => 1,
-                'total_price' => $amountPaid,
-                'is_free_monthly_bottle' => true,
+                'total_price' => $productPrice,
+                'is_free_monthly_bottle' => false,
             ]);
         }
 
