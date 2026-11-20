@@ -94,6 +94,20 @@ class RazorpayService
     }
 
     /**
+     * Verify recurring subscription signature from Razorpay checkout modal.
+     */
+    public function verifySubscriptionSignature(string $subscriptionId, string $paymentId, string $signature): bool
+    {
+        if ($this->isDummy() || str_starts_with($subscriptionId, 'sub_mock_') || str_starts_with($subscriptionId, 'sub_fallback_')) {
+            return true;
+        }
+
+        $expected = hash_hmac('sha256', $paymentId.'|'.$subscriptionId, $this->keySecret);
+
+        return hash_equals($expected, $signature);
+    }
+
+    /**
      * Verify incoming webhook signature.
      */
     public function verifyWebhookSignature(string $payload, string $signature): bool
@@ -108,7 +122,7 @@ class RazorpayService
     }
 
     /**
-     * Create recurring subscription plan on Razorpay (every 30 days).
+     * Create recurring subscription plan on Razorpay (monthly billing).
      */
     public function createPlan(string $name, float $amountInRupees, string $description = 'Monthly Sacred Offering'): ?string
     {
@@ -120,8 +134,8 @@ class RazorpayService
             $response = Http::withBasicAuth($this->keyId, $this->keySecret)
                 ->timeout(10)
                 ->post('https://api.razorpay.com/v1/plans', [
-                    'period' => 'daily',
-                    'interval' => 30,
+                    'period' => 'monthly',
+                    'interval' => 1,
                     'item' => [
                         'name' => $name,
                         'amount' => (int) round($amountInRupees * 100),
@@ -143,7 +157,7 @@ class RazorpayService
     /**
      * Create subscription mandate for a customer.
      */
-    public function createSubscription(string $planId, int $totalCount = 60, array $notes = []): array
+    public function createSubscription(string $planId, int $totalCount = 60, array $notes = [], float $upfrontAddonAmount = 0.0): array
     {
         if ($this->isDummy() || str_starts_with($planId, 'plan_mock_') || str_starts_with($planId, 'plan_fallback_')) {
             return [
@@ -154,20 +168,36 @@ class RazorpayService
             ];
         }
 
+        $payload = [
+            'plan_id' => $planId,
+            'total_count' => $totalCount,
+            'quantity' => 1,
+            'customer_notify' => 1,
+            'notes' => $notes,
+        ];
+
+        if ($upfrontAddonAmount > 0) {
+            $payload['addons'] = [
+                [
+                    'item' => [
+                        'name' => '5-Year Membership Registration Contribution',
+                        'amount' => (int) round($upfrontAddonAmount * 100),
+                        'currency' => 'INR',
+                    ],
+                ],
+            ];
+        }
+
         try {
             $response = Http::withBasicAuth($this->keyId, $this->keySecret)
                 ->timeout(10)
-                ->post('https://api.razorpay.com/v1/subscriptions', [
-                    'plan_id' => $planId,
-                    'total_count' => $totalCount,
-                    'quantity' => 1,
-                    'customer_notify' => 1,
-                    'notes' => $notes,
-                ]);
+                ->post('https://api.razorpay.com/v1/subscriptions', $payload);
 
             if ($response->successful()) {
                 return $response->json();
             }
+
+            Log::error('Razorpay Subscription creation failed: '.$response->body());
         } catch (\Throwable $e) {
             Log::error('Razorpay Subscription creation exception: '.$e->getMessage());
         }

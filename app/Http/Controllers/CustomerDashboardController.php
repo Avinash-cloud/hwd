@@ -18,6 +18,7 @@ class CustomerDashboardController extends Controller
     {
         $user = $request->user();
         $membership = $user->activeMembership;
+        $activeSubscription = $membership ? $membership->subscriptions()->where('status', 'active')->latest()->first() : null;
         $orders = $user->orders()->with(['batch', 'items.product'])->take(5)->get();
         $addresses = $user->addresses()->latest()->get();
 
@@ -33,6 +34,7 @@ class CustomerDashboardController extends Controller
         return view('dashboard', compact(
             'user',
             'membership',
+            'activeSubscription',
             'orders',
             'addresses',
             'monthlyGangajal',

@@ -16,7 +16,7 @@ class ProcessSubscriptionRenewals extends Command
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'subscriptions:process-renewals';
+    protected $signature = 'subscriptions:process-renewals {--user= : Specific user ID or email to process} {--force : Process immediately even if next_billing_date is in the future}';
 
     /**
      * The console command description.
@@ -30,16 +30,53 @@ class ProcessSubscriptionRenewals extends Command
     {
         $this->info('Checking for due membership subscriptions...');
 
-        $dueSubscriptions = MembershipSubscription::where('status', 'active')
-            ->where('next_billing_date', '<=', now())
-            ->with(['user', 'membership', 'product', 'variant'])
-            ->get();
+        $query = MembershipSubscription::where('status', 'active')
+            ->with(['user', 'membership', 'product', 'variant']);
 
-        $this->info("Found {$dueSubscriptions->count()} subscription(s) due for billing.");
+        if (! $this->option('force')) {
+            $query->where('next_billing_date', '<=', now());
+        }
+
+        if ($userIdentifier = $this->option('user')) {
+            $query->whereHas('user', function ($q) use ($userIdentifier) {
+                $q->where('id', $userIdentifier)->orWhere('email', $userIdentifier);
+            });
+        }
+
+        $dueSubscriptions = $query->get();
+
+        $this->info("Found {$dueSubscriptions->count()} subscription(s) to process.");
 
         foreach ($dueSubscriptions as $sub) {
             $user = $sub->user;
             $membership = $sub->membership;
+
+            if (! $user) {
+                continue;
+            }
+
+            // Auto-renew 5-year membership tenure if expired or within 30 days of expiry
+            if ($membership && $membership->expires_at && $membership->expires_at->lte(now()->addDays(30))) {
+                $oldExpiry = $membership->expires_at->copy();
+                $newExpiry = $membership->expires_at->copy()->addYears(5);
+                $membership->update([
+                    'expires_at' => $newExpiry,
+                    'status' => 'active',
+                ]);
+
+                $this->info("Membership #{$membership->id} automatically renewed for 5 years until {$newExpiry->toDateString()}");
+
+                SubscriptionLog::create([
+                    'subscription_id' => $sub->id,
+                    'event' => 'membership_auto_renewed',
+                    'amount' => 0.00,
+                    'details' => [
+                        'previous_expiry' => $oldExpiry->toIso8601String(),
+                        'new_expiry' => $newExpiry->toIso8601String(),
+                        'note' => '5-Year sacred devotee membership automatically renewed via recurring subscription mandate.',
+                    ],
+                ]);
+            }
 
             // Only active members are eligible
             if (! $membership || ! $membership->isActive()) {

@@ -2,8 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use App\Models\Batch;
+use App\Models\Category;
 use App\Models\Membership;
+use App\Models\MembershipSubscription;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\SiteSetting;
+use App\Models\SubscriptionLog;
+use App\Services\GstService;
 use App\Services\RazorpayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,12 +35,13 @@ class MembershipController extends Controller
         $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
         $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
         $razorpayKeyId = $this->razorpayService->getKeyId();
+        $defaultAddress = $user ? ($user->addresses()->where('is_default', true)->first() ?? $user->addresses()->first()) : null;
 
-        return view('membership.join', compact('user', 'membershipFee', 'validityYears', 'shippingRate', 'razorpayKeyId'));
+        return view('membership.join', compact('user', 'membershipFee', 'validityYears', 'shippingRate', 'razorpayKeyId', 'defaultAddress'));
     }
 
     /**
-     * Create Razorpay order for membership checkout modal.
+     * Create Razorpay subscription mandate & order for membership auto-debit checkout.
      */
     public function createRazorpayOrder(Request $request)
     {
@@ -41,8 +51,29 @@ class MembershipController extends Controller
         }
 
         $fee = (float) SiteSetting::get('membership_fee', 500);
-        $receipt = 'mem_rcpt_'.time().'_'.$user->id;
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
 
+        // 1. Create recurring monthly plan for auto-debit of monthly logistics
+        $planId = $this->razorpayService->createPlan(
+            name: 'Blu Bliss Monthly Sacred Gangajal Delivery',
+            amountInRupees: $shippingRate,
+            description: 'Monthly automatic doorstep delivery of 500ml pure Haridwar Gangajal'
+        );
+
+        // 2. Create Razorpay recurring subscription (60 monthly cycles = 5 years) with upfront registration fee
+        $sub = $this->razorpayService->createSubscription(
+            planId: $planId,
+            totalCount: 60,
+            notes: [
+                'type' => 'blu_bliss_membership_subscription',
+                'user_id' => (string) $user->id,
+                'email' => $user->email,
+            ],
+            upfrontAddonAmount: $fee
+        );
+
+        // Fallback standard order
+        $receipt = 'mem_rcpt_'.time().'_'.$user->id;
         $order = $this->razorpayService->createOrder($fee, $receipt, [
             'type' => 'membership_subscription',
             'user_id' => $user->id,
@@ -50,23 +81,24 @@ class MembershipController extends Controller
         ]);
 
         return response()->json([
+            'subscription_id' => $sub['id'],
             'order_id' => $order['id'],
             'amount' => $order['amount'],
-            'currency' => $order['currency'] ?? 'INR',
+            'currency' => 'INR',
             'key' => $this->razorpayService->getKeyId(),
             'name' => 'Haridwar Bliss',
-            'description' => '5-Year Sacred Devotee Membership',
+            'description' => 'Blu Bliss 5-Year Sacred Devotee Membership (Auto-Debit)',
             'prefill' => [
                 'name' => $user->name,
                 'email' => $user->email,
                 'contact' => $user->phone ?? '',
             ],
-            'is_mock' => $order['is_mock'] ?? false,
+            'is_mock' => $sub['is_mock'] ?? false,
         ]);
     }
 
     /**
-     * Process membership payment and activate 5-year membership.
+     * Process membership payment, register auto-debit mandate, and dispatch month 1 order.
      */
     public function subscribe(Request $request): RedirectResponse
     {
@@ -80,32 +112,82 @@ class MembershipController extends Controller
             return redirect()->route('dashboard')->with('info', 'You already possess an active Haridwar Bliss Sacred Membership!');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'terms_accepted' => 'required|accepted',
             'payment_method' => 'nullable|string',
+            'shipping_address' => 'nullable|string|max:500',
+            'shipping_city' => 'nullable|string|max:100',
+            'shipping_state' => 'nullable|string|max:100',
+            'shipping_pincode' => 'nullable|string|max:20',
+            'shipping_phone' => 'nullable|string|max:25',
         ], [
-            'terms_accepted.accepted' => 'You must read and accept the Haridwar Bliss Membership Terms & Conditions to proceed with activation.',
+            'terms_accepted.accepted' => 'You must read and accept the Blu Bliss Membership Terms & Conditions to proceed with activation.',
         ]);
+
+        $defaultAddress = $user->addresses()->where('is_default', true)->first() ?? $user->addresses()->first();
+
+        $shippingPhone = trim((string) ($request->input('shipping_phone') ?: ($defaultAddress?->phone ?? $user->phone ?? '9999999999')));
+        $shippingAddressLine = trim((string) ($request->input('shipping_address') ?: ($defaultAddress?->address_line1 ?? 'Devotee Residential Address on file')));
+        $shippingCity = trim((string) ($request->input('shipping_city') ?: ($defaultAddress?->city ?? 'Haridwar')));
+        $shippingState = trim((string) ($request->input('shipping_state') ?: ($defaultAddress?->state ?? 'Uttarakhand')));
+        $shippingPincode = trim((string) ($request->input('shipping_pincode') ?: ($defaultAddress?->postal_code ?? '249401')));
 
         $fee = (float) SiteSetting::get('membership_fee', 500);
         $years = (int) SiteSetting::get('membership_validity_years', 5);
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
 
-        $paymentMethod = $request->input('payment_method', 'razorpay');
+        $paymentMethod = $request->input('payment_method', 'razorpay_subscription');
         $paymentId = $request->input('razorpay_payment_id', 'pay_HB_MEM_'.Str::random(10));
+        $subscriptionId = $request->input('razorpay_subscription_id');
         $razorpayOrderId = $request->input('razorpay_order_id');
         $razorpaySignature = $request->input('razorpay_signature');
 
-        // Verify Razorpay signature if provided
-        if ($razorpayOrderId && $razorpaySignature) {
+        // Signature verification (support both subscription e-mandate and standard fallback)
+        if ($subscriptionId && $paymentId && $razorpaySignature) {
+            $isValid = $this->razorpayService->verifySubscriptionSignature($subscriptionId, $paymentId, $razorpaySignature);
+            if (! $isValid) {
+                return redirect()->back()->withInput()->with('error', 'Razorpay subscription verification failed. Please try again.');
+            }
+        } elseif ($razorpayOrderId && $razorpaySignature) {
             $isValid = $this->razorpayService->verifyPaymentSignature($razorpayOrderId, $paymentId, $razorpaySignature);
             if (! $isValid) {
-                return redirect()->back()->with('error', 'Payment verification failed. Please try again or contact support.');
+                return redirect()->back()->withInput()->with('error', 'Payment verification failed. Please try again.');
             }
         }
 
+        // Save or update shipping address on devotee profile
+        $shippingAddressArray = [
+            'recipient_name' => $user->name,
+            'phone' => $shippingPhone,
+            'email' => $user->email,
+            'address_line1' => $shippingAddressLine,
+            'city' => $shippingCity,
+            'state' => $shippingState,
+            'postal_code' => $shippingPincode,
+            'country' => 'India',
+        ];
+
+        if (empty($user->phone)) {
+            $user->update(['phone' => $shippingPhone]);
+        }
+
+        Address::updateOrCreate(
+            ['user_id' => $user->id, 'is_default' => true],
+            [
+                'type' => 'shipping',
+                'recipient_name' => $user->name,
+                'phone' => $shippingPhone,
+                'address_line1' => $shippingAddressLine,
+                'city' => $shippingCity,
+                'state' => $shippingState,
+                'postal_code' => $shippingPincode,
+                'country' => 'India',
+            ]
+        );
+
         $invoiceNumber = 'HB-MEM-'.date('Ymd').'-'.strtoupper(Str::random(4));
 
-        // Create membership with full audit trail
+        // 1. Create 5-Year Membership
         $membership = Membership::create([
             'user_id' => $user->id,
             'status' => 'active',
@@ -123,9 +205,106 @@ class MembershipController extends Controller
             'terms_version' => '1.0',
         ]);
 
+        // 2. Identify 500ml Gangajal Product for monthly automated fulfillment
+        $monthlyGangajal = Product::where('is_gangajal', true)
+            ->where('is_active', true)
+            ->where('volume_ml', 500)
+            ->first()
+            ?? Product::where('is_gangajal', true)->where('is_active', true)->first()
+            ?? Product::first();
+
+        if (! $monthlyGangajal) {
+            $cat = Category::firstOrCreate(['slug' => 'gangajal'], ['name' => 'Sacred Gangajal']);
+            $monthlyGangajal = Product::create([
+                'category_id' => $cat->id,
+                'name' => 'Haridwar Sacred Gangajal 500ml',
+                'slug' => 'haridwar-gangajal-500ml-'.Str::random(6),
+                'price' => $shippingRate,
+                'volume_ml' => 500,
+                'is_gangajal' => true,
+                'is_active' => true,
+                'stock' => 999,
+            ]);
+        }
+
+        // 3. Create MembershipSubscription (Auto-Debit Profile)
+        $subRecord = MembershipSubscription::create([
+            'user_id' => $user->id,
+            'membership_id' => $membership->id,
+            'product_id' => $monthlyGangajal->id,
+            'status' => 'active',
+            'billing_interval_days' => 30,
+            'billing_amount' => $shippingRate,
+            'next_billing_date' => now()->addDays(30),
+            'last_billed_at' => now(),
+            'razorpay_subscription_id' => $subscriptionId ?? ('sub_'.Str::random(14)),
+            'shipping_address' => $shippingAddressArray,
+            'notes' => 'Blu Bliss 5-Year Sacred Membership Auto-Debit Mandate (Every 30 Days)',
+        ]);
+
+        // 4. Immediately create Month 1 initial dispatch Order
+        $batch = Batch::where('status', 'ready')->latest('collection_date')->first();
+        $orderNumber = 'HB-MEM-'.date('Ymd').'-'.strtoupper(Str::random(4));
+        $qrToken = 'HB-QR-'.Str::uuid()->toString();
+
+        $tax = GstService::calculate($shippingRate, 18.00);
+
+        $order = Order::create([
+            'order_number' => $orderNumber,
+            'user_id' => $user->id,
+            'batch_id' => $batch?->id,
+            'subtotal' => $shippingRate,
+            'total_taxable_amount' => $tax['taxable'],
+            'total_gst_amount' => $tax['gst'],
+            'cgst_amount' => $tax['cgst'],
+            'sgst_amount' => $tax['sgst'],
+            'igst_amount' => $tax['igst'],
+            'discount_amount' => 0.00,
+            'shipping_amount' => 0.00,
+            'total_amount' => $shippingRate,
+            'payment_method' => 'razorpay_subscription',
+            'payment_status' => 'paid',
+            'payment_id' => $paymentId,
+            'order_status' => 'confirmed',
+            'inventory_deducted' => false,
+            'qr_token' => $qrToken,
+            'shipping_address' => $shippingAddressArray,
+            'customer_notes' => 'Month 1 initial sacred Gangajal dispatch (Blu Bliss 5-Year Auto-Debit Subscription).',
+        ]);
+
+        if ($monthlyGangajal) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $monthlyGangajal->id,
+                'product_name' => $monthlyGangajal->name,
+                'hsn_code' => $monthlyGangajal->hsn_code ?? '22019010',
+                'gst_percentage' => 18.00,
+                'taxable_amount' => $tax['taxable'],
+                'gst_amount' => $tax['gst'],
+                'unit_price' => $shippingRate,
+                'quantity' => 1,
+                'total_price' => $shippingRate,
+                'is_free_monthly_bottle' => true,
+            ]);
+        }
+
+        // 5. Log subscription activation
+        SubscriptionLog::create([
+            'subscription_id' => $subRecord->id,
+            'event' => 'subscription_activated',
+            'amount' => $fee,
+            'order_id' => $order->id,
+            'payment_id' => $paymentId,
+            'details' => [
+                'order_number' => $orderNumber,
+                'invoice_number' => $invoiceNumber,
+                'note' => '5-Year sacred membership activated with automatic monthly recurring auto-debit.',
+            ],
+        ]);
+
         return redirect()->route('dashboard')->with(
             'success',
-            'Har Har Gange! Your 5-Year Haridwar Bliss Sacred Membership has been successfully activated. Invoice #'.$invoiceNumber.' has been generated.'
+            'Har Har Gange! Your Blu Bliss 5-Year Sacred Membership has been activated with automated monthly deliveries. Month 1 Gangajal delivery (Order #'.$orderNumber.') has been confirmed!'
         );
     }
 

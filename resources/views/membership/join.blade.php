@@ -28,7 +28,13 @@
              isProcessing: false,
              paymentId: '',
              orderId: '',
+             subscriptionId: '',
              signature: '',
+             shippingPhone: '{{ old('shipping_phone', $defaultAddress?->phone ?? $user?->phone ?? '') }}',
+             shippingAddress: '{{ old('shipping_address', $defaultAddress?->address_line1 ?? '') }}',
+             shippingCity: '{{ old('shipping_city', $defaultAddress?->city ?? '') }}',
+             shippingState: '{{ old('shipping_state', $defaultAddress?->state ?? '') }}',
+             shippingPincode: '{{ old('shipping_pincode', $defaultAddress?->postal_code ?? '') }}',
 
              initiatePayment() {
                  if (!this.termsAccepted) {
@@ -36,14 +42,24 @@
                      return;
                  }
 
+                 if (!this.shippingPhone.trim() || !this.shippingAddress.trim() || !this.shippingCity.trim() || !this.shippingState.trim() || !this.shippingPincode.trim()) {
+                     alert('Please complete your monthly doorstep delivery address details below.');
+                     return;
+                 }
+
                  if (this.paymentMethod === 'mock') {
-                     document.getElementById('membership-form').submit();
+                     this.paymentId = 'pay_HB_MEM_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                     this.subscriptionId = 'sub_mock_' + Math.random().toString(36).substring(2, 14);
+                     this.signature = 'mock_signature';
+                     this.$nextTick(() => {
+                         document.getElementById('membership-form').submit();
+                     });
                      return;
                  }
 
                  this.isProcessing = true;
 
-                 // Create Razorpay Order
+                 // Create Razorpay subscription mandate & order
                  fetch('{{ route('membership.razorpay.order') }}', {
                      method: 'POST',
                      headers: {
@@ -55,6 +71,7 @@
                  .then(data => {
                      if (data.is_mock || typeof Razorpay === 'undefined') {
                          this.paymentId = 'pay_HB_MEM_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                         this.subscriptionId = data.subscription_id || ('sub_mock_' + Math.random().toString(36).substring(2, 14));
                          this.orderId = data.order_id || 'order_mock';
                          this.signature = 'mock_signature';
                          this.$nextTick(() => {
@@ -65,16 +82,18 @@
 
                      const options = {
                          key: data.key,
-                         amount: data.amount,
-                         currency: data.currency,
                          name: data.name,
                          description: data.description,
-                         order_id: data.order_id,
-                         prefill: data.prefill,
+                         prefill: {
+                             name: data.prefill.name,
+                             email: data.prefill.email,
+                             contact: this.shippingPhone || data.prefill.contact
+                         },
                          theme: { color: '#D97706' },
                          handler: (response) => {
                              this.paymentId = response.razorpay_payment_id;
-                             this.orderId = response.razorpay_order_id;
+                             this.subscriptionId = response.razorpay_subscription_id || data.subscription_id;
+                             this.orderId = response.razorpay_order_id || '';
                              this.signature = response.razorpay_signature;
                              this.$nextTick(() => {
                                  document.getElementById('membership-form').submit();
@@ -87,6 +106,12 @@
                          }
                      };
 
+                     if (data.subscription_id) {
+                         options.subscription_id = data.subscription_id;
+                     } else if (data.order_id) {
+                         options.order_id = data.order_id;
+                     }
+
                      const rzp = new Razorpay(options);
                      rzp.open();
                  })
@@ -94,7 +119,12 @@
                      console.error('Payment error:', err);
                      this.isProcessing = false;
                      // Fallback submission
-                     document.getElementById('membership-form').submit();
+                     this.subscriptionId = 'sub_fallback_' + Math.random().toString(36).substring(2, 12);
+                     this.paymentId = 'pay_fallback_' + Math.random().toString(36).substring(2, 12);
+                     this.signature = 'fallback_signature';
+                     this.$nextTick(() => {
+                         document.getElementById('membership-form').submit();
+                     });
                  });
              }
          }">
@@ -227,13 +257,17 @@
                     </div>
 
                     <div class="text-center pb-6 border-b border-amber-100">
-                        <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">One-Time Contribution</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">5-Year Devotee Membership</span>
                         <div class="mt-2 flex items-baseline justify-center gap-1">
                             <span class="text-4xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>
-                            <span class="text-xs font-bold text-stone-600">/ 5 Years</span>
+                            <span class="text-xs font-bold text-stone-600">Registration</span>
+                        </div>
+                        <div class="mt-2 flex items-center justify-center gap-1.5 text-xs text-amber-900 font-medium">
+                            <span>+ ₹{{ number_format($shippingRate) }}/month</span>
+                            <span class="text-emerald-700 font-bold bg-emerald-100/80 px-2 py-0.5 rounded-full text-[10px]">Auto-Debit Mandate</span>
                         </div>
                         <span class="inline-block mt-2 text-[11px] font-semibold text-[#0369A1] bg-[#0369A1]/10 border border-[#0369A1]/30 px-3 py-0.5 rounded-full">
-                            Equivalent to ₹{{ number_format($membershipFee / 60, 2) }} / month • GST Included
+                            5 Years (60 Months) Uninterrupted Doorstep Delivery • Auto-Renews
                         </span>
                     </div>
 
@@ -265,6 +299,7 @@
                                 @csrf
                                 <input type="hidden" name="payment_method" :value="paymentMethod">
                                 <input type="hidden" name="razorpay_payment_id" :value="paymentId">
+                                <input type="hidden" name="razorpay_subscription_id" :value="subscriptionId">
                                 <input type="hidden" name="razorpay_order_id" :value="orderId">
                                 <input type="hidden" name="razorpay_signature" :value="signature">
 
@@ -280,6 +315,69 @@
                                         class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-500" />
                                 </div>
 
+                                <!-- Doorstep Delivery Address -->
+                                <div class="p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200/80 space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-[#881337] flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <span>Doorstep Delivery Address</span>
+                                        </span>
+                                        <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">Monthly Dispatch</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-600 leading-normal">
+                                        Address where your monthly 500ml sacred Gangajal bottles will be safely delivered:
+                                    </p>
+
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Contact Phone Number *</label>
+                                        <input type="tel" name="shipping_phone" x-model="shippingPhone" required placeholder="e.g. 9876543210"
+                                               class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                        @error('shipping_phone')
+                                            <p class="text-red-600 text-[10px] mt-0.5">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-700 mb-0.5">Street Address / House No / Area *</label>
+                                        <textarea name="shipping_address" x-model="shippingAddress" rows="2" required placeholder="Flat / House No, Building, Street, Area"
+                                                  class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]"></textarea>
+                                        @error('shipping_address')
+                                            <p class="text-red-600 text-[10px] mt-0.5">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-0.5">City *</label>
+                                            <input type="text" name="shipping_city" x-model="shippingCity" required placeholder="e.g. New Delhi"
+                                                   class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                            @error('shipping_city')
+                                                <p class="text-red-600 text-[10px] mt-0.5">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-700 mb-0.5">PIN Code *</label>
+                                            <input type="text" name="shipping_pincode" x-model="shippingPincode" required placeholder="e.g. 110001"
+                                                   class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                            @error('shipping_pincode')
+                                                <p class="text-red-600 text-[10px] mt-0.5">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-slate-700 mb-0.5">State *</label>
+                                        <input type="text" name="shipping_state" x-model="shippingState" required placeholder="e.g. Delhi"
+                                               class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-xl focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                        @error('shipping_state')
+                                            <p class="text-red-600 text-[10px] mt-0.5">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div>
                                     <label class="block text-xs font-bold text-slate-700 mb-1">Select Payment Gateway</label>
                                     <div class="space-y-2 text-xs">
@@ -287,8 +385,8 @@
                                                :class="paymentMethod === 'razorpay' ? 'border-[#D97706] bg-amber-50/60 font-bold' : 'border-slate-200 hover:bg-slate-50'">
                                             <input type="radio" x-model="paymentMethod" value="razorpay" class="text-[#D97706] focus:ring-[#D97706]">
                                             <div class="flex items-center justify-between w-full">
-                                                <span class="text-slate-800">Razorpay (UPI, Cards, NetBanking)</span>
-                                                <span class="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-bold">Fast</span>
+                                                <span class="text-slate-800">Razorpay Subscriptions (AutoPay UPI, Cards)</span>
+                                                <span class="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-bold">Auto-Debit</span>
                                             </div>
                                         </label>
                                         <label class="flex items-center gap-2 p-2.5 border rounded-xl cursor-pointer transition"
@@ -309,7 +407,7 @@
                                             <button type="button" @click="termsModalOpen = true" class="text-[#D97706] font-bold underline hover:text-[#B45309]">
                                                 Membership Terms & Conditions
                                             </button>
-                                            governing the 5-year tenure, monthly offerings, and digital delivery.
+                                            governing the 5-year tenure, monthly recurring auto-debit of ₹{{ number_format($shippingRate) }}/month, and sacred digital delivery.
                                         </span>
                                     </label>
                                     @error('terms_accepted')
@@ -323,10 +421,10 @@
                                             :disabled="!termsAccepted || isProcessing"
                                             :class="(!termsAccepted || isProcessing) ? 'opacity-60 cursor-not-allowed bg-slate-400' : 'bg-[#D97706] hover:bg-[#F97316] shadow-lg'"
                                             class="w-full py-3.5 px-4 rounded-xl text-sm font-bold text-white transition flex items-center justify-center gap-2">
-                                        <span x-show="!isProcessing">Pay ₹{{ number_format($membershipFee) }} & Activate 5-Year Membership</span>
+                                        <span x-show="!isProcessing">Pay ₹{{ number_format($membershipFee) }} & Authorize Monthly Auto-Debit</span>
                                         <span x-show="isProcessing" class="flex items-center gap-2">
                                             <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-                                            <span>Processing Payment...</span>
+                                            <span>Processing Mandate...</span>
                                         </span>
                                     </button>
                                 </div>
@@ -366,8 +464,8 @@
                 </div>
 
                 <div class="text-xs text-slate-600 space-y-3 max-h-96 overflow-y-auto pr-2 leading-relaxed">
-                    <p><strong>1. Membership Tenure:</strong> The Blu Bliss Sacred Devotee Membership is valid for exactly 5 continuous calendar years (60 months) from the date of activation.</p>
-                    <p><strong>2. Monthly Sacred Gangajal Benefit:</strong> Active members are entitled to claim 1 complimentary (₹0 product cost) 500ml Haridwar Gangajal bottle per calendar month. A flat subsidized packing, handling, and delivery charge (currently ₹{{ number_format($shippingRate) }}) applies per dispatch. In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.</p>
+                    <p><strong>1. Membership Tenure & Auto-Renewal:</strong> The Blu Bliss Sacred Devotee Membership is valid for 5 continuous calendar years (60 months) from the date of activation. Upon recurring monthly fulfillment, the 5-year membership tenure automatically renews so your sacred household connection remains uninterrupted.</p>
+                    <p><strong>2. Monthly Sacred Gangajal Benefit & Auto-Debit:</strong> Active members receive 1 fresh 500ml Haridwar Gangajal bottle every month (₹0 product cost). A recurring subsidized delivery charge (currently ₹{{ number_format($shippingRate) }}/month) is auto-debited via your authorized payment mandate to ensure seamless monthly dispatch. In case of any future changes in monthly courier/logistics rates, nominal charges may be revised with advance prior intimation to members.</p>
                     <p><strong>3. Sanctity Guarantee:</strong> Haridwar Bliss certifies that water is collected strictly from sacred Haridwar Ganga Ghats during auspicious Brahma Muhurta morning Aarti. Every bottle includes tamper-evident, leak-proof protective packaging and a verifiable batch lab assay.</p>
                     <p><strong>4. Fee & Invoicing:</strong> The ₹{{ number_format($membershipFee) }} one-time registration contribution is inclusive of 18% GST (SAC Code 9995). A downloadable digital tax invoice is generated upon confirmation.</p>
                     <p><strong>5. Sacred Kits & Cleanliness Pledge:</strong> Members receive preferred pricing and early access privileges on consecrated Vedic Puja Essentials, festive kits, and Haridwar Ghat Prasadam. Every monthly delivery directly supports our Eco-Clean Ganga Pledge toward river waste removal and environmental conservation in Haridwar.</p>

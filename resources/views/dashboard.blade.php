@@ -42,7 +42,7 @@
                     </div>
 
                     @if ($membership && $membership->isActive())
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-white/20 text-xs">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-white/20 text-xs">
                             <div>
                                 <span class="text-amber-200 block text-[11px]">Started On</span>
                                 <strong class="text-white">{{ $membership->starts_at->format('M d, Y') }}</strong>
@@ -52,6 +52,10 @@
                                 <strong class="text-white">{{ $membership->expires_at->format('M d, Y') }}</strong>
                             </div>
                             <div>
+                                <span class="text-amber-200 block text-[11px]">5-Year Renewal</span>
+                                <strong class="text-emerald-300 font-bold">{{ ($activeSubscription ?? null) ? 'Auto-Renewing' : 'Active' }}</strong>
+                            </div>
+                            <div>
                                 <span class="text-amber-200 block text-[11px]">Days Remaining</span>
                                 <strong
                                     class="text-[#F97316] font-mono text-sm">{{ (int) now()->diffInDays($membership->expires_at) }}
@@ -59,12 +63,18 @@
                             </div>
                         </div>
 
-                        <div class="pt-3">
+                        <div class="pt-3 flex flex-wrap items-center gap-3">
                             <a href="{{ route('membership.invoice', $membership->id) }}" target="_blank"
                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-xs transition">
                                 <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>Download Membership Tax Invoice</span>
                             </a>
+                            @if ($activeSubscription ?? null)
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs font-semibold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>Recurring Auto-Debit Active (₹{{ number_format($activeSubscription->billing_amount, 0) }}/mo)</span>
+                                </span>
+                            @endif
                         </div>
                     @else
                         <div class="pt-4 border-t border-white/20 text-xs space-y-3">
@@ -110,18 +120,40 @@
                     </p>
                 </div>
 
-                @if ($monthlyGangajal)
-                    @if ($membership && $membership->isActive())
+                @if ($membership && $membership->isActive())
+                    @if ($activeSubscription ?? null)
+                        <div class="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span>Auto-Debit Active</span>
+                                </span>
+                                <span class="text-xs font-bold text-emerald-900 font-mono">₹{{ number_format($activeSubscription->billing_amount, 0) }}/mo</span>
+                            </div>
+                            <p class="text-[11px] text-emerald-950 leading-relaxed">
+                                Uninterrupted monthly 500ml Gangajal supply auto-dispatches directly to your doorstep.
+                            </p>
+                            <div class="text-[10px] text-emerald-900/80 pt-1.5 border-t border-emerald-200/70 flex justify-between">
+                                <span>Next Auto-Dispatch:</span>
+                                <strong>{{ $activeSubscription->next_billing_date?->format('M d, Y') ?? 'Every 30 Days' }}</strong>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if ($monthlyGangajal)
                         <form method="POST" action="{{ route('cart.add') }}">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $monthlyGangajal->id }}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit"
-                                class="w-full py-3.5 px-4 rounded-xl font-bold text-xs text-white bg-[#D97706] hover:bg-[#F97316] shadow-md transition">
-                                Claim Monthly Free Bottle (₹0) →
+                                class="w-full py-3 px-4 rounded-xl font-bold text-xs {{ ($activeSubscription ?? null) ? 'text-[#881337] bg-amber-50 hover:bg-amber-100 border border-amber-300' : 'text-white bg-[#D97706] hover:bg-[#F97316]' }} shadow-xs transition flex items-center justify-center gap-1.5">
+                                <span>{{ ($activeSubscription ?? null) ? 'Order Additional Bottle' : 'Claim Monthly Free Bottle (₹0)' }}</span>
+                                <span>→</span>
                             </button>
                         </form>
-                    @else
+                    @endif
+                @else
+                    @if ($monthlyGangajal)
                         <a href="{{ route('membership.join') }}"
                             class="w-full text-center block py-3.5 px-4 rounded-xl font-bold text-xs text-white bg-[#D97706] hover:bg-[#F97316] transition">
                             Join for ₹{{ number_format($membershipFee) }} to Claim
