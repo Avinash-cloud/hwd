@@ -96,7 +96,7 @@
                                         <input type="hidden" name="item_key" value="{{ $item['key'] }}">
                                         <input type="hidden" name="product_id" value="{{ $item['product']->id }}">
                                         <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="20"
-                                            class="w-16 px-2 py-1 text-xs border border-slate-300 rounded-lg text-center"
+                                            class="w-16 px-2 py-1 text-xs border border-slate-300 rounded-lg text-center text-black font-mono"
                                             onchange="this.form.submit()">
                                     </form>
 

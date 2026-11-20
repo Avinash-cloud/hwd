@@ -535,34 +535,8 @@
                                     class="text-4xl sm:text-5xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>
                                 <span class="text-xs font-bold text-amber-900">/ 5 Full Years</span>
                             </div>
-                            <span
-                                class="inline-block mt-2 text-[11px] font-bold text-[#0369A1] bg-sky-100/80 border border-sky-300 px-3 py-0.5 rounded-full">
-                                Equivalent to ₹8.33 / month · GST Included
-                            </span>
-                        </div>
-
-                        <!-- Side by Side Comparison -->
-                        <div class="py-4 space-y-2.5 text-xs">
-                            <div class="flex justify-between items-center text-amber-900">
-                                <span>60 Monthly Bottles (Non-Member):</span>
-                                <span class="line-through font-mono">₹8,940</span>
-                            </div>
-                            <div class="flex justify-between items-center text-amber-900">
-                                <span>Puja Samagri Member Savings:</span>
-                                <span class="font-mono text-emerald-700 font-bold">+ ₹2,500</span>
-                            </div>
-                            <div
-                                class="flex justify-between items-center pt-2 border-t border-amber-200 text-sm font-extrabold text-[#881337]">
-                                <span>Total Value Delivered:</span>
-                                <span class="font-mono">₹11,440+</span>
-                            </div>
-                            <div
-                                class="flex justify-between items-center bg-amber-100/80 p-2.5 rounded-xl border border-amber-300/80 text-xs">
-                                <span class="font-bold text-[#881337]">Your 5-Year Cost:</span>
-                                <span
-                                    class="font-extrabold text-[#881337] font-mono text-base">₹{{ number_format($membershipFee) }}</span>
-                            </div>
-                        </div>
+                            
+                        </div>                        
                     </div>
 
                     <div class="pt-4 space-y-2">
