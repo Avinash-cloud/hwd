@@ -65,7 +65,12 @@ class NimbusPostService
             return null;
         }
 
-        // If no secret provided, API key is used directly as Bearer token
+        // If the key is already an API Key (e.g. npk_...) or bearer token, use it directly
+        if (! filter_var($this->apiKey, FILTER_VALIDATE_EMAIL)) {
+            return $this->apiKey;
+        }
+
+        // Only if the apiKey is an email address, attempt credential exchange via /users/login
         if (empty($this->apiSecret)) {
             return $this->apiKey;
         }
@@ -75,7 +80,6 @@ class NimbusPostService
             return $cachedToken;
         }
 
-        // When both API Key and API Secret are provided, exchange credentials for session token
         try {
             $response = Http::timeout(15)->post("{$this->baseUrl}/users/login", [
                 'email' => $this->apiKey,
@@ -96,7 +100,6 @@ class NimbusPostService
             Log::info('NimbusPost login exchange note: '.$e->getMessage().'. Using API key directly.');
         }
 
-        // Fallback: Use the API key directly as the authorization token
         return $this->apiKey;
     }
 
@@ -113,11 +116,13 @@ class NimbusPostService
         if ($this->apiKey) {
             $headers['api-key'] = $this->apiKey;
             $headers['key'] = $this->apiKey;
+            $headers['x-api-key'] = $this->apiKey;
         }
 
         if ($this->apiSecret) {
             $headers['api-secret'] = $this->apiSecret;
             $headers['secret'] = $this->apiSecret;
+            $headers['x-api-secret'] = $this->apiSecret;
         }
 
         $http = Http::timeout($timeout)->withHeaders($headers);
