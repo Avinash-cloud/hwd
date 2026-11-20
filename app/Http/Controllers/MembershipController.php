@@ -37,7 +37,24 @@ class MembershipController extends Controller
         $razorpayKeyId = $this->razorpayService->getKeyId();
         $defaultAddress = $user ? ($user->addresses()->where('is_default', true)->first() ?? $user->addresses()->first()) : null;
 
-        return view('membership.join', compact('user', 'membershipFee', 'validityYears', 'shippingRate', 'razorpayKeyId', 'defaultAddress'));
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyProduct = $billing['product'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+
+        return view('membership.join', compact(
+            'user',
+            'membershipFee',
+            'validityYears',
+            'shippingRate',
+            'razorpayKeyId',
+            'defaultAddress',
+            'monthlyProduct',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'monthlyAutoDebit'
+        ));
     }
 
     /**
@@ -51,13 +68,16 @@ class MembershipController extends Controller
         }
 
         $fee = (float) SiteSetting::get('membership_fee', 500);
-        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyDebit = $billing['total_monthly_charge'];
+        $productPrice = $billing['product_price'];
+        $deliveryCharge = $billing['delivery_charge'];
 
-        // 1. Create recurring monthly plan for auto-debit of monthly logistics
+        // 1. Create recurring monthly plan for auto-debit of product price + delivery charge
         $planId = $this->razorpayService->createPlan(
-            name: 'Blu Bliss Monthly Sacred Gangajal Delivery',
-            amountInRupees: $shippingRate,
-            description: 'Monthly automatic doorstep delivery of 500ml pure Haridwar Gangajal'
+            name: 'Blu Bliss Monthly Sacred Gangajal Auto-Delivery',
+            amountInRupees: $monthlyDebit,
+            description: "Monthly recurring auto-order: Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge})"
         );
 
         // 2. Create Razorpay recurring subscription (60 monthly cycles = 5 years) with upfront registration fee
@@ -68,6 +88,9 @@ class MembershipController extends Controller
                 'type' => 'blu_bliss_membership_subscription',
                 'user_id' => (string) $user->id,
                 'email' => $user->email,
+                'product_price' => (string) $productPrice,
+                'delivery_charge' => (string) $deliveryCharge,
+                'monthly_debit' => (string) $monthlyDebit,
             ],
             upfrontAddonAmount: $fee
         );
@@ -84,10 +107,13 @@ class MembershipController extends Controller
             'subscription_id' => $sub['id'],
             'order_id' => $order['id'],
             'amount' => $order['amount'],
+            'monthly_amount' => $monthlyDebit,
+            'product_price' => $productPrice,
+            'delivery_charge' => $deliveryCharge,
             'currency' => 'INR',
             'key' => $this->razorpayService->getKeyId(),
             'name' => 'Haridwar Bliss',
-            'description' => 'Blu Bliss 5-Year Sacred Devotee Membership (Auto-Debit)',
+            'description' => "Blu Bliss 5-Year Sacred Devotee Membership (Auto-Debit: ₹{$monthlyDebit}/mo)",
             'prefill' => [
                 'name' => $user->name,
                 'email' => $user->email,
@@ -205,13 +231,12 @@ class MembershipController extends Controller
             'terms_version' => '1.0',
         ]);
 
-        // 2. Identify 500ml Gangajal Product for monthly automated fulfillment
-        $monthlyGangajal = Product::where('is_gangajal', true)
-            ->where('is_active', true)
-            ->where('volume_ml', 500)
-            ->first()
-            ?? Product::where('is_gangajal', true)->where('is_active', true)->first()
-            ?? Product::first();
+        // 2. Identify active product and monthly billing breakdown (Product Price + Delivery Charge)
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyGangajal = $billing['product'];
+        $productPrice = $billing['product_price'];
+        $deliveryCharge = $billing['delivery_charge'];
+        $monthlyDebit = $billing['total_monthly_charge'];
 
         if (! $monthlyGangajal) {
             $cat = Category::firstOrCreate(['slug' => 'gangajal'], ['name' => 'Sacred Gangajal']);
@@ -219,12 +244,14 @@ class MembershipController extends Controller
                 'category_id' => $cat->id,
                 'name' => 'Haridwar Sacred Gangajal 500ml',
                 'slug' => 'haridwar-gangajal-500ml-'.Str::random(6),
-                'price' => $shippingRate,
+                'price' => $productPrice ?: 50.00,
                 'volume_ml' => 500,
                 'is_gangajal' => true,
                 'is_active' => true,
                 'stock' => 999,
             ]);
+            $productPrice = (float) $monthlyGangajal->price;
+            $monthlyDebit = round($productPrice + $deliveryCharge, 2);
         }
 
         // 3. Create MembershipSubscription (Auto-Debit Profile)
@@ -234,12 +261,12 @@ class MembershipController extends Controller
             'product_id' => $monthlyGangajal->id,
             'status' => 'active',
             'billing_interval_days' => 30,
-            'billing_amount' => $shippingRate,
+            'billing_amount' => $monthlyDebit,
             'next_billing_date' => now()->addDays(30),
             'last_billed_at' => now(),
             'razorpay_subscription_id' => $subscriptionId ?? ('sub_'.Str::random(14)),
             'shipping_address' => $shippingAddressArray,
-            'notes' => 'Blu Bliss 5-Year Sacred Membership Auto-Debit Mandate (Every 30 Days)',
+            'notes' => "Blu Bliss 5-Year Sacred Membership Auto-Debit: Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge}) = ₹{$monthlyDebit}/mo",
         ]);
 
         // 4. Immediately create Month 1 initial dispatch Order
@@ -247,21 +274,27 @@ class MembershipController extends Controller
         $orderNumber = 'HB-MEM-'.date('Ymd').'-'.strtoupper(Str::random(4));
         $qrToken = 'HB-QR-'.Str::uuid()->toString();
 
-        $tax = GstService::calculate($shippingRate, 18.00);
+        $productGstRate = (float) ($monthlyGangajal->gst_percentage ?? 18.00);
+        $productTax = GstService::calculate($productPrice, $productGstRate);
+        $shippingTax = GstService::calculate($deliveryCharge, 18.00);
+
+        $totalTaxable = round($productTax['taxable'] + $shippingTax['taxable'], 2);
+        $totalGst = round($productTax['gst'] + $shippingTax['gst'], 2);
+        $halfGst = round($totalGst / 2, 2);
 
         $order = Order::create([
             'order_number' => $orderNumber,
             'user_id' => $user->id,
             'batch_id' => $batch?->id,
-            'subtotal' => $shippingRate,
-            'total_taxable_amount' => $tax['taxable'],
-            'total_gst_amount' => $tax['gst'],
-            'cgst_amount' => $tax['cgst'],
-            'sgst_amount' => $tax['sgst'],
-            'igst_amount' => $tax['igst'],
+            'subtotal' => $productPrice,
+            'total_taxable_amount' => $totalTaxable,
+            'total_gst_amount' => $totalGst,
+            'cgst_amount' => $halfGst,
+            'sgst_amount' => $halfGst,
+            'igst_amount' => $totalGst,
             'discount_amount' => 0.00,
-            'shipping_amount' => 0.00,
-            'total_amount' => $shippingRate,
+            'shipping_amount' => $deliveryCharge,
+            'total_amount' => $monthlyDebit,
             'payment_method' => 'razorpay_subscription',
             'payment_status' => 'paid',
             'payment_id' => $paymentId,
@@ -269,7 +302,7 @@ class MembershipController extends Controller
             'inventory_deducted' => false,
             'qr_token' => $qrToken,
             'shipping_address' => $shippingAddressArray,
-            'customer_notes' => 'Month 1 initial sacred Gangajal dispatch (Blu Bliss 5-Year Auto-Debit Subscription).',
+            'customer_notes' => "Month 1 initial sacred Gangajal dispatch (Blu Bliss 5-Year Auto-Debit: Product ₹{$productPrice} + Delivery ₹{$deliveryCharge}).",
         ]);
 
         if ($monthlyGangajal) {
@@ -278,13 +311,13 @@ class MembershipController extends Controller
                 'product_id' => $monthlyGangajal->id,
                 'product_name' => $monthlyGangajal->name,
                 'hsn_code' => $monthlyGangajal->hsn_code ?? '22019010',
-                'gst_percentage' => 18.00,
-                'taxable_amount' => $tax['taxable'],
-                'gst_amount' => $tax['gst'],
-                'unit_price' => $shippingRate,
+                'gst_percentage' => $productGstRate,
+                'taxable_amount' => $productTax['taxable'],
+                'gst_amount' => $productTax['gst'],
+                'unit_price' => $productPrice,
                 'quantity' => 1,
-                'total_price' => $shippingRate,
-                'is_free_monthly_bottle' => true,
+                'total_price' => $productPrice,
+                'is_free_monthly_bottle' => false,
             ]);
         }
 

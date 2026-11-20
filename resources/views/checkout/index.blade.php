@@ -342,7 +342,7 @@
 
                         @if ($cartDetails['member_discount'] > 0)
                             <div class="flex justify-between text-emerald-700 font-bold">
-                                <span>Member Savings / Free Offering:</span>
+                                <span>Member Discount:</span>
                                 <span class="font-mono">- ₹{{ number_format($cartDetails['member_discount'], 2) }}</span>
                             </div>
                         @endif

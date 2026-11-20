@@ -114,7 +114,7 @@
                                         <span class="block text-[11px] text-amber-800 font-semibold">Size: {{ $item->variant_name }}</span>
                                     @endif
                                     @if ($item->is_free_monthly_bottle)
-                                        <span class="block text-[10px] text-[#0369A1] font-bold">★ 5-Year Member Monthly Free Bottle</span>
+                                        <span class="block text-[10px] text-[#0369A1] font-bold">★ 5-Year Member Monthly Delivery</span>
                                     @endif
                                 </td>
                                 <td class="py-3 text-center font-mono text-[11px] text-slate-600">{{ $item->hsn_code ?? '22019010' }}</td>

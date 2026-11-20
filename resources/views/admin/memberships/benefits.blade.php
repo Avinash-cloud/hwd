@@ -9,15 +9,15 @@
                     ← Back to Memberships
                 </a>
             </div>
-            <h1 class="text-xl font-semibold text-slate-900">Monthly Free Offering Benefit Catalog</h1>
+            <h1 class="text-xl font-semibold text-slate-900">Monthly Membership Auto-Delivery Catalog</h1>
             <p class="text-xs text-slate-500 mt-0.5">
-                Select which products active 5-year members can claim for <strong>FREE (₹0)</strong> once per calendar month.
+                Select which active products from the catalog are fulfilled for 5-year members during their monthly auto-delivery at the set price and delivery charge.
             </p>
         </div>
 
         <div class="flex items-center gap-2">
             <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200">
-                {{ $eligibleCount }} of {{ $products->count() }} Products Eligible
+                {{ $eligibleCount }} of {{ $products->count() }} Products Active
             </span>
         </div>
     </div>
@@ -28,7 +28,7 @@
         <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
             <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                 <div class="text-slate-600">
-                    Check products to allow members to claim 1 free item per month. If multiple eligible products are added to their cart, the system automatically discounts the lower-priced eligible item to ₹0.
+                    Check products to designate them as active membership auto-order items. Active member recurring subscriptions automatically fulfill their order each month at the designated catalog price and delivery charge.
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                     <button type="button" onclick="document.querySelectorAll('.benefit-checkbox').forEach(c => c.checked = true)"
@@ -42,7 +42,7 @@
                     </button>
                     <button type="submit"
                             class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-xs shadow-xs transition ml-2">
-                        Save Benefit Catalog
+                        Save Membership Catalog
                     </button>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 <table class="w-full text-left text-xs">
                     <thead>
                         <tr class="bg-slate-50/50 border-b border-slate-200 text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
-                            <th class="py-3 px-4 w-12 text-center">Free Quota</th>
+                            <th class="py-3 px-4 w-12 text-center">In Catalog</th>
                             <th class="py-3 px-4">Product Details</th>
                             <th class="py-3 px-4">Category</th>
                             <th class="py-3 px-4">Price</th>

@@ -18,22 +18,15 @@
             <h3 class="font-serif font-bold text-base text-slate-900">1. What is the 5-Year Haridwar Bliss Membership?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                The membership is a one-time sacred subscription of ₹{{ number_format($membershipFee) }} that gives your
-                family 5 full years (60 months) of direct access to consecrated Haridwar holy water. Each month, your
-                first bottle of Gangajal is provided at <strong>₹0 product price</strong>, and you pay only the flat
-                shipping delivery fee of ₹{{ number_format($shippingRate) }}.
+                The membership is a 5-year (60 months) service commitment with a one-time non-refundable commitment fee of ₹{{ number_format($membershipFee) }}. The primary benefit of the membership is the automatic monthly ordering and delivery of the active 500ml pure Haridwar Gangajal from our membership catalog directly to your doorstep at the set monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST).
             </p>
         </div>
 
         <div class="bg-white rounded-2xl border border-amber-200 p-6 shadow-xs space-y-2">
-            <h3 class="font-serif font-bold text-base text-slate-900">2. How does the monthly pricing automation work?
+            <h3 class="font-serif font-bold text-base text-slate-900">2. How does the monthly auto-delivery work?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                When an active member places an order:
-                <br>• <strong>1 Bottle:</strong> Product Price = ₹0 (Free), Shipping =
-                ₹{{ number_format($shippingRate) }} flat.
-                <br>• <strong>2 or More Bottles:</strong> 1st bottle is ₹0, additional bottles are charged at the
-                regular member rate, and shipping remains ₹{{ number_format($shippingRate) }} flat per order.
+                For active members, the system automatically creates and schedules your monthly 500ml pure Gangajal bottle dispatch every 30 days at the set monthly charge of ₹{{ number_format($shippingRate) }}/month via your authorized payment mandate. You can also order additional bottles and items from our store catalog anytime at exclusive member prices.
             </p>
         </div>
 

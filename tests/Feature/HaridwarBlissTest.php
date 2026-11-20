@@ -108,7 +108,7 @@ class HaridwarBlissTest extends TestCase
         Membership::create([
             'user_id' => $user->id,
             'status' => 'active',
-            'fee_paid' => 500.00,
+            'fee_paid' => 797.00,
             'validity_years' => 5,
             'starts_at' => now(),
             'expires_at' => now()->addYears(5),
@@ -118,10 +118,10 @@ class HaridwarBlissTest extends TestCase
         $category = Category::create(['name' => 'Gangajal', 'slug' => 'gangajal']);
         $gangajal = Product::create([
             'category_id' => $category->id,
-            'name' => 'Brahmakund Gangajal 500ml',
+            'name' => 'Sacred Haridwar Gangajal 500ml',
             'slug' => 'gangajal-500ml',
             'price' => 149.00,
-            'member_price' => 0.00,
+            'member_price' => 129.00,
             'is_gangajal' => true,
             'volume_ml' => 500,
             'stock' => 50,
@@ -130,32 +130,32 @@ class HaridwarBlissTest extends TestCase
 
         $cartService = app(CartService::class);
 
-        // Case 1: 1 bottle of Gangajal -> price is ₹0, shipping is ₹149, total is ₹149
+        // Case 1: 1 bottle of Gangajal -> charged at member price (129), saving 20, shipping (149) -> total 278 (nothing free)
         $cartService->add($gangajal->id, 1);
         $details1 = $cartService->getDetails($user);
 
         $this->assertEquals(149.00, $details1['subtotal']);
-        $this->assertEquals(149.00, $details1['discount']); // 1st bottle free
+        $this->assertEquals(20.00, $details1['discount']);
         $this->assertEquals(149.00, $details1['shipping']);
-        $this->assertEquals(149.00, $details1['total']);
-        $this->assertTrue($details1['free_bottle_applied']);
+        $this->assertEquals(278.00, $details1['total']);
+        $this->assertFalse($details1['free_bottle_applied']);
 
-        // Case 2: 2 bottles of Gangajal -> 1 free (149 off), 1 charged (149), shipping (149) -> total 298
+        // Case 2: 2 bottles of Gangajal -> charged at member price (2 * 129 = 258), saving 40, shipping (149) -> total 407
         $cartService->clear();
         $cartService->add($gangajal->id, 2);
         $details2 = $cartService->getDetails($user);
 
         $this->assertEquals(298.00, $details2['subtotal']);
-        $this->assertEquals(149.00, $details2['discount']);
+        $this->assertEquals(40.00, $details2['discount']);
         $this->assertEquals(149.00, $details2['shipping']);
-        $this->assertEquals(298.00, $details2['total']);
+        $this->assertEquals(407.00, $details2['total']);
     }
 
     public function test_batch_traceability_public_verification(): void
     {
         $batch = Batch::create([
             'batch_number' => 'HB-GANG-VERIFY-99',
-            'sourcing_ghat' => 'Har Ki Pauri, Brahmakund, Haridwar',
+            'sourcing_ghat' => 'Sacred Haridwar Ghat, Haridwar',
             'collection_date' => now()->subDays(2),
             'packaging_date' => now()->subDay(),
             'purity_notes' => 'Laboratory Tested pH 7.8',
@@ -185,7 +185,7 @@ class HaridwarBlissTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('HB-GANG-VERIFY-99');
-        $response->assertSee('Har Ki Pauri, Brahmakund, Haridwar');
+        $response->assertSee('Sacred Haridwar Ghat, Haridwar');
         $response->assertSee('pH 7.8');
     }
 

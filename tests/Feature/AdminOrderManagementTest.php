@@ -219,7 +219,7 @@ class AdminOrderManagementTest extends TestCase
         $res->assertSee('249401');
         $res->assertSee('pay_TEST_12345');
         $res->assertSee('FESTIVE10');
-        $res->assertSee('Monthly Member Free Quota');
+        $res->assertSee('Monthly Member Subscription Auto-Delivery');
     }
 
     public function test_admin_orders_tabs_math_matches_total_count_across_all_statuses(): void

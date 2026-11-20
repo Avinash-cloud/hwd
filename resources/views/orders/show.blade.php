@@ -148,7 +148,7 @@
                                         @if ($item->is_free_monthly_bottle)
                                             <span
                                                 class="px-2 py-0.5 rounded-full font-bold bg-[#0369A1]/10 text-[#0369A1] text-[10px]">
-                                                Monthly Free Bottle (₹0)
+                                                Monthly Subscription Auto-Delivery
                                             </span>
                                         @endif
                                     </div>

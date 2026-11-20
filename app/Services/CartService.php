@@ -161,7 +161,6 @@ class CartService
         $subtotal = 0.0;
         $memberDiscount = 0.0;
         $gangajalCount = 0;
-        $freeBottleApplied = false;
 
         $totalTaxable = 0.0;
         $totalGst = 0.0;
@@ -184,8 +183,8 @@ class CartService
                 'total_amount' => 0.0,
                 'total_items_count' => 0,
                 'free_bottle_applied' => false,
-                'monthly_quota_used' => $hasClaimedThisMonth,
-                'can_claim_monthly_free' => $canClaimMonthlyFree,
+                'monthly_quota_used' => false,
+                'can_claim_monthly_free' => false,
                 'gangajal_count' => 0,
                 'total_taxable_amount' => 0.0,
                 'total_gst_amount' => 0.0,
@@ -208,25 +207,7 @@ class CartService
         $products = Product::whereIn('id', array_unique($productIds))->get()->keyBy('id');
         $variants = ! empty($variantIds) ? ProductVariant::whereIn('id', array_unique($variantIds))->get()->keyBy('id') : collect();
 
-        // Step 1: Identify lowest-priced eligible product for monthly free quota
-        $freeItemKey = null;
-        if ($canClaimMonthlyFree) {
-            $minEligiblePrice = PHP_FLOAT_MAX;
-            foreach ($rawCart as $key => $entry) {
-                /** @var Product|null $p */
-                $p = $products->get($entry['product_id']);
-                if ($p && ($p->is_member_free_eligible || $p->is_gangajal)) {
-                    $v = ! empty($entry['variant_id']) ? $variants->get($entry['variant_id']) : null;
-                    $uPrice = $v ? (float) $v->price : (float) $p->price;
-                    if ($uPrice < $minEligiblePrice) {
-                        $minEligiblePrice = $uPrice;
-                        $freeItemKey = $key;
-                    }
-                }
-            }
-        }
-
-        // Step 2: Build line items
+        // Build line items
         foreach ($rawCart as $key => $entry) {
             /** @var Product|null $product */
             $product = $products->get($entry['product_id']);
@@ -246,25 +227,15 @@ class CartService
 
             $lineSubtotal = $unitPrice * $qty;
             $lineDiscount = 0.0;
-            $hasFreeBottle = false;
 
             if ($product->is_gangajal) {
                 $gangajalCount += $qty;
             }
 
-            // Check if this item is the chosen free monthly item
-            if ($canClaimMonthlyFree && ! $freeBottleApplied && $key === $freeItemKey) {
-                $hasFreeBottle = true;
-                $freeBottleApplied = true;
-                $lineDiscount += $unitPrice;
-
-                if ($qty > 1 && $isMember && ! $product->is_gangajal && $memberPrice !== null && (float) $memberPrice > 0) {
-                    $extraDiscount = max(0, $unitPrice - (float) $memberPrice) * ($qty - 1);
-                    $lineDiscount += $extraDiscount;
-                }
-            } elseif ($isMember && ! $product->is_gangajal && $memberPrice !== null && (float) $memberPrice > 0) {
-                $memberSavings = max(0, $unitPrice - (float) $memberPrice);
-                $lineDiscount += $memberSavings * $qty;
+            // Member price savings (if set and lower than unit price)
+            if ($isMember && $memberPrice !== null && (float) $memberPrice > 0 && (float) $memberPrice < $unitPrice) {
+                $memberSavings = ($unitPrice - (float) $memberPrice) * $qty;
+                $lineDiscount += $memberSavings;
             }
 
             $lineTotal = max(0, $lineSubtotal - $lineDiscount);
@@ -297,9 +268,9 @@ class CartService
                 'line_subtotal' => $lineSubtotal,
                 'line_discount' => $lineDiscount,
                 'line_total' => $lineTotal,
-                'has_free_bottle' => $hasFreeBottle,
-                'is_free_monthly_bottle' => $hasFreeBottle,
-                'is_eligible_for_free' => (bool) ($product->is_member_free_eligible || $product->is_gangajal),
+                'has_free_bottle' => false,
+                'is_free_monthly_bottle' => false,
+                'is_eligible_for_free' => false,
             ];
         }
 
@@ -340,9 +311,9 @@ class CartService
             'total' => $total,
             'total_amount' => $total,
             'total_items_count' => $this->count(),
-            'free_bottle_applied' => $freeBottleApplied,
-            'monthly_quota_used' => $hasClaimedThisMonth,
-            'can_claim_monthly_free' => $canClaimMonthlyFree,
+            'free_bottle_applied' => false,
+            'monthly_quota_used' => false,
+            'can_claim_monthly_free' => false,
             'gangajal_count' => $gangajalCount,
             'total_taxable_amount' => round($totalTaxable, 2),
             'total_gst_amount' => round($totalGst, 2),

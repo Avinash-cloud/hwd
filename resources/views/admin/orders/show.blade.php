@@ -18,7 +18,7 @@
                 @endif
                 @if ($order->hasFreeMonthlyItem())
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800 border border-sky-300">
-                        ★ Monthly Member Free Quota
+                        ★ Monthly Member Subscription Order
                     </span>
                 @endif
             </div>
@@ -156,7 +156,7 @@
                                     </div>
                                     @if ($item->is_free_monthly_bottle)
                                         <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-sky-50 text-sky-800 border border-sky-200">
-                                            ★ 1 Unit Monthly Free Member Benefit (₹0.00)
+                                            ★ Monthly Member Subscription Auto-Delivery
                                         </span>
                                     @endif
                                 </div>

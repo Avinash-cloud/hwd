@@ -31,28 +31,6 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
                 <!-- Cart Items List (2 cols) -->
                 <div class="lg:col-span-2 space-y-4">
-                    @if ($cartDetails['free_bottle_applied'])
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3 text-xs text-emerald-800 shadow-xs">
-                            <div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 text-emerald-700 font-bold">
-                                ✓
-                            </div>
-                            <div>
-                                <strong class="font-bold block sm:inline">Monthly Member Benefit Applied:</strong>
-                                <span>You have received 1 complimentary sacred offering for <strong>₹0.00</strong> (Standard shipping fee applies).</span>
-                            </div>
-                        </div>
-                    @elseif ($cartDetails['monthly_quota_used'])
-                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3 text-xs text-amber-900 shadow-xs">
-                            <div class="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center shrink-0 text-[#D97706]">
-                                ℹ
-                            </div>
-                            <div>
-                                <strong class="font-bold block sm:inline">Devotee Monthly Status:</strong>
-                                <span>You have already claimed your 1 free devotee offering for {{ now()->format('F Y') }}. Additional items are billed at exclusive member prices.</span>
-                            </div>
-                        </div>
-                    @endif
-
                     <div class="bg-white rounded-3xl border border-[#D97706]/20 shadow-xs divide-y divide-slate-100 overflow-hidden">
                         @foreach ($cartDetails['items'] as $item)
                             <div class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -74,15 +52,7 @@
                                             </div>
                                         @endif
                                         <div class="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-500">
-                                            @if ($item['has_free_bottle'])
-                                                <span class="line-through text-slate-400">₹{{ number_format($item['unit_price'], 2) }}</span>
-                                                <span class="font-bold text-emerald-700 font-mono">₹0.00</span>
-                                                <span class="px-2 py-0.5 rounded-md font-bold bg-emerald-100 text-emerald-800 text-[10px]">
-                                                    1 Unit FREE (₹0)
-                                                </span>
-                                            @else
-                                                <span>Unit Price: ₹{{ number_format($item['unit_price'], 2) }}</span>
-                                            @endif
+                                            <span>Unit Price: ₹{{ number_format($item['unit_price'], 2) }}</span>
                                             <span class="text-slate-300">·</span>
                                             <span class="text-[11px] text-slate-400">GST ({{ $item['gst_percentage'] ?? 18 }}%) included</span>
                                         </div>
@@ -206,7 +176,7 @@
 
                         @if ($cartDetails['member_discount'] > 0)
                             <div class="flex justify-between text-emerald-700 font-bold">
-                                <span>Member Savings / Free Quota</span>
+                                <span>Member Discount</span>
                                 <span class="font-mono">- ₹{{ number_format($cartDetails['member_discount'], 2) }}</span>
                             </div>
                         @endif

@@ -88,29 +88,47 @@ class ProcessSubscriptionRenewals extends Command
 
             $product = $sub->product;
             $variant = $sub->variant;
-            $amount = (float) $sub->billing_amount;
+            $billing = MembershipSubscription::getMonthlyBillingDetails($product);
+            $productPrice = $billing['product_price'];
+            $deliveryCharge = $billing['delivery_charge'];
+            $amount = (float) ($sub->billing_amount ?: $billing['total_monthly_charge']);
 
-            $this->info("Processing renewal for user {$user->name} (#{$sub->id}) - Amount: ₹{$amount}");
+            // If subscription record amount differs from current pricing, preserve breakdown:
+            if ($amount != round($productPrice + $deliveryCharge, 2) && $amount > 0) {
+                if ($amount >= $deliveryCharge) {
+                    $productPrice = round($amount - $deliveryCharge, 2);
+                } else {
+                    $deliveryCharge = $amount;
+                    $productPrice = 0.0;
+                }
+            }
+
+            $this->info("Processing renewal for user {$user->name} (#{$sub->id}) - Total: ₹{$amount} (Product: ₹{$productPrice} + Delivery: ₹{$deliveryCharge})");
 
             $batch = Batch::where('status', 'ready')->latest('collection_date')->first();
             $orderNumber = 'HB-SUB-'.date('Ymd').'-'.strtoupper(Str::random(4));
             $qrToken = 'HB-QR-'.Str::uuid()->toString();
 
-            $gstRate = (float) ($variant?->gst_percentage ?? $product->gst_percentage ?? 18.00);
-            $tax = GstService::calculate($amount, $gstRate);
+            $gstRate = (float) ($variant?->gst_percentage ?? $product?->gst_percentage ?? 18.00);
+            $productTax = GstService::calculate($productPrice, $gstRate);
+            $shippingTax = GstService::calculate($deliveryCharge, 18.00);
+
+            $totalTaxable = round($productTax['taxable'] + $shippingTax['taxable'], 2);
+            $totalGst = round($productTax['gst'] + $shippingTax['gst'], 2);
+            $halfGst = round($totalGst / 2, 2);
 
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'user_id' => $user->id,
                 'batch_id' => $batch?->id,
-                'subtotal' => $amount,
-                'total_taxable_amount' => $tax['taxable'],
-                'total_gst_amount' => $tax['gst'],
-                'cgst_amount' => $tax['cgst'],
-                'sgst_amount' => $tax['sgst'],
-                'igst_amount' => $tax['igst'],
+                'subtotal' => $productPrice,
+                'total_taxable_amount' => $totalTaxable,
+                'total_gst_amount' => $totalGst,
+                'cgst_amount' => $halfGst,
+                'sgst_amount' => $halfGst,
+                'igst_amount' => $totalGst,
                 'discount_amount' => 0.00,
-                'shipping_amount' => 0.00,
+                'shipping_amount' => $deliveryCharge,
                 'total_amount' => $amount,
                 'payment_method' => 'razorpay_recurring',
                 'payment_status' => 'paid',
@@ -128,7 +146,7 @@ class ProcessSubscriptionRenewals extends Command
                     'postal_code' => '249401',
                     'country' => 'India',
                 ],
-                'customer_notes' => 'Automatic monthly member product delivery (Every 30 Days).',
+                'customer_notes' => "Automatic monthly member product delivery: Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge}) (Every 30 Days).",
             ]);
 
             OrderItem::create([
@@ -139,12 +157,12 @@ class ProcessSubscriptionRenewals extends Command
                 'variant_name' => $variant?->name,
                 'hsn_code' => $variant?->hsn_code ?? $product->hsn_code ?? '22019010',
                 'gst_percentage' => $gstRate,
-                'taxable_amount' => $tax['taxable'],
-                'gst_amount' => $tax['gst'],
-                'unit_price' => $amount,
+                'taxable_amount' => $productTax['taxable'],
+                'gst_amount' => $productTax['gst'],
+                'unit_price' => $productPrice,
                 'quantity' => 1,
-                'total_price' => $amount,
-                'is_free_monthly_bottle' => true,
+                'total_price' => $productPrice,
+                'is_free_monthly_bottle' => false,
             ]);
 
             $sub->update([

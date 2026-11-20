@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Membership;
-use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\User;
@@ -58,7 +56,7 @@ class MembershipBenefitAndQuotaTest extends TestCase
         $this->assertTrue($product2->fresh()->is_member_free_eligible);
     }
 
-    public function test_lower_priced_eligible_product_receives_free_discount_in_cart(): void
+    public function test_cart_does_not_discount_products_to_free_and_charges_catalog_prices(): void
     {
         $user = User::factory()->create();
         Membership::create([
@@ -73,7 +71,6 @@ class MembershipBenefitAndQuotaTest extends TestCase
 
         $category = Category::create(['name' => 'Sacred Offerings', 'slug' => 'sacred-offerings']);
 
-        // Higher price eligible product: ₹249
         $productHigh = Product::create([
             'category_id' => $category->id,
             'name' => 'Large Gangajal Brass Can 1L',
@@ -83,11 +80,10 @@ class MembershipBenefitAndQuotaTest extends TestCase
             'stock' => 50,
         ]);
 
-        // Lower price eligible product: ₹149
         $productLow = Product::create([
             'category_id' => $category->id,
-            'name' => 'Brahmakund Gangajal 500ml',
-            'slug' => 'brahmakund-gangajal-500ml',
+            'name' => 'Haridwar Gangajal 500ml',
+            'slug' => 'haridwar-gangajal-500ml',
             'price' => 149.00,
             'is_member_free_eligible' => true,
             'stock' => 50,
@@ -99,84 +95,12 @@ class MembershipBenefitAndQuotaTest extends TestCase
 
         $details = $cartService->getDetails($user);
 
-        // Lower priced item (₹149) should be free, higher priced (₹249) charged
+        // Nothing is free in cart: both products charged at their catalog price
         $this->assertEquals(398.00, $details['subtotal']);
-        $this->assertEquals(149.00, $details['discount']); // ₹149 discounted
+        $this->assertEquals(0.00, $details['discount']); // No free product discount
         $this->assertEquals(149.00, $details['shipping']);
-        $this->assertEquals(398.00, $details['total']); // 249 + 149 shipping = 398
-        $this->assertTrue($details['free_bottle_applied']);
-    }
-
-    public function test_member_can_only_order_one_free_product_per_calendar_month(): void
-    {
-        $user = User::factory()->create();
-        Membership::create([
-            'user_id' => $user->id,
-            'status' => 'active',
-            'fee_paid' => 500.00,
-            'validity_years' => 5,
-            'starts_at' => now(),
-            'expires_at' => now()->addYears(5),
-            'terms_accepted' => true,
-        ]);
-
-        $category = Category::create(['name' => 'Gangajal', 'slug' => 'gangajal']);
-        $product = Product::create([
-            'category_id' => $category->id,
-            'name' => 'Brahmakund Gangajal 500ml',
-            'slug' => 'gangajal-500ml',
-            'price' => 149.00,
-            'is_gangajal' => true,
-            'is_member_free_eligible' => true,
-            'stock' => 50,
-        ]);
-
-        // First order in current calendar month claiming free bottle
-        $order1 = Order::create([
-            'order_number' => 'HB-ORD-MONTH-01',
-            'user_id' => $user->id,
-            'subtotal' => 149.00,
-            'discount_amount' => 149.00,
-            'shipping_amount' => 149.00,
-            'total_amount' => 149.00,
-            'payment_method' => 'mock',
-            'payment_status' => 'paid',
-            'order_status' => 'confirmed',
-            'qr_token' => 'HB-QR-M1',
-            'shipping_address' => ['recipient_name' => 'Devotee', 'address_line1' => 'Ghat', 'city' => 'Haridwar', 'state' => 'Uttarakhand', 'postal_code' => '249401'],
-            'created_at' => now(),
-        ]);
-
-        OrderItem::create([
-            'order_id' => $order1->id,
-            'product_id' => $product->id,
-            'product_name' => $product->name,
-            'unit_price' => 149.00,
-            'quantity' => 1,
-            'total_price' => 0.00,
-            'is_free_monthly_bottle' => true,
-        ]);
-
-        // User now has claimed their monthly quota for current month
-        $this->assertTrue($user->fresh()->hasClaimedMonthlyFreeProduct());
-
-        // Now user adds product to cart again in the SAME month
-        $cartService = app(CartService::class);
-        $cartService->clear();
-        $cartService->add($product->id, 1);
-
-        $details = $cartService->getDetails($user->fresh());
-
-        // Discount should be 0, full price charged
-        $this->assertEquals(149.00, $details['subtotal']);
-        $this->assertEquals(0.00, $details['discount']);
+        $this->assertEquals(547.00, $details['total']); // 398 + 149 shipping = 547
         $this->assertFalse($details['free_bottle_applied']);
-        $this->assertTrue($details['monthly_quota_used']);
-        $this->assertEquals(298.00, $details['total']); // 149 product + 149 shipping = 298
-
-        // However, in the NEXT calendar month, user has NOT claimed yet
-        $nextMonth = now()->addMonth();
-        $this->assertFalse($user->fresh()->hasClaimedMonthlyFreeProduct($nextMonth));
     }
 
     public function test_admin_can_configure_member_shipping_price_in_settings(): void

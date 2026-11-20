@@ -115,11 +115,6 @@
                                             <img :src="item.image || 'https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=200&fit=crop'"
                                                  :alt="item.name"
                                                  class=" object-cover rounded-lg ">
-                                            <template x-if="item.is_free_monthly_bottle">
-                                                <span class="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-600 text-white shadow">
-                                                    FREE
-                                                </span>
-                                            </template>
                                         </div>
 
                                         <!-- Details -->
@@ -144,16 +139,8 @@
                                             </div>
 
                                             <div class="flex items-center gap-2 mt-1">
-                                                <template x-if="item.is_free_monthly_bottle">
-                                                    <span class="text-xs font-extrabold text-emerald-600 font-mono">₹0.00</span>
-                                                </template>
-                                                <template x-if="item.is_free_monthly_bottle">
-                                                    <span class="text-[11px] text-slate-400 line-through" x-text="'₹' + item.unit_price"></span>
-                                                </template>
-                                                <template x-if="!item.is_free_monthly_bottle">
-                                                    <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.unit_price"></span>
-                                                </template>
-                                                <template x-if="!item.is_free_monthly_bottle && item.compare_price && item.compare_price > item.unit_price">
+                                                <span class="text-xs font-extrabold text-slate-900" x-text="'₹' + item.unit_price"></span>
+                                                <template x-if="item.compare_price && item.compare_price > item.unit_price">
                                                     <span class="text-[11px] text-slate-400 line-through" x-text="'₹' + item.compare_price"></span>
                                                 </template>
                                             </div>
@@ -175,13 +162,8 @@
                                                     </button>
                                                 </div>
 
-                                                <template x-if="item.is_free_monthly_bottle && item.quantity === 1">
-                                                    <span class="text-xs font-bold text-emerald-600 font-mono">₹0.00</span>
-                                                </template>
-                                                <template x-if="!item.is_free_monthly_bottle || item.quantity > 1">
-                                                    <span class="text-xs font-bold text-[#D97706] font-mono"
-                                                          x-text="'₹' + item.line_total.toFixed(2)"></span>
-                                                </template>
+                                                <span class="text-xs font-bold text-[#D97706] font-mono"
+                                                      x-text="'₹' + item.line_total.toFixed(2)"></span>
                                             </div>
                                         </div>
                                     </div>

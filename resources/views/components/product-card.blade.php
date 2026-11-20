@@ -107,8 +107,8 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                     <span>5-Yr Member:</span>
                 </span>
-                <span class="font-black text-[#0369A1] bg-white/90 border border-sky-300 px-1.5 py-0.5 rounded shadow-2xs">
-                    ₹0 Free Monthly
+                <span class="font-bold text-[#881337] bg-white/90 border border-amber-300 px-1.5 py-0.5 rounded shadow-2xs">
+                    Monthly Auto-Order
                 </span>
             </div>
         @endif

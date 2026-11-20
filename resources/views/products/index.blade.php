@@ -56,7 +56,7 @@
                             <span>Devotee Privilege</span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-[11px]">
-                            Join our 5-Year Membership (₹{{ number_format($membershipFee) }}) and receive your 1st Gangajal bottle FREE! Thereafter, enjoy uninterrupted doorstep delivery of a pure 500ml Gangajal bottle every month at just ₹199/month.
+                            Join our 5-Year Membership (₹{{ number_format($membershipFee ?? 797) }}) for uninterrupted monthly doorstep auto-delivery of pure 500ml Haridwar Gangajal at ₹{{ number_format($shippingRate ?? 199) }}/month.
                         </p>
                         <a href="{{ route('membership.join') }}"
                            class="block text-center w-full py-2 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-[11px] shadow-xs transition">

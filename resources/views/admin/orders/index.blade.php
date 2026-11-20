@@ -102,7 +102,7 @@
             <div>
                 <a href="{{ route('admin.orders.index', ['status' => $currentStatus, 'member_free_only' => request('member_free_only') ? null : 1, 'search' => request('search')]) }}"
                     class="px-3 py-1.5 rounded-lg text-xs font-semibold transition inline-flex items-center gap-1.5 {{ request('member_free_only') ? 'bg-sky-100 text-sky-900 border border-sky-300 ring-1 ring-sky-300' : 'bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100' }}">
-                    <span>★ Member Free Quota Orders</span>
+                    <span>★ Member Subscription Orders</span>
                     <span
                         class="px-1.5 py-0.2 rounded-full text-[10px] bg-sky-200 text-sky-800">{{ $counts['member_free'] }}</span>
                 </a>
@@ -223,7 +223,7 @@
                                         <div class="mt-1">
                                             <span
                                                 class="inline-block px-1.5 py-0.2 rounded text-[9px] font-bold bg-sky-100 text-sky-800 border border-sky-300">
-                                                ★ Member Free Quota
+                                                ★ Member Subscription Order
                                             </span>
                                         </div>
                                     @endif

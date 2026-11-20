@@ -91,8 +91,9 @@ class ProductController extends Controller
 
         $categories = Category::with('children')->root()->where('is_active', true)->orderBy('sort_order')->get();
         $membershipFee = SiteSetting::get('membership_fee', '500');
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 199);
 
-        return view('products.index', compact('products', 'categories', 'membershipFee'));
+        return view('products.index', compact('products', 'categories', 'membershipFee', 'shippingRate'));
     }
 
     /**

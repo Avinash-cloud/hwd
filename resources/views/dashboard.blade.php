@@ -79,8 +79,8 @@
                     @else
                         <div class="pt-4 border-t border-white/20 text-xs space-y-3">
                             <p class="text-amber-100">
-                                You do not currently have an active 5-year membership. Join today to unlock free monthly
-                                Haridwar Gangajal deliveries.
+                                You do not currently have an active 5-year membership. Join today for uninterrupted monthly
+                                Haridwar Gangajal doorstep auto-deliveries.
                             </p>
                             <a href="{{ route('membership.join') }}"
                                 class="inline-block px-5 py-2.5 bg-white text-slate-900 hover:bg-[#FFFDF7] rounded-xl font-bold text-xs shadow transition">
@@ -145,8 +145,8 @@
                             <input type="hidden" name="product_id" value="{{ $monthlyGangajal->id }}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit"
-                                class="w-full py-3 px-4 rounded-xl font-bold text-xs {{ ($activeSubscription ?? null) ? 'text-[#881337] bg-amber-50 hover:bg-amber-100 border border-amber-300' : 'text-white bg-[#D97706] hover:bg-[#F97316]' }} shadow-xs transition flex items-center justify-center gap-1.5">
-                                <span>{{ ($activeSubscription ?? null) ? 'Order Additional Bottle' : 'Claim Monthly Free Bottle (₹0)' }}</span>
+                                class="w-full py-3 px-4 rounded-xl font-bold text-xs text-[#881337] bg-amber-50 hover:bg-amber-100 border border-amber-300 shadow-xs transition flex items-center justify-center gap-1.5">
+                                <span>Order Additional Bottle (₹{{ number_format($monthlyGangajal->price, 0) }})</span>
                                 <span>→</span>
                             </button>
                         </form>
@@ -155,7 +155,7 @@
                     @if ($monthlyGangajal)
                         <a href="{{ route('membership.join') }}"
                             class="w-full text-center block py-3.5 px-4 rounded-xl font-bold text-xs text-white bg-[#D97706] hover:bg-[#F97316] transition">
-                            Join for ₹{{ number_format($membershipFee) }} to Claim
+                            Join 5-Year Membership (₹{{ number_format($membershipFee) }})
                         </a>
                     @endif
                 @endif

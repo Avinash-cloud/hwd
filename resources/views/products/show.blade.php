@@ -407,7 +407,7 @@
                                 <div>
                                     <span class="font-bold text-slate-800">5-Year Member Rate:</span>
                                     @if ($product->is_gangajal)
-                                        <span class="text-[#0369A1] font-bold">1st Bottle Free / Month</span>
+                                        <span class="text-[#881337] font-bold">Monthly Auto-Order Catalog</span>
                                     @else
                                         <span class="text-[#D97706] font-bold">₹<span x-text="Math.round(currentMemberPrice)"></span></span>
                                     @endif

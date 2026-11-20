@@ -16,10 +16,10 @@
                     Pure Authentic Haridwar Gangajal & Vedic Essentials · Sourced from Sacred Ganga
                 </span>
                 <span class="hidden md:inline text-white/40 shrink-0">|</span>
-                <!-- <a href="{{ route('membership.join') }}"
+                <a href="{{ route('membership.join') }}"
                     class="hidden md:inline text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2 shrink-0">
-                    🌟 5-Year Members Receive 1 Free Gangajal Bottle Every Month
-                </a> -->
+                    🌟 5-Year Sacred Membership: Monthly Doorstep Auto-Delivery
+                </a>
             </div>
 
             <!-- Right: Batch Verification & Support Links -->
