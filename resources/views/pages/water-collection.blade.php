@@ -144,7 +144,7 @@
                 alert('Unable to connect with Razorpay. You can switch to Pay on Collection or try again.');
             });
         }
-    }" class="bg-[#FAF7F2] text-slate-800 min-h-screen">
+    }" class="bg-[#FFA028] text-slate-800 min-h-screen">
 
         <!-- 1. Sacred Hero Banner (Signature Maroon Card on Solid Light Orange Band) -->
         <div class="relative bg-[#FFA028] text-white overflow-hidden py-10 sm:py-16 border-b border-orange-600/40">
@@ -184,49 +184,49 @@
         <!-- Value Proposition Highlights -->
         <div class="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto text-left text-xs sm:text-sm ">
             <div
-                class="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
+                class="bg-[#fef4cf] backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-lg bg-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 text-xl">
                     🌊
                 </div>
                 <div>
-                    <span class="block font-bold text-amber-200">100% Pure Gangajal</span>
+                    <span class="block font-bold text-[#881337]">100% Pure Gangajal</span>
                     <span class="text-[11px] text-amber-100/70">Kumbh Snan Muhurat</span>
                 </div>
             </div>
 
             <div
-                class="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
+                class="bg-[#fef4cf] backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-lg bg-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 text-xl">
                     🏨
                 </div>
                 <div>
-                    <span class="block font-bold text-amber-200">Hotel Pickup</span>
+                    <span class="block font-bold text-[#881337]">Hotel Pickup</span>
                     <span class="text-[11px] text-amber-100/70">Any Haridwar stay</span>
                 </div>
             </div>
 
             <div
-                class="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
+                class="bg-[#fef4cf] backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-lg bg-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 text-xl">
                     🚚
                 </div>
                 <div>
-                    <span class="block font-bold text-amber-200">Doorstep Delivery</span>
+                    <span class="block font-bold text-[#881337]">Doorstep Delivery</span>
                     <span class="text-[11px] text-amber-100/70">Any resident address</span>
                 </div>
             </div>
 
             <div
-                class="bg-white/10 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
+                class="bg-[#fef4cf] backdrop-blur-md rounded-xl p-3 sm:p-4 border border-amber-400/30 flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-lg bg-amber-500/30 text-amber-300 flex items-center justify-center shrink-0 text-xl">
                     🔒
                 </div>
                 <div>
-                    <span class="block font-bold text-amber-200">Tamper-Proof Seal</span>
+                    <span class="block font-bold text-[#881337]">Tamper-Proof Seal</span>
                     <span class="text-[11px] text-amber-100/70">Vedic authenticity</span>
                 </div>
             </div>
