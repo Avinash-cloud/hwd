@@ -582,7 +582,7 @@
                     </a>
                     <a href="{{ route('water-collection') }}"
                         class="whitespace-nowrap shrink-0 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ request()->routeIs('water-collection*') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
-                        Water collection
+                        Kumbh Gangajal Collection
                     </a>
                 </div>
             </div>

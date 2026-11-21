@@ -534,7 +534,7 @@
                             </div>
                             <span
                                 class="inline-block mt-2 text-[11px] font-bold text-amber-900 bg-amber-200/70 border border-amber-300 px-3 py-0.5 rounded-full">
-                                Equivalent to ₹85 / month · All 5 Years Covered
+                                Equivalent to ₹{{ round($membershipFee / 60, 2) }} / month · All 5 Years Covered
                             </span>
                         </div>
 
@@ -544,10 +544,7 @@
                                 <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
                                 <span class="leading-tight"><strong>60 Months</strong> of sacred Gangajal delivery (1 bottle/mo)</span>
                             </div>
-                            <div class="flex items-start gap-2.5">
-                                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
-                                <span class="leading-tight"><strong>15% – 20% Member Off</strong> on all Puja Samagri & Brass</span>
-                            </div>
+                            
                             <div class="flex items-start gap-2.5">
                                 <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
                                 <span class="leading-tight"><strong>Priority Dispatch</strong> for Shivratri, Navratri & Diwali</span>
