@@ -35,7 +35,7 @@ class PageController extends Controller
         return view('pages.faqs', compact('membershipFee', 'shippingRate', 'monthlyAutoDebit', 'monthlyProductPrice', 'monthlyDeliveryCharge'));
     }
 
-    public function contact(): View
+    public function contact(Request $request): View
     {
         $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
         $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');

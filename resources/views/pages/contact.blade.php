@@ -112,35 +112,50 @@
                     @csrf
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Your Full Name *</label>
-                        <input type="text" name="name" required
+                        <input type="text" name="name" value="{{ old('name', auth()->user()?->name ?? '') }}" required
                             class="w-full px-3 py-2 border border-slate-300 rounded-xl" placeholder="John Doe" />
+                        @error('name')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Email Address *</label>
-                        <input type="email" name="email" required
+                        <input type="email" name="email" value="{{ old('email', auth()->user()?->email ?? '') }}" required
                             class="w-full px-3 py-2 border border-slate-300 rounded-xl"
                             placeholder="devotee@example.com" />
+                        @error('email')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Phone Number (Optional)</label>
-                        <input type="text" name="phone" class="w-full px-3 py-2 border border-slate-300 rounded-xl"
+                        <input type="text" name="phone" value="{{ old('phone', auth()->user()?->phone ?? '') }}" class="w-full px-3 py-2 border border-slate-300 rounded-xl"
                             placeholder="+91 70424 82555" />
+                        @error('phone')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Subject *</label>
-                        <input type="text" name="subject" required
+                        <input type="text" name="subject" value="{{ old('subject', request('subject', '')) }}" required
                             class="w-full px-3 py-2 border border-slate-300 rounded-xl"
                             placeholder="Membership inquiry or Delivery question" />
+                        @error('subject')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Your Message *</label>
                         <textarea name="message" rows="4" required
                             class="w-full px-3 py-2 border border-slate-300 rounded-xl"
-                            placeholder="How may our Haridwar team serve you?"></textarea>
+                            placeholder="How may our Haridwar team serve you?">{{ old('message') }}</textarea>
+                        @error('message')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button type="submit"
