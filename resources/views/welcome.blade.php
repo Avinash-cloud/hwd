@@ -394,9 +394,6 @@
                     Understanding the vital role of pure Gangajal in daily prayers and rituals, 'Blu Bliss' introduces a
                     unique and convenient Membership Plan. By joining this plan, you ensure that you never run out of
                     Gangajal for your rituals and worship at home.
-
-
-
                 </p>
             </div>
 
@@ -500,27 +497,27 @@
                     </div>
 
                     <div
-                        class="mt-6 pt-4 border-t border-amber-400/30 flex flex-wrap items-center justify-between gap-3 text-xs text-amber-200">
+                        class="mt-6 pt-4 border-t border-amber-300/60 flex flex-wrap items-center justify-between gap-3 text-xs text-[#6B0E29]">
                         <span class="flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M5 13l4 4L19 7" />
                             </svg>
-                            <span class="text-[#6B0E29] font-medium">No Annual Subscriptions · No Renewal Fees</span>
+                            <span class="font-semibold">No Annual Subscriptions · No Renewal Fees</span>
                         </span>
                         <span class="flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M5 13l4 4L19 7" />
                             </svg>
-                            <span class="text-[#6B0E29] font-medium">Claim Bottles Anytime via Devotee Dashboard</span>
+                            <span class="font-semibold">Claim Bottles Anytime via Devotee Dashboard</span>
                         </span>
                     </div>
                 </div>
 
                 <!-- Right 4 Cols: Value Math & Activation Box -->
                 <div
-                    class="lg:col-span-4 bg-gradient-to-b from-[#FFFDF7] to-amber-50 rounded-3xl p-6 sm:p-8 text-[#881337] shadow-2xl flex flex-col justify-between border-2 border-amber-300">
+                    class="lg:col-span-4 bg-gradient-to-b from-[#FFFDF7] to-amber-50 rounded-3xl p-6 sm:p-7 text-[#881337] shadow-2xl flex flex-col justify-between border-2 border-amber-300">
                     <div>
                         <div class="text-center pb-4 border-b border-amber-200">
                             <span
@@ -535,13 +532,36 @@
                                     class="text-4xl sm:text-5xl font-extrabold font-serif text-[#881337]">₹{{ number_format($membershipFee) }}</span>
                                 <span class="text-xs font-bold text-amber-900">/ 5 Full Years</span>
                             </div>
-                            
-                        </div>                        
+                            <span
+                                class="inline-block mt-2 text-[11px] font-bold text-amber-900 bg-amber-200/70 border border-amber-300 px-3 py-0.5 rounded-full">
+                                Equivalent to ₹85 / month · All 5 Years Covered
+                            </span>
+                        </div>
+
+                        <!-- 5-Year Devotee Plan Inclusions -->
+                        <div class="py-4 space-y-2.5 text-xs text-amber-950">
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
+                                <span class="leading-tight"><strong>60 Months</strong> of sacred Gangajal delivery (1 bottle/mo)</span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
+                                <span class="leading-tight"><strong>15% – 20% Member Off</strong> on all Puja Samagri & Brass</span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
+                                <span class="leading-tight"><strong>Priority Dispatch</strong> for Shivratri, Navratri & Diwali</span>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
+                                <span class="leading-tight"><strong>Zero Renewal Fees</strong> · Locked 5-Year Devotee Rate</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="pt-4 space-y-2">
+                    <div class="pt-4 border-t border-amber-200 space-y-2">
                         <a href="{{ route('membership.join') }}"
-                            class="w-full inline-flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-[#881337] to-[#D97706] hover:brightness-110 text-white rounded-2xl font-extrabold text-sm shadow-xl transition transform hover:-translate-y-0.5">
+                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#881337] to-[#D97706] hover:brightness-110 text-white rounded-2xl font-extrabold text-sm shadow-xl transition transform hover:-translate-y-0.5">
                             <span>Join 5-Year Membership Plan</span>
                             <span>→</span>
                         </a>
