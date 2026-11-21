@@ -109,8 +109,7 @@
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <span
-                                class="block font-serif font-extrabold italic text-3xl text-white tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss<sup>™</sup></span>
+                            <img src="{{ asset('/images/BluBliss-logo-2-nonbg.png') }}" alt="BluBliss Logo" class="h-28 w-auto brightness-200 drop-shadow-lg">
                             <span class="block text-sm font-medium tracking-wider text-amber-300 uppercase">HARIDWAR
                                 BLISS FOOD & BEVERAGES PVT. LTD.</span>
                             <span class="block text-xs text-amber-200/70 ">CIN: U11040UT2025PTC019429</span>

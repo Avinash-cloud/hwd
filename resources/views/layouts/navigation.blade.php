@@ -1,43 +1,80 @@
 <header x-data="navigationComponent()" class="sticky top-0 z-40 bg-white shadow-xs w-full">
-    <!-- 1. Top Announcement Bar (99Pandit style) -->
-    <div class="bg-[#881337] text-white text-xs py-2 px-3 sm:px-4 shadow-inner overflow-hidden w-full">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 min-w-0">
-            <!-- Left: Rotating / Static Message -->
-            <div class="flex items-center gap-2 overflow-hidden whitespace-nowrap min-w-0 flex-1">
-                <span class="inline-flex items-center text-amber-400 shrink-0">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z"
-                            clip-rule="evenodd" />
-                    </svg>
+    <!-- 1. Top Announcement Bar with Marquee -->
+    <div class="bg-[#881337] text-white text-xs py-2 shadow-inner overflow-hidden w-full">
+        <div class="flex items-center w-full overflow-hidden">
+            <!-- Marquee Track -->
+            <div class="marquee-track flex whitespace-nowrap">
+                <!-- First copy -->
+                <span class="inline-flex items-center gap-3 px-8">
+                    <span class="inline-flex items-center text-amber-400">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    <span class="font-bold text-amber-200 tracking-wide">हर हर गंगे!</span>
+                    <span class="text-white/40">·</span>
+                    <span class="font-medium text-white/95">Pure Authentic Haridwar Gangajal &amp; Vedic Essentials · Sourced from Sacred Ganga</span>
+                    <span class="text-white/40">·</span>
+                    <a href="{{ route('membership.join') }}" class="text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2">
+                        🌟 5-Year Sacred Membership: Monthly Doorstep Auto-Delivery
+                    </a>
+                    <span class="text-white/40">·</span>
+                    <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
+                    <span class="text-white/40">·</span>
+                    <span class="inline-flex items-center gap-1 text-amber-300 font-bold">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        +91 7042482555
+                    </span>
                 </span>
-                <span class="font-bold text-amber-200 tracking-wide text-xs">हर हर गंगे!</span>
-                <span class="font-medium text-white/95 truncate">
-                    Pure Authentic Haridwar Gangajal & Vedic Essentials · Sourced from Sacred Ganga
-                </span>
-                <span class="hidden md:inline text-white/40 shrink-0">|</span>
-                <a href="{{ route('membership.join') }}"
-                    class="hidden md:inline text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2 shrink-0">
-                    🌟 5-Year Sacred Membership: Monthly Doorstep Auto-Delivery
-                </a>
-            </div>
-
-            <!-- Right: Batch Verification & Support Links -->
-            <div class="hidden lg:flex items-center gap-4 text-[11px] text-white/80 shrink-0">
-                <a href="{{ route('about') }}" class="hover:text-amber-200 transition font-medium">About Us</a>
-                <span>·</span>
-                <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
-                <span>·</span>
-                <span class="inline-flex items-center gap-1 text-amber-300 font-bold">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <span>+91 7042482555</span>
+                <!-- Duplicate copy for seamless loop -->
+                <span class="inline-flex items-center gap-3 px-8">
+                    <span class="inline-flex items-center text-amber-400">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.124 1.903-1.685 3.226C7.302 8.877 6 12.188 6 15a6 6 0 1012 0c0-3.327-1.89-6.44-3.605-8.892a29.13 29.13 0 00-2-2.555z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    <span class="font-bold text-amber-200 tracking-wide">हर हर गंगे!</span>
+                    <span class="text-white/40">·</span>
+                    <span class="font-medium text-white/95">Pure Authentic Haridwar Gangajal &amp; Vedic Essentials · Sourced from Sacred Ganga</span>
+                    <span class="text-white/40">·</span>
+                    <a href="{{ route('membership.join') }}" class="text-amber-200 hover:text-white font-bold underline decoration-amber-400 decoration-1 underline-offset-2">
+                        🌟 5-Year Sacred Membership: Monthly Doorstep Auto-Delivery
+                    </a>
+                    <span class="text-white/40">·</span>
+                    <a href="{{ route('contact') }}" class="hover:text-amber-200 transition">Devotee Support</a>
+                    <span class="text-white/40">·</span>
+                    <span class="inline-flex items-center gap-1 text-amber-300 font-bold">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        +91 7042482555
+                    </span>
                 </span>
             </div>
         </div>
     </div>
+
+    <style>
+        @keyframes marquee-rtl {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee-rtl 30s linear infinite;
+            will-change: transform;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+    </style>
 
     <!-- 2. Main Header Bar (Logo, Predictive Search, Account, Wishlist, Cart) -->
     <div class="relative z-20 border-b border-amber-200/50 bg-white w-full">
@@ -80,7 +117,7 @@
                             </span>
                         </div>
 
-                        <img src="{{ asset('/images/blubliss-logo.png') }}" alt="Logo" class="h-20 lg:h-20">
+                        <img src="{{ asset('/images/BluBliss-logo-2.png') }}" alt="Logo" class="h-20 lg:h-20">
 
                     </a>
                 </div>
