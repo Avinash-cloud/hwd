@@ -30,12 +30,14 @@ class NimbusPostWebhookController extends Controller
         ]);
 
         // Verify webhook secret if configured
-        $secret = $request->header('X-NimbusPost-Signature')
+        $signature = $request->header('x-nimbus-signature')
+            ?? $request->header('X-NimbusPost-Signature')
+            ?? $request->header('X-Hmac-SHA256')
             ?? $request->header('X-Webhook-Token')
             ?? $request->query('token')
             ?? $request->input('webhook_secret');
 
-        if (! $this->nimbusPostService->verifyWebhookSignature($secret)) {
+        if (! $this->nimbusPostService->verifyWebhookSignature($signature, $request->getContent())) {
             Log::warning('NimbusPost webhook signature mismatch.');
 
             return response()->json(['error' => 'Unauthorized signature'], 401);

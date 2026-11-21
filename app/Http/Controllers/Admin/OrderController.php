@@ -144,6 +144,13 @@ class OrderController extends Controller
                 $order->update(['order_status' => 'confirmed']);
             }
 
+            if (! empty($result['pending_booking'])) {
+                return back()->with(
+                    'warning',
+                    "Order #{$order->order_number} successfully registered in your NimbusPost dashboard! Courier allocation requires a wallet balance (currently ₹0). Recharge your NimbusPost wallet to generate the AWB."
+                );
+            }
+
             return back()->with(
                 'success',
                 "Shipment successfully booked with NimbusPost! AWB: {$order->fresh()->awb_number} ({$order->fresh()->courier_name})."

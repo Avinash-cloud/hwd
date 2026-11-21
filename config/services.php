@@ -48,11 +48,13 @@ return [
     ],
 
     'nimbuspost' => [
-        'base_url' => rtrim((string) env('NIMBUSPOST_BASE_URL', 'https://api.nimbuspost.com/v1'), '/'),
-        'api_key' => env('NIMBUSPOST_API_KEY', env('NIMBUSPOST_API_TOKEN')),
+        'base_url' => rtrim((string) env('NIMBUSPOST_BASE_URL', 'https://api-v2.nimbuspost.com'), '/'),
+        'api_key' => env('NIMBUSPOST_API_KEY'),
         'api_secret' => env('NIMBUSPOST_API_SECRET'),
+        'warehouse_id' => env('NIMBUSPOST_WAREHOUSE_ID', '7f8a72aa-e52b-4916-b67b-23e78cba50bc'),
+        'warehouse_code' => env('NIMBUSPOST_WAREHOUSE_CODE', 'WH-001'),
         'warehouse_name' => env('NIMBUSPOST_WAREHOUSE_NAME', 'Haridwar Bliss Warehouse'),
-        'webhook_secret' => env('NIMBUSPOST_WEBHOOK_SECRET'),
+        'webhook_secret' => env('NIMBUSPOST_WEBHOOK_SECRET', 'haridwar_bliss_nimbus_secret_2026'),
         'auto_create_shipment' => env('NIMBUSPOST_AUTO_CREATE_SHIPMENT', true),
         'mock_mode' => env('NIMBUSPOST_MOCK_MODE', false),
     ],
