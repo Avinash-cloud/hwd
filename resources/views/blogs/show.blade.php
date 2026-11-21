@@ -17,13 +17,18 @@
 
         <!-- 2. Article Header -->
         <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center sm:text-left">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-[#D97706] border border-amber-300 mb-4">
-                <span>{{ $blog->category }}</span>
+            <div
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-4 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                <span class="font-serif tracking-wider font-extrabold uppercase">{{ $blog->category }}</span>
             </div>
 
-            <h1 class="font-serif font-extrabold text-3xl sm:text-4xl lg:text-5xl text-slate-900 leading-tight">
-                {{ $blog->title }}
-            </h1>
+            <div class="w-full flex justify-center sm:justify-start mb-2">
+                <h1
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                    {{ $blog->title }}
+                </h1>
+            </div>
 
             @if ($blog->excerpt)
                 <p class="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed font-normal">
@@ -64,7 +69,7 @@
 
         <!-- 4. Article Body Content -->
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed space-y-6">
+            <div class="prose prose-slate max-w-none text-[#FDE68A] text-sm sm:text-base leading-relaxed space-y-6">
                 {!! $blog->content !!}
             </div>
 
@@ -101,11 +106,18 @@
         @if ($recommendedProducts->isNotEmpty())
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-amber-200/50">
                 <div class="text-center max-w-xl mx-auto mb-8">
-                    <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">Vedic Essentials</span>
-                    <h2 class="font-serif font-bold text-2xl sm:text-3xl text-slate-900 mt-1">
-                        Consecrated Offerings from Sacred Haridwar
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-1">
+                    <div
+                        class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                        <span class="font-serif tracking-wider font-extrabold uppercase">Vedic Essentials</span>
+                    </div>
+                    <div class="w-full flex justify-center">
+                        <h2
+                            class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                            Consecrated Offerings from Sacred Haridwar
+                        </h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">
                         Enhance your pooja ritual with certified authentic Ganga water collected at dawn.
                     </p>
                 </div>
@@ -140,12 +152,21 @@
         <!-- 6. Related Articles -->
         @if ($relatedBlogs->isNotEmpty())
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-amber-200/50">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
                     <div>
-                        <span class="text-xs font-bold uppercase tracking-wider text-[#D97706]">Continue Reading</span>
-                        <h2 class="font-serif font-bold text-2xl text-slate-900 mt-0.5">Related Spiritual Wisdom</h2>
+                        <div
+                            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-2 shadow-md">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                            <span class="font-serif tracking-wider font-extrabold uppercase">Continue Reading</span>
+                        </div>
+                        <div>
+                            <h2
+                                class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-5 sm:px-7 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                                Related Spiritual Wisdom
+                            </h2>
+                        </div>
                     </div>
-                    <a href="{{ route('blogs.index') }}" class="text-xs font-bold text-[#D97706] hover:underline">
+                    <a href="{{ route('blogs.index') }}" class="text-xs font-bold text-[#881337] hover:underline">
                         View all articles →
                     </a>
                 </div>
