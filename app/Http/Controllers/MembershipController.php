@@ -274,35 +274,30 @@ class MembershipController extends Controller
         $orderNumber = 'HB-MEM-'.date('Ymd').'-'.strtoupper(Str::random(4));
         $qrToken = 'HB-QR-'.Str::uuid()->toString();
 
+        // Month 1 entire order (bottle + shipping) is free as a membership welcome benefit.
         $productGstRate = (float) ($monthlyGangajal->gst_percentage ?? 18.00);
-        $productTax = GstService::calculate($productPrice, $productGstRate);
-        $shippingTax = GstService::calculate($deliveryCharge, 18.00);
-
-        $totalTaxable = round($productTax['taxable'] + $shippingTax['taxable'], 2);
-        $totalGst = round($productTax['gst'] + $shippingTax['gst'], 2);
-        $halfGst = round($totalGst / 2, 2);
 
         $order = Order::create([
             'order_number' => $orderNumber,
             'user_id' => $user->id,
             'batch_id' => $batch?->id,
             'subtotal' => $productPrice,
-            'total_taxable_amount' => $totalTaxable,
-            'total_gst_amount' => $totalGst,
-            'cgst_amount' => $halfGst,
-            'sgst_amount' => $halfGst,
-            'igst_amount' => $totalGst,
-            'discount_amount' => 0.00,
+            'total_taxable_amount' => 0.00,
+            'total_gst_amount' => 0.00,
+            'cgst_amount' => 0.00,
+            'sgst_amount' => 0.00,
+            'igst_amount' => 0.00,
+            'discount_amount' => $monthlyDebit,
             'shipping_amount' => $deliveryCharge,
-            'total_amount' => $monthlyDebit,
-            'payment_method' => 'razorpay_subscription',
+            'total_amount' => 0.00,
+            'payment_method' => 'free',
             'payment_status' => 'paid',
             'payment_id' => $paymentId,
             'order_status' => 'confirmed',
             'inventory_deducted' => false,
             'qr_token' => $qrToken,
             'shipping_address' => $shippingAddressArray,
-            'customer_notes' => "Month 1 initial sacred Gangajal dispatch (Blu Bliss 5-Year Auto-Debit: Product ₹{$productPrice} + Delivery ₹{$deliveryCharge}).",
+            'customer_notes' => "Month 1 complimentary Gangajal dispatch — entirely free as Blu Bliss 5-Year Membership welcome benefit (Product ₹{$productPrice} + Delivery ₹{$deliveryCharge} waived).",
         ]);
 
         if ($monthlyGangajal) {
@@ -312,12 +307,12 @@ class MembershipController extends Controller
                 'product_name' => $monthlyGangajal->name,
                 'hsn_code' => $monthlyGangajal->hsn_code ?? '22019010',
                 'gst_percentage' => $productGstRate,
-                'taxable_amount' => $productTax['taxable'],
-                'gst_amount' => $productTax['gst'],
+                'taxable_amount' => 0.00,
+                'gst_amount' => 0.00,
                 'unit_price' => $productPrice,
                 'quantity' => 1,
-                'total_price' => $productPrice,
-                'is_free_monthly_bottle' => false,
+                'total_price' => 0.00,
+                'is_free_monthly_bottle' => true,
             ]);
         }
 
@@ -331,7 +326,7 @@ class MembershipController extends Controller
             'details' => [
                 'order_number' => $orderNumber,
                 'invoice_number' => $invoiceNumber,
-                'note' => '5-Year sacred membership activated with automatic monthly recurring auto-debit.',
+                'note' => '5-Year sacred membership activated. First bottle dispatched free as welcome benefit. Auto-debit begins month 2.',
             ],
         ]);
 
