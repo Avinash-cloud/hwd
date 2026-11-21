@@ -44,7 +44,7 @@
     </div>
 
     <!-- Product Details Main Section (Shop.99Pandit Style) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-14 pb-28 lg:pb-14 w-full min-w-0 overflow-hidden bg-[#FFA028]"
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-14 pb-28 lg:pb-14 w-full min-w-0 overflow-hidden "
          x-data="{
              currentImage: '{{ addslashes($imgUrl) }}',
              selectedThumb: 0,
