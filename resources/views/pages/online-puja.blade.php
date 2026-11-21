@@ -1340,23 +1340,69 @@
                             </div>
 
                             <!-- 4. Shipping Address for Consecrated Prasad Delivery -->
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">
-                                    <span x-show="lang === 'en'">Complete Prasad Postal Delivery Address (With Pincode)
-                                        <span class="text-red-600">*</span></span>
-                                    <span x-show="lang === 'hi'" x-cloak>प्रसाद डिलीवरी का पूरा पता (Complete Postal
-                                        Address with Pincode) <span class="text-red-600">*</span></span>
+                            <div class="space-y-4">
+                                <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider font-mono">
+                                    <span x-show="lang === 'en'">Prasad Delivery Address <span class="text-red-600">*</span></span>
+                                    <span x-show="lang === 'hi'" x-cloak>प्रसाद डिलीवरी का पता <span class="text-red-600">*</span></span>
                                 </label>
-                                <textarea name="shipping_address" rows="2" required
-                                    :placeholder="lang === 'en' ? 'Flat/House No., Street/Society, Landmark, City, State, and 6-digit Pincode' : 'मकान संख्या, गली/सोसायटी, लैंडमार्क, शहर, राज्य एवं 6-अंकीय पिनकोड'"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">{{ old('shipping_address') }}</textarea>
-                                <p x-show="lang === 'en'" class="text-[10px] text-slate-500 mt-0.5">Blessed 500ml Blu
-                                    Bliss Gangajal and sacred Mangal Prasad box will be shipped here.</p>
-                                <p x-show="lang === 'hi'" x-cloak
-                                    class="text-[10px] text-slate-500 mt-0.5 leading-[1.6]">यहाँ Blu Bliss 500ml गंगाजल
-                                    और मंगल प्रसाद बॉक्स सुरक्षित कूरियर किया जाएगा।</p>
-                                @error('shipping_address')
-                                <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+
+                                <!-- Address Line -->
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                        <span x-show="lang === 'en'">House / Flat No., Street, Landmark <span class="text-red-600">*</span></span>
+                                        <span x-show="lang === 'hi'" x-cloak>मकान संख्या, गली/सोसायटी, लैंडमार्क <span class="text-red-600">*</span></span>
+                                    </label>
+                                    <input type="text" name="address_line" value="{{ old('address_line') }}" required maxlength="255"
+                                        :placeholder="lang === 'en' ? 'e.g. B-12, Shiv Apartments, Near Metro Station' : 'उदा. बी-12, शिव अपार्टमेंट, मेट्रो स्टेशन के पास'"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                    @error('address_line')
+                                    <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <!-- City -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                            <span x-show="lang === 'en'">City <span class="text-red-600">*</span></span>
+                                            <span x-show="lang === 'hi'" x-cloak>शहर <span class="text-red-600">*</span></span>
+                                        </label>
+                                        <input type="text" name="city" value="{{ old('city') }}" required maxlength="100"
+                                            :placeholder="lang === 'en' ? 'e.g. Delhi' : 'उदा. दिल्ली'"
+                                            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                        @error('city')
+                                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <!-- State -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                            <span x-show="lang === 'en'">State <span class="text-red-600">*</span></span>
+                                            <span x-show="lang === 'hi'" x-cloak>राज्य <span class="text-red-600">*</span></span>
+                                        </label>
+                                        <input type="text" name="state" value="{{ old('state') }}" required maxlength="100"
+                                            :placeholder="lang === 'en' ? 'e.g. Delhi' : 'उदा. दिल्ली'"
+                                            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                        @error('state')
+                                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <!-- Pincode -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">
+                                            <span x-show="lang === 'en'">Pincode <span class="text-red-600">*</span></span>
+                                            <span x-show="lang === 'hi'" x-cloak>पिनकोड <span class="text-red-600">*</span></span>
+                                        </label>
+                                        <input type="text" name="pincode" value="{{ old('pincode') }}" required
+                                            inputmode="numeric" pattern="[1-9][0-9]{5}" maxlength="6" placeholder="110034"
+                                            @input="$el.value = $el.value.replace(/\D/g, '')"
+                                            class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-sm font-mono focus:outline-none focus:border-[#D97706] focus:ring-1 focus:ring-[#D97706]">
+                                        @error('pincode')
+                                        <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+
+                                <p x-show="lang === 'en'" class="text-[10px] text-slate-500">Blessed 500ml Blu Bliss Gangajal and sacred Mangal Prasad box will be shipped here.</p>
+                                <p x-show="lang === 'hi'" x-cloak class="text-[10px] text-slate-500 leading-[1.6]">यहाँ Blu Bliss 500ml गंगाजल और मंगल प्रसाद बॉक्स सुरक्षित कूरियर किया जाएगा।</p>
                             </div>
 
                             <!-- 5. Special Notes -->

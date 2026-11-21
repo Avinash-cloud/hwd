@@ -104,7 +104,10 @@ class PageController extends Controller
             'phone' => 'required|string|max:25',
             'email' => 'nullable|email|max:255',
             'occasion' => 'nullable|string|max:255',
-            'shipping_address' => 'required|string|max:500',
+            'address_line' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:100'],
+            'state' => ['required', 'string', 'max:100'],
+            'pincode' => ['required', 'digits:6'],
             'special_instructions' => 'nullable|string|max:1000',
             'terms_agreed' => 'accepted',
             'payment_method' => 'nullable|string',
@@ -112,6 +115,8 @@ class PageController extends Controller
             'razorpay_order_id' => 'nullable|string',
             'razorpay_signature' => 'nullable|string',
         ]);
+
+        $validated['shipping_address'] = "{$validated['address_line']}, {$validated['city']}, {$validated['state']} - {$validated['pincode']}";
 
         $packageName = $validated['package'];
         $amount = (str_contains($packageName, '11,000') || str_contains($packageName, '11000') || str_contains($packageName, 'पैकेज 2'))
