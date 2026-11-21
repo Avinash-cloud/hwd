@@ -151,8 +151,8 @@
         <section
             class="relative bg-gradient-to-b from-[#25050A] via-[#380B12] to-[#25050A] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-300/30">
             <!-- Authentic Haridwar Ganga Ghat Background Image -->
-            <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}" alt="Sacred Haridwar Ganga Ghats"
-                class="absolute inset-0 w-full h-full object-cover opacity-25 object-center">
+            <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}" alt="Sacred Haridwar Ganga Ghats"
+                class="absolute inset-0 w-full h-full object-cover opacity-25 object-center"> -->
             <!-- <div
                 class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-[#25050A]/75 to-transparent pointer-events-none">
             </div> -->

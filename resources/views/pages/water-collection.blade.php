@@ -149,9 +149,9 @@
         <!-- 1. Sacred Hero Banner -->
         <section class="relative bg-gradient-to-b from-[#25050A] via-[#3B0813] to-[#25050A] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-400/30">
             <!-- Background Image overlay -->
-            <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+            <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
                  alt="Haridwar Kumbh Ganga Ghats"
-                 class="absolute inset-0 w-full h-full object-cover opacity-20 object-center mix-blend-luminosity">
+                 class="absolute inset-0 w-full h-full object-cover opacity-20 object-center mix-blend-luminosity"> -->
 
             <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
                 <!-- Auspicious Tag / Sloka -->

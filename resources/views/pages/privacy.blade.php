@@ -1,9 +1,9 @@
 <x-app-layout>
     <!-- Header Banner -->
     <div class="relative bg-gradient-to-b from-[#25050A] via-[#380B12] to-[#25050A] text-white py-12 sm:py-16 border-b border-amber-300/30 overflow-hidden">
-        <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+        <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
              alt="Haridwar Ganga Ghat"
-             class="absolute inset-0 w-full h-full object-cover opacity-20 object-center">
+             class="absolute inset-0 w-full h-full object-cover opacity-20 object-center"> -->
         <div class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-transparent to-transparent"></div>
 
         <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">

@@ -22,9 +22,9 @@
             <!-- Col 1 & 2: Membership Status Card -->
             <div
                 class="lg:col-span-2 bg-[#881337] rounded-3xl p-8 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
-                <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
+                <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
                      alt="Haridwar Ganga Temples"
-                     class="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-overlay pointer-events-none">
+                     class="absolute inset-0 w-full h-full object-cover opacity-15 mix-blend-overlay pointer-events-none"> -->
                 <div class="relative z-10 space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="text-xs uppercase font-bold tracking-widest text-amber-200 font-mono">Blu Bliss Sanctity Pass</span>
