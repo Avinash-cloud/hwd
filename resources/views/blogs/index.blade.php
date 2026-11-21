@@ -2,12 +2,20 @@
     <!-- 1. Hero Header -->
     <section class="relative bg-gradient-to-b from-amber-900/10 via-amber-500/5 to-transparent pt-12 pb-10 border-b border-amber-200/40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-amber-100 text-amber-900 border border-amber-300 mb-3">
-                <span>Vedic Wisdom & Darshan</span>
-            </span>
-            <h1 class="font-serif font-extrabold text-3xl sm:text-5xl text-slate-900 tracking-tight">
-                Spiritual Knowledge & Ganga Lore
-            </h1>
+            <!-- Auspicious Tag -->
+            <div
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                <span class="font-serif tracking-wider font-extrabold uppercase">Vedic Wisdom &amp; Darshan</span>
+            </div>
+
+            <!-- Page Title in Signature Maroon Card with Light-Yellow Gold Text -->
+            <div class="w-full flex justify-center mb-1">
+                <h1
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                    Spiritual Knowledge &amp; Ganga Lore
+                </h1>
+            </div>
             <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
                 Discover the sacred significance of holy Maa Ganga in Haridwar, ancient Ayurvedic rituals, and authentic Vedic wisdom passed down through generations.
             </p>
