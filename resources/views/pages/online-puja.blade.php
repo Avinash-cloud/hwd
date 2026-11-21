@@ -18,113 +18,97 @@
     </style>
 
     <!-- Page Wrapper with Single-Page Alpine Language & Modal State (Default: 'en') -->
-    <div x-data="{
-        lang: (typeof window !== 'undefined' && localStorage.getItem('puja_lang')) ? localStorage.getItem('puja_lang') : 'en',
-        setLang(l) {
-            this.lang = l;
-            try { localStorage.setItem('puja_lang', l); } catch(e) {}
-        },
-        isBookingModalOpen: {{ ($errors->any() || session('booking_success')) ? 'true' : 'false' }},
-        selectedPackage: '{{ old('package', 'पैकेज 1: मंगल उत्सव एवं आयुष्मान संकल्प पूजा (₹5,100/-)') }}',
-        pujaPaymentMethod: '{{ old('payment_method', 'razorpay') }}',
-        isPujaProcessing: false,
-        pujaPaymentId: '',
-        pujaOrderId: '',
-        pujaSignature: '',
+    <script>
+        window.pujaPage = function() {
+            return {
+                lang: (localStorage.getItem('puja_lang') || 'en'),
+                isBookingModalOpen: {{ ($errors->any() || session('booking_success')) ? 'true' : 'false' }},
+                selectedPackage: @js(old('package', 'पैकेज 1: मंगल उत्सव एवं आयुष्मान संकल्प पूजा (₹5,100/-)')),
+                pujaPaymentMethod: @js(old('payment_method', 'razorpay')),
+                isPujaProcessing: false,
+                pujaPaymentId: '',
+                pujaOrderId: '',
+                pujaSignature: '',
 
-        get currentPujaAmount() {
-            return (this.selectedPackage.includes('11,000') || this.selectedPackage.includes('11000') || this.selectedPackage.includes('पैकेज 2')) ? 11000 : 5100;
-        },
-
-        openBookingModal(pkgName = null) {
-            if (pkgName) {
-                this.selectedPackage = pkgName;
-            }
-            this.isBookingModalOpen = true;
-            document.body.classList.add('overflow-hidden');
-        },
-        closeBookingModal() {
-            this.isBookingModalOpen = false;
-            document.body.classList.remove('overflow-hidden');
-        },
-
-        initiatePujaPayment() {
-            const form = document.getElementById('puja-booking-form');
-            if (!form) return;
-
-            if (!form.reportValidity()) {
-                return;
-            }
-
-            this.isPujaProcessing = true;
-
-            const devoteeName = form.querySelector('[name=devotee_name]')?.value || '';
-            const phone = form.querySelector('[name=phone]')?.value || '';
-            const email = form.querySelector('[name=email]')?.value || '';
-
-            fetch('{{ route('online-puja.razorpay.order') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                setLang(l) {
+                    this.lang = l;
+                    try { localStorage.setItem('puja_lang', l); } catch(e) {}
                 },
-                body: JSON.stringify({
-                    package: this.selectedPackage,
-                    devotee_name: devoteeName,
-                    phone: phone,
-                    email: email
-                })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('Order creation failed');
-                return res.json();
-            })
-            .then(data => {
-                if (data.is_mock || typeof Razorpay === 'undefined') {
-                    this.pujaPaymentId = 'pay_PUJA_' + Math.random().toString(36).substring(2, 10).toUpperCase();
-                    this.pujaOrderId = data.order_id || 'order_mock';
-                    this.pujaSignature = 'mock_signature';
-                    this.$nextTick(() => {
-                        form.submit();
-                    });
-                    return;
-                }
 
-                const options = {
-                    key: data.key,
-                    amount: data.amount,
-                    currency: data.currency || 'INR',
-                    name: data.name || 'Haridwar Bliss - Vedic Puja',
-                    description: data.description || this.selectedPackage,
-                    order_id: data.order_id,
-                    prefill: data.prefill,
-                    theme: { color: '#881337' },
-                    handler: (response) => {
-                        this.pujaPaymentId = response.razorpay_payment_id;
-                        this.pujaOrderId = response.razorpay_order_id;
-                        this.pujaSignature = response.razorpay_signature;
-                        this.$nextTick(() => {
-                            form.submit();
-                        });
-                    },
-                    modal: {
-                        ondismiss: () => {
-                            this.isPujaProcessing = false;
+                currentPujaAmount() {
+                    return (this.selectedPackage.includes('11,000') || this.selectedPackage.includes('11000') || this.selectedPackage.includes('पैकेज 2')) ? 11000 : 5100;
+                },
+
+                openBookingModal(pkgName) {
+                    if (pkgName) this.selectedPackage = pkgName;
+                    this.isBookingModalOpen = true;
+                    document.body.classList.add('overflow-hidden');
+                },
+
+                closeBookingModal() {
+                    this.isBookingModalOpen = false;
+                    document.body.classList.remove('overflow-hidden');
+                },
+
+                initiatePujaPayment() {
+                    const form = document.getElementById('puja-booking-form');
+                    if (!form || !form.reportValidity()) return;
+
+                    this.isPujaProcessing = true;
+
+                    const devoteeName = form.querySelector('[name=devotee_name]')?.value || '';
+                    const phone = form.querySelector('[name=phone]')?.value || '';
+                    const email = form.querySelector('[name=email]')?.value || '';
+
+                    fetch('{{ route('online-puja.razorpay.order') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ package: this.selectedPackage, devotee_name: devoteeName, phone, email })
+                    })
+                    .then(res => { if (!res.ok) throw new Error('Order creation failed'); return res.json(); })
+                    .then(data => {
+                        if (data.is_mock || typeof Razorpay === 'undefined') {
+                            this.pujaPaymentId = 'pay_PUJA_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                            this.pujaOrderId = data.order_id || 'order_mock';
+                            this.pujaSignature = 'mock_signature';
+                            this.$nextTick(() => form.submit());
+                            return;
                         }
-                    }
-                };
+                        const rzp = new Razorpay({
+                            key: data.key,
+                            amount: data.amount,
+                            currency: data.currency || 'INR',
+                            name: data.name || 'Haridwar Bliss - Vedic Puja',
+                            description: data.description || this.selectedPackage,
+                            order_id: data.order_id,
+                            prefill: data.prefill,
+                            theme: { color: '#881337' },
+                            handler: (response) => {
+                                this.pujaPaymentId = response.razorpay_payment_id;
+                                this.pujaOrderId = response.razorpay_order_id;
+                                this.pujaSignature = response.razorpay_signature;
+                                this.$nextTick(() => form.submit());
+                            },
+                            modal: { ondismiss: () => { this.isPujaProcessing = false; } }
+                        });
+                        rzp.open();
+                    })
+                    .catch(err => {
+                        console.error('Puja Razorpay Error:', err);
+                        this.isPujaProcessing = false;
+                        alert('Payment gateway failed. Please try again.');
+                    });
+                }
+            };
+        };
+    </script>
 
-                const rzp = new Razorpay(options);
-                rzp.open();
-            })
-            .catch(err => {
-                console.error('Puja Razorpay Error:', err);
-                this.isPujaProcessing = false;
-                alert('Razorpay payment gateway failed to initialize. Please try again.');
-            });
-        }
-    }" @open-puja-booking.window="openBookingModal($event.detail?.package)"
-        @keydown.escape.window="if(isBookingModalOpen) closeBookingModal()">
+    <div x-data="pujaPage()"
+        x-on:open-puja-booking.window="openBookingModal($event.detail?.package)"
+        x-on:keydown.escape.window="if(isBookingModalOpen) closeBookingModal()">
 
         <!-- Floating Quick Language Switcher (Only for this page, sticky at bottom-left) -->
         <div
@@ -211,9 +195,6 @@
                             हरिद्वार के पावन गंगा घाटों से सीधे आपके नाम और गोत्र से वैदिक आचार्यों द्वारा संकल्पित लाइव पूजन, 15–20 मिनट की व्यक्तिगत लाइव स्ट्रीमिंग, तथा घर पर अभिमंत्रित प्रसाद व 500ml गंगाजल की पावन डिलीवरी।
                         </p>
                     </div>
-                </div>
-            </div>
-        </section>
 
                 <!-- 4 Trust Markers Grid -->
                 <div class="pt-2  grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left hidden">
@@ -297,7 +278,8 @@
                     </button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
         <!-- Main Body Container -->
         <div class="bg-[#FFFDF7] text-slate-800">
@@ -1455,8 +1437,8 @@
                                     class="w-full sm:w-auto px-8 py-3.5 text-white font-bold text-sm rounded-xl transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2">
                                     <template x-if="!isPujaProcessing">
                                         <span>
-                                            <span x-show="lang === 'en'">Pay ₹<span x-text="currentPujaAmount.toLocaleString()"></span> via Razorpay &amp; Book →</span>
-                                            <span x-show="lang === 'hi'" x-cloak>₹<span x-text="currentPujaAmount.toLocaleString()"></span> रेज़रपे से भुगतान कर संकल्प बुक करें →</span>
+                                            <span x-show="lang === 'en'">Pay ₹<span x-text="currentPujaAmount().toLocaleString()"></span> via Razorpay &amp; Book →</span>
+                                            <span x-show="lang === 'hi'" x-cloak>₹<span x-text="currentPujaAmount().toLocaleString()"></span> रेज़रपे से भुगतान कर संकल्प बुक करें →</span>
                                         </span>
                                     </template>
                                     <template x-if="isPujaProcessing">
