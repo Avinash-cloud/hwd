@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Breadcrumb & Header Banner -->
     <div class="relative bg-stone-900 text-white overflow-hidden py-8 sm:py-12 border-b border-amber-200/60">
-        <div class="absolute inset-0 bg-gradient-to-r from-orange-950 via-orange-900/90 to-stone-950/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-orange-950 via-orange-900/90 to-orange-950/80"></div>
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumbs -->
