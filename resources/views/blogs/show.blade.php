@@ -1,5 +1,5 @@
-<x-app-layout>
-    <article class="py-10">
+<x-app-layout> 
+    <article class="py-10 bg-[#FDE68A]">
         <!-- 1. Breadcrumbs -->
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
             <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap pb-2">
@@ -11,27 +11,27 @@
                     {{ $blog->category }}
                 </a>
                 <span>/</span>
-                <span class="text-slate-800 font-bold truncate max-w-xs">{{ $blog->title }}</span>
+                <span class="text-[#3B2314] font-bold truncate max-w-xs">{{ $blog->title }}</span>
             </nav>
         </div>
 
         <!-- 2. Article Header -->
         <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center sm:text-left">
             <div
-                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-4 shadow-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-4 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span class="font-serif tracking-wider font-extrabold uppercase">{{ $blog->category }}</span>
             </div>
 
             <div class="w-full flex justify-center sm:justify-start mb-2">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     {{ $blog->title }}
                 </h1>
             </div>
 
             @if ($blog->excerpt)
-                <p class="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed font-normal">
+                <p class="text-base sm:text-lg text-[#3B2314] font-medium mt-4 leading-relaxed">
                     {{ $blog->excerpt }}
                 </p>
             @endif
@@ -43,8 +43,8 @@
                         {{ strtoupper(substr($blog->author_name, 0, 1)) }}
                     </div>
                     <div>
-                        <strong class="block text-slate-900 font-semibold text-sm">{{ $blog->author_name }}</strong>
-                        <span class="text-slate-400">Haridwar Vedic Scholar</span>
+                        <strong class="block text-[#3B2314] font-semibold text-sm">{{ $blog->author_name }}</strong>
+                        <span class="text-slate-500">Haridwar Vedic Scholar</span>
                     </div>
                 </div>
 
@@ -67,9 +67,9 @@
             </div>
         </div>
 
-        <!-- 4. Article Body Content -->
+        <!-- 4. Article Body Content (Rich Dark Brand Color with Maximum Contrast) -->
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="prose prose-slate max-w-none text-[#FDE68A] text-sm sm:text-base leading-relaxed space-y-6">
+            <div class="prose prose-stone max-w-none text-[#5e351b] text-sm sm:text-base leading-relaxed space-y-6 prose-headings:text-[#881337] prose-headings:font-serif prose-headings:font-bold prose-strong:text-[#3B2314] prose-a:text-[#F87318] prose-a:font-bold">
                 {!! $blog->content !!}
             </div>
 
@@ -107,17 +107,17 @@
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-12 border-t border-amber-200/50">
                 <div class="text-center max-w-xl mx-auto mb-8">
                     <div
-                        class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                        class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-3 shadow-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                         <span class="font-serif tracking-wider font-extrabold uppercase">Vedic Essentials</span>
                     </div>
                     <div class="w-full flex justify-center">
                         <h2
-                            class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                            class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                             Consecrated Offerings from Sacred Haridwar
                         </h2>
                     </div>
-                    <p class="text-xs text-slate-500 mt-2">
+                    <p class="text-xs text-slate-600 mt-2">
                         Enhance your pooja ritual with certified authentic Ganga water collected at dawn.
                     </p>
                 </div>
@@ -129,12 +129,12 @@
                                 <div class="h-36 rounded-xl overflow-hidden bg-slate-50 mb-3">
                                     <img src="{{ $prod->image_url }}" alt="{{ $prod->name }}" class="w-full h-full object-cover">
                                 </div>
-                                <h3 class="font-bold text-slate-900 text-xs line-clamp-1 hover:text-[#D97706]">
+                                <h3 class="font-bold text-[#3B2314] text-xs line-clamp-1 hover:text-[#D97706]">
                                     {{ $prod->name }}
                                 </h3>
                                 <div class="mt-1 flex items-center justify-between">
                                     @if ($prod->isInStock())
-                                        <span class="font-bold font-mono text-xs text-slate-900">₹{{ number_format($prod->price, 0) }}</span>
+                                        <span class="font-bold font-mono text-xs text-[#3B2314]">₹{{ number_format($prod->price, 0) }}</span>
                                         @if ($prod->is_gangajal)
                                             <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-1.5 py-0.5 rounded">Free for Members</span>
                                         @endif
@@ -155,13 +155,13 @@
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
                     <div>
                         <div
-                            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-2 shadow-md">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-2 shadow-md">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                             <span class="font-serif tracking-wider font-extrabold uppercase">Continue Reading</span>
                         </div>
                         <div>
                             <h2
-                                class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-5 sm:px-7 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                                class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-5 sm:px-7 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                                 Related Spiritual Wisdom
                             </h2>
                         </div>
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="p-5">
                                     <span class="text-[10px] font-bold uppercase text-[#D97706] block mb-1">{{ $rel->category }}</span>
-                                    <h3 class="font-serif font-bold text-base text-slate-900 group-hover:text-[#881337] transition line-clamp-2">
+                                    <h3 class="font-serif font-bold text-base text-[#3B2314] group-hover:text-[#881337] transition line-clamp-2">
                                         {{ $rel->title }}
                                     </h3>
                                     <p class="text-xs text-slate-500 mt-1 line-clamp-2">{{ $rel->excerpt }}</p>

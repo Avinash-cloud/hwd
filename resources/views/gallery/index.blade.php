@@ -25,15 +25,15 @@
         <section class="relative bg-gradient-to-b from-amber-900/10 via-amber-500/5 to-transparent pt-12 pb-10 border-b border-amber-200/40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div
-                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-3 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span class="font-serif tracking-wider font-extrabold uppercase">Sacred Darshan &amp; Provenance</span>
             </div>
 
-            <!-- Page Title in Signature Maroon Card with Light-Yellow Gold Text -->
+            <!-- Page Title in Signature Maroon Card with High Contrast Pure White Text -->
             <div class="w-full flex justify-center mb-1">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     Sacred Haridwar Darshan Gallery
                 </h1>
             </div>

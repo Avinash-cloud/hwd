@@ -4,15 +4,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <!-- Auspicious Tag -->
             <div
-                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-3 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span class="font-serif tracking-wider font-extrabold uppercase">Vedic Wisdom &amp; Darshan</span>
             </div>
 
-            <!-- Page Title in Signature Maroon Card with Light-Yellow Gold Text -->
+            <!-- Page Title in Signature Maroon Card with High Contrast Pure White Text -->
             <div class="w-full flex justify-center mb-1">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     Spiritual Knowledge &amp; Ganga Lore
                 </h1>
             </div>
@@ -27,7 +27,7 @@
                            name="search"
                            value="{{ request('search') }}"
                            placeholder="Search articles, rituals, scriptures..."
-                           class="w-full pl-10 pr-24 py-2.5 bg-white border border-amber-300 rounded-full text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs" />
+                           class="w-full pl-10 pr-24 py-2.5 bg-white border border-amber-300 rounded-full text-xs sm:text-sm text-[#3B2314] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-xs" />
                     <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
@@ -59,7 +59,7 @@
         @if (request('search'))
             <div class="mb-8 flex items-center justify-between pb-4 border-b border-slate-200">
                 <h2 class="text-sm font-semibold text-slate-700">
-                    Search results for: <span class="font-bold text-slate-900">"{{ request('search') }}"</span> ({{ $blogs->total() }})
+                    Search results for: <span class="font-bold text-[#3B2314]">"{{ request('search') }}"</span> ({{ $blogs->total() }})
                 </h2>
                 <a href="{{ route('blogs.index') }}" class="text-xs text-[#D97706] hover:underline font-bold">
                     Clear Search ✕
@@ -90,7 +90,7 @@
                                 <span>·</span>
                                 <span>{{ $featuredBlog->published_at ? $featuredBlog->published_at->format('M d, Y') : '' }}</span>
                             </div>
-                            <h2 class="font-serif font-bold text-2xl sm:text-3xl text-slate-900 leading-tight">
+                            <h2 class="font-serif font-bold text-2xl sm:text-3xl text-[#3B2314] leading-tight">
                                 <a href="{{ route('blogs.show', $featuredBlog->slug) }}" class="hover:text-[#881337] transition">
                                     {{ $featuredBlog->title }}
                                 </a>
@@ -105,7 +105,7 @@
                                 <div class="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-[#D97706]">
                                     {{ strtoupper(substr($featuredBlog->author_name, 0, 1)) }}
                                 </div>
-                                <span class="text-xs font-semibold text-slate-800">{{ $featuredBlog->author_name }}</span>
+                                <span class="text-xs font-semibold text-[#3B2314]">{{ $featuredBlog->author_name }}</span>
                             </div>
                             <a href="{{ route('blogs.show', $featuredBlog->slug) }}"
                                class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#881337] hover:bg-[#D97706] text-white text-xs font-bold rounded-xl transition shadow-xs">
@@ -122,7 +122,7 @@
         @if ($blogs->isEmpty())
             <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-amber-300 p-8">
                 <span class="text-4xl block mb-2">📜</span>
-                <h3 class="font-serif font-bold text-lg text-slate-800">No articles found</h3>
+                <h3 class="font-serif font-bold text-lg text-[#3B2314]">No articles found</h3>
                 <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
                     Try searching for another keyword or clear active category filters.
                 </p>
@@ -155,7 +155,7 @@
                                     <span>{{ $blog->published_at ? $blog->published_at->format('M d, Y') : '' }}</span>
                                 </div>
 
-                                <h3 class="font-serif font-bold text-lg text-slate-900 group-hover:text-[#881337] transition leading-snug line-clamp-2">
+                                <h3 class="font-serif font-bold text-lg text-[#3B2314] group-hover:text-[#881337] transition leading-snug line-clamp-2">
                                     <a href="{{ route('blogs.show', $blog->slug) }}">
                                         {{ $blog->title }}
                                     </a>
