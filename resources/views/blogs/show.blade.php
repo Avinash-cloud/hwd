@@ -1,5 +1,5 @@
 <x-app-layout> 
-    <article class="py-10 bg-[#FDE68A]">
+    <article class="py-10 bg-white">
         <!-- 1. Breadcrumbs -->
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
             <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap pb-2">
@@ -18,14 +18,14 @@
         <!-- 2. Article Header -->
         <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center sm:text-left">
             <div
-                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-4 shadow-md">
+                class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-4 shadow-md">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span class="font-serif tracking-wider font-extrabold uppercase">{{ $blog->category }}</span>
             </div>
 
             <div class="w-full flex justify-center sm:justify-start mb-2">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
+                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     {{ $blog->title }}
                 </h1>
             </div>
@@ -155,13 +155,13 @@
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
                     <div>
                         <div
-                            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-white border border-amber-300/40 mb-2 shadow-md">
+                            class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-2 shadow-md">
                             <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                             <span class="font-serif tracking-wider font-extrabold uppercase">Continue Reading</span>
                         </div>
                         <div>
                             <h2
-                                class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-white bg-[#881337] border border-amber-300/40 px-5 sm:px-7 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
+                                class="inline-block text-lg sm:text-2xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-5 sm:px-7 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                                 Related Spiritual Wisdom
                             </h2>
                         </div>

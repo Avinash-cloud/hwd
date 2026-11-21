@@ -1,44 +1,44 @@
 <x-app-layout>
-    <!-- Breadcrumb & Header Banner -->
-    <div class="relative bg-stone-900 text-white overflow-hidden py-8 sm:py-12 border-b border-amber-200/60">
-        <div class="absolute inset-0 bg-gradient-to-r from-orange-950 via-orange-900/90 to-orange-950/80"></div>
+    <!-- Breadcrumb & Header Banner (Signature Maroon Card on Solid Light Orange Band) -->
+    <x-page-hero bandBg="bg-[#FFA028]">
+        <x-slot:breadcrumbs>
+            <a href="{{ route('home') }}" class="hover:text-white transition">Home</a>
+            <span class="text-amber-300/50">/</span>
+            <a href="{{ route('products.index') }}" class="hover:text-white transition">Catalog</a>
+            @if (request('category'))
+                <span class="text-amber-300/50">/</span>
+                <span class="font-bold text-white capitalize">{{ str_replace('-', ' ', request('category')) }}</span>
+            @endif
+        </x-slot:breadcrumbs>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Breadcrumbs -->
-            <nav class="flex items-center gap-2 text-xs text-slate-300 mb-2">
-                <a href="{{ route('home') }}" class="hover:text-amber-300 transition">Home</a>
-                <span>/</span>
-                <a href="{{ route('products.index') }}" class="hover:text-amber-300 transition">Catalog</a>
-                @if (request('category'))
-                    <span>/</span>
-                    <span class="font-bold text-white capitalize">{{ str_replace('-', ' ', request('category')) }}</span>
-                @endif
-            </nav>
+        <x-slot:badge>
+            Sacred Offerings Collection
+        </x-slot:badge>
 
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight leading-snug">
-                        @if (request('category'))
-                            {{ ucwords(str_replace('-', ' ', request('category'))) }}
-                        @elseif (request('type') === 'gangajal')
-                            Sacred Haridwar Gangajal Editions
-                        @elseif (request('search'))
-                            Search Results for "{{ request('search') }}"
-                        @else
-                            Sacred Spiritual Catalog & Puja Samagri
-                        @endif
-                    </h1>
-                    <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                        Explore authentic Haridwar Gangajal, cow dung hawan cups, pure cotton battis, and sacred temple utensils.
-                    </p>
-                </div>
+        <x-slot:title>
+            @if (request('category'))
+                {{ ucwords(str_replace('-', ' ', request('category'))) }}
+            @elseif (request('type') === 'gangajal')
+                Sacred Haridwar Gangajal Editions
+            @elseif (request('search'))
+                Search Results for "{{ request('search') }}"
+            @else
+                Sacred Spiritual Catalog & Puja Samagri
+            @endif
+        </x-slot:title>
 
-                <div class="text-xs text-amber-300 font-semibold shrink-0">
-                    Showing <span class="font-bold text-white">{{ $products->total() }}</span> sacred offerings
-                </div>
+        <x-slot:subtitle>
+            Explore authentic Haridwar Gangajal, cow dung hawan cups, pure cotton battis, and sacred temple utensils.
+        </x-slot:subtitle>
+
+        <x-slot:extra>
+            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-amber-400/20 text-[#FDE68A] border border-amber-300/40">
+                <span>Showing</span>
+                <span class="font-bold text-white">{{ $products->total() }}</span>
+                <span>sacred offerings</span>
             </div>
-        </div>
-    </div>
+        </x-slot:extra>
+    </x-page-hero>
 
     <!-- Main Content Area with Sidebar Filters + Product Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -140,16 +140,11 @@
                     </div>
                 </div>
 
-                <!-- Sourcing Trust Card with Haridwar Photo -->
-                <div class="relative rounded-2xl overflow-hidden border border-amber-200/80 shadow-xs group">
-                    <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-                         alt="Sacred Haridwar Ganga Ghat"
-                         class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-transparent p-4 flex flex-col justify-end text-white">
-                        <span class="text-[10px] uppercase font-bold text-amber-300 font-mono">100% Genuine Origin</span>
-                        <h4 class="font-serif font-bold text-xs sm:text-sm text-white">Sacred Haridwar Ghats</h4>
-                        <p class="text-[11px] text-slate-300 mt-0.5">Sourced at Brahma Muhurta morning Aarti in Haridwar</p>
-                    </div>
+                <!-- Sourcing Trust Card (Solid Colors Only) -->
+                <div class="rounded-2xl border border-amber-300/60 p-5 bg-[#881337] text-white shadow-md space-y-2">
+                    <span class="text-[10px] uppercase font-bold text-[#FDE68A] font-mono px-2.5 py-0.5 rounded-full bg-amber-400/20 border border-amber-300/40 inline-block">100% Genuine Origin</span>
+                    <h4 class="font-serif font-bold text-sm text-[#FDE68A] italic">Sacred Haridwar Ghats</h4>
+                    <p class="text-[11px] text-white/90 leading-relaxed">Sourced at Brahma Muhurta morning Aarti directly from the holy banks of Haridwar.</p>
                 </div>
             </aside>
 

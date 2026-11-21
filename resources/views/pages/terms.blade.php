@@ -1,26 +1,15 @@
 <x-app-layout>
-    <!-- Header Banner -->
-    <div class="relative bg-gradient-to-b from-[#25050A] via-[#380B12] to-[#25050A] text-white py-12 sm:py-16 border-b border-amber-300/30 overflow-hidden">
-        <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-             alt="Haridwar Ganga Ghat"
-             class="absolute inset-0 w-full h-full object-cover opacity-20 object-center"> -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-transparent to-transparent"></div>
-
-        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/20 text-amber-200 border border-[#D97706]/40 backdrop-blur-xs font-mono">
-                Legal & Service Policy Documentation
-            </span>
-            <h1 class="text-3xl sm:text-5xl font-serif font-extrabold text-white tracking-tight leading-snug drop-shadow-md">
-                Terms & Conditions
-            </h1>
-            <p class="text-xs sm:text-sm text-amber-100/90 max-w-2xl mx-auto">
-                M/s HARIDWAR BLISS FOOD &amp; BEVERAGES PVT. LTD. · Ganga Jal Seva Commitment Plans &amp; Website Use
-            </p>
-            <div class="pt-2 text-[11px] text-amber-200/80 font-mono">
+    <!-- Header Banner (Signature Maroon Hero Card on Solid Orange Band) -->
+    <x-page-hero bandBg="bg-[#FFA028]"
+                 badge="Legal & Service Policy Documentation"
+                 title="Terms & Conditions"
+                 subtitle="M/s HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD. · Ganga Jal Seva Commitment Plans & Website Use">
+        <x-slot:extra>
+            <span class="inline-block text-[11px] text-amber-200/90 font-mono px-3 py-1 rounded-full bg-[#6B0E29] border border-amber-300/30">
                 Effective Date: 17 November 2026
-            </div>
-        </div>
-    </div>
+            </span>
+        </x-slot:extra>
+    </x-page-hero>
 
     <!-- Main Content Container -->
     <div class="bg-[#FFFDF7] py-12 sm:py-16 text-slate-800">

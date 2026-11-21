@@ -146,31 +146,32 @@
         }
     }" class="bg-[#FAF7F2] text-slate-800 min-h-screen">
 
-        <!-- 1. Sacred Hero Banner -->
-        <section class="relative bg-gradient-to-b from-[#25050A] via-[#3B0813] to-[#25050A] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-400/30">
-            <!-- Background Image overlay -->
-            <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-                 alt="Haridwar Kumbh Ganga Ghats"
-                 class="absolute inset-0 w-full h-full object-cover opacity-20 object-center mix-blend-luminosity"> -->
+        <!-- 1. Sacred Hero Banner (Signature Maroon Card on Solid Light Orange Band) -->
+        <div class="relative bg-[#FFA028] text-white overflow-hidden py-10 sm:py-16 border-b border-orange-600/40">
+            <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-amber-300/20 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-sky-200/20 blur-3xl pointer-events-none"></div>
 
-            <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-                <!-- Auspicious Tag / Sloka -->
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs sm:text-sm font-semibold tracking-wide shadow-md backdrop-blur-xs">
-                    <span>🕉️ ॐ गंगे च यमुने चैव गोदावरि सरस्वति</span>
-                    <span class="hidden md:inline">|</span>
-                    <span class="hidden md:inline font-normal">Haridwar Kumbh Mahotsav Sewa</span>
+            <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-[#881337] border border-amber-300/40 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-xl text-center space-y-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/40 text-[#FDE68A] text-xs sm:text-sm font-semibold tracking-wide shadow-md">
+                        <span>🕉️ ॐ गंगे च यमुने चैव गोदावरि सरस्वति</span>
+                        <span class="hidden md:inline">|</span>
+                        <span class="hidden md:inline font-normal">Haridwar Kumbh Mahotsav Sewa</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-tight">
+                        Haridwar Kumbh Water Collection Service
+                        <span class="block text-xl sm:text-2xl lg:text-3xl font-semibold text-amber-200 mt-2 not-italic">
+                            हरिद्वार महाकुम्भ पवित्र गंगाजल संग्रह एवं देवस्थान होम डिलीवरी
+                        </span>
+                    </h1>
+
+                    <p class="max-w-3xl mx-auto text-sm sm:text-base text-white/95 leading-relaxed font-medium">
+                        Direct sacred collection of 100% pure Haridwar Ganga Jal during auspicious Kumbh Mahotsav. Picked up from your Haridwar Hotel or Dharamshala, sanctified and sealed in food-grade containers, and delivered safely to your resident doorstep across India.
+                    </p>
                 </div>
-
-                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-amber-100 tracking-tight leading-tight">
-                    Haridwar Kumbh Water Collection Service
-                    <span class="block text-xl sm:text-2xl lg:text-3xl font-semibold text-amber-300 mt-2">
-                        हरिद्वार महाकुम्भ पवित्र गंगाजल संग्रह एवं देवस्थान होम डिलीवरी
-                    </span>
-                </h1>
-
-                <p class="max-w-3xl mx-auto text-sm sm:text-base text-amber-100/80 leading-relaxed font-light">
-                    Direct sacred collection of 100% pure Haridwar Ganga Jal during auspicious Kumbh Mahotsav. Picked up from your Haridwar Hotel or Dharamshala, sanctified and sealed in food-grade containers, and delivered safely to your resident doorstep across India.
-                </p>
+            </div>
+        </div>
 
                 <!-- Value Proposition Highlights -->
                 <div class="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto text-left text-xs sm:text-sm">

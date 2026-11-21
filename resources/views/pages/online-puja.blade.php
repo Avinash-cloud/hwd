@@ -147,85 +147,73 @@
             </div>
         </div>
 
-        <!-- 1. Sacred Vedic Hero Banner -->
-        <section
-            class="relative bg-gradient-to-b from-[#25050A] via-[#380B12] to-[#25050A] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-300/30">
-            <!-- Authentic Haridwar Ganga Ghat Background Image -->
-            <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}" alt="Sacred Haridwar Ganga Ghats"
-                class="absolute inset-0 w-full h-full object-cover opacity-25 object-center"> -->
-            <!-- <div
-                class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-[#25050A]/75 to-transparent pointer-events-none">
-            </div> -->
+        <!-- 1. Sacred Vedic Hero Banner (Solid Colors Only - No Background Images) -->
+        <section class="relative bg-[#FFA028] text-white overflow-hidden py-10 sm:py-16 border-b border-orange-600/40">
+            <!-- Subtle sacred aura glows -->
+            <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-amber-300/20 blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-sky-200/20 blur-3xl pointer-events-none"></div>
 
-            <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Signature Maroon Card -->
+                <div class="bg-[#881337] border border-amber-300/40 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-xl text-center space-y-6">
 
-                <!-- Language Switcher Bar in Hero Banner -->
-                <div class="flex items-center justify-center">
-                    <div
-                        class="inline-flex items-center gap-2 p-1.5 bg-black/50 border border-amber-400/60 rounded-full backdrop-blur-md shadow-xl">
-                        <span class="text-xs font-semibold pl-3 text-amber-200/90 flex items-center gap-1.5 font-mono">
-                            <span>🌐</span>
-                            <span x-show="lang === 'en'">Language / भाषा:</span>
-                            <span x-show="lang === 'hi'" x-cloak>भाषा चयन / Language:</span>
-                        </span>
-                        <div class="flex items-center gap-1">
-                            <button type="button" @click="setLang('en')"
-                                :class="lang === 'en' ? 'bg-[#D97706] text-white shadow-md font-bold' : 'text-amber-200/80 hover:text-white font-medium'"
-                                class="px-4 py-1.5 rounded-full text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5">
-                                <span>English</span>
-                            </button>
-                            <button type="button" @click="setLang('hi')"
-                                :class="lang === 'hi' ? 'bg-[#D97706] text-white shadow-md font-bold' : 'text-amber-200/80 hover:text-white font-medium'"
-                                class="px-4 py-1.5 rounded-full text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5">
-                                <span>हिन्दी</span>
-                            </button>
+                    <!-- Language Switcher Bar in Hero Banner -->
+                    <div class="flex items-center justify-center">
+                        <div class="inline-flex items-center gap-2 p-1.5 bg-[#6B0E29] border border-amber-400/60 rounded-full shadow-lg">
+                            <span class="text-xs font-semibold pl-3 text-amber-200/90 flex items-center gap-1.5 font-mono">
+                                <span>🌐</span>
+                                <span x-show="lang === 'en'">Language / भाषा:</span>
+                                <span x-show="lang === 'hi'" x-cloak>भाषा चयन / Language:</span>
+                            </span>
+                            <div class="flex items-center gap-1">
+                                <button type="button" @click="setLang('en')"
+                                    :class="lang === 'en' ? 'bg-[#F97316] text-white shadow-md font-bold' : 'text-amber-200/80 hover:text-white font-medium'"
+                                    class="px-4 py-1.5 rounded-full text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5">
+                                    <span>English</span>
+                                </button>
+                                <button type="button" @click="setLang('hi')"
+                                    :class="lang === 'hi' ? 'bg-[#F97316] text-white shadow-md font-bold' : 'text-amber-200/80 hover:text-white font-medium'"
+                                    class="px-4 py-1.5 rounded-full text-xs sm:text-sm transition-all cursor-pointer flex items-center gap-1.5">
+                                    <span>हिन्दी</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Vedic Sloka Banner -->
-                <div
-                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#D97706]/20 text-amber-200 border border-[#D97706]/40 backdrop-blur-xs shadow-inner max-w-2xl mx-auto">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
-                    <span x-show="lang === 'en'" class="tracking-wide text-xs sm:text-[13px] leading-relaxed">
-                        "O Holy Rivers Ganga, Yamuna, Godavari, Saraswati, Narmada, Sindhu, &amp; Kaveri: Bless this
-                        water with your sacred presence."
-                    </span>
-                    <span x-show="lang === 'hi'" x-cloak
-                        class="tracking-wide text-xs sm:text-[13px] leading-[1.8] font-medium">
-                        गङ्गे च यमुने चैव गोदावरि सरस्वति । नर्मदे सिन्धु कावेरि जलेऽस्मिन् सन्निधिं कुरु ॥
-                    </span>
-                </div>
+                    <!-- Vedic Sloka Banner -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-amber-400/20 text-[#FDE68A] border border-amber-300/40 shadow-inner max-w-2xl mx-auto">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                        <span x-show="lang === 'en'" class="tracking-wide text-xs sm:text-[13px] leading-relaxed">
+                            "O Holy Rivers Ganga, Yamuna, Godavari, Saraswati, Narmada, Sindhu, &amp; Kaveri: Bless this water with your sacred presence."
+                        </span>
+                        <span x-show="lang === 'hi'" x-cloak class="tracking-wide text-xs sm:text-[13px] leading-[1.8] font-medium">
+                            गङ्गे च यमुने चैव गोदावरि सरस्वति । नर्मदे सिन्धु कावेरि जलेऽस्मिन् सन्निधिं कुरु ॥
+                        </span>
+                    </div>
 
-                <!-- Page Title -->
-                <div class="space-y-3 max-w-3xl mx-auto">
-                    <!-- English Title -->
-                    <h1 x-show="lang === 'en'"
-                        class="text-3xl sm:text-4xl lg:text-[32px] font-serif font-extrabold text-white tracking-tight leading-snug drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                        Sacred Haridwar Ghats Online Puja &amp; Vedic Rituals
-                    </h1>
-                    <!-- Hindi Title with Fixed Generous Line Height -->
-                    <h1 x-show="lang === 'hi'" x-cloak
-                        class="text-3xl sm:text-3xl lg:text-[32px] font-serif font-extrabold text-white tracking-tight hindi-title drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
-                        हरिद्वार पावन घाट ऑनलाइन पूजा एवं वैदिक अनुष्ठान
-                    </h1>
+                    <!-- Page Title -->
+                    <div class="space-y-3 max-w-3xl mx-auto">
+                        <h1 x-show="lang === 'en'"
+                            class="text-3xl sm:text-4xl lg:text-[40px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-snug drop-shadow-sm">
+                            Sacred Haridwar Ghats Online Puja &amp; Vedic Rituals
+                        </h1>
+                        <h1 x-show="lang === 'hi'" x-cloak
+                            class="text-3xl sm:text-3xl lg:text-[36px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight hindi-title drop-shadow-sm">
+                            हरिद्वार पावन घाट ऑनलाइन पूजा एवं वैदिक अनुष्ठान
+                        </h1>
 
-                    <!-- English Subtitle -->
-                    <p x-show="lang === 'en'"
-                        class="text-sm sm:text-base text-amber-100/90 leading-relaxed font-normal max-w-2xl mx-auto">
-                        Authentic personalized Vedic Sankalp performed in your name and Gotra directly from the sacred
-                        Ganga Ghats of Haridwar by learned Vedic Acharyas. Includes 15–20 minute private live video
-                        streaming, followed by consecrated Prasad and pure 500ml Blu Bliss Gangajal doorstep delivery.
-                    </p>
-                    <!-- Hindi Subtitle with Fixed Generous Line Height -->
-                    <p x-show="lang === 'hi'" x-cloak
-                        class="text-xs sm:text-sm text-amber-100/90 hindi-subtitle font-normal max-w-2xl mx-auto">
-                        हरिद्वार के पावन गंगा घाटों से सीधे आपके नाम और गोत्र से वैदिक आचार्यों द्वारा संकल्पित लाइव
-                        पूजन,
-                        15–20 मिनट की व्यक्तिगत लाइव स्ट्रीमिंग, तथा घर पर अभिमंत्रित प्रसाद व 500ml गंगाजल की पावन
-                        डिलीवरी।
-                    </p>
+                        <p x-show="lang === 'en'"
+                            class="text-sm sm:text-base text-white/95 leading-relaxed font-medium max-w-2xl mx-auto">
+                            Authentic personalized Vedic Sankalp performed in your name and Gotra directly from the sacred Ganga Ghats of Haridwar by learned Vedic Acharyas. Includes 15–20 minute private live video streaming, followed by consecrated Prasad and pure 500ml Blu Bliss Gangajal doorstep delivery.
+                        </p>
+                        <p x-show="lang === 'hi'" x-cloak
+                            class="text-xs sm:text-sm text-white/95 hindi-subtitle font-medium max-w-2xl mx-auto">
+                            हरिद्वार के पावन गंगा घाटों से सीधे आपके नाम और गोत्र से वैदिक आचार्यों द्वारा संकल्पित लाइव पूजन, 15–20 मिनट की व्यक्तिगत लाइव स्ट्रीमिंग, तथा घर पर अभिमंत्रित प्रसाद व 500ml गंगाजल की पावन डिलीवरी।
+                        </p>
+                    </div>
                 </div>
+            </div>
+        </section>
 
                 <!-- 4 Trust Markers Grid -->
                 <div class="pt-2  grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left hidden">

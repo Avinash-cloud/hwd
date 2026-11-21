@@ -1,24 +1,9 @@
 <x-app-layout>
-    <div class="relative bg-gradient-to-b from-[#4A0E17] via-[#5C1521] to-[#380B12] text-white overflow-hidden py-14 sm:py-20 border-b border-amber-400/30">
-        <!-- <img src="{{ asset('images/haridwar-panorama-clocktower.jpg') }}"
-             alt="Haridwar Ganga Temples"
-             class="absolute inset-0 w-full h-full object-cover opacity-25 object-center"> -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#25050A] via-[#380B12]/80 to-transparent"></div>
-
-        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#D97706]/30 text-amber-300 border border-[#D97706]/50 backdrop-blur-xs mb-3">
-                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                <span>🌟 Sacred 5-Year Devotee Circle · Household Privilege</span>
-            </span>
-            <h1 class="text-3xl sm:text-5xl font-serif font-extrabold text-white">
-                Blu Bliss 5-Year Sacred Devotee Membership
-            </h1>
-            <p class="mt-4 text-sm sm:text-base text-amber-100/90 max-w-2xl mx-auto leading-relaxed">
-                Connect your household directly to the divine blessings of Maa Ganga in sacred Haridwar with uninterrupted
-                monthly sacred deliveries for 5 full years (60 months total).
-            </p>
-        </div>
-    </div>
+    <!-- Signature Maroon Hero Banner (Solid Colors Only) -->
+    <x-page-hero bandBg="bg-[#FFA028]"
+                 badge="🌟 Sacred 5-Year Devotee Circle · Household Privilege"
+                 title="Blu Bliss 5-Year Sacred Devotee Membership"
+                 subtitle="Connect your household directly to the divine blessings of Maa Ganga in sacred Haridwar with uninterrupted monthly sacred deliveries for 5 full years (60 months total)." />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
          x-data="{
