@@ -567,44 +567,7 @@
                         Spiritual Blogs
                     </a>
 
-                    <!-- 7. etc... (More Collections Dropdown & Sacred Gallery) -->
-                    @if ($otherCats->count() > 0)
-                        <div class="relative group shrink-0" x-data="{ moreCatOpen: false }"
-                            @mouseenter="moreCatOpen = true" @mouseleave="moreCatOpen = false">
-                            <button type="button" @click="moreCatOpen = !moreCatOpen"
-                                class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition text-slate-700">
-                                <span>More Collections</span>
-                                <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
 
-                            <div x-show="moreCatOpen" x-cloak x-transition:enter="transition ease-out duration-150"
-                                x-transition:enter-start="opacity-0 translate-y-1"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-100"
-                                x-transition:leave-start="opacity-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 translate-y-1"
-                                class="absolute left-0 top-full mt-0 w-60 bg-white rounded-xl shadow-xl border border-amber-200 py-2 z-40 divide-y divide-slate-100">
-                                <div class="py-1">
-                                    @foreach ($otherCats as $moreCat)
-                                        <a href="{{ route('products.index', ['category' => $moreCat->slug]) }}"
-                                            class="block px-3 py-1.5 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
-                                            {{ $moreCat->name }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                                <div class="pt-1.5 px-3">
-                                    <a href="{{ route('gallery.index') }}"
-                                        class="text-[11px] font-bold text-[#881337] hover:underline block py-1">
-                                        Sacred Gallery →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
 
                     <!-- Sacred Gallery (Direct Link on wider screens) -->
                     <a href="{{ route('gallery.index') }}"
@@ -767,27 +730,7 @@
                 Spiritual Blogs
             </a>
 
-            <!-- 7. etc... (More Collections Accordion & Other Links) -->
-            @if ($otherCats->count() > 0)
-                <div x-data="{ moreOpen: false }" class="pt-1">
-                    <button type="button" @click="moreOpen = !moreOpen"
-                        class="w-full flex items-center justify-between px-3 py-2 text-slate-700 font-semibold hover:bg-amber-50 rounded-lg">
-                        <span>More Collections</span>
-                        <svg class="w-4 h-4 transition transform" :class="moreOpen ? 'rotate-180' : ''" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                    <div x-show="moreOpen" x-cloak class="pl-4 py-1 space-y-1 bg-amber-50/40 rounded-lg text-xs">
-                        @foreach ($otherCats as $cat)
-                            <a href="{{ route('products.index', ['category' => $cat->slug]) }}"
-                                class="block py-1.5 px-2 text-slate-700 hover:text-[#D97706] font-medium">
-                                {{ $cat->name }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+
 
             <a href="{{ route('gallery.index') }}"
                 class="block px-3 py-2 rounded-lg font-semibold text-slate-800 hover:bg-amber-50 {{ request()->routeIs('gallery.*') ? 'bg-amber-100/60 text-[#D97706]' : '' }}">
