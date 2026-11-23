@@ -9,6 +9,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,6 +36,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (BadRequestException $e, Request $request) {
             if (! ($request->is('api/*') || $request->expectsJson()) && ! $request->is('404')) {
                 return redirect()->route('not-found');
+            }
+        });
+
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            if (! ($request->is('api/*') || $request->expectsJson())) {
+                return response()->view('errors.404', ['exception' => $e], 404);
             }
         });
 
