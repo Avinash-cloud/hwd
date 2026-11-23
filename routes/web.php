@@ -68,6 +68,11 @@ Route::post('/contact', [PageController::class, 'submitContact'])->name('contact
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 
+// Dedicated 404 Error Page
+Route::get('/404', function () {
+    return response()->view('errors.404', [], 404);
+})->name('not-found');
+
 // Public Traceability QR Verification
 Route::get('/verify/{token}', [TraceabilityController::class, 'verify'])->name('verify.batch');
 
