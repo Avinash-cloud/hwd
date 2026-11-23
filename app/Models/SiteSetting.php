@@ -20,9 +20,13 @@ class SiteSetting extends Model
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        $setting = static::where('key', $key)->first();
+        try {
+            $setting = static::where('key', $key)->first();
 
-        return $setting ? $setting->value : $default;
+            return $setting ? $setting->value : $default;
+        } catch (\Throwable) {
+            return $default;
+        }
     }
 
     /**

@@ -49,11 +49,15 @@ class MembershipSubscription extends Model
      */
     public static function getMonthlyBillingDetails(?Product $specificProduct = null): array
     {
-        $product = $specificProduct
-            ?? Product::where('is_active', true)->where('is_member_free_eligible', true)->first()
-            ?? Product::where('is_active', true)->where('is_gangajal', true)->where('volume_ml', 500)->first()
-            ?? Product::where('is_active', true)->where('is_gangajal', true)->first()
-            ?? Product::where('is_active', true)->first();
+        try {
+            $product = $specificProduct
+                ?? Product::where('is_active', true)->where('is_member_free_eligible', true)->first()
+                ?? Product::where('is_active', true)->where('is_gangajal', true)->where('volume_ml', 500)->first()
+                ?? Product::where('is_active', true)->where('is_gangajal', true)->first()
+                ?? Product::where('is_active', true)->first();
+        } catch (\Throwable) {
+            $product = null;
+        }
 
         $productPrice = 0.0;
         if ($product) {

@@ -37,18 +37,13 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                     <div class="p-4 bg-white rounded-2xl border border-amber-200 shadow-2xs space-y-1">
                         <span class="text-[10px] uppercase font-bold text-slate-500 font-mono tracking-wider">One-Time Fee</span>
-                        <div class="text-2xl font-serif font-extrabold text-[#D97706]">₹797</div>
-                        <p class="text-[11px] text-slate-600">Payable once at enrolment towards the 5-year commitment (Non-refundable).</p>
+                        <div class="text-2xl font-serif font-extrabold text-[#D97706]">₹{{ number_format($membershipFee ?? 797) }}</div>
+                        <p class="text-[11px] text-slate-600">Payable once at enrolment towards the {{ $validityYears ?? 5 }}-year commitment (Non-refundable).</p>
                     </div>
                     <div class="p-4 bg-white rounded-2xl border border-amber-200 shadow-2xs space-y-1">
                         <span class="text-[10px] uppercase font-bold text-slate-500 font-mono tracking-wider">Monthly Service Charge</span>
-                        <div class="text-2xl font-serif font-extrabold text-[#881337]">₹149 / mo</div>
-                        <p class="text-[11px] text-slate-600">Per 500 ml bottle delivery, inclusive of applicable GST, payable by the 5th of each month.</p>
-                    </div>
-                    <div class="p-4 bg-white rounded-2xl border border-amber-200 shadow-2xs space-y-1">
-                        <span class="text-[10px] uppercase font-bold text-slate-500 font-mono tracking-wider">Continuation (Post 60 Mo)</span>
-                        <div class="text-2xl font-serif font-extrabold text-emerald-700">₹85 + GST</div>
-                        <p class="text-[11px] text-slate-600">No new commitment fee charged; optional monthly continuation arrangement.</p>
+                        <div class="text-2xl font-serif font-extrabold text-[#881337]">₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }} / mo</div>
+                        <p class="text-[11px] text-slate-600">Per {{ $monthlyVolume ?? 500 }} ml bottle delivery, inclusive of applicable GST, payable by the 5th of each month.</p>
                     </div>
                 </div>
             </div>
@@ -83,9 +78,9 @@
                     <p>The Company offers Ganga Jal Seva services through its website and other authorised channels. Under the five-year commitment service plan:</p>
                     <ol class="list-decimal pl-5 space-y-2 text-slate-700">
                         <li>The Company provides Ganga Jal sourced directly from Haridwar.</li>
-                        <li>The standard service product covered by the agreement is a <strong>500 ml PET bottle</strong>.</li>
+                        <li>The standard service product covered by the agreement is a <strong>{{ $monthlyVolume ?? 500 }} ml PET bottle</strong>.</li>
                         <li>The service is intended to provide one (1) delivery per month to the customer's registered delivery address.</li>
-                        <li>The service commitment period is <strong>sixty (60) consecutive months</strong>, subject to the terms of the applicable service agreement.</li>
+                        <li>The service commitment period is <strong>{{ ($validityYears ?? 5) * 12 }} ({{ ($validityYears ?? 5) * 12 }}) consecutive months</strong>, subject to the terms of the applicable service agreement.</li>
                         <li>Customers must provide accurate contact and delivery information when registering for the service.</li>
                     </ol>
                     <p class="text-xs text-slate-500">
@@ -124,24 +119,24 @@
 
                     <div class="space-y-3">
                         <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200">
-                            <h3 class="font-bold text-slate-900 text-xs sm:text-sm">A. One-Time Commitment Fee: ₹797</h3>
+                            <h3 class="font-bold text-slate-900 text-xs sm:text-sm">A. One-Time Commitment Fee: ₹{{ number_format($membershipFee ?? 797) }}</h3>
                             <p class="mt-1 text-xs text-slate-700">
-                                The customer is required to pay a one-time commitment fee of <strong>₹797</strong> at the time of enrolment. This fee is charged towards the five-year service commitment and is non-refundable, subject to applicable consumer protection laws and any refund required by law.
+                                The customer is required to pay a one-time commitment fee of <strong>₹{{ number_format($membershipFee ?? 797) }}</strong> at the time of enrolment. This fee is charged towards the {{ $validityYears ?? 5 }}-year service commitment and is non-refundable, subject to applicable consumer protection laws and any refund required by law.
                             </p>
                         </div>
 
                         <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200">
-                            <h3 class="font-bold text-slate-900 text-xs sm:text-sm">B. Monthly Service Charge: ₹149 per Bottle</h3>
+                            <h3 class="font-bold text-slate-900 text-xs sm:text-sm">B. Monthly Service Charge: ₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }} per Bottle</h3>
                             <p class="mt-1 text-xs text-slate-700">
-                                The monthly service charge is <strong>₹149 per 500 ml bottle</strong>, inclusive of applicable GST, as specified in the service agreement.
+                                The monthly service charge is <strong>₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }} per {{ $monthlyVolume ?? 500 }} ml bottle</strong>, inclusive of applicable GST, as specified in the service agreement.
                             </p>
                         </div>
 
                         <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200">
                             <h3 class="font-bold text-slate-900 text-xs sm:text-sm">C. Payment Schedule</h3>
                             <ul class="list-disc pl-5 mt-1 text-xs text-slate-700 space-y-1">
-                                <li>The one-time commitment fee (₹797) must be paid at the time of initial enrolment.</li>
-                                <li>The monthly service charge (₹149) must be paid by the <strong>5th day of each calendar month</strong>.</li>
+                                <li>The one-time commitment fee (₹{{ number_format($membershipFee ?? 797) }}) must be paid at the time of initial enrolment.</li>
+                                <li>The monthly service charge (₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }}) must be paid by the <strong>5th day of each calendar month</strong>.</li>
                                 <li>Applicable taxes will be charged in accordance with prevailing laws.</li>
                                 <li>A valid tax invoice will be issued for all applicable transactions. The customer should retain payment confirmations and invoices for future reference.</li>
                             </ul>
@@ -156,14 +151,14 @@
                         <span>Service Duration and Renewal</span>
                     </h2>
                     <p>
-                        The five-year commitment plan shall remain valid for <strong>60 consecutive months</strong> from its commencement date as specified in the applicable service agreement. Upon completion of the 60-month period:
+                        The {{ $validityYears ?? 5 }}-year commitment plan shall remain valid for <strong>{{ ($validityYears ?? 5) * 12 }} consecutive months</strong> from its commencement date as specified in the applicable service agreement. Upon completion of the {{ ($validityYears ?? 5) * 12 }}-month period:
                     </p>
                     <ol class="list-decimal pl-5 space-y-1.5 text-xs text-slate-700">
-                        <li>The existing five-year agreement shall automatically conclude.</li>
-                        <li><strong>No additional five-year commitment fee</strong> shall be charged merely for continuing the monthly service.</li>
+                        <li>The existing {{ $validityYears ?? 5 }}-year agreement shall automatically conclude.</li>
+                        <li><strong>No additional {{ $validityYears ?? 5 }}-year commitment fee</strong> shall be charged merely for continuing the monthly service.</li>
                         <li>Customers wishing to continue receiving Ganga Jal may do so under the applicable continuation arrangement.</li>
-                        <li>The continuation monthly service charge stated in the Company's service cancellation policy is <strong>₹85 plus applicable GST</strong>.</li>
-                        <li>A fresh agreement may be executed if the Company and customer mutually agree to a new five-year commitment.</li>
+                        <li>The continuation monthly service charge stated in the Company's service cancellation policy is <strong>₹{{ number_format($continuationCharge ?? 85) }} plus applicable GST</strong>.</li>
+                        <li>A fresh agreement may be executed if the Company and customer mutually agree to a new {{ $validityYears ?? 5 }}-year commitment.</li>
                     </ol>
                     <p class="text-xs text-slate-500">
                         Renewal or continuation is subject to service availability and confirmation by the Company.
@@ -199,7 +194,7 @@
                     <p>By enrolling in the service, customers agree to:</p>
                     <ol class="list-decimal pl-5 space-y-1.5 text-xs text-slate-700">
                         <li>Provide correct registration, billing, and delivery details.</li>
-                        <li>Pay the applicable commitment fee (₹797) and monthly charges (₹149) within the prescribed time.</li>
+                        <li>Pay the applicable commitment fee (₹{{ number_format($membershipFee ?? 797) }}) and monthly charges (₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }}) within the prescribed time.</li>
                         <li>Maintain an active contact number and provide updated contact information.</li>
                         <li>Notify the Company at least 15 days before changing the delivery address.</li>
                         <li>Cooperate with reasonable delivery arrangements.</li>
@@ -230,7 +225,7 @@
                         <span>Non-Refundable Commitment Fee</span>
                     </h2>
                     <p>
-                        The one-time commitment fee of <strong>₹797</strong> is associated with the five-year Ganga Jal Seva arrangement. If a customer voluntarily discontinues the service before completion of the 60-month commitment period, the commitment fee will not ordinarily be refunded.
+                        The one-time commitment fee of <strong>₹{{ number_format($membershipFee ?? 797) }}</strong> is associated with the {{ $validityYears ?? 5 }}-year Ganga Jal Seva arrangement. If a customer voluntarily discontinues the service before completion of the {{ ($validityYears ?? 5) * 12 }}-month commitment period, the commitment fee will not ordinarily be refunded.
                     </p>
                     <p class="text-xs text-slate-600">
                         However, nothing in this clause is intended to exclude any refund, remedy, or statutory consumer right that cannot lawfully be excluded under applicable Indian consumer protection laws. The non-refundable nature of the commitment fee does not automatically make separately paid advance monthly charges non-refundable in every situation.
@@ -252,7 +247,7 @@
                         <p>The following conditions apply:</p>
                         <ol class="list-decimal pl-5 space-y-1">
                             <li>Customers may request discontinuation in accordance with the cancellation policy.</li>
-                            <li>The one-time commitment fee (₹797) is ordinarily non-refundable.</li>
+                            <li>The one-time commitment fee (₹{{ number_format($membershipFee ?? 797) }}) is ordinarily non-refundable.</li>
                             <li>Monthly charges already paid in advance will be adjusted in accordance with applicable billing and cancellation terms.</li>
                             <li>Any outstanding monthly payment must be settled prior to account closure.</li>
                             <li>Cancellation does not remove payment obligations that became due before the effective cancellation date.</li>

@@ -208,7 +208,33 @@ class PageController extends Controller
 
     public function terms(): View
     {
-        return view('pages.terms');
+        $membershipFee = (float) SiteSetting::get('membership_fee', 797);
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
+        $continuationCharge = (float) SiteSetting::get('membership_continuation_charge', 85);
+        $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
+        $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyProduct = $billing['product'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyVolume = $monthlyProduct?->volume_ml ?? 500;
+
+        return view('pages.terms', compact(
+            'membershipFee',
+            'validityYears',
+            'shippingRate',
+            'continuationCharge',
+            'supportEmail',
+            'supportPhone',
+            'monthlyProduct',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'monthlyAutoDebit',
+            'monthlyVolume'
+        ));
     }
 
     public function privacy(): View
