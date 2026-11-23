@@ -157,7 +157,7 @@ class RazorpayService
     /**
      * Create subscription mandate for a customer.
      */
-    public function createSubscription(string $planId, int $totalCount = 60, array $notes = [], float $upfrontAddonAmount = 0.0): array
+    public function createSubscription(string $planId, int $totalCount = 60, array $notes = [], float $upfrontAddonAmount = 0.0, ?int $startAt = null): array
     {
         if ($this->isDummy() || str_starts_with($planId, 'plan_mock_') || str_starts_with($planId, 'plan_fallback_')) {
             return [
@@ -175,6 +175,10 @@ class RazorpayService
             'customer_notify' => 1,
             'notes' => $notes,
         ];
+
+        if ($startAt) {
+            $payload['start_at'] = $startAt;
+        }
 
         if ($upfrontAddonAmount > 0) {
             $payload['addons'] = [

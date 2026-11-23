@@ -81,6 +81,9 @@ class MembershipController extends Controller
         );
 
         // 2. Create Razorpay recurring subscription (60 monthly cycles = 5 years) with upfront registration fee
+        // The recurring auto-debit starts from Month 2 (after 30 days) because Month 1 initial dispatch is free
+        $startAt = now()->addDays(30)->timestamp;
+
         $sub = $this->razorpayService->createSubscription(
             planId: $planId,
             totalCount: 60,
@@ -92,7 +95,8 @@ class MembershipController extends Controller
                 'delivery_charge' => (string) $deliveryCharge,
                 'monthly_debit' => (string) $monthlyDebit,
             ],
-            upfrontAddonAmount: $fee
+            upfrontAddonAmount: $fee,
+            startAt: $startAt
         );
 
         // Fallback standard order
