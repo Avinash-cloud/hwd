@@ -20,7 +20,7 @@ class SettingsController extends Controller
             'free_first_bottle_enabled' => SiteSetting::get('free_first_bottle_enabled', '1'),
             'guest_checkout_enabled' => SiteSetting::get('guest_checkout_enabled', '0'),
             'support_phone' => SiteSetting::get('support_phone', '+91 7042482555'),
-            'support_email' => SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com'),
+            'support_email' => SiteSetting::get('support_email', 'sales@haridwarbliss.com'),
             'ghat_location_default' => SiteSetting::get('ghat_location_default', 'Sacred Ganga Ghat, Haridwar, Uttarakhand'),
         ];
 

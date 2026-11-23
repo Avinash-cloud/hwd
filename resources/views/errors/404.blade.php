@@ -112,7 +112,7 @@
                 Need immediate assistance? Contact our Devotee Care team at 
                 <a href="tel:+917042482555" class="text-amber-700 font-bold hover:underline">+91 7042482555</a> 
                 or email 
-                <a href="mailto:sdenterprisesghaziabad@gmail.com" class="text-amber-700 font-bold hover:underline">sdenterprisesghaziabad@gmail.com</a>
+                <a href="mailto:sales@haridwarbliss.com" class="text-amber-700 font-bold hover:underline">sales@haridwarbliss.com</a>
             </div>
 
         </div>

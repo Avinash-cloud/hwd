@@ -30,7 +30,7 @@
 
     <p style="font-size: 13px; color: #64748B; margin-top: 20px;">
         If you have any questions or if this cancellation was made in error, please contact our devotee support team at
-        <a href="mailto:support@haridwarbliss.com" style="color: #D97706; font-weight: 600;">support@haridwarbliss.com</a>.
+        <a href="mailto:sales@haridwarbliss.com" style="color: #D97706; font-weight: 600;">sales@haridwarbliss.com</a>.
     </p>
 
     <div style="text-align: center; margin: 30px 0;">

@@ -36,7 +36,7 @@
                         <p class="text-[11px] text-slate-600 font-mono mt-0.5">CIN: <strong class="text-slate-800">U11040UT2025PTC019429</strong></p>
                         <p class="text-[11px] text-slate-600 leading-tight mt-1">
                             G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403<br>
-                            Phone: <span class="font-mono">+91 7042482555</span> | Email: <span class="font-mono">sdenterprisesghaziabad@gmail.com</span><br>
+                            Phone: <span class="font-mono">+91 7042482555</span> | Email: <span class="font-mono">sales@haridwarbliss.com</span><br>
                             GSTIN: 05AAACH1234F1Z8 | FSSAI Certified
                         </p>
                     </div>
@@ -180,7 +180,7 @@
                 <p class="font-bold text-slate-800 text-xs">Pure Haridwar Gangajal (Packaged)</p>
                 <p>Marketed & Billed by <strong>HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</strong> · CIN: <strong class="font-mono text-slate-700">U11040UT2025PTC019429</strong></p>
                 <p>Registered Address: G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Shivalik Nagar, Hardwar, Haridwar- 249403, Uttarakhand</p>
-                <p>Devotee Helpline: +91 7042482555 · Official Email: sdenterprisesghaziabad@gmail.com</p>
+                <p>Devotee Helpline: +91 7042482555 · Official Email: sales@haridwarbliss.com</p>
                 <p class="text-slate-400 pt-1">This is a computer-generated tax invoice and requires no physical signature. Har Har Gange!</p>
             </div>
         </div>

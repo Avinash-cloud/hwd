@@ -38,7 +38,7 @@ class PageController extends Controller
     public function contact(Request $request): View
     {
         $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
-        $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');
+        $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
 
         return view('pages.contact', compact('supportPhone', 'supportEmail'));
     }
@@ -46,7 +46,7 @@ class PageController extends Controller
     public function onlinePuja(): View
     {
         $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
-        $supportEmail = SiteSetting::get('support_email', 'sdenterprisesghaziabad@gmail.com');
+        $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
         $razorpayKeyId = $this->razorpayService->getKeyId();
 
         return view('pages.online-puja', compact('supportPhone', 'supportEmail', 'razorpayKeyId'));

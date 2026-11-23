@@ -171,7 +171,7 @@
             </p>
             <p style="margin: 6px 0; font-size: 11px;">
                 Questions about your sacred order? Reach our devotee support at
-                <a href="mailto:support@haridwarbliss.com">support@haridwarbliss.com</a> or visit
+                <a href="mailto:sales@haridwarbliss.com">sales@haridwarbliss.com</a> or visit
                 <a href="{{ url('/') }}">{{ parse_url(config('app.url', 'http://localhost'), PHP_URL_HOST) }}</a>
             </p>
             <p style="margin-top: 12px; font-size: 10px; color: #94A3B8;">

@@ -26,7 +26,7 @@ class AboutUsTest extends TestCase
         $response->assertSee('Collected at Brahma Muhurta');
         $response->assertSee('Hygienic &amp; Tamper-Proof Packaging', false);
         $response->assertSee('Live Ghat Pujas &amp; Vedic Essentials', false);
-        $response->assertSee('Conscious Social &amp; Environmental Pledge', false);
+        $response->assertSee('Social &amp; Environmental Pledge', false);
 
         // Hindi Version Assertions
         $response->assertSee('ब्लू ब्लिस (Blu Bliss) के बारे में');

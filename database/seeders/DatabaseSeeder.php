@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         SiteSetting::set('free_first_bottle_enabled', '0', 'Enable free monthly 1st Gangajal bottle for active members');
         SiteSetting::set('guest_checkout_enabled', '1', 'Enable guest checkout for non-logged-in customers');
         SiteSetting::set('support_phone', '+91 7042482555', 'Customer care phone');
-        SiteSetting::set('support_email', 'sdenterprisesghaziabad@gmail.com', 'Customer care email');
+        SiteSetting::set('support_email', 'sales@haridwarbliss.com', 'Customer care email');
         SiteSetting::set('ghat_location_default', 'Sacred Ganga Ghat, Haridwar, Uttarakhand', 'Default holy collection ghat');
 
         // 2. Users

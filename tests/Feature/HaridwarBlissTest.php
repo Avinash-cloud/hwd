@@ -294,7 +294,7 @@ class HaridwarBlissTest extends TestCase
         $orderInvoiceRes->assertSee('U11040UT2025PTC019429');
         $orderInvoiceRes->assertSee('G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar');
         $orderInvoiceRes->assertSee('+91 7042482555');
-        $orderInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
+        $orderInvoiceRes->assertSee('sales@haridwarbliss.com');
 
         // 2. Membership Invoice Verification
         $memInvoiceRes = $this->actingAs($user)->get(route('membership.invoice', $membership->id));
@@ -303,7 +303,7 @@ class HaridwarBlissTest extends TestCase
         $memInvoiceRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED', false);
         $memInvoiceRes->assertSee('U11040UT2025PTC019429');
         $memInvoiceRes->assertSee('+91 7042482555');
-        $memInvoiceRes->assertSee('sdenterprisesghaziabad@gmail.com');
+        $memInvoiceRes->assertSee('sales@haridwarbliss.com');
 
         // 3. Storefront Footer Verification
         $homeRes = $this->get('/');
@@ -312,6 +312,6 @@ class HaridwarBlissTest extends TestCase
         $homeRes->assertSee('HARIDWAR BLISS FOOD & BEVERAGES PVT. LTD.', false);
         $homeRes->assertSee('U11040UT2025PTC019429');
         $homeRes->assertSee('+91 7042482555');
-        $homeRes->assertSee('sdenterprisesghaziabad@gmail.com');
+        $homeRes->assertSee('sales@haridwarbliss.com');
     }
 }

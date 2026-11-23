@@ -200,8 +200,8 @@
                     <div class="text-xs text-amber-200/90 space-y-1.5">
                         <div>Phone: <a href="tel:+917042482555"
                                 class="text-amber-300 hover:underline font-mono font-bold">+91 7042482555</a></div>
-                        <div>Email: <a href="mailto:sdenterprisesghaziabad@gmail.com"
-                                class="text-amber-300 hover:underline break-all">sdenterprisesghaziabad@gmail.com</a>
+                        <div>Email: <a href="mailto:sales@haridwarbliss.com"
+                                class="text-amber-300 hover:underline break-all">sales@haridwarbliss.com</a>
                         </div>
                     </div>
 
