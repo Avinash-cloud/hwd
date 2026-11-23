@@ -47,6 +47,10 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth/google/callback'),
     ],
 
+    'admin' => [
+        'email' => env('ADMIN_NOTIFICATION_EMAIL', 'admin@haridwarbliss.com'),
+    ],
+
     'nimbuspost' => [
         'base_url' => rtrim((string) env('NIMBUSPOST_BASE_URL', 'https://api-v2.nimbuspost.com'), '/'),
         'api_key' => env('NIMBUSPOST_API_KEY'),

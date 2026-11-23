@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Mail\AdminSubscriptionAlertMail;
 use App\Models\Batch;
 use App\Models\Category;
 use App\Models\Membership;
@@ -10,7 +11,9 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Services\SubscriptionOrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class MembershipSubscriptionRecurringTest extends TestCase
@@ -114,19 +117,20 @@ class MembershipSubscriptionRecurringTest extends TestCase
             'razorpay_subscription_id' => 'sub_test_mem_001',
         ]);
 
-        // Assert Month 1 initial dispatch order created
+        // Assert Month 1 initial dispatch order created (free welcome benefit)
         $order = Order::where('user_id', $user->id)->latest()->first();
         $this->assertNotNull($order);
-        $this->assertEquals(199.00, (float) $order->total_amount);
+        $this->assertEquals(0.00, (float) $order->total_amount);
         $this->assertEquals(50.00, (float) $order->subtotal);
         $this->assertEquals(149.00, (float) $order->shipping_amount);
+        $this->assertEquals(now()->format('Y-m'), $order->billing_period);
         $this->assertEquals('House 108, Sacred Vihar, Kankhal', $order->shipping_address['address_line1']);
         $this->assertEquals('Haridwar', $order->shipping_address['city']);
 
-        // Assert OrderItem has is_free_monthly_bottle = false (not free, charged at product price)
+        // Assert OrderItem has is_free_monthly_bottle = true (free welcome benefit)
         $item = $order->items->first();
         $this->assertNotNull($item);
-        $this->assertFalse((bool) $item->is_free_monthly_bottle);
+        $this->assertTrue((bool) $item->is_free_monthly_bottle);
         $this->assertEquals(50.00, (float) $item->unit_price);
 
         // Assert subscription log recorded
@@ -385,5 +389,127 @@ class MembershipSubscriptionRecurringTest extends TestCase
         $this->assertNotNull($order);
         $this->assertEquals(199.00, (float) $order->total_amount);
         $this->assertFalse((bool) $order->items->first()->is_free_monthly_bottle);
+    }
+
+    public function test_deduplication_prevents_duplicate_orders_for_same_billing_cycle(): void
+    {
+        $user = User::factory()->create();
+
+        $membership = Membership::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+            'fee_paid' => 797.00,
+            'validity_years' => 5,
+            'starts_at' => now(),
+            'expires_at' => now()->addYears(5),
+            'terms_accepted' => true,
+        ]);
+
+        $sub = MembershipSubscription::create([
+            'user_id' => $user->id,
+            'membership_id' => $membership->id,
+            'product_id' => Product::first()->id,
+            'status' => 'active',
+            'billing_interval_days' => 30,
+            'billing_amount' => 199.00,
+            'next_billing_date' => now(),
+            'last_billed_at' => now()->subDays(30),
+            'razorpay_subscription_id' => 'sub_dedup_test_999',
+            'shipping_address' => [
+                'recipient_name' => $user->name,
+                'phone' => '9876543210',
+                'address_line1' => 'Ganga Kripa Kutir',
+                'city' => 'Haridwar',
+                'state' => 'Uttarakhand',
+                'postal_code' => '249401',
+            ],
+        ]);
+
+        $orderService = app(SubscriptionOrderService::class);
+        $billingPeriod = now()->format('Y-m');
+
+        // First creation succeeds
+        $order1 = $orderService->createOrderForBillingCycle(
+            subscription: $sub,
+            billingPeriod: $billingPeriod,
+            amountPaid: 199.00,
+            paymentId: 'pay_first_call_111',
+            paymentMethod: 'razorpay_subscription'
+        );
+        $this->assertNotNull($order1);
+
+        // Second creation for same period returns null (dedup guard)
+        $order2 = $orderService->createOrderForBillingCycle(
+            subscription: $sub,
+            billingPeriod: $billingPeriod,
+            amountPaid: 199.00,
+            paymentId: 'pay_second_call_222',
+            paymentMethod: 'razorpay_subscription'
+        );
+        $this->assertNull($order2);
+
+        // Exactly one order exists in DB for this subscription
+        $this->assertEquals(1, Order::where('membership_subscription_id', $sub->id)->count());
+    }
+
+    public function test_payment_failure_alerts_admin_via_email(): void
+    {
+        Mail::fake();
+
+        $user = User::factory()->create();
+
+        $membership = Membership::create([
+            'user_id' => $user->id,
+            'status' => 'active',
+            'fee_paid' => 797.00,
+            'validity_years' => 5,
+            'starts_at' => now(),
+            'expires_at' => now()->addYears(5),
+            'terms_accepted' => true,
+        ]);
+
+        $sub = MembershipSubscription::create([
+            'user_id' => $user->id,
+            'membership_id' => $membership->id,
+            'product_id' => Product::first()->id,
+            'status' => 'active',
+            'billing_interval_days' => 30,
+            'billing_amount' => 199.00,
+            'next_billing_date' => now()->addDays(30),
+            'razorpay_subscription_id' => 'sub_fail_test_888',
+        ]);
+
+        $payload = [
+            'event' => 'payment.failed',
+            'payload' => [
+                'payment' => [
+                    'entity' => [
+                        'id' => 'pay_failed_123',
+                        'subscription_id' => 'sub_fail_test_888',
+                        'amount' => 19900,
+                        'error_code' => 'BAD_REQUEST_ERROR',
+                        'error_description' => 'Card balance insufficient',
+                    ],
+                ],
+            ],
+        ];
+
+        $rawPayload = (string) json_encode($payload);
+        $secret = (string) config('services.razorpay.webhook_secret', 'dummy_webhook_secret');
+        $signature = hash_hmac('sha256', $rawPayload, $secret);
+
+        $response = $this->call('POST', route('webhooks.razorpay'), [], [], [], [
+            'HTTP_X_RAZORPAY_SIGNATURE' => $signature,
+            'CONTENT_TYPE' => 'application/json',
+        ], $rawPayload);
+
+        $response->assertOk();
+
+        // Verify failure count incremented
+        $sub->refresh();
+        $this->assertEquals(1, $sub->payment_failures_count);
+
+        // Verify admin was alerted via email
+        Mail::assertSent(AdminSubscriptionAlertMail::class);
     }
 }

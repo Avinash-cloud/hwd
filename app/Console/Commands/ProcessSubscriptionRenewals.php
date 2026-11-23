@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Batch;
 use App\Models\MembershipSubscription;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\SubscriptionLog;
-use App\Services\GstService;
+use App\Services\RazorpayService;
+use App\Services\SubscriptionOrderService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class ProcessSubscriptionRenewals extends Command
 {
@@ -21,14 +19,21 @@ class ProcessSubscriptionRenewals extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Process recurring 30-day membership subscriptions and automatically create verified orders.';
+    protected $description = 'Reconciliation safety-net: verify missed webhook payments with Razorpay API and create orders for confirmed charges.';
+
+    public function __construct(
+        protected RazorpayService $razorpayService,
+        protected SubscriptionOrderService $orderService
+    ) {
+        parent::__construct();
+    }
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $this->info('Checking for due membership subscriptions...');
+        $this->info('Reconciliation: Checking for due subscriptions with no matching order...');
 
         $query = MembershipSubscription::where('status', 'active')
             ->with(['user', 'membership', 'product', 'variant']);
@@ -45,7 +50,11 @@ class ProcessSubscriptionRenewals extends Command
 
         $dueSubscriptions = $query->get();
 
-        $this->info("Found {$dueSubscriptions->count()} subscription(s) to process.");
+        $this->info("Found {$dueSubscriptions->count()} subscription(s) past billing date.");
+
+        $processed = 0;
+        $skipped = 0;
+        $failed = 0;
 
         foreach ($dueSubscriptions as $sub) {
             $user = $sub->user;
@@ -55,136 +64,178 @@ class ProcessSubscriptionRenewals extends Command
                 continue;
             }
 
-            // Auto-renew 5-year membership tenure if expired or within 30 days of expiry
-            if ($membership && $membership->expires_at && $membership->expires_at->lte(now()->addDays(30))) {
-                $oldExpiry = $membership->expires_at->copy();
-                $newExpiry = $membership->expires_at->copy()->addYears(5);
-                $membership->update([
-                    'expires_at' => $newExpiry,
-                    'status' => 'active',
-                ]);
+            // Auto-renew 5-year membership tenure if near expiry
+            $this->autoRenewMembershipIfNeeded($sub);
 
-                $this->info("Membership #{$membership->id} automatically renewed for 5 years until {$newExpiry->toDateString()}");
-
-                SubscriptionLog::create([
-                    'subscription_id' => $sub->id,
-                    'event' => 'membership_auto_renewed',
-                    'amount' => 0.00,
-                    'details' => [
-                        'previous_expiry' => $oldExpiry->toIso8601String(),
-                        'new_expiry' => $newExpiry->toIso8601String(),
-                        'note' => '5-Year sacred devotee membership automatically renewed via recurring subscription mandate.',
-                    ],
-                ]);
-            }
-
-            // Only active members are eligible
+            // Skip if membership is not active
             if (! $membership || ! $membership->isActive()) {
-                $this->warn("Skipping subscription #{$sub->id}: Member is not active.");
+                $this->warn("Skipping sub #{$sub->id}: Membership not active.");
                 $sub->update(['status' => 'past_due']);
+                $skipped++;
 
                 continue;
             }
 
-            $product = $sub->product;
-            $variant = $sub->variant;
-            $billing = MembershipSubscription::getMonthlyBillingDetails($product);
-            $productPrice = $billing['product_price'];
-            $deliveryCharge = $billing['delivery_charge'];
-            $amount = (float) ($sub->billing_amount ?: $billing['total_monthly_charge']);
+            // Determine the billing period to reconcile
+            $billingPeriod = now()->format('Y-m');
 
-            // If subscription record amount differs from current pricing, preserve breakdown:
-            if ($amount != round($productPrice + $deliveryCharge, 2) && $amount > 0) {
-                if ($amount >= $deliveryCharge) {
-                    $productPrice = round($amount - $deliveryCharge, 2);
-                } else {
-                    $deliveryCharge = $amount;
-                    $productPrice = 0.0;
-                }
+            // Check if an order already exists for this cycle (webhook may have handled it)
+            $existingOrder = Order::where('membership_subscription_id', $sub->id)
+                ->where('billing_period', $billingPeriod)
+                ->exists();
+
+            if ($existingOrder) {
+                $this->info("Sub #{$sub->id}: Order already exists for {$billingPeriod} (webhook handled it). Skipping.");
+                $skipped++;
+
+                continue;
             }
 
-            $this->info("Processing renewal for user {$user->name} (#{$sub->id}) - Total: ₹{$amount} (Product: ₹{$productPrice} + Delivery: ₹{$deliveryCharge})");
+            // Verify payment status with Razorpay API
+            $this->info("Sub #{$sub->id}: No order for {$billingPeriod}. Verifying with Razorpay API...");
 
-            $batch = Batch::where('status', 'ready')->latest('collection_date')->first();
-            $orderNumber = 'HB-SUB-'.date('Ymd').'-'.strtoupper(Str::random(4));
-            $qrToken = 'HB-QR-'.Str::uuid()->toString();
+            $rzpSub = $this->razorpayService->fetchSubscription($sub->razorpay_subscription_id);
 
-            $gstRate = (float) ($variant?->gst_percentage ?? $product?->gst_percentage ?? 18.00);
-            $productTax = GstService::calculate($productPrice, $gstRate);
-            $shippingTax = GstService::calculate($deliveryCharge, 18.00);
+            if (! $rzpSub) {
+                $this->error("Sub #{$sub->id}: Could not fetch Razorpay subscription status.");
+                $this->orderService->alertAdmin(
+                    'Razorpay API Unreachable During Reconciliation',
+                    $sub,
+                    null,
+                    ['razorpay_sub_id' => $sub->razorpay_subscription_id]
+                );
+                $failed++;
 
-            $totalTaxable = round($productTax['taxable'] + $shippingTax['taxable'], 2);
-            $totalGst = round($productTax['gst'] + $shippingTax['gst'], 2);
-            $halfGst = round($totalGst / 2, 2);
+                continue;
+            }
 
-            $order = Order::create([
-                'order_number' => $orderNumber,
-                'user_id' => $user->id,
-                'batch_id' => $batch?->id,
-                'subtotal' => $productPrice,
-                'total_taxable_amount' => $totalTaxable,
-                'total_gst_amount' => $totalGst,
-                'cgst_amount' => $halfGst,
-                'sgst_amount' => $halfGst,
-                'igst_amount' => $totalGst,
-                'discount_amount' => 0.00,
-                'shipping_amount' => $deliveryCharge,
-                'total_amount' => $amount,
-                'payment_method' => 'razorpay_recurring',
-                'payment_status' => 'paid',
-                'payment_id' => 'pay_auto_'.Str::random(10),
-                'order_status' => 'confirmed',
-                'inventory_deducted' => false,
-                'qr_token' => $qrToken,
-                'shipping_address' => $sub->shipping_address ?? [
-                    'recipient_name' => $user->name,
-                    'phone' => $user->phone ?? '9999999999',
-                    'email' => $user->email,
-                    'address_line1' => 'Member Subscription Delivery Address',
-                    'city' => 'Haridwar',
-                    'state' => 'Uttarakhand',
-                    'postal_code' => '249401',
-                    'country' => 'India',
-                ],
-                'customer_notes' => "Automatic monthly member product delivery: Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge}) (Every 30 Days).",
+            // If subscription is halted/cancelled on Razorpay, update locally and alert
+            if (in_array($rzpSub['status'] ?? '', ['halted', 'cancelled'])) {
+                $sub->update(['status' => $rzpSub['status'] === 'halted' ? 'past_due' : 'cancelled']);
+                $this->warn("Sub #{$sub->id}: Razorpay status is '{$rzpSub['status']}'. Updated locally.");
+                $this->orderService->alertAdmin(
+                    "Subscription {$rzpSub['status']} on Razorpay",
+                    $sub,
+                    null,
+                    ['razorpay_status' => $rzpSub['status']]
+                );
+                $failed++;
+
+                continue;
+            }
+
+            // Fetch invoices to find the latest paid one for this cycle
+            $invoices = $this->razorpayService->fetchSubscriptionInvoices($sub->razorpay_subscription_id);
+
+            $latestPaidInvoice = collect($invoices)
+                ->filter(fn (array $inv): bool => ($inv['status'] ?? '') === 'paid')
+                ->sortByDesc('paid_at')
+                ->first();
+
+            if (! $latestPaidInvoice) {
+                $this->warn("Sub #{$sub->id}: No paid invoice found on Razorpay. Payment may still be pending.");
+                $this->orderService->alertAdmin(
+                    'No Paid Invoice Found — Payment Pending or Failed',
+                    $sub,
+                    null,
+                    [
+                        'razorpay_sub_id' => $sub->razorpay_subscription_id,
+                        'billing_period' => $billingPeriod,
+                        'next_billing_date' => $sub->next_billing_date?->toDateString(),
+                    ]
+                );
+                $failed++;
+
+                continue;
+            }
+
+            $paymentId = $latestPaidInvoice['payment_id'] ?? null;
+            $amountPaid = isset($latestPaidInvoice['amount_paid']) ? ((float) $latestPaidInvoice['amount_paid'] / 100) : 0;
+
+            if (! $paymentId || $amountPaid <= 0) {
+                $this->warn("Sub #{$sub->id}: Paid invoice found but no valid payment_id or amount.");
+                $this->orderService->alertAdmin(
+                    'Invoice Paid But Missing Payment Details',
+                    $sub,
+                    null,
+                    ['invoice' => $latestPaidInvoice]
+                );
+                $failed++;
+
+                continue;
+            }
+
+            // Check if this specific payment_id was already used in a previous order
+            $paymentAlreadyUsed = Order::where('payment_id', $paymentId)->exists();
+            if ($paymentAlreadyUsed) {
+                $this->info("Sub #{$sub->id}: Payment {$paymentId} already linked to an existing order. Skipping.");
+                // Advance the billing date so we don't re-check every day
+                $sub->update([
+                    'last_billed_at' => now(),
+                    'next_billing_date' => now()->addDays($sub->billing_interval_days ?: 30),
+                ]);
+                $skipped++;
+
+                continue;
+            }
+
+            // Payment verified — create the order with the REAL Razorpay payment ID
+            $this->info("Sub #{$sub->id}: Payment verified (₹{$amountPaid}, {$paymentId}). Creating order...");
+
+            $order = $this->orderService->createOrderForBillingCycle(
+                subscription: $sub,
+                billingPeriod: $billingPeriod,
+                amountPaid: $amountPaid,
+                paymentId: $paymentId,
+                paymentMethod: 'razorpay_recurring'
+            );
+
+            if ($order) {
+                $this->orderService->bookShipmentAndNotify($order, $sub);
+                $this->info("Order #{$order->order_number} created and shipment booked for sub #{$sub->id}.");
+                $processed++;
+            } else {
+                $this->info("Sub #{$sub->id}: Order not created (likely dedup race condition). Skipping.");
+                $skipped++;
+            }
+        }
+
+        $this->info("Reconciliation complete: {$processed} order(s) created, {$skipped} skipped, {$failed} failed.");
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Auto-renew 5-year membership tenure if expired or within 30 days of expiry.
+     */
+    protected function autoRenewMembershipIfNeeded(MembershipSubscription $sub): void
+    {
+        $membership = $sub->membership;
+
+        if (! $membership || ! $membership->expires_at) {
+            return;
+        }
+
+        if ($membership->expires_at->lte(now()->addDays(30))) {
+            $oldExpiry = $membership->expires_at->copy();
+            $newExpiry = $membership->expires_at->copy()->addYears(5);
+            $membership->update([
+                'expires_at' => $newExpiry,
+                'status' => 'active',
             ]);
 
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product->id,
-                'variant_id' => $variant?->id,
-                'product_name' => $product->name,
-                'variant_name' => $variant?->name,
-                'hsn_code' => $variant?->hsn_code ?? $product->hsn_code ?? '22019010',
-                'gst_percentage' => $gstRate,
-                'taxable_amount' => $productTax['taxable'],
-                'gst_amount' => $productTax['gst'],
-                'unit_price' => $productPrice,
-                'quantity' => 1,
-                'total_price' => $productPrice,
-                'is_free_monthly_bottle' => false,
-            ]);
-
-            $sub->update([
-                'last_billed_at' => now(),
-                'next_billing_date' => now()->addDays($sub->billing_interval_days ?: 30),
-                'payment_failures_count' => 0,
-            ]);
+            $this->info("Membership #{$membership->id} automatically renewed for 5 years until {$newExpiry->toDateString()}");
 
             SubscriptionLog::create([
                 'subscription_id' => $sub->id,
-                'event' => 'payment_success',
-                'amount' => $amount,
-                'order_id' => $order->id,
-                'payment_id' => $order->payment_id,
-                'details' => ['order_number' => $orderNumber],
+                'event' => 'membership_auto_renewed',
+                'amount' => 0.00,
+                'details' => [
+                    'previous_expiry' => $oldExpiry->toIso8601String(),
+                    'new_expiry' => $newExpiry->toIso8601String(),
+                    'note' => '5-Year sacred devotee membership automatically renewed via recurring subscription mandate.',
+                ],
             ]);
-
-            $this->info("Order #{$orderNumber} created successfully for subscription #{$sub->id}.");
         }
-
-        $this->info('All due subscriptions processed.');
-
-        return Command::SUCCESS;
     }
 }

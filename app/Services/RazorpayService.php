@@ -28,7 +28,10 @@ class RazorpayService
 
     public function isDummy(): bool
     {
-        return str_starts_with($this->keyId, 'rzp_test_dummy_') || empty($this->keySecret);
+        return app()->environment('testing')
+            || app()->runningUnitTests()
+            || str_starts_with($this->keyId, 'rzp_test_dummy_')
+            || empty($this->keySecret);
     }
 
     /**
@@ -152,6 +155,80 @@ class RazorpayService
         }
 
         return 'plan_fallback_'.Str::random(12);
+    }
+
+    /**
+     * Fetch a subscription's current status from Razorpay.
+     *
+     * @return array{id: string, status: string, paid_count: int, ...}|null
+     */
+    public function fetchSubscription(string $subscriptionId): ?array
+    {
+        if ($this->isDummy() || str_contains($subscriptionId, 'mock') || str_contains($subscriptionId, 'test') || str_contains($subscriptionId, 'fallback')) {
+            return [
+                'id' => $subscriptionId,
+                'status' => 'active',
+                'paid_count' => 1,
+                'is_mock' => true,
+            ];
+        }
+
+        try {
+            $response = Http::withBasicAuth($this->keyId, $this->keySecret)
+                ->timeout(10)
+                ->get("https://api.razorpay.com/v1/subscriptions/{$subscriptionId}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            Log::error("Razorpay fetchSubscription failed for {$subscriptionId}: ".$response->body());
+        } catch (\Throwable $e) {
+            Log::error("Razorpay fetchSubscription exception for {$subscriptionId}: ".$e->getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Fetch invoices for a subscription from Razorpay.
+     *
+     * @return array<int, array{id: string, status: string, payment_id: ?string, amount_paid: int, ...}>
+     */
+    public function fetchSubscriptionInvoices(string $subscriptionId): array
+    {
+        if ($this->isDummy() || str_contains($subscriptionId, 'mock') || str_contains($subscriptionId, 'test') || str_contains($subscriptionId, 'fallback')) {
+            return [
+                [
+                    'id' => 'inv_mock_'.Str::random(10),
+                    'subscription_id' => $subscriptionId,
+                    'status' => 'paid',
+                    'payment_id' => 'pay_mock_'.Str::random(10),
+                    'amount_paid' => 19900,
+                    'paid_at' => now()->timestamp,
+                    'is_mock' => true,
+                ],
+            ];
+        }
+
+        try {
+            $response = Http::withBasicAuth($this->keyId, $this->keySecret)
+                ->timeout(10)
+                ->get('https://api.razorpay.com/v1/invoices', [
+                    'subscription_id' => $subscriptionId,
+                    'type' => 'invoice',
+                ]);
+
+            if ($response->successful()) {
+                return $response->json('items') ?? [];
+            }
+
+            Log::error("Razorpay fetchSubscriptionInvoices failed for {$subscriptionId}: ".$response->body());
+        } catch (\Throwable $e) {
+            Log::error("Razorpay fetchSubscriptionInvoices exception for {$subscriptionId}: ".$e->getMessage());
+        }
+
+        return [];
     }
 
     /**

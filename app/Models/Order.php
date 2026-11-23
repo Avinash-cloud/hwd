@@ -16,6 +16,8 @@ class Order extends Model
         'user_id',
         'guest_email',
         'batch_id',
+        'membership_subscription_id',
+        'billing_period',
         'subtotal',
         'total_taxable_amount',
         'total_gst_amount',
@@ -84,6 +86,11 @@ class Order extends Model
     public function batch(): BelongsTo
     {
         return $this->belongsTo(Batch::class);
+    }
+
+    public function membershipSubscription(): BelongsTo
+    {
+        return $this->belongsTo(MembershipSubscription::class);
     }
 
     public function items(): HasMany

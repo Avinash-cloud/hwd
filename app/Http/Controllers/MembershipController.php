@@ -12,8 +12,8 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\SubscriptionLog;
-use App\Services\GstService;
 use App\Services\RazorpayService;
+use App\Services\SubscriptionOrderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,7 +22,8 @@ use Illuminate\View\View;
 class MembershipController extends Controller
 {
     public function __construct(
-        protected RazorpayService $razorpayService
+        protected RazorpayService $razorpayService,
+        protected SubscriptionOrderService $subscriptionOrderService
     ) {}
 
     /**
@@ -285,6 +286,8 @@ class MembershipController extends Controller
             'order_number' => $orderNumber,
             'user_id' => $user->id,
             'batch_id' => $batch?->id,
+            'membership_subscription_id' => $subRecord->id,
+            'billing_period' => now()->format('Y-m'),
             'subtotal' => $productPrice,
             'total_taxable_amount' => 0.00,
             'total_gst_amount' => 0.00,
@@ -330,9 +333,13 @@ class MembershipController extends Controller
             'details' => [
                 'order_number' => $orderNumber,
                 'invoice_number' => $invoiceNumber,
+                'billing_period' => now()->format('Y-m'),
                 'note' => '5-Year sacred membership activated. First bottle dispatched free as welcome benefit. Auto-debit begins month 2.',
             ],
         ]);
+
+        // 6. Auto-book shipment and send confirmation email for Month 1
+        $this->subscriptionOrderService->bookShipmentAndNotify($order, $subRecord);
 
         return redirect()->route('dashboard')->with(
             'success',
