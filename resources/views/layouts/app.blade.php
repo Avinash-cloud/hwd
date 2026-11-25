@@ -170,6 +170,8 @@
                         <li><a href="{{ route('about') }}"
                                 class="text-amber-300 font-medium hover:text-white transition">About Us (Our Sacred
                                 Sanctity)</a></li>
+                        <li><a href="{{ route('why-choose-us') }}" class="hover:text-white transition">Why Choose
+                                Blu Bliss</a></li>
                         <li><a href="{{ route('verify.batch', 'HB-VERIFY-2026-SAMPLE') }}"
                                 class="hover:text-white transition">Batch QR Verification & Lab Tests</a></li>
                         <li><a href="{{ route('faqs') }}" class="hover:text-white transition">Frequently Asked
@@ -236,6 +238,7 @@
                 <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
                     <a href="{{ route('terms') }}" class="hover:text-white transition">Terms & Conditions</a>
                     <a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="{{ route('cancellation-policy') }}" class="hover:text-white transition">Cancellation Policy</a>
                     <a href="{{ route('faqs') }}" class="hover:text-white transition">FAQs</a>
                     <div class="flex items-center gap-3 sm:pl-3 sm:border-l sm:border-amber-800/80">
                         <a href="https://www.facebook.com/profile.php?id=61596766471785" target="_blank" rel="noopener noreferrer"

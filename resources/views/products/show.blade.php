@@ -557,7 +557,7 @@
                                     </p>
                                 @elseif (!Auth::check() || !Auth::user()->hasActiveMembership())
                                     <p class="text-[11px] text-[#3B2314]/70 italic text-center">
-                                        Note: Placing orders requires signing in or joining the 5-Year Membership (₹500 for 5 years).
+                                        Note: Placing orders requires signing in or joining the {{ $validityYears ?? 5 }}-Year Membership (₹{{ number_format($membershipFee ?? 500) }} for {{ $validityYears ?? 5 }} years).
                                     </p>
                                 @endif
                             </div>

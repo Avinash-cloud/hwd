@@ -155,7 +155,7 @@ class PageController extends Controller
             ."Payment Method: {$paymentMethod}\n"
             ."Payment Status: {$paymentStatus}\n"
             .($razorpayPaymentId ? "Razorpay Payment ID: {$razorpayPaymentId}\n" : '')
-            ."Agreement: Devotee agreed to 100% Non-Refundable online puja terms.\n";
+            ."Agreement: Devotee agreed to Haridwar Ghat E-Puja Terms & Conditions (tiered cancellation & rescheduling policy).\n";
 
         ContactInquiry::create([
             'name' => $validated['devotee_name'],
@@ -208,10 +208,9 @@ class PageController extends Controller
 
     public function terms(): View
     {
-        $membershipFee = (float) SiteSetting::get('membership_fee', 797);
+        $membershipFee = (float) SiteSetting::get('membership_fee', 500);
         $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
         $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
-        $continuationCharge = (float) SiteSetting::get('membership_continuation_charge', 85);
         $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
         $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
 
@@ -226,7 +225,6 @@ class PageController extends Controller
             'membershipFee',
             'validityYears',
             'shippingRate',
-            'continuationCharge',
             'supportEmail',
             'supportPhone',
             'monthlyProduct',
@@ -240,5 +238,48 @@ class PageController extends Controller
     public function privacy(): View
     {
         return view('pages.privacy');
+    }
+
+    public function whyChooseUs(): View
+    {
+        $membershipFee = (float) SiteSetting::get('membership_fee', 500);
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyProduct = $billing['product'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyVolume = $monthlyProduct?->volume_ml ?? 500;
+
+        return view('pages.why-choose-us', compact(
+            'membershipFee',
+            'validityYears',
+            'shippingRate',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'monthlyAutoDebit',
+            'monthlyVolume'
+        ));
+    }
+
+    public function cancellationPolicy(): View
+    {
+        $membershipFee = (float) SiteSetting::get('membership_fee', 500);
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+        $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
+        $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+
+        return view('pages.cancellation-policy', compact(
+            'membershipFee',
+            'validityYears',
+            'monthlyAutoDebit',
+            'supportEmail',
+            'supportPhone'
+        ));
     }
 }

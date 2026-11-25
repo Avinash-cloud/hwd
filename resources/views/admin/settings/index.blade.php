@@ -64,9 +64,9 @@
 
                 <input type="hidden" name="free_first_bottle_enabled" value="0">
                 <div class="p-3 bg-amber-50/50 border border-amber-200/70 rounded-lg text-xs space-y-1">
-                    <span class="text-amber-900 block font-semibold text-xs">Monthly Recurring Auto-Debit Policy</span>
+                    <span class="text-amber-900 block font-semibold text-xs">Monthly Recurring Auto-Debit &amp; Auto-Renewal Policy</span>
                     <span class="text-[11px] text-slate-600 block leading-relaxed">
-                        Every month, the member auto-debit mandate debits: <strong>Active Product Price</strong> (from Membership Catalog) + <strong>Delivery Charge</strong>. Both components are billed at their configured values (nothing is free).
+                        Every month, the member auto-debit mandate debits: <strong>Active Product Price</strong> (from Membership Catalog) + <strong>Delivery Charge</strong>. Upon tenure completion, active mandates automatically renew the membership with no extra commitment fee.
                     </span>
                 </div>
             </div>

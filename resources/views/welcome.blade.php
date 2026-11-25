@@ -1181,8 +1181,113 @@
         </div>
     </section>
 
+    <!-- 8.5 Why Choose Blu Bliss (5 Core Pillars) -->
+    <section id="why-choose-blu-bliss" class="py-16 sm:py-20 bg-[#F97316] border-t border-amber-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12 space-y-2.5">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-amber-100 text-[#881337] font-mono">
+                    Sacred Sourcing &amp; Monthly Devotion
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-serif font-extrabold text-[#881337]">
+                    Why Choose Blu Bliss
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-100 leading-relaxed">
+                    Every {{ $validityYears ?? 5 }}-Year Membership ({{ ($validityYears ?? 5) * 12 }} months, ₹{{ number_format($membershipFee ?? 500) }} one-time commitment fee) delivers pure Haridwar Gangajal in sealed {{ $monthlyVolume ?? 500 }} ml PET bottles at ₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }}/month (incl. GST).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 1. Purity -->
+                <article class="bg-white rounded-3xl border border-amber-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                            01 · Purity
+                        </span>
+                        <h3 class="font-serif font-extrabold text-lg text-[#881337]">Purity Guaranteed</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Sourced directly from Haridwar and hygienically packed in sealed <strong>{{ $monthlyVolume ?? 500 }} ml PET bottles</strong> so your home altar receives authentic Gangajal every month.
+                        </p>
+                    </div>
+                    <p class="text-xs font-semibold italic text-amber-900 pt-3 border-t border-amber-100">
+                        &ldquo;Purity guaranteed &mdash; authentic Haridwar Gangajal for your sacred altar.&rdquo;
+                    </p>
+                </article>
+
+                <!-- 2. Auto-Delivery -->
+                <article class="bg-white rounded-3xl border border-amber-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                            02 · Auto-Delivery
+                        </span>
+                        <h3 class="font-serif font-extrabold text-lg text-[#881337]">Auto-Delivery Subscription</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Enroll once and never remember to reorder every month. Your scheduled {{ $monthlyVolume ?? 500 }} ml PET bottle arrives automatically at ₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }}/month (incl. GST).
+                        </p>
+                    </div>
+                    <p class="text-xs font-semibold italic text-amber-900 pt-3 border-t border-amber-100">
+                        &ldquo;Leave worship logistics to us &mdash; you just focus on devotion.&rdquo;
+                    </p>
+                </article>
+
+                <!-- 3. Virtue + Cleanliness -->
+                <article class="bg-white rounded-3xl border border-amber-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                            03 · Virtue + Cleanliness
+                        </span>
+                        <h3 class="font-serif font-extrabold text-lg text-[#881337]">Virtue + Cleanliness Double Benefit</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Rooted in reverence for Maa Ganga&mdash;uniting sacred household worship with mindful practices that respect river cleanliness and sanctity.
+                        </p>
+                    </div>
+                    <p class="text-xs font-semibold italic text-amber-900 pt-3 border-t border-amber-100">
+                        &ldquo;Devotion and sacred stewardship moving hand in hand.&rdquo;
+                    </p>
+                </article>
+
+                <!-- 4. Pan-India Delivery -->
+                <article class="bg-white rounded-3xl border border-amber-200 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
+                            04 · Pan-India Delivery
+                        </span>
+                        <h3 class="font-serif font-extrabold text-lg text-[#881337]">Zero Logistics Hassle</h3>
+                        <p class="text-xs text-slate-700 leading-relaxed">
+                            Pan-India doorstep delivery in sealed, food-grade <strong>{{ $monthlyVolume ?? 500 }} ml PET bottles</strong> via trusted courier partners, with 15 days&rsquo; notice support for address updates.
+                        </p>
+                    </div>
+                    <p class="text-xs font-semibold italic text-amber-900 pt-3 border-t border-amber-100">
+                        &ldquo;Haridwar at Your Doorstep.&rdquo;
+                    </p>
+                </article>
+
+                <!-- 5. Family & Tradition -->
+                <article class="md:col-span-2 bg-[#FEF4CF] rounded-3xl border-2 border-amber-300/80 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-[#881337] bg-amber-200/70 px-2.5 py-0.5 rounded-full">
+                            05 · Family &amp; Tradition
+                        </span>
+                        <h3 class="font-serif font-extrabold text-lg text-[#881337]">Family Well-Being &amp; Living Sanskar</h3>
+                        <p class="text-xs text-slate-800 leading-relaxed">
+                            A convenient {{ $monthlyVolume ?? 500 }} ml PET bottle connects generations&mdash;share the sacred story of Ganga Maiya with children and keep daily Vedic traditions alive at home for <strong>about ₹{{ max(1, (int) round(($monthlyAutoDebit ?? $shippingRate ?? 149) / 30)) }} per day</strong>.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-amber-300/60 flex flex-wrap items-center justify-between gap-3">
+                        <p class="text-xs font-semibold italic text-[#881337]">
+                            &ldquo;Stay connected to your roots, for about ₹{{ max(1, (int) round(($monthlyAutoDebit ?? $shippingRate ?? 149) / 30)) }} per day.&rdquo;
+                        </p>
+                        <a href="{{ route('why-choose-us') }}"
+                           class="inline-flex items-center px-4 py-2 rounded-xl bg-[#881337] hover:bg-[#6B0E29] text-white text-xs font-bold transition shadow-xs">
+                            Explore Why Choose Blu Bliss &rarr;
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <!-- 9. Trust & Quality Assurance Pillars (99Pandit Style) -->
-    <section class="py-10 sm:py-14 bg-[#F97316] border-b border-orange-600/40 relative overflow-hidden">
+    <section class="py-10 sm:py-14 bg-[#FFA028] border-b border-orange-600/40 relative overflow-hidden">
         <!-- Subtle sacred background aura -->
         <div class="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-amber-200/20 blur-3xl pointer-events-none">
         </div>

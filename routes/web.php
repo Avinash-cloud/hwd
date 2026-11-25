@@ -62,11 +62,13 @@ Route::post('/water-collection', [WaterCollectionController::class, 'store'])->n
 Route::get('/water-collection/confirmed/{lead_number}', [WaterCollectionController::class, 'confirmed'])->name('water-collection.confirmed');
 
 Route::get('/about-us', [PageController::class, 'about'])->name('about');
+Route::get('/why-choose-us', [PageController::class, 'whyChooseUs'])->name('why-choose-us');
 Route::get('/faqs', [PageController::class, 'faqs'])->name('faqs');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::post('/contact', [PageController::class, 'submitContact'])->name('contact.submit');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/cancellation-policy', [PageController::class, 'cancellationPolicy'])->name('cancellation-policy');
 
 // Dedicated 404 Error Page
 Route::get('/404', function () {

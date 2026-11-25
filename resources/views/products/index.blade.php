@@ -53,7 +53,7 @@
                             <span>Devotee Privilege</span>
                         </div>
                         <p class="text-slate-600 leading-relaxed text-[11px]">
-                            Join our 5-Year Membership (₹{{ number_format($membershipFee ?? 797) }}) for uninterrupted monthly doorstep auto-delivery of pure 500ml Haridwar Gangajal at ₹{{ number_format($shippingRate ?? 199) }}/month.
+                            Join our {{ $validityYears ?? 5 }}-Year Membership (₹{{ number_format($membershipFee ?? 500) }}) for uninterrupted monthly doorstep auto-delivery of pure {{ $monthlyVolume ?? 500 }}ml Haridwar Gangajal at ₹{{ number_format($monthlyAutoDebit ?? $shippingRate ?? 149) }}/month.
                         </p>
                         <a href="{{ route('membership.join') }}"
                            class="block text-center w-full py-2 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-[11px] shadow-xs transition">

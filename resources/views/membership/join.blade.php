@@ -162,7 +162,7 @@
                             <div>
                                 <h3 class="font-bold text-[#881337] text-sm sm:text-base">5-Year Commitment & Price Lock</h3>
                                 <p class="text-xs text-[#3B2314]/85 leading-relaxed mt-1">
-                                    A one-time commitment fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months. The monthly auto-debit charge of <strong>₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month</strong> (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}) per bottle is payable by the 5th of every month.
+                                    A one-time commitment fee of <strong>₹{{ number_format($membershipFee) }}</strong> secures your membership for 60 months, with automatic membership renewal upon completion via your active mandate. The monthly auto-debit charge of <strong>₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month</strong> (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}) per bottle is processed automatically each billing cycle.
                                     <span class="block text-[11px] text-amber-900/80 font-medium mt-1">
                                         *(Note: Service rate of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }} ensured for the agreement period. In case of any future price revision, 30 days prior written notice will be provided.)*
                                     </span>
@@ -221,7 +221,10 @@
                         • <strong>Agreement Period:</strong> 60 Months (5 Continuous Years) of monthly 500ml pure Haridwar Gangajal delivered to your address.
                     </p>
                     <p>
-                        • <strong>Financial Terms:</strong> One-time commitment fee of ₹{{ number_format($membershipFee) }} (non-refundable) + monthly delivery charge of ₹{{ number_format($shippingRate) }}/month (including GST) payable by the 5th of every month.
+                        • <strong>Financial Terms:</strong> One-time commitment fee of ₹{{ number_format($membershipFee) }} (non-refundable) + automated monthly recurring charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, including GST). Upon completion of 60 months, your membership renews automatically through your active recurring mandate with no extra commitment fee.
+                    </p>
+                    <p>
+                        • <strong>Cancellation Policy:</strong> Review our complete <a href="{{ route('cancellation-policy') }}" class="text-[#D97706] font-bold hover:underline">Service Cancellation Policy</a> for cancellation and auto-renewal terms.
                     </p>
                     <p>
                         • <strong>Sanctity Assurance:</strong> Sacred water collected during Brahma Muhurta morning Aarti under continuous Vedic recitation. Untouched by human hands and hermetically sealed.
@@ -468,7 +471,7 @@
                         <ul class="mt-1 space-y-1.5 text-slate-600">
                             <li><strong>A] One Time Commitment Fee:</strong> ₹{{ number_format($membershipFee) }}/- (This fee is charged as a one-time charge for the 5-year service commitment. This fee is <strong>Non-Refundable</strong> and shall not be refunded under any circumstances).</li>
                             <li><strong>B] Monthly Charge:</strong> ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/- per bottle per month (Product Price: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, Including GST).</li>
-                            <li><strong>C] Payment:</strong> The Commitment Fee is payable in advance at the time of signing the Agreement. The Monthly Charge is payable by the 5th of every month.</li>
+                            <li><strong>C] Payment:</strong> The Commitment Fee is payable in advance at the time of joining. The Monthly Charge is processed automatically each month via your authorized recurring payment mandate.</li>
                         </ul>
                     </div>
 
@@ -500,13 +503,13 @@
                     </div>
 
                     <div class="pt-3">
-                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">7. Termination of Agreement</h4>
-                        <p class="mt-1 text-slate-600">This Agreement shall automatically terminate upon completion of 60 months. Renewal shall be at the Customer's discretion.</p>
+                        <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">7. Duration &amp; Automatic Renewal</h4>
+                        <p class="mt-1 text-slate-600">Upon completion of 60 months, this membership is automatically renewed for the subsequent term through your active recurring mandate with no extra Commitment Fee, unless discontinued prior by the Customer.</p>
                     </div>
 
                     <div class="pt-3">
                         <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">8. Dispute Resolution</h4>
-                        <p class="mt-1 text-slate-600">All disputes related to this Agreement shall be subject to the jurisdiction of Haridwar District Court.</p>
+                        <p class="mt-1 text-slate-600">All disputes related to this Agreement shall be subject to the jurisdiction of Haridwar District Court, Uttarakhand.</p>
                     </div>
 
                     <div class="pt-3">
@@ -515,9 +518,12 @@
                             <li><strong>A.</strong> The Customer may discontinue the service in any month by giving written notice or e-mail.</li>
                             <li><strong>B.</strong> The Commitment Fee of ₹{{ number_format($membershipFee) }} is non-refundable under any circumstances.</li>
                             <li><strong>C.</strong> Any monthly fee paid in advance shall be adjusted in the subsequent month's bill.</li>
-                            <li><strong>D.</strong> After completion of 60 months, no further Commitment Fee shall be charged.</li>
-                            <li><strong>E.</strong> For renewal after 5 years, a fresh Agreement may be executed if required.</li>
+                            <li><strong>D.</strong> After completion of 60 months, the membership renews automatically through the active recurring mandate without any additional Commitment Fee.</li>
+                            <li><strong>E.</strong> Customers who do not wish to auto-renew may cancel anytime before renewal in accordance with our Cancellation Policy.</li>
                         </ul>
+                        <p class="mt-2 text-[11px] text-slate-500">
+                            See also the standalone <a href="{{ route('cancellation-policy') }}" class="text-[#D97706] font-bold hover:underline">Service Cancellation Policy</a>.
+                        </p>
                     </div>
                 </div>
 

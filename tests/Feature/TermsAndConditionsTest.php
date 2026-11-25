@@ -17,13 +17,21 @@ class TermsAndConditionsTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Terms & Conditions');
         $response->assertSee('HARIDWAR BLISS FOOD &amp; BEVERAGES PVT. LTD.', false);
-        $response->assertSee('₹797');
-        $response->assertDontSee('699');
+        $response->assertSee('17 November 2026');
+        $response->assertSee('₹500');
+        $response->assertDontSee('₹797');
         $response->assertSee('sales@haridwarbliss.com');
         $response->assertDontSee('SDENTERPRISESGHAZIABAD@GMAIL.COM');
         $response->assertSee('Five-Year Ganga Jal Seva Commitment Plan');
         $response->assertSee('₹149');
-        $response->assertSee('Ghaziabad District Court');
+        $response->assertSee('Auto-Renewed');
+        $response->assertSee('automatically renewed');
+        $response->assertDontSee('5th day of each month');
+        $response->assertDontSee('payable by the 5th');
+        $response->assertDontSee('₹85 + GST');
+        $response->assertSee('Haridwar District Court');
+        $response->assertDontSee('Ghaziabad District Court');
+        $response->assertSee(route('cancellation-policy'), false);
     }
 
     public function test_terms_page_uses_database_pricing(): void
@@ -31,13 +39,13 @@ class TermsAndConditionsTest extends TestCase
         SiteSetting::set('membership_fee', '1250');
         SiteSetting::set('shipping_charge', '199');
         SiteSetting::set('membership_validity_years', '3');
-        SiteSetting::set('membership_continuation_charge', '95');
 
         $response = $this->get('/terms');
 
         $response->assertStatus(200);
         $response->assertSee('₹1,250');
-        $response->assertSee('₹95');
+        $response->assertSee('₹199');
         $response->assertSee('3-year');
+        $response->assertSee('Auto-Renewed');
     }
 }

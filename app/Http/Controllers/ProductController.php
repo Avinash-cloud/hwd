@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\MembershipSubscription;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Illuminate\Http\JsonResponse;
@@ -91,9 +92,21 @@ class ProductController extends Controller
 
         $categories = Category::with('children')->root()->where('is_active', true)->orderBy('sort_order')->get();
         $membershipFee = SiteSetting::get('membership_fee', '500');
-        $shippingRate = (float) SiteSetting::get('shipping_charge', 199);
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyVolume = $billing['product']?->volume_ml ?? 500;
 
-        return view('products.index', compact('products', 'categories', 'membershipFee', 'shippingRate'));
+        return view('products.index', compact(
+            'products',
+            'categories',
+            'membershipFee',
+            'validityYears',
+            'shippingRate',
+            'monthlyAutoDebit',
+            'monthlyVolume'
+        ));
     }
 
     /**
@@ -201,11 +214,12 @@ class ProductController extends Controller
             ->get();
 
         $membershipFee = SiteSetting::get('membership_fee', '500');
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
         $shippingRate = SiteSetting::get('shipping_charge', '149');
         $user = auth()->user();
         $isVerifiedPurchaser = $product->canUserReview($user);
         $userReview = $product->getUserReview($user);
 
-        return view('products.show', compact('product', 'relatedProducts', 'allProducts', 'membershipFee', 'shippingRate', 'isVerifiedPurchaser', 'userReview'));
+        return view('products.show', compact('product', 'relatedProducts', 'allProducts', 'membershipFee', 'validityYears', 'shippingRate', 'isVerifiedPurchaser', 'userReview'));
     }
 }

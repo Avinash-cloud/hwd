@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use App\Models\Category;
+use App\Models\MembershipSubscription;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\Slider;
@@ -163,7 +164,13 @@ class HomeController extends Controller
             ->first();
 
         $membershipFee = SiteSetting::get('membership_fee', '500');
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
         $shippingRate = SiteSetting::get('shipping_charge', '149');
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $monthlyVolume = $billing['product']?->volume_ml ?? 500;
 
         return view('welcome', compact(
             'sliders',
@@ -177,7 +184,12 @@ class HomeController extends Controller
             'categories',
             'latestBatch',
             'membershipFee',
-            'shippingRate'
+            'validityYears',
+            'shippingRate',
+            'monthlyAutoDebit',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'monthlyVolume'
         ));
     }
 }

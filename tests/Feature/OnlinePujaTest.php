@@ -38,7 +38,14 @@ class OnlinePujaTest extends TestCase
         $response->assertSee('openBookingModal', false);
         $response->assertSee('isBookingModalOpen', false);
         $response->assertSee('closeBookingModal', false);
+        $response->assertSee('openTermsModal', false);
+        $response->assertSee('isTermsModalOpen', false);
         $response->assertSee('Vedic Sankalp &amp; Online Puja Booking', false);
+        $response->assertSee('50% refund');
+        $response->assertSee('5 to 7 working days');
+        $response->assertSee('6 hours');
+        $response->assertSee('3 to 5 working days');
+        $response->assertSee('Haridwar District Court, Uttarakhand');
     }
 
     public function test_navigation_menu_links_to_online_puja_page(): void
@@ -68,7 +75,10 @@ class OnlinePujaTest extends TestCase
             'occasion' => 'विवाह की 10वीं वर्षगांठ',
             'phone' => '+91 7042482555',
             'email' => 'devotee@example.com',
-            'shipping_address' => '102, गंगा एन्क्लेव, निकट हर की पौड़ी, हरिद्वार, उत्तराखंड - 249401',
+            'address_line' => '102, गंगा एन्क्लेव, निकट हर की पौड़ी',
+            'city' => 'Haridwar',
+            'state' => 'Uttarakhand',
+            'pincode' => '249401',
             'special_instructions' => 'सुख-शांति एवं उत्तम स्वास्थ्य की विशेष प्रार्थना',
             'terms_agreed' => '1',
         ];
@@ -87,7 +97,7 @@ class OnlinePujaTest extends TestCase
 
         $inquiry = ContactInquiry::latest('id')->first();
         $this->assertStringContainsString('कश्यप', $inquiry->message);
-        $this->assertStringContainsString('100% Non-Refundable', $inquiry->message);
+        $this->assertStringContainsString('Haridwar Ghat E-Puja Terms & Conditions (tiered cancellation & rescheduling policy)', $inquiry->message);
     }
 
     public function test_booking_submission_fails_if_mandatory_terms_not_agreed(): void

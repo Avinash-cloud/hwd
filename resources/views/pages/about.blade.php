@@ -53,13 +53,15 @@
 
                 <p x-show="lang === 'en'" class="text-sm sm:text-base text-stone-600 leading-relaxed">
                     Blu Bliss, an initiative by <strong>Haridwar Bliss Food &amp; Beverages Private Limited</strong>,
-                    bridges timeless Vedic traditions and modern life. We bring the sanctity and authentic rituals of
-                    Haridwar directly to your home.
+                    was born from a simple yet profound vision: to bridge the distance between timeless Vedic traditions
+                    and modern lives. We bring the untouched sanctity, spiritual energy, and authentic rituals of the
+                    sacred city of Haridwar directly to your home.
                 </p>
                 <p x-show="lang === 'hi'" x-cloak class="text-sm text-stone-600 hindi-text">
-                    <strong>Haridwar Bliss Food &amp; Beverages Private Limited</strong> का उपक्रम
-                    <strong>ब्लू ब्लिस</strong> प्राचीन वैदिक परंपराओं और आधुनिक जीवनशैली के बीच एक सेतु है। हम हरिद्वार की
-                    शुद्धता और प्रामाणिक अनुष्ठान सीधे आपके घर तक पहुँचाते हैं।
+                    <strong>Haridwar Bliss Food &amp; Beverages Private Limited</strong> का एक पवित्र उपक्रम,
+                    <strong>ब्लू ब्लिस (Blu Bliss)</strong> एक सरल किंतु गहन उद्देश्य के साथ स्थापित किया गया है—प्राचीन
+                    वैदिक परंपराओं और आधुनिक जीवनशैली के बीच एक आध्यात्मिक सेतु बनाना। हम पावन तीर्थ नगरी हरिद्वार की
+                    दिव्य ऊर्जा, शुद्धता और प्रामाणिक अनुष्ठानों को सीधे आपके घर तक पहुँचाते हैं।
                 </p>
             </div>
         </section>
@@ -80,23 +82,27 @@
 
                     <div x-show="lang === 'en'" class="space-y-3 text-stone-600">
                         <p>
-                            In today’s fast-paced world, visiting the banks of Maa Ganga regularly isn’t always
-                            possible. Yet the need for spiritual grounding and purity at home remains.
+                            In today’s fast-paced world, visiting the holy banks of the Maa Ganga regularly isn’t always
+                            possible. Yet, the need for spiritual grounding, purity, and divine blessings in our homes
+                            remains constant.
                         </p>
                         <p>
-                            At <strong>Blu Bliss</strong>, we give every household access to pure Haridwar Gangajal and
-                            genuine Vedic worship, delivered with transparency, hygiene, and devotion.
+                            At <strong>Blu Bliss</strong>, we ensure that every household has uninterrupted access to
+                            pure, authentic Haridwar Gangajal and genuine Vedic worship experiences—delivered with
+                            complete transparency, hygiene, and devotion.
                         </p>
                     </div>
 
                     <div x-show="lang === 'hi'" x-cloak class="space-y-3 text-stone-600 hindi-text">
                         <p>
-                            आज की व्यस्त जीवनशैली में हर किसी के लिए नियमित रूप से हरिद्वार आकर माँ गंगा के तट पर पूजन करना
-                            संभव नहीं। किंतु घर में शुद्धि और आशीर्वाद की आवश्यकता सदैव बनी रहती है।
+                            आज की व्यस्त और भागदौड़ भरी जीवनशैली में हर किसी के लिए नियमित रूप से हरिद्वार आकर माँ गंगा
+                            के तट पर स्नान और पूजन करना संभव नहीं हो पाता। किंतु, घर में सकारात्मक ऊर्जा, शुद्धि और
+                            ईश्वर के आशीर्वाद की आवश्यकता सदैव बनी रहती है।
                         </p>
                         <p>
-                            <strong>ब्लू ब्लिस</strong> प्रत्येक परिवार को शुद्धता, स्वच्छता और श्रद्धा के साथ हरिद्वार का
-                            गंगाजल और प्रामाणिक वैदिक पूजा सेवाएँ घर बैठे उपलब्ध कराता है।
+                            <strong>ब्लू ब्लिस</strong> यह सुनिश्चित करता है कि प्रत्येक परिवार को पूर्ण शुद्धता,
+                            स्वच्छता और श्रद्धा के साथ हरिद्वार का पावन गंगाजल और प्रमाणिक वैदिक पूजा सेवाएँ घर बैठे
+                            सहजता से प्राप्त हों।
                         </p>
                     </div>
                 </div>
@@ -132,15 +138,15 @@
                             Collected at Brahma Muhurta
                         </h3>
                         <h3 x-show="lang === 'hi'" x-cloak class="text-lg font-serif font-bold text-stone-900 hindi-title">
-                            ब्रह्म मुहूर्त में संकलन
+                            ब्रह्म मुहूर्त में संकलन (Brahma Muhurta Collection)
                         </h3>
                         <p x-show="lang === 'en'" class="text-stone-600">
-                            Our Gangajal is collected during the auspicious hours of Brahma Muhurta from the pure waters
-                            of Haridwar, preserving its natural and spiritual essence.
+                            Our Gangajal is sacredly collected during the auspicious hours of Brahma Muhurta from the pure
+                            waters of Haridwar, preserving its natural and spiritual essence.
                         </p>
                         <p x-show="lang === 'hi'" x-cloak class="text-stone-600 hindi-text">
-                            हमारा गंगाजल हरिद्वार के पावन तट से ब्रह्म मुहूर्त के शुभ समय में संकलित किया जाता है, जिससे इसकी
-                            पवित्रता अक्षुण्ण बनी रहती है।
+                            हमारा गंगाजल विशेष रूप से हरिद्वार के पावन तट से ब्रह्म मुहूर्त के अत्यंत शुभ समय में
+                            संकलित किया जाता है, जिससे इसकी प्राकृतिक और आध्यात्मिक पवित्रता अक्षुण्ण बनी रहती है।
                         </p>
                     </div>
 
@@ -154,11 +160,12 @@
                             स्वच्छ एवं सुरक्षित पैकेजिंग
                         </h3>
                         <p x-show="lang === 'en'" class="text-stone-600">
-                            Every bottle is processed with strict hygiene standards, with zero chemical interference,
-                            keeping the sacred water pure for your daily rituals.
+                            Every bottle is processed with strict hygiene standards, ensuring zero chemical
+                            interference while keeping the sacred water pure for your daily rituals.
                         </p>
                         <p x-show="lang === 'hi'" x-cloak class="text-stone-600 hindi-text">
-                            बिना किसी रासायनिक मिश्रण के, प्रत्येक बोतल को उच्च स्वच्छता मानकों के साथ सीलबंद किया जाता है।
+                            बिना किसी रासायनिक मिश्रण के, प्रत्येक बोतल को उच्च स्वच्छता मानकों के साथ सीलबंद किया
+                            जाता है ताकि आपके दैनिक पूजन के लिए जल पूर्णतः शुद्ध रहे।
                         </p>
                     </div>
 
@@ -172,12 +179,14 @@
                             लाइव घाट पूजा एवं वैदिक सामग्री
                         </h3>
                         <p x-show="lang === 'en'" class="text-stone-600">
-                            Live-streamed pujas from Haridwar ghats by learned Vedic Acharyas, with your Name and Gotra
-                            Sankalp, followed by doorstep delivery of consecrated puja essentials and Prasadam.
+                            Beyond Gangajal, we facilitate personalized live-streamed pujas from Haridwar ghats performed
+                            by learned Vedic Acharyas—complete with your Name and Gotra Sankalp, followed by doorstep
+                            delivery of consecrated Vedic Puja Essentials and Prasadam.
                         </p>
                         <p x-show="lang === 'hi'" x-cloak class="text-stone-600 hindi-text">
-                            विद्वान वैदिक आचार्यों द्वारा आपके नाम और गोत्र के संकल्प के साथ लाइव पूजा, और उसके बाद अभिमंत्रित
-                            पूजा सामग्री व प्रसाद आपके घर तक।
+                            गंगाजल के अतिरिक्त, हम हरिद्वार के पावन घाटों पर विद्वान वैदिक आचार्यों द्वारा आपके नाम
+                            और गोत्र के संकल्प के साथ व्यक्तिगत लाइव स्ट्रीमिंग पूजा की सुविधा प्रदान करते हैं, जिसके
+                            पश्चात अभिमंत्रित वैदिक पूजा सामग्री और प्रसाद आपके घर पहुँचाया जाता है।
                         </p>
                     </div>
 
@@ -185,18 +194,18 @@
                     <div class="bg-white p-6 rounded-2xl border border-amber-200 space-y-2">
                         <div class="text-2xl">🌿</div>
                         <h3 x-show="lang === 'en'" class="text-lg font-serif font-bold text-stone-900">
-                            Social &amp; Environmental Pledge
+                            Conscious Social &amp; Environmental Pledge
                         </h3>
                         <h3 x-show="lang === 'hi'" x-cloak class="text-lg font-serif font-bold text-stone-900 hindi-title">
                             पर्यावरण एवं गंगा स्वच्छता संकल्प
                         </h3>
                         <p x-show="lang === 'en'" class="text-stone-600">
-                            Devotion to Maa Ganga means protecting her. We remain committed to river cleanliness and
-                            environmental sustainability.
+                            Devotion to Maa Ganga means protecting her. With every step we take, we remain deeply
+                            committed to river cleanliness and environmental sustainability.
                         </p>
                         <p x-show="lang === 'hi'" x-cloak class="text-stone-600 hindi-text">
-                            माँ गंगा के प्रति सच्ची श्रद्धा उनकी स्वच्छता में निहित है। हम नदी संरक्षण और पर्यावरण के प्रति
-                            प्रतिबद्ध हैं।
+                            माँ गंगा के प्रति सच्ची श्रद्धा उनकी स्वच्छता में निहित है। हमारा प्रत्येक कदम नदी
+                            संरक्षण और पर्यावरण के प्रति हमारी जिम्मेदारी को दर्शाता है।
                         </p>
                     </div>
                 </div>
@@ -211,12 +220,13 @@
                     हमारा लक्ष्य
                 </h2>
                 <p x-show="lang === 'en'" class="max-w-2xl mx-auto text-stone-600 italic">
-                    “To be a trusted spiritual companion for families across India and the world, making daily worship,
-                    special occasion pujas, and sacred Haridwar offerings effortless, authentic, and deeply fulfilling.”
+                    “To serve as a trusted spiritual companion for families across India and the world—making daily
+                    worship, special occasion pujas, and sacred Haridwar offerings effortless, authentic, and deeply
+                    fulfilling.”
                 </p>
                 <p x-show="lang === 'hi'" x-cloak class="max-w-2xl mx-auto text-stone-600 hindi-text">
-                    “देश और दुनिया भर के श्रद्धालुओं के लिए एक विश्वसनीय आध्यात्मिक सहयोगी बनना, ताकि दैनिक पूजा और विशेष पर्वों
-                    के अनुष्ठान पूर्ण श्रद्धा, पारदर्शिता और सहजता के साथ संपन्न हो सकें।”
+                    “देश और दुनिया भर के श्रद्धालुओं के लिए एक विश्वसनीय आध्यात्मिक सहयोगी बनना—ताकि दैनिक पूजा, जन्मदिन,
+                    विवाह वर्षगांठ और विशेष पर्वों के अनुष्ठान पूर्ण श्रद्धा, पारदर्शिता और सहजता के साथ संपन्न हो सकें।”
                 </p>
             </section>
 

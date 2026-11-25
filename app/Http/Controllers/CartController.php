@@ -70,18 +70,21 @@ class CartController extends Controller
         }
 
         if ($user && ! $user->hasActiveMembership() && ! $user->is_admin && ! $guestCheckoutEnabled) {
+            $membershipFeeFormatted = number_format((float) SiteSetting::get('membership_fee', 500));
+            $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'membership_required' => true,
                     'redirect' => route('membership.join'),
-                    'message' => 'Ordering is reserved for 5-Year Haridwar Bliss members (₹500 for 5 years).',
+                    'message' => "Ordering is reserved for {$validityYears}-Year Blu Bliss members (₹{$membershipFeeFormatted} for {$validityYears} years).",
                 ], 403);
             }
 
             return redirect()->route('membership.join')->with(
                 'warning',
-                'Ordering sacred Gangajal and pooja essentials is reserved exclusively for Haridwar Bliss members. Please activate your 5-Year Membership for ₹500 to proceed.'
+                "Ordering sacred Gangajal and pooja essentials is reserved exclusively for Blu Bliss members. Please activate your {$validityYears}-Year Membership for ₹{$membershipFeeFormatted} to proceed."
             );
         }
 

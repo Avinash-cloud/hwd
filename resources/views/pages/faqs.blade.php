@@ -15,10 +15,10 @@
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
         <div class="bg-white rounded-2xl border border-amber-200 p-6 shadow-xs space-y-2">
-            <h3 class="font-serif font-bold text-base text-slate-900">1. What is the 5-Year Haridwar Bliss Membership?
+            <h3 class="font-serif font-bold text-base text-slate-900">1. What is the 5-Year Blu Bliss Membership?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                The membership is a 5-year (60 months) service commitment with a one-time non-refundable commitment fee of ₹{{ number_format($membershipFee) }}. The primary benefit of the membership is the automatic monthly ordering and delivery of the active 500ml pure Haridwar Gangajal from our membership catalog directly to your doorstep at the set monthly charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, including GST).
+                The membership is a 5-year (60 months) service commitment with a one-time non-refundable commitment fee of ₹{{ number_format($membershipFee) }}. The primary benefit of the membership is the automatic monthly ordering and delivery of the active 500 ml PET bottle of pure Haridwar Gangajal from our membership catalog directly to your doorstep at the set monthly charge of ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month (Product: ₹{{ number_format($monthlyProductPrice ?? 0) }} + Delivery: ₹{{ number_format($monthlyDeliveryCharge ?? $shippingRate) }}, including GST). Upon completion of 60 months, your membership renews automatically via your active recurring payment mandate with no extra commitment fee unless cancelled. See our <a href="{{ route('cancellation-policy') }}" class="text-amber-700 font-semibold underline hover:text-amber-900">Service Cancellation Policy</a>.
             </p>
         </div>
 

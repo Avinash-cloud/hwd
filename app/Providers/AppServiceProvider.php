@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('sort_order')
                     ->get();
                 $view->with('navCategories', $navCategories);
+            }
+
+            if (Schema::hasTable('site_settings')) {
+                $view->with('navMembershipFee', (float) SiteSetting::get('membership_fee', 500));
+                $view->with('navValidityYears', (int) SiteSetting::get('membership_validity_years', 5));
             }
         });
     }

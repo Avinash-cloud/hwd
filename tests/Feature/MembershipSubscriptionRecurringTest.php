@@ -63,6 +63,9 @@ class MembershipSubscriptionRecurringTest extends TestCase
         $response->assertSee('797');
         $response->assertSee('199');
         $response->assertSee('Doorstep Delivery Address');
+        $response->assertSee('renews automatically');
+        $response->assertDontSee('payable by the 5th');
+        $response->assertDontSee('₹85 + GST');
     }
 
     public function test_devotee_can_create_razorpay_subscription_order(): void

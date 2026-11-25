@@ -23,6 +23,7 @@
             return {
                 lang: (localStorage.getItem('puja_lang') || 'en'),
                 isBookingModalOpen: {{ ($errors->any() || session('booking_success')) ? 'true' : 'false' }},
+                isTermsModalOpen: false,
                 selectedPackage: @js(old('package', 'पैकेज 1: मंगल उत्सव एवं आयुष्मान संकल्प पूजा (₹5,100/-)')),
                 pujaPaymentMethod: @js(old('payment_method', 'razorpay')),
                 isPujaProcessing: false,
@@ -47,7 +48,21 @@
 
                 closeBookingModal() {
                     this.isBookingModalOpen = false;
-                    document.body.classList.remove('overflow-hidden');
+                    if (!this.isTermsModalOpen) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                },
+
+                openTermsModal() {
+                    this.isTermsModalOpen = true;
+                    document.body.classList.add('overflow-hidden');
+                },
+
+                closeTermsModal() {
+                    this.isTermsModalOpen = false;
+                    if (!this.isBookingModalOpen) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
                 },
 
                 initiatePujaPayment() {
@@ -108,7 +123,7 @@
 
     <div x-data="pujaPage()"
         x-on:open-puja-booking.window="openBookingModal($event.detail?.package)"
-        x-on:keydown.escape.window="if(isBookingModalOpen) closeBookingModal()">
+        x-on:keydown.escape.window="if (isTermsModalOpen) { closeTermsModal(); } else if (isBookingModalOpen) { closeBookingModal(); }">
 
         <!-- Floating Quick Language Switcher (Only for this page, sticky at bottom-left) -->
         <div
@@ -960,16 +975,17 @@
                         <div x-show="activeFaq === 3" x-cloak
                             class="p-4 pt-0 text-xs text-slate-600 border-t border-amber-100">
                             <p x-show="lang === 'en'" class="leading-relaxed">
-                                Within 24 hours of ritual completion, your sanctified Prasad Box (energized Raksha Sutra
-                                thread, Roli, Akshat, and dry Panchmeva) along with the consecrated 500ml Blu Bliss
-                                Gangajal bottle is dispatched in tamper-evident protective packaging. It typically
-                                reaches your doorstep in 3 to 5 business days.
+                                For packages that include prasad or sacred Gangajal, your sanctified Prasad Box (energized
+                                Raksha Sutra thread, Roli, Akshat, and dry Panchmeva) along with the consecrated 500ml Blu
+                                Bliss Gangajal bottle is generally dispatched within 3 to 5 working days after completion
+                                of the puja in tamper-evident protective packaging. Delivery timelines depend on your pin
+                                code, weather, and third-party courier services.
                             </p>
                             <p x-show="lang === 'hi'" x-cloak class="hindi-text">
-                                अनुष्ठान संपन्न होने के 24 घंटे के भीतर आपका मंगल प्रसाद बॉक्स (अभिमंत्रित रक्षा सूत्र,
-                                रोली, अक्षत, सूखा पंचमेवा) तथा 500ml शुद्ध Blu Bliss गंगाजल बोतल विशेष पैकेजिंग में
-                                कूरियर द्वारा प्रेषित की जाती है। सामान्यतः 3 से 5 कार्यदिवसों में यह आपके पते पर पहुँच
-                                जाती है।
+                                अनुष्ठान संपन्न होने के 3 से 5 कार्यदिवसों के भीतर आपका मंगल प्रसाद बॉक्स (अभिमंत्रित
+                                रक्षा सूत्र, रोली, अक्षत, सूखा पंचमेवा) तथा 500ml शुद्ध Blu Bliss गंगाजल बोतल विशेष
+                                पैकेजिंग में कूरियर द्वारा प्रेषित की जाती है। डिलीवरी समय पिनकोड, मौसम व कूरियर सेवा
+                                पर निर्भर करता है।
                             </p>
                         </div>
                     </div>
@@ -978,28 +994,59 @@
                     <div class="border border-amber-200 rounded-2xl bg-white overflow-hidden shadow-xs">
                         <button type="button" @click="activeFaq = (activeFaq === 4 ? null : 4)"
                             class="w-full p-4 text-left font-bold text-sm text-slate-900 flex items-center justify-between gap-4 hover:bg-amber-50/50 transition">
-                            <span x-show="lang === 'en'">4. Can the puja date be rescheduled later if needed?</span>
-                            <span x-show="lang === 'hi'" x-cloak class="hindi-title">4. क्या पूजा की तिथि बाद में बदली
-                                (Reschedule) जा सकती है?</span>
+                            <span x-show="lang === 'en'">4. What is the cancellation, rescheduling, and refund policy?</span>
+                            <span x-show="lang === 'hi'" x-cloak class="hindi-title">4. ऑनलाइन पूजा रद्द करने, तिथि बदलने (Reschedule) व रिफंड की क्या नीति है?</span>
                             <span class="text-base font-mono text-[#D97706]"
                                 x-text="activeFaq === 4 ? '−' : '+'">+</span>
                         </button>
                         <div x-show="activeFaq === 4" x-cloak
-                            class="p-4 pt-0 text-xs text-slate-600 border-t border-amber-100">
-                            <p x-show="lang === 'en'" class="leading-relaxed">
-                                Yes. If you need to reschedule due to unforeseen circumstances, please notify our
-                                helpline at least 24 hours prior to the scheduled puja time. While all online puja
-                                bookings are 100% non-refundable once confirmed, free rescheduling to another date is
-                                accommodated with 24 hours' advance notice.
-                            </p>
-                            <p x-show="lang === 'hi'" x-cloak class="hindi-text">
-                                हाँ, यदि आपको किसी अपरिहार्य कारणवश तिथि बदलनी हो, तो कृपया निर्धारित पूजा समय से कम से
-                                कम 24 घंटे पूर्व हमारे हेल्पलाइन नंबर पर सूचित करें। सभी ऑनलाइन पूजा शुल्क गैर-वापसी
-                                योग्य (Non-Refundable) हैं, परंतु 24 घंटे पूर्व सूचना देने पर नई तिथि निर्धारित की जा
-                                सकती है।
-                            </p>
+                            class="p-4 pt-0 text-xs text-slate-600 border-t border-amber-100 space-y-2">
+                            <div x-show="lang === 'en'" class="leading-relaxed space-y-1.5">
+                                <p>
+                                    We follow a transparent tiered cancellation and rescheduling policy (see full
+                                    <button type="button" @click="openTermsModal()" class="text-[#D97706] font-bold underline hover:text-[#881337]">E-Puja Terms &amp; Conditions</button>):
+                                </p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>More than 48 hours prior:</strong> A refund after deducting applicable payment gateway and processing charges will be processed within 5 to 7 working days.</li>
+                                    <li><strong>Between 48 and 24 hours prior:</strong> 50% refund processed within 5 to 7 working days.</li>
+                                    <li><strong>Within 24 hours:</strong> No refund (100% Non-Refundable).</li>
+                                    <li><strong>Company-initiated cancellation:</strong> Alternative date or 100% refund.</li>
+                                    <li><strong>Rescheduling:</strong> Requests must be raised at least 24 hours in advance, subject to purohit and muhurat availability.</li>
+                                </ul>
+                            </div>
+                            <div x-show="lang === 'hi'" x-cloak class="hindi-text space-y-1.5">
+                                <p>
+                                    ऑनलाइन पूजा बुकिंग के लिए पारदर्शी श्रेणीबद्ध नीति लागू होती है (<button type="button" @click="openTermsModal()" class="text-[#D97706] font-bold underline hover:text-[#881337]">ई-पूजा नियम एवं शर्तें देखें</button>):
+                                </p>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>48 घंटे से अधिक पूर्व:</strong> लागू पेमेंट गेटवे व प्रोसेसिंग शुल्क काटकर शेष राशि 5 से 7 कार्यदिवसों में रिफंड की जाएगी।</li>
+                                    <li><strong>48 से 24 घंटे के बीच:</strong> 50% रिफंड 5 से 7 कार्यदिवसों में।</li>
+                                    <li><strong>24 घंटे के भीतर:</strong> कोई रिफंड नहीं (100% गैर-वापसी योग्य)।</li>
+                                    <li><strong>कंपनी द्वारा रद्द होने पर:</strong> वैकल्पिक तिथि या 100% रिफंड।</li>
+                                    <li><strong>तिथि परिवर्तन (Reschedule):</strong> कम से कम 24 घंटे पूर्व अनुरोध आवश्यक है, जो पुरोहित और मुहूर्त की उपलब्धता के अधीन होगा।</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- E-Puja Terms & Conditions Summary Banner -->
+                <div class="p-5 bg-white rounded-2xl border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+                    <div class="space-y-1">
+                        <h3 class="font-serif font-bold text-sm sm:text-base text-[#881337]">
+                            <span x-show="lang === 'en'">Terms and Conditions — Haridwar Ghat E-Puja Services</span>
+                            <span x-show="lang === 'hi'" x-cloak>नियम एवं शर्तें — हरिद्वार घाट ई-पूजा सेवाएँ</span>
+                        </h3>
+                        <p class="text-xs text-slate-600">
+                            <span x-show="lang === 'en'">Review all 8 clauses covering Sankalp accuracy (6-hour cutoff), ghat conditions, live stream backup, dispatch, tiered refunds, and Haridwar jurisdiction.</span>
+                            <span x-show="lang === 'hi'" x-cloak>संकल्प संशोधन (6 घंटे पूर्व), घाट नियम, लाइव स्ट्रीमिंग बैकअप, प्रसाद प्रेषण, श्रेणीबद्ध रिफंड एवं हरिद्वार न्यायक्षेत्र से संबंधित सभी 8 नियम पढ़ें।</span>
+                        </p>
+                    </div>
+                    <button type="button" @click="openTermsModal()"
+                        class="px-4 py-2.5 bg-[#881337] hover:bg-[#9F1239] text-[#FDE68A] rounded-xl text-xs font-bold whitespace-nowrap transition shadow-xs cursor-pointer">
+                        <span x-show="lang === 'en'">Read E-Puja Terms &amp; Conditions →</span>
+                        <span x-show="lang === 'hi'" x-cloak>ई-पूजा नियम एवं शर्तें पढ़ें →</span>
+                    </button>
                 </div>
 
                 <!-- Helpline Card -->
@@ -1426,24 +1473,18 @@
                                     <div class="space-y-2 text-xs text-slate-800 leading-relaxed">
                                         <!-- English Section -->
                                         <p class="font-medium text-slate-900 leading-relaxed">
-                                            I agree to the <a href="{{ route('terms') }}" target="_blank"
-                                                class="text-[#D97706] font-bold underline hover:text-[#881337]">Terms
-                                                &amp; Conditions</a> &amp; <a href="{{ route('privacy') }}"
-                                                target="_blank"
-                                                class="text-[#D97706] font-bold underline hover:text-[#881337]">Privacy
-                                                Policy</a>. I confirm that the Name, Gotra, and puja date provided are
-                                            correct. I understand that all online puja packages and live streaming
-                                            services are <strong>100% Non-Refundable</strong> once booked, and
-                                            rescheduling requires at least 24 hours' prior notice.
+                                            I agree to the
+                                            <button type="button" @click="openTermsModal()" class="text-[#D97706] font-bold underline hover:text-[#881337]">E-Puja Terms &amp; Conditions</button>,
+                                            <a href="{{ route('terms') }}" target="_blank" class="text-[#D97706] font-bold underline hover:text-[#881337]">General Terms</a>,
+                                            <a href="{{ route('cancellation-policy') }}" target="_blank" class="text-[#D97706] font-bold underline hover:text-[#881337]">Cancellation Policy</a> &amp;
+                                            <a href="{{ route('privacy') }}" target="_blank" class="text-[#D97706] font-bold underline hover:text-[#881337]">Privacy Policy</a>.
+                                            I confirm that the Name, Gotra, and puja date provided are correct (corrections require at least 6 hours' prior notice). I understand the tiered cancellation &amp; refund policy (&gt;48 hrs: refund minus gateway charges; 48–24 hrs: 50% refund; &lt;24 hrs: No Refund) and that rescheduling requires at least 24 hours' prior notice.
                                         </p>
                                         <!-- Hindi Section with Proper Line Height -->
                                         <p class="text-slate-700 border-t border-amber-200/80 pt-2 hindi-text">
-                                            मैं <a href="{{ route('terms') }}" target="_blank"
-                                                class="text-[#D97706] font-bold underline hover:text-[#881337]">नियम एवं
-                                                शर्तों (Terms &amp; Conditions)</a> से सहमत हूँ। मेरे द्वारा दिए गए नाम
-                                            और गोत्र के अनुसार ही हरिद्वार घाट पर संकल्प लिया जाएगा। मुझे ज्ञात है कि
-                                            सभी ऑनलाइन पूजा और लाइव स्ट्रीमिंग शुल्क <strong>100% गैर-वापसी योग्य
-                                                (Non-Refundable)</strong> हैं।
+                                            मैं <button type="button" @click="openTermsModal()" class="text-[#D97706] font-bold underline hover:text-[#881337]">ई-पूजा नियम एवं शर्तों</button>,
+                                            <a href="{{ route('terms') }}" target="_blank" class="text-[#D97706] font-bold underline hover:text-[#881337]">सामान्य शर्तों</a> व
+                                            <a href="{{ route('cancellation-policy') }}" target="_blank" class="text-[#D97706] font-bold underline hover:text-[#881337]">रद्दीकरण नीति</a> से सहमत हूँ। मेरे द्वारा दिए गए नाम और गोत्र के अनुसार ही हरिद्वार घाट पर संकल्प लिया जाएगा (सुधार कम से कम 6 घंटे पूर्व आवश्यक)। मुझे श्रेणीबद्ध रद्दीकरण नीति (48 घंटे से पहले: गेटवे शुल्क काटकर रिफंड; 48–24 घंटे: 50% रिफंड; 24 घंटे के भीतर: कोई रिफंड नहीं) तथा 24 घंटे पूर्व री-शेड्यूल नियम ज्ञात हैं।
                                         </p>
                                     </div>
                                 </label>
@@ -1498,6 +1539,119 @@
                             </div>
                         </form>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- HARIDWAR GHAT E-PUJA TERMS & CONDITIONS MODAL       -->
+        <!-- ==================================================== -->
+        <div x-show="isTermsModalOpen" x-cloak class="relative z-[60]" role="dialog" aria-modal="true" aria-labelledby="epuja-terms-title">
+            <div x-show="isTermsModalOpen" x-transition:enter="ease-out duration-200"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in duration-150" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" @click="closeTermsModal()"
+                class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs transition-opacity"></div>
+
+            <div x-show="isTermsModalOpen" class="fixed inset-0 z-[60] overflow-y-auto p-3 sm:p-5 flex items-center justify-center">
+                <div @click.away="closeTermsModal()"
+                    class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-amber-300/80 w-full max-w-2xl overflow-hidden my-auto text-slate-800 flex flex-col max-h-[90vh]">
+                    <div class="px-5 sm:px-7 py-4 bg-gradient-to-r from-[#FFFDF7] via-amber-50 to-[#FFFDF7] border-b border-amber-200 flex items-center justify-between shrink-0">
+                        <div>
+                            <h3 id="epuja-terms-title" class="font-serif font-bold text-[#881337] text-base sm:text-lg leading-tight">
+                                Terms and Conditions — Haridwar Ghat E-Puja Services
+                            </h3>
+                            <p class="text-[11px] text-slate-500 mt-0.5">M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. · Blu Bliss</p>
+                        </div>
+                        <button type="button" @click="closeTermsModal()"
+                            class="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition cursor-pointer"
+                            aria-label="Close E-Puja Terms dialog">✕</button>
+                    </div>
+
+                    <div class="p-5 sm:p-7 overflow-y-auto space-y-5 text-xs text-slate-700 leading-relaxed divide-y divide-slate-100">
+                        <section class="space-y-1.5 pt-1">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">1. Nature of Service &amp; Company Role</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Facilitation &amp; Coordination:</strong> M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. (Blu Bliss) facilitates authentic Vedic rituals and E-Pujas at Ganga ghats in Haridwar through qualified and experienced teerth purohits/pandits on behalf of the devotee.</li>
+                                <li><strong>Faith &amp; No Guaranteed Outcomes:</strong> While every ritual is performed strictly according to traditional Vedic procedures and devotion, M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. makes no legal, medical, financial, or supernatural guarantee of specific personal outcomes or miracles.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">2. Devotee Responsibilities &amp; Sankalp Details</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Accurate Information:</strong> The devotee must provide accurate details for the sankalp, including their full name, father's/spouse's name, gotra (if known), current city/state, and purpose/intention of the puja.</li>
+                                <li><strong>Liability for Errors:</strong> M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. is not responsible for errors resulting from misspelled names, incorrect gotra, or inaccurate family/ancestor details submitted by the user, unless a correction request is received and acknowledged at least <strong>6 hours prior</strong> to the scheduled ritual.</li>
+                                <li><strong>Availability for Live Sessions:</strong> For packages that include a live video call, the devotee must be available online with a stable internet connection 10 to 15 minutes before the scheduled slot. If the devotee fails to join or answer on time, the purohit will proceed with the sankalp and puja during the designated muhurat and share the recorded video/photos as proof of completion.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">3. Haridwar Ghat Conditions, River Level &amp; Crowd Management</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Right to Change Ghat Location or Slot:</strong> Due to fluctuations in Ganga river water levels, strong currents, monsoon rains, dense fog, heavy crowds on major bathing festivals (such as Somvati Amavasya, Ganga Dussehra, Kanwar Yatra, Kumbh/Ardh Kumbh), or local administration/police directives, M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. reserves the right to shift the ritual to another suitable ghat or adjust the timing.</li>
+                                <li><strong>Safety Priority:</strong> If water levels or administrative restrictions prevent sitting directly at the water's edge, the puja will be performed at a safe elevated spot or nearby ghat within the same sacred area, which will constitute complete fulfilment of the service.</li>
+                                <li><strong>River Cleanliness &amp; Environmental Compliance:</strong> In accordance with Haridwar Nagar Nigam and Ganga conservation laws, no plastic, polythene, or non-biodegradable items are immersed in the river; all rituals are conducted in an eco-friendly manner.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">4. Live Streaming, Recording &amp; Technical Limitations</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Network Instability Backup:</strong> Mobile network congestion or bad weather near the ghats can occasionally disrupt live video calls or streams. In such cases, M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. will provide a clear recorded video and/or photographs of the ritual via WhatsApp or email.</li>
+                                <li><strong>Valid Proof of Completion:</strong> Once the ritual has been duly performed and the recording/photos are shared, a live stream interruption caused by network conditions will not be treated as non-performance or valid grounds for a refund.</li>
+                                <li><strong>Local Videography Restrictions:</strong> Where local authorities or ghat bodies restrict live cameras during certain hours or locations, the company will provide permissible photo/video documentation in compliance with local regulations.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">5. Fees, Payment &amp; Prasad/Gangajal Dispatch</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Transparent Pricing:</strong> All charges—including purohit dakshina, puja samagri, live/recording service, and prasad/Gangajal shipping (inclusive of applicable taxes)—are displayed clearly at checkout. A booking is confirmed only upon successful payment and issuance of a Booking Confirmation.</li>
+                                <li><strong>Dispatch Timeline:</strong> For packages that include prasad or sacred Gangajal, items are generally dispatched within <strong>3 to 5 working days</strong> after the completion of the puja.</li>
+                                <li><strong>Delivery &amp; Incorrect Address:</strong> Delivery timelines depend on the customer's pin code, weather, and third-party courier services. If a shipment is returned due to an incorrect/incomplete address, unreachable phone number, or recipient unavailability, re-shipping charges must be paid separately by the customer.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">6. Cancellation, Rescheduling &amp; Refund Policy</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Cancellation More Than 48 Hours in Advance (Refund Eligible):</strong> If a booking is cancelled more than 48 hours prior to the scheduled puja date and time, a refund after deducting applicable payment gateway and processing charges will be processed to the original payment method within <strong>5 to 7 working days</strong>.</li>
+                                <li><strong>Cancellation Between 48 and 24 Hours:</strong> If a booking is cancelled less than 48 hours but more than 24 hours before the scheduled time, a <strong>50% refund</strong> will be processed within <strong>5 to 7 working days</strong>.</li>
+                                <li><strong>Cancellation Within 24 Hours (No Refund):</strong> If a booking is cancelled within 24 hours of the scheduled puja time, no amount will be refunded (100% Non-Refundable).</li>
+                                <li><strong>Company-Initiated Cancellation:</strong> If M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. is unable to perform the puja due to unforeseen circumstances or local administrative restrictions, the devotee will be offered an alternative date or a 100% refund.</li>
+                                <li><strong>Rescheduling:</strong> Requests to reschedule a puja must be raised at least <strong>24 hours</strong> in advance and will be accommodated subject to purohit and muhurat availability.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">7. Code of Conduct, Privacy, Liability &amp; Jurisdiction</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Respectful Conduct:</strong> Any abusive, obscene, or disrespectful behavior during a live session or with support staff gives M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd. the right to terminate the session immediately without a refund.</li>
+                                <li><strong>Data Privacy:</strong> Personal details (name, gotra, phone number, email, and shipping address) are used strictly for sankalp, coordination, and prasad delivery in accordance with our <a href="{{ route('privacy') }}" class="text-[#D97706] font-bold hover:underline">Privacy Policy</a>.</li>
+                                <li><strong>Limitation of Liability:</strong> To the maximum extent permitted by law, M/s Haridwar Bliss Food &amp; Beverages Pvt. Ltd.'s total financial liability for any claim or dispute shall not exceed the amount paid by the customer for the specific booking.</li>
+                                <li><strong>Governing Law &amp; Jurisdiction:</strong> These Terms and Conditions are governed by the laws of India, and any disputes shall be subject to the exclusive jurisdiction of the <strong>Haridwar District Court, Uttarakhand</strong>.</li>
+                            </ul>
+                        </section>
+
+                        <section class="space-y-1.5 pt-4">
+                            <h4 class="font-bold text-xs uppercase tracking-wide text-[#881337]">8. Customer Support &amp; Contact Details</h4>
+                            <p>For assistance with bookings, sankalp corrections, live links, or prasad tracking, reach out to us at:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Email:</strong> <a href="mailto:sales@haridwarbliss.com" class="text-[#D97706] font-bold hover:underline font-mono">sales@haridwarbliss.com</a></li>
+                                <li><strong>WhatsApp / Helpline:</strong> <a href="tel:+917042482555" class="text-[#D97706] font-bold hover:underline font-mono">{{ $supportPhone }}</a> (Mon - Sat, 09:00 AM - 06:00 PM)</li>
+                                <li><strong>Registered Office / Haridwar Desk:</strong> G-46, Shivalik Nagar, BHEL, Ranipur More, Haridwar, Uttarakhand - 249403, India</li>
+                            </ul>
+                        </section>
+                    </div>
+
+                    <div class="px-5 sm:px-7 py-3.5 border-t border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
+                        <a href="{{ route('cancellation-policy') }}" class="text-xs font-bold text-[#D97706] hover:underline">View Cancellation Policy →</a>
+                        <button type="button" @click="closeTermsModal()"
+                            class="px-5 py-2 bg-[#881337] hover:bg-[#9F1239] text-white text-xs font-bold rounded-xl transition cursor-pointer">
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>

@@ -161,12 +161,12 @@
                         Experience Divine Sanctity at Your Home Altar
                     </h2>
                     <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                        Join our 5-Year Sacred Devotee Membership to receive regular ₹0 monthly shipments of certified, untouched Haridwar Gangajal.
+                        Join our {{ $validityYears ?? 5 }}-Year Sacred Devotee Membership to receive automatic monthly shipments of certified, untouched Haridwar Gangajal (₹{{ number_format($monthlyAutoDebit ?? 149) }}/month incl. GST).
                     </p>
                     <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
                         <a href="{{ route('membership.join') }}"
                            class="px-6 py-3 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-lg transform hover:-translate-y-0.5">
-                            Join Devotee Membership (₹500)
+                            Join Devotee Membership (₹{{ number_format($membershipFee ?? 500) }})
                         </a>
                         <a href="{{ route('products.index') }}"
                            class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm rounded-xl transition border border-white/20">
