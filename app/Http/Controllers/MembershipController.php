@@ -14,6 +14,7 @@ use App\Models\SiteSetting;
 use App\Models\SubscriptionLog;
 use App\Services\RazorpayService;
 use App\Services\SubscriptionOrderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -344,6 +345,255 @@ class MembershipController extends Controller
         return redirect()->route('dashboard')->with(
             'success',
             'Har Har Gange! Your Blu Bliss 5-Year Sacred Membership has been activated with automated monthly deliveries. Month 1 Gangajal delivery (Order #'.$orderNumber.') has been confirmed!'
+        );
+    }
+
+    /**
+     * Create a ₹0 upfront Razorpay subscription mandate for an already-active (e.g. offline) member.
+     */
+    public function createMandateRazorpayOrder(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json(['error' => 'Authentication required'], 401);
+        }
+
+        $membership = $user->activeMembership;
+        if (! $membership || ! $membership->isActive()) {
+            return response()->json(['error' => 'Active 5-Year Membership required before activating auto-debit.'], 403);
+        }
+
+        $alreadyLinked = $membership->subscriptions()
+            ->where('status', 'active')
+            ->where('billing_mode', 'razorpay')
+            ->whereNotNull('razorpay_subscription_id')
+            ->exists();
+
+        if ($alreadyLinked) {
+            return response()->json(['error' => 'Monthly Razorpay auto-debit mandate is already active for your membership.'], 422);
+        }
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyDebit = $billing['total_monthly_charge'];
+        $productPrice = $billing['product_price'];
+        $deliveryCharge = $billing['delivery_charge'];
+
+        $planId = $this->razorpayService->createPlan(
+            name: 'Blu Bliss Monthly Sacred Gangajal Auto-Delivery',
+            amountInRupees: $monthlyDebit,
+            description: "Monthly recurring auto-order: Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge})"
+        );
+
+        $offlineSub = $membership->subscriptions()
+            ->where('status', 'active')
+            ->where('billing_mode', 'offline_prepaid')
+            ->latest()
+            ->first();
+
+        $startAt = ($offlineSub && $offlineSub->hasActivePrepaidCoverage() && $offlineSub->prepaid_until)
+            ? $offlineSub->prepaid_until->copy()->addDay()->timestamp
+            : null;
+
+        $remainingMonths = max(1, min(60, (int) ceil(now()->floatDiffInMonths($membership->expires_at))));
+
+        $sub = $this->razorpayService->createSubscription(
+            planId: $planId,
+            totalCount: $remainingMonths,
+            notes: [
+                'type' => 'blu_bliss_existing_member_mandate',
+                'user_id' => (string) $user->id,
+                'membership_id' => (string) $membership->id,
+                'email' => $user->email,
+                'product_price' => (string) $productPrice,
+                'delivery_charge' => (string) $deliveryCharge,
+                'monthly_debit' => (string) $monthlyDebit,
+            ],
+            upfrontAddonAmount: 0.0,
+            startAt: $startAt
+        );
+
+        return response()->json([
+            'subscription_id' => $sub['id'],
+            'monthly_amount' => $monthlyDebit,
+            'product_price' => $productPrice,
+            'delivery_charge' => $deliveryCharge,
+            'currency' => 'INR',
+            'key' => $this->razorpayService->getKeyId(),
+            'name' => 'Haridwar Bliss',
+            'description' => "Monthly Gangajal Auto-Delivery Mandate (₹{$monthlyDebit}/mo — ₹0 Joining Fee)",
+            'prefill' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'contact' => $user->phone ?? '',
+            ],
+            'is_mock' => $sub['is_mock'] ?? false,
+        ]);
+    }
+
+    /**
+     * Activate recurring Razorpay auto-delivery mandate for an existing active member without charging joining fees.
+     */
+    public function activateMandate(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (! $user) {
+            return redirect()->route('login')->with('warning', 'Please log in to activate your monthly delivery mandate.');
+        }
+
+        $membership = $user->activeMembership;
+        if (! $membership || ! $membership->isActive()) {
+            return redirect()->route('membership.join')->with('warning', 'Please join or activate a 5-Year Membership first.');
+        }
+
+        $alreadyLinked = $membership->subscriptions()
+            ->where('status', 'active')
+            ->where('billing_mode', 'razorpay')
+            ->whereNotNull('razorpay_subscription_id')
+            ->exists();
+
+        if ($alreadyLinked) {
+            return redirect()->route('dashboard')->with('info', 'Your Razorpay auto-debit mandate is already active.');
+        }
+
+        $request->validate([
+            'terms_accepted' => 'required|accepted',
+            'payment_method' => 'nullable|string',
+            'shipping_phone' => 'nullable|string|max:25',
+            'shipping_address' => 'nullable|string|max:500',
+            'shipping_city' => 'nullable|string|max:100',
+            'shipping_state' => 'nullable|string|max:100',
+            'shipping_pincode' => 'nullable|string|max:20',
+        ], [
+            'terms_accepted.accepted' => 'Please accept the recurring delivery terms to activate AutoPay.',
+        ]);
+
+        $paymentMethod = $request->input('payment_method', 'razorpay_subscription');
+        $paymentId = $request->input('razorpay_payment_id', 'pay_HB_MANDATE_'.Str::random(10));
+        $subscriptionId = $request->input('razorpay_subscription_id');
+        $razorpaySignature = $request->input('razorpay_signature');
+
+        if ($subscriptionId && $paymentId && $razorpaySignature) {
+            $isValid = $this->razorpayService->verifySubscriptionSignature($subscriptionId, $paymentId, $razorpaySignature);
+            if (! $isValid) {
+                return redirect()->back()->withInput()->with('error', 'Razorpay mandate signature verification failed. Please try again.');
+            }
+        }
+
+        $defaultAddress = $user->addresses()->where('is_default', true)->first() ?? $user->addresses()->first();
+
+        $shippingPhone = trim((string) ($request->input('shipping_phone') ?: ($defaultAddress?->phone ?? $user->phone ?? '9999999999')));
+        $shippingAddressLine = trim((string) ($request->input('shipping_address') ?: ($defaultAddress?->address_line1 ?? 'Address on file')));
+        $shippingCity = trim((string) ($request->input('shipping_city') ?: ($defaultAddress?->city ?? 'Haridwar')));
+        $shippingState = trim((string) ($request->input('shipping_state') ?: ($defaultAddress?->state ?? 'Uttarakhand')));
+        $shippingPincode = trim((string) ($request->input('shipping_pincode') ?: ($defaultAddress?->postal_code ?? '249401')));
+
+        $shippingAddressArray = [
+            'recipient_name' => $user->name,
+            'phone' => $shippingPhone,
+            'email' => $user->email,
+            'address_line1' => $shippingAddressLine,
+            'city' => $shippingCity,
+            'state' => $shippingState,
+            'postal_code' => $shippingPincode,
+            'country' => 'India',
+        ];
+
+        Address::updateOrCreate(
+            ['user_id' => $user->id, 'is_default' => true],
+            [
+                'type' => 'shipping',
+                'recipient_name' => $user->name,
+                'phone' => $shippingPhone,
+                'address_line1' => $shippingAddressLine,
+                'city' => $shippingCity,
+                'state' => $shippingState,
+                'postal_code' => $shippingPincode,
+                'country' => 'India',
+            ]
+        );
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyGangajal = $billing['product'];
+        $productPrice = $billing['product_price'];
+        $deliveryCharge = $billing['delivery_charge'];
+        $monthlyDebit = $billing['total_monthly_charge'];
+
+        if (! $monthlyGangajal) {
+            $cat = Category::firstOrCreate(['slug' => 'gangajal'], ['name' => 'Sacred Gangajal']);
+            $monthlyGangajal = Product::create([
+                'category_id' => $cat->id,
+                'name' => 'Haridwar Sacred Gangajal 500ml',
+                'slug' => 'haridwar-gangajal-500ml-'.Str::random(6),
+                'price' => $productPrice ?: 50.00,
+                'volume_ml' => 500,
+                'is_gangajal' => true,
+                'is_active' => true,
+                'stock' => 999,
+            ]);
+            $productPrice = (float) $monthlyGangajal->price;
+            $monthlyDebit = round($productPrice + $deliveryCharge, 2);
+        }
+
+        $existingSub = $membership->subscriptions()->where('status', 'active')->latest()->first();
+        $coveredByPrepaid = (bool) ($existingSub && $existingSub->hasActivePrepaidCoverage());
+        $nextBillingDate = ($coveredByPrepaid && $existingSub->prepaid_until)
+            ? $existingSub->prepaid_until->copy()->addDay()
+            : now()->addDays(30);
+
+        $subAttributes = [
+            'product_id' => $monthlyGangajal->id,
+            'status' => 'active',
+            'billing_mode' => 'razorpay',
+            'billing_interval_days' => 30,
+            'billing_amount' => $monthlyDebit,
+            'next_billing_date' => $nextBillingDate,
+            'last_billed_at' => now(),
+            'razorpay_subscription_id' => $subscriptionId ?? ('sub_'.Str::random(14)),
+            'shipping_address' => $shippingAddressArray,
+            'notes' => "Existing member auto-debit mandate linked (₹0 joining fee): Product (₹{$productPrice}) + Delivery (₹{$deliveryCharge}) = ₹{$monthlyDebit}/mo",
+        ];
+
+        if ($existingSub) {
+            $existingSub->update($subAttributes);
+            $subRecord = $existingSub->fresh();
+        } else {
+            $subRecord = MembershipSubscription::create([
+                ...$subAttributes,
+                'user_id' => $user->id,
+                'membership_id' => $membership->id,
+            ]);
+        }
+
+        SubscriptionLog::create([
+            'subscription_id' => $subRecord->id,
+            'event' => 'mandate_activated_for_existing_member',
+            'amount' => 0.00,
+            'payment_id' => $paymentId,
+            'details' => [
+                'invoice_number' => $membership->invoice_number,
+                'covered_by_prepaid' => $coveredByPrepaid,
+                'next_billing_date' => $nextBillingDate->toDateString(),
+                'note' => 'Razorpay monthly mandate linked for existing active member with zero commitment fee.',
+            ],
+        ]);
+
+        if (! $coveredByPrepaid) {
+            $order = $this->subscriptionOrderService->createOrderForBillingCycle(
+                subscription: $subRecord,
+                billingPeriod: now()->format('Y-m'),
+                amountPaid: $monthlyDebit,
+                paymentId: $paymentId,
+                paymentMethod: $paymentMethod
+            );
+
+            if ($order) {
+                $this->subscriptionOrderService->bookShipmentAndNotify($order, $subRecord);
+            }
+        }
+
+        return redirect()->route('dashboard')->with(
+            'success',
+            'Monthly Auto-Delivery Mandate activated with ₹0 joining fee! Your future monthly Gangajal dispatches are now automated.'
         );
     }
 

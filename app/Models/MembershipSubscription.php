@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,10 +18,12 @@ class MembershipSubscription extends Model
         'product_id',
         'variant_id',
         'status',
+        'billing_mode',
         'billing_interval_days',
         'billing_amount',
         'next_billing_date',
         'last_billed_at',
+        'prepaid_until',
         'razorpay_subscription_id',
         'razorpay_plan_id',
         'razorpay_customer_id',
@@ -34,6 +37,7 @@ class MembershipSubscription extends Model
         return [
             'next_billing_date' => 'datetime',
             'last_billed_at' => 'datetime',
+            'prepaid_until' => 'datetime',
             'billing_amount' => 'decimal:2',
             'billing_interval_days' => 'integer',
             'payment_failures_count' => 'integer',
@@ -107,5 +111,24 @@ class MembershipSubscription extends Model
     public function isActive(): bool
     {
         return $this->status === 'active';
+    }
+
+    public function isRazorpayMandate(): bool
+    {
+        return $this->billing_mode === 'razorpay' && ! empty($this->razorpay_subscription_id);
+    }
+
+    public function isOfflinePrepaid(): bool
+    {
+        return $this->billing_mode === 'offline_prepaid';
+    }
+
+    public function hasActivePrepaidCoverage(?CarbonInterface $date = null): bool
+    {
+        if (! $this->prepaid_until) {
+            return false;
+        }
+
+        return ($date ?? now())->lessThanOrEqualTo($this->prepaid_until->copy()->endOfDay());
     }
 }

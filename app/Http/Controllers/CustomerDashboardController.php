@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Address;
+use App\Models\MembershipSubscription;
 use App\Models\Product;
 use App\Models\SiteSetting;
+use App\Services\RazorpayService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CustomerDashboardController extends Controller
 {
+    public function __construct(
+        protected RazorpayService $razorpayService
+    ) {}
+
     /**
      * Show customer portal / dashboard.
      */
@@ -21,6 +26,7 @@ class CustomerDashboardController extends Controller
         $activeSubscription = $membership ? $membership->subscriptions()->where('status', 'active')->latest()->first() : null;
         $orders = $user->orders()->with(['batch', 'items.product'])->take(5)->get();
         $addresses = $user->addresses()->latest()->get();
+        $defaultAddress = $addresses->firstWhere('is_default', true) ?? $addresses->first();
 
         // Find primary Gangajal product for 1-click monthly order
         $monthlyGangajal = Product::where('is_gangajal', true)
@@ -30,6 +36,12 @@ class CustomerDashboardController extends Controller
 
         $membershipFee = SiteSetting::get('membership_fee', '500');
         $shippingRate = SiteSetting::get('shipping_charge', '149');
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $razorpayKeyId = $this->razorpayService->getKeyId();
+        $razorpayIsDummy = $this->razorpayService->isDummy();
 
         return view('dashboard', compact(
             'user',
@@ -37,9 +49,15 @@ class CustomerDashboardController extends Controller
             'activeSubscription',
             'orders',
             'addresses',
+            'defaultAddress',
             'monthlyGangajal',
             'membershipFee',
-            'shippingRate'
+            'shippingRate',
+            'monthlyAutoDebit',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'razorpayKeyId',
+            'razorpayIsDummy'
         ));
     }
 

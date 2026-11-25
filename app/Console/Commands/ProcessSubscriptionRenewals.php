@@ -91,6 +91,33 @@ class ProcessSubscriptionRenewals extends Command
                 continue;
             }
 
+            // Offline-prepaid subscriptions do not use Razorpay API; dispatch only within prepaid window
+            if ($sub->isOfflinePrepaid() || empty($sub->razorpay_subscription_id)) {
+                if ($sub->hasActivePrepaidCoverage()) {
+                    $prepaidRef = 'OFF-PREPAID-'.now()->format('Ym').'-'.$sub->id;
+                    $order = $this->orderService->createOrderForBillingCycle(
+                        subscription: $sub,
+                        billingPeriod: $billingPeriod,
+                        amountPaid: (float) $sub->billing_amount,
+                        paymentId: $prepaidRef,
+                        paymentMethod: 'offline_prepaid'
+                    );
+
+                    if ($order) {
+                        $this->orderService->bookShipmentAndNotify($order, $sub);
+                        $processed++;
+                        $this->info("Sub #{$sub->id}: Dispatched offline-prepaid order #{$order->order_number}.");
+                    } else {
+                        $skipped++;
+                    }
+                } else {
+                    $this->info("Sub #{$sub->id}: Offline member outside prepaid coverage — awaiting Razorpay mandate activation.");
+                    $skipped++;
+                }
+
+                continue;
+            }
+
             // Verify payment status with Razorpay API
             $this->info("Sub #{$sub->id}: No order for {$billingPeriod}. Verifying with Razorpay API...");
 

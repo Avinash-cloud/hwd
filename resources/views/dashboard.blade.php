@@ -50,7 +50,15 @@
                             </div>
                             <div>
                                 <span class="text-amber-200 block text-[11px]">5-Year Renewal</span>
-                                <strong class="text-emerald-300 font-bold">{{ ($activeSubscription ?? null) ? 'Auto-Renewing' : 'Active' }}</strong>
+                                <strong class="text-emerald-300 font-bold">
+                                    @if ($activeSubscription && $activeSubscription->isRazorpayMandate())
+                                        Auto-Renewing
+                                    @elseif ($activeSubscription && $activeSubscription->isOfflinePrepaid())
+                                        Offline Prepaid
+                                    @else
+                                        Active (Mandate Pending)
+                                    @endif
+                                </strong>
                             </div>
                             <div>
                                 <span class="text-amber-200 block text-[11px]">Days Remaining</span>
@@ -66,10 +74,18 @@
                                 <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>Download Membership Tax Invoice</span>
                             </a>
-                            @if ($activeSubscription ?? null)
+                            @if ($activeSubscription && $activeSubscription->isRazorpayMandate())
                                 <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 text-xs font-semibold">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                     <span>Recurring Auto-Debit Active (₹{{ number_format($activeSubscription->billing_amount, 0) }}/mo)</span>
+                                </span>
+                            @elseif ($activeSubscription && $activeSubscription->isOfflinePrepaid())
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-300/40 text-amber-100 text-xs font-semibold">
+                                    <span>Offline Prepaid{{ $activeSubscription->prepaid_until ? ' Until ' . $activeSubscription->prepaid_until->format('d M Y') : '' }}</span>
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-300/40 text-amber-100 text-xs font-semibold">
+                                    <span>Offline Member &middot; Mandate Not Linked Yet</span>
                                 </span>
                             @endif
                         </div>
@@ -109,7 +125,7 @@
                     <h3 class="text-xl font-serif font-bold text-slate-900 mt-1">Monthly Gangajal Supply</h3>
                     <p class="text-xs text-slate-600 mt-2 leading-relaxed">
                         @if ($membership && $membership->isActive())
-                            Your monthly 500ml pure Haridwar Gangajal supply is billed at <strong>₹{{ number_format($shippingRate) }}/month</strong> (including GST).
+                            Your monthly 500ml pure Haridwar Gangajal supply is billed at <strong>₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/month</strong> (including GST).
                         @else
                             Available to 5-year members with dedicated monthly doorstep delivery.
                         @endif
@@ -117,7 +133,7 @@
                 </div>
 
                 @if ($membership && $membership->isActive())
-                    @if ($activeSubscription ?? null)
+                    @if ($activeSubscription && $activeSubscription->isRazorpayMandate())
                         <div class="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 space-y-2">
                             <div class="flex items-center justify-between">
                                 <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase">
@@ -127,12 +143,136 @@
                                 <span class="text-xs font-bold text-emerald-900 font-mono">₹{{ number_format($activeSubscription->billing_amount, 0) }}/mo</span>
                             </div>
                             <p class="text-[11px] text-emerald-950 leading-relaxed">
-                                Uninterrupted monthly 500ml Gangajal supply auto-dispatches directly to your doorstep.
+                                Uninterrupted monthly 500ml Gangajal supply auto-dispatches directly to your doorstep via NimbusPost.
                             </p>
                             <div class="text-[10px] text-emerald-900/80 pt-1.5 border-t border-emerald-200/70 flex justify-between">
                                 <span>Next Auto-Dispatch:</span>
                                 <strong>{{ $activeSubscription->next_billing_date?->format('M d, Y') ?? 'Every 30 Days' }}</strong>
                             </div>
+                        </div>
+                    @else
+                        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 space-y-3"
+                             x-data="{
+                                 mandateOpen: false,
+                                 termsAccepted: false,
+                                 isProcessing: false,
+                                 paymentMethod: '{{ ($razorpayIsDummy ?? false) ? 'mock' : 'razorpay' }}',
+                                 paymentId: '',
+                                 subscriptionId: '',
+                                 signature: '',
+                                 shippingPhone: '{{ old('shipping_phone', $defaultAddress?->phone ?? $user->phone ?? '') }}',
+                                 shippingAddress: '{{ old('shipping_address', $defaultAddress?->address_line1 ?? '') }}',
+                                 shippingCity: '{{ old('shipping_city', $defaultAddress?->city ?? '') }}',
+                                 shippingState: '{{ old('shipping_state', $defaultAddress?->state ?? '') }}',
+                                 shippingPincode: '{{ old('shipping_pincode', $defaultAddress?->postal_code ?? '') }}',
+                                 startMandate() {
+                                     if (!this.termsAccepted) {
+                                         alert('Please accept the recurring delivery terms first.');
+                                         return;
+                                     }
+                                     if (!this.shippingPhone.trim() || !this.shippingAddress.trim() || !this.shippingCity.trim() || !this.shippingState.trim() || !this.shippingPincode.trim()) {
+                                         alert('Please complete your doorstep delivery address.');
+                                         return;
+                                     }
+                                     if (this.paymentMethod === 'mock') {
+                                         this.paymentId = 'pay_HB_MANDATE_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                                         this.subscriptionId = 'sub_mock_' + Math.random().toString(36).substring(2, 14);
+                                         this.signature = 'mock_signature';
+                                         this.$nextTick(() => document.getElementById('activate-mandate-form').submit());
+                                         return;
+                                     }
+                                     this.isProcessing = true;
+                                     fetch('{{ route('membership.mandate.razorpay.order') }}', {
+                                         method: 'POST',
+                                         headers: {
+                                             'Content-Type': 'application/json',
+                                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                         }
+                                     })
+                                     .then(res => res.json())
+                                     .then(data => {
+                                         if (data.error) {
+                                             alert(data.error);
+                                             this.isProcessing = false;
+                                             return;
+                                         }
+                                         if (data.is_mock || typeof Razorpay === 'undefined') {
+                                             this.paymentId = 'pay_HB_MANDATE_' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                                             this.subscriptionId = data.subscription_id;
+                                             this.signature = 'mock_signature';
+                                             this.$nextTick(() => document.getElementById('activate-mandate-form').submit());
+                                             return;
+                                         }
+                                         const rzp = new Razorpay({
+                                             key: data.key,
+                                             name: data.name,
+                                             description: data.description,
+                                             subscription_id: data.subscription_id,
+                                             prefill: data.prefill,
+                                             theme: { color: '#D97706' },
+                                             handler: (response) => {
+                                                 this.paymentId = response.razorpay_payment_id;
+                                                 this.subscriptionId = response.razorpay_subscription_id || data.subscription_id;
+                                                 this.signature = response.razorpay_signature;
+                                                 this.$nextTick(() => document.getElementById('activate-mandate-form').submit());
+                                             },
+                                             modal: { ondismiss: () => { this.isProcessing = false; } }
+                                         });
+                                         rzp.open();
+                                     })
+                                     .catch(() => { this.isProcessing = false; });
+                                 }
+                             }">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-[#881337]">
+                                    ₹0 Joining Fee &bull; Mandate Setup
+                                </span>
+                                @if ($activeSubscription && $activeSubscription->hasActivePrepaidCoverage())
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                                        Prepaid till {{ $activeSubscription->prepaid_until->format('d M Y') }}
+                                    </span>
+                                @endif
+                            </div>
+                            <p class="text-[11px] text-slate-700 leading-relaxed">
+                                Your joining commitment is already active! Link Razorpay AutoPay for automated monthly Gangajal dispatches at ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/mo.
+                            </p>
+                            <button type="button" @click="mandateOpen = !mandateOpen"
+                                    class="w-full py-2.5 px-3 rounded-xl bg-[#881337] hover:bg-[#6B0E29] text-white text-xs font-bold transition shadow-xs">
+                                <span x-text="mandateOpen ? 'Hide Auto-Debit Setup' : 'Activate Monthly Auto-Delivery (₹0 Joining Fee)'"></span>
+                            </button>
+
+                            <form x-show="mandateOpen" x-cloak id="activate-mandate-form" method="POST" action="{{ route('membership.mandate.activate') }}" class="space-y-2.5 pt-2 border-t border-amber-200 text-xs">
+                                @csrf
+                                <input type="hidden" name="payment_method" :value="paymentMethod">
+                                <input type="hidden" name="razorpay_payment_id" :value="paymentId">
+                                <input type="hidden" name="razorpay_subscription_id" :value="subscriptionId">
+                                <input type="hidden" name="razorpay_signature" :value="signature">
+
+                                <input type="text" name="shipping_phone" x-model="shippingPhone" required placeholder="Delivery Phone"
+                                       class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg" />
+                                <input type="text" name="shipping_address" x-model="shippingAddress" required placeholder="Street / House Address"
+                                       class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-300 rounded-lg" />
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    <input type="text" name="shipping_city" x-model="shippingCity" required placeholder="City"
+                                           class="w-full px-2 py-1.5 text-xs bg-white border border-slate-300 rounded-lg" />
+                                    <input type="text" name="shipping_state" x-model="shippingState" required placeholder="State"
+                                           class="w-full px-2 py-1.5 text-xs bg-white border border-slate-300 rounded-lg" />
+                                    <input type="text" name="shipping_pincode" x-model="shippingPincode" required placeholder="PIN"
+                                           class="w-full px-2 py-1.5 text-xs bg-white border border-slate-300 rounded-lg font-mono" />
+                                </div>
+                                <label class="flex items-start gap-2 cursor-pointer text-[11px] text-slate-700">
+                                    <input type="checkbox" name="terms_accepted" value="1" x-model="termsAccepted" required class="mt-0.5 rounded text-amber-600 border-slate-300" />
+                                    <span>
+                                        I authorize recurring ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }}/mo billing per
+                                        <a href="{{ route('payment-delivery-policy') }}" class="text-amber-700 font-semibold underline">Payment &amp; Delivery Policy</a>.
+                                    </span>
+                                </label>
+                                <button type="button" @click="startMandate()" :disabled="isProcessing"
+                                        class="w-full py-2.5 px-3 bg-[#D97706] hover:bg-amber-700 text-white font-bold text-xs rounded-xl transition">
+                                    <span x-show="!isProcessing">Proceed to Authorize AutoPay &rarr;</span>
+                                    <span x-show="isProcessing">Authorizing Mandate...</span>
+                                </button>
+                            </form>
                         </div>
                     @endif
 
@@ -292,4 +432,8 @@
             </div>
         </div>
     </div>
+
+    @if ($membership && $membership->isActive() && (! $activeSubscription || ! $activeSubscription->isRazorpayMandate()))
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    @endif
 </x-app-layout>

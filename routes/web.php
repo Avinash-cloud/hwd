@@ -83,6 +83,8 @@ Route::get('/verify/{token}', [TraceabilityController::class, 'verify'])->name('
 Route::get('/membership/join', [MembershipController::class, 'index'])->name('membership.join');
 Route::post('/membership/create-razorpay-order', [MembershipController::class, 'createRazorpayOrder'])->middleware('auth')->name('membership.razorpay.order');
 Route::post('/membership/subscribe', [MembershipController::class, 'subscribe'])->middleware('auth')->name('membership.subscribe');
+Route::post('/membership/activate-mandate/razorpay-order', [MembershipController::class, 'createMandateRazorpayOrder'])->middleware('auth')->name('membership.mandate.razorpay.order');
+Route::post('/membership/activate-mandate', [MembershipController::class, 'activateMandate'])->middleware('auth')->name('membership.mandate.activate');
 Route::get('/membership/invoice/{membership}', [MembershipController::class, 'invoice'])->middleware('auth')->name('membership.invoice');
 
 // Shopping Cart (Public view, but add requires auth/membership)
@@ -169,6 +171,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/orders/{order}/packing-slip', [AdminOrderController::class, 'packingSlip'])->name('orders.packingSlip');
 
     Route::get('/memberships', [AdminMembershipController::class, 'index'])->name('memberships.index');
+    Route::get('/memberships/offline/create', [AdminMembershipController::class, 'createOffline'])->name('memberships.offline.create');
+    Route::post('/memberships/offline', [AdminMembershipController::class, 'storeOffline'])->name('memberships.offline.store');
+    Route::get('/memberships/offline/template', [AdminMembershipController::class, 'downloadCsvTemplate'])->name('memberships.offline.template');
+    Route::post('/memberships/offline/import', [AdminMembershipController::class, 'importCsv'])->name('memberships.offline.import');
+    Route::post('/memberships/{membership}/dispatch-monthly', [AdminMembershipController::class, 'dispatchMonthly'])->name('memberships.dispatchMonthly');
     Route::post('/memberships/{membership}/toggle', [AdminMembershipController::class, 'toggleStatus'])->name('memberships.toggle');
     Route::get('/membership-benefits', [AdminMembershipBenefitController::class, 'index'])->name('membership-benefits.index');
     Route::post('/membership-benefits', [AdminMembershipBenefitController::class, 'update'])->name('membership-benefits.update');
