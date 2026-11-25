@@ -63,8 +63,7 @@
             <h3 class="font-serif font-bold text-base text-slate-900">6. Which courier service handles the shipments?
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                All packages are dispatched via Shiprocket's premier express couriers (BlueDart, Delhivery, DTDC) with
-                live tracking number updates sent directly to your registered phone and email.
+                All packages are dispatched from Haridwar through NimbusPost&rsquo;s multi-courier express network (including BlueDart, Delhivery, DTDC, and partner carriers) with live AWB tracking updates sent directly to your registered email. Payments and subscriptions are processed securely via Razorpay. See our <a href="{{ route('payment-delivery-policy') }}" class="text-amber-700 font-semibold underline hover:text-amber-900">Payment &amp; Delivery Policy</a>.
             </p>
         </div>
     </div>

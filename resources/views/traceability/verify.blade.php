@@ -174,7 +174,7 @@
                         </div>
                         <div>
                             <span class="text-slate-400 block">Logistics Partner:</span>
-                            <span class="font-bold text-slate-900">{{ $order->courier_name ?? 'Shiprocket Express' }}</span>
+                            <span class="font-bold text-slate-900">{{ $order->courier_name ?? 'NimbusPost Express' }}</span>
                         </div>
                         <div>
                             <span class="text-slate-400 block">Tracking AWB:</span>

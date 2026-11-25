@@ -482,7 +482,7 @@
                         <span>Entire Agreement</span>
                     </h2>
                     <p>
-                        These Terms &amp; Conditions, together with the applicable service agreement, <a href="{{ route('cancellation-policy') }}" class="text-[#D97706] font-bold hover:underline">cancellation policy</a>, payment terms and <a href="{{ route('privacy') }}" class="text-[#D97706] font-bold hover:underline">Privacy Policy</a>, constitute the terms governing the customer's use of the website and the relevant services.
+                        These Terms &amp; Conditions, together with the applicable service agreement, <a href="{{ route('cancellation-policy') }}" class="text-[#D97706] font-bold hover:underline">cancellation policy</a>, <a href="{{ route('payment-delivery-policy') }}" class="text-[#D97706] font-bold hover:underline">payment &amp; delivery policy</a> and <a href="{{ route('privacy') }}" class="text-[#D97706] font-bold hover:underline">Privacy Policy</a>, constitute the terms governing the customer's use of the website and the relevant services.
                     </p>
                     <p>Where a specific written service agreement contains service-specific provisions, those provisions shall govern the relevant service to the extent of any inconsistency, subject always to applicable law.</p>
                 </section>

@@ -164,7 +164,7 @@
                     @endif
 
                     <div class="flex justify-between text-slate-600">
-                        <span>Shiprocket Express Shipping:</span>
+                        <span>NimbusPost Express Shipping:</span>
                         <span class="font-mono">₹{{ number_format($order->shipping_amount, 2) }}</span>
                     </div>
 

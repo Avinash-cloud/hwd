@@ -698,8 +698,8 @@
                                 </button>
                                 <div x-show="openTab === 3" class="p-4 bg-white text-[#3B2314] leading-relaxed border-t border-amber-200/60 space-y-2">
                                     <p>• Dispatched within 24-48 hours directly from our Haridwar center.</p>
-                                    <p>• Pan-India express delivery typically arrives within 3-5 business days via Shiprocket insured couriers.</p>
-                                    <p>• Free shipping applied automatically on all orders over ₹499.</p>
+                                    <p>• Pan-India express delivery typically arrives within 3-5 business days via NimbusPost partner couriers.</p>
+                                    <p>• Standard &amp; member shipping rates apply at checkout — see our <a href="{{ route('payment-delivery-policy') }}" class="text-[#D97706] font-bold hover:underline">Payment &amp; Delivery Policy</a>.</p>
                                 </div>
                             </div>
                         </div>

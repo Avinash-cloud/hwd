@@ -119,6 +119,7 @@
             <div class="pt-2 flex flex-wrap gap-4 text-xs">
                 <a href="{{ route('terms') }}" class="text-amber-800 font-semibold underline hover:text-amber-950">Terms &amp; Conditions</a>
                 <a href="{{ route('privacy') }}" class="text-amber-800 font-semibold underline hover:text-amber-950">Privacy Policy</a>
+                <a href="{{ route('payment-delivery-policy') }}" class="text-amber-800 font-semibold underline hover:text-amber-950">Payment &amp; Delivery Policy</a>
                 <a href="{{ route('online-puja') }}" class="text-amber-800 font-semibold underline hover:text-amber-950">Haridwar Ghat E-Puja</a>
                 <a href="{{ route('membership.join') }}" class="text-amber-800 font-semibold underline hover:text-amber-950">5-Year Membership</a>
             </div>

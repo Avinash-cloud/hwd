@@ -238,7 +238,7 @@
                             </div>
                         @endif
                         <div class="flex justify-between text-slate-600">
-                            <span>Shipping (Shiprocket Flat):</span>
+                            <span>Shipping (NimbusPost Logistics):</span>
                             <span>₹{{ number_format($order->shipping_amount, 2) }}</span>
                         </div>
                         <div

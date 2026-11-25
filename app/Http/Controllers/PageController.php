@@ -282,4 +282,32 @@ class PageController extends Controller
             'supportPhone'
         ));
     }
+
+    public function paymentDeliveryPolicy(): View
+    {
+        $membershipFee = (float) SiteSetting::get('membership_fee', 500);
+        $validityYears = (int) SiteSetting::get('membership_validity_years', 5);
+        $shippingRate = (float) SiteSetting::get('shipping_charge', 149);
+        $memberShippingSetting = SiteSetting::get('member_shipping_charge');
+        $memberShippingRate = ($memberShippingSetting !== null && $memberShippingSetting !== '') ? (float) $memberShippingSetting : $shippingRate;
+        $supportEmail = SiteSetting::get('support_email', 'sales@haridwarbliss.com');
+        $supportPhone = SiteSetting::get('support_phone', '+91 7042482555');
+
+        $billing = MembershipSubscription::getMonthlyBillingDetails();
+        $monthlyProductPrice = $billing['product_price'];
+        $monthlyDeliveryCharge = $billing['delivery_charge'];
+        $monthlyAutoDebit = $billing['total_monthly_charge'];
+
+        return view('pages.payment-delivery-policy', compact(
+            'membershipFee',
+            'validityYears',
+            'shippingRate',
+            'memberShippingRate',
+            'monthlyProductPrice',
+            'monthlyDeliveryCharge',
+            'monthlyAutoDebit',
+            'supportEmail',
+            'supportPhone'
+        ));
+    }
 }

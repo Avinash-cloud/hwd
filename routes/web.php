@@ -69,6 +69,7 @@ Route::post('/contact', [PageController::class, 'submitContact'])->name('contact
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/cancellation-policy', [PageController::class, 'cancellationPolicy'])->name('cancellation-policy');
+Route::get('/payment-delivery-policy', [PageController::class, 'paymentDeliveryPolicy'])->name('payment-delivery-policy');
 
 // Dedicated 404 Error Page
 Route::get('/404', function () {

@@ -239,6 +239,7 @@
                     <a href="{{ route('terms') }}" class="hover:text-white transition">Terms & Conditions</a>
                     <a href="{{ route('privacy') }}" class="hover:text-white transition">Privacy Policy</a>
                     <a href="{{ route('cancellation-policy') }}" class="hover:text-white transition">Cancellation Policy</a>
+                    <a href="{{ route('payment-delivery-policy') }}" class="hover:text-white transition">Payment &amp; Delivery Policy</a>
                     <a href="{{ route('faqs') }}" class="hover:text-white transition">FAQs</a>
                     <div class="flex items-center gap-3 sm:pl-3 sm:border-l sm:border-amber-800/80">
                         <a href="https://www.facebook.com/profile.php?id=61596766471785" target="_blank" rel="noopener noreferrer"

@@ -190,7 +190,7 @@
 
                         <div class="flex justify-between text-slate-600">
                             <span class="flex items-center gap-1.5">
-                                <span>Shipping (Shiprocket Logistics)</span>
+                                <span>Shipping (NimbusPost Logistics)</span>
                                 @if (!empty($cartDetails['is_member_shipping']))
                                     <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded">Member Rate</span>
                                 @endif
