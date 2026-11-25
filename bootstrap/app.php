@@ -3,6 +3,7 @@
 use App\Http\Middleware\CheckAdminPermission;
 use App\Http\Middleware\EnsureUserHasMembership;
 use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Support\SoftErrorResponder;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -46,10 +47,18 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (HttpExceptionInterface $e, Request $request) {
+            if ($e->getStatusCode() >= 500 && $e->getStatusCode() < 600) {
+                return SoftErrorResponder::render($e, $request);
+            }
+
             if (! ($request->is('api/*') || $request->expectsJson())) {
                 if ($e->getStatusCode() === 400 && ! $request->is('404')) {
                     return redirect()->route('not-found');
                 }
             }
+        });
+
+        $exceptions->render(function (Throwable $e, Request $request) {
+            return SoftErrorResponder::render($e, $request);
         });
     })->create();

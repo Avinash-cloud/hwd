@@ -522,7 +522,7 @@
                         <div class="text-center pb-4 border-b border-amber-200">
                             <span
                                 class="inline-block px-3 py-1 bg-[#881337] text-white text-[10px] font-extrabold uppercase tracking-widest rounded-full mb-2">
-                                Auspicious Devotee Offering
+                                Gangajal Membership
                             </span>
                             <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider">One-Time 5-Year
                                 (handling & processing charges)
@@ -542,7 +542,7 @@
                         <div class="py-4 space-y-2.5 text-xs text-amber-950">
                             <div class="flex items-start gap-2.5">
                                 <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</span>
-                                <span class="leading-tight"><strong>60 Months</strong> of sacred Gangajal delivery (1 bottle/mo)</span>
+                                <span class="leading-tight"><strong>60 Months</strong> of sacred Gangajal delivery (1 bottle/month @ ₹{{ number_format($monthlyAutoDebit ?? $shippingRate) }} /-)</span>
                             </div>
                             
                             <div class="flex items-start gap-2.5">
@@ -558,9 +558,8 @@
 
                     <div class="pt-4 border-t border-amber-200 space-y-2">
                         <a href="{{ route('membership.join') }}"
-                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#881337] to-[#D97706] hover:brightness-110 text-white rounded-2xl font-extrabold text-sm shadow-xl transition transform hover:-translate-y-0.5">
-                            <span>Join 5-Year Membership Plan</span>
-                            <span>→</span>
+                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#881337] to-[#D97706] hover:brightness-110 text-white rounded-2xl font-extrabold text-2xl shadow-xl transition transform hover:-translate-y-0.5">
+                            <span>Join</span>
                         </a>
                         <p class="text-[10px] text-center text-amber-900 font-semibold">
                             Instant tax invoice (SAC 9995) & member portal activation

@@ -71,10 +71,14 @@ Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/cancellation-policy', [PageController::class, 'cancellationPolicy'])->name('cancellation-policy');
 Route::get('/payment-delivery-policy', [PageController::class, 'paymentDeliveryPolicy'])->name('payment-delivery-policy');
 
-// Dedicated 404 Error Page
+// Dedicated Error Pages
 Route::get('/404', function () {
     return response()->view('errors.404', [], 404);
 })->name('not-found');
+
+Route::get('/500', function () {
+    return response()->view('errors.500', ['statusCode' => 500], 500);
+})->name('server-error');
 
 // Public Traceability QR Verification
 Route::get('/verify/{token}', [TraceabilityController::class, 'verify'])->name('verify.batch');
