@@ -276,7 +276,7 @@
                 <div class="w-full flex justify-center">
                     <h2
                         class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
-                        Pure haridwar blu bliss Gangajal
+                        Pure haridwar Blu Bliss Gangajal
                     </h2>
                 </div>
                 <p
@@ -381,12 +381,12 @@
                 <!-- <span
                     class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#881337] text-[#FDE68A] border border-amber-300/40 shadow-xs mb-3">
                     <span class="w-2 h-2 rounded-full bg-[#F59E0B] animate-pulse"></span>
-                    <span>Pure haridwar blu bliss Gangajal</span>
+                    <span>Pure haridwar Blu Bliss Gangajal</span>
                 </span> -->
                 <div>
                     <h2
                         class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
-                        BluBliss gangajal Membership Plan <br> Now delivered straight to doorstep every month.
+                        Blu Bliss gangajal Membership Plan <br> Now delivered straight to doorstep every month.
                     </h2>
                 </div>
                 <p
@@ -584,7 +584,7 @@
                 <div
                     class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-3 shadow-md">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B] animate-pulse"></span>
-                    <span class="font-serif tracking-wider font-extrabold uppercase">Pure haridwar blu bliss Gangajal
+                    <span class="font-serif tracking-wider font-extrabold uppercase">Pure haridwar Blu Bliss Gangajal
                     </span>
                 </div>
                 <div class="w-full flex justify-center">
@@ -861,7 +861,7 @@
                 </div>
                 <p
                     class="text-xs sm:text-base text-white font-medium leading-relaxed mt-3.5 max-w-2xl mx-auto drop-shadow-2xs">
-                    Witness the divine riverside ghats and ancient temples of Haridwar where every drop of BluBliss
+                    Witness the divine riverside ghats and ancient temples of Haridwar where every drop of Blu Bliss
                     Gangajal is collected during Brahma Muhurta.
                 </p>
             </div>

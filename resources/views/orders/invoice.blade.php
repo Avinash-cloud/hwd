@@ -29,7 +29,7 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-16 h-16 rounded-xl object-cover ring-1 ring-slate-200 shrink-0 mt-1">
                     <div>
                         <div class="flex items-center gap-2">
-                            <h1 class="font-serif font-extrabold italic text-2xl text-slate-900 leading-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">BluBliss</h1>
+                            <h1 class="font-serif font-extrabold italic text-2xl text-slate-900 leading-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4]">Blu Bliss</h1>
                             <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold uppercase tracking-wider">Packaged Drinking Water</span>
                         </div>
                         <p class="text-xs text-slate-900 font-bold mt-0.5">HARIDWAR BLISS FOOD & BEVERAGES PRIVATE LIMITED</p>

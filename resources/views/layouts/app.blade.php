@@ -109,7 +109,7 @@
                     <div class="flex items-center gap-3">
                         <!-- <x-application-logo class="w-12 h-12 rounded-xl object-cover ring-1 ring-white/10" /> -->
                         <div>
-                            <img src="{{ asset('/images/BluBliss-logo-2-nonbg.png') }}" alt="BluBliss Logo" class="h-28 w-auto brightness-200 drop-shadow-lg">
+                            <img src="{{ asset('/images/BluBliss-logo-2-nonbg.png') }}" alt="Blu Bliss Logo" class="h-28 w-auto brightness-200 drop-shadow-lg">
                             <span class="block text-sm font-medium tracking-wider text-amber-300 uppercase">HARIDWAR
                                 BLISS FOOD & BEVERAGES PVT. LTD.</span>
                             <span class="block text-xs text-amber-200/70 ">CIN: U11040UT2025PTC019429</span>
@@ -138,7 +138,7 @@
                         Offerings</h4>
                     <ul class="space-y-2.5 text-sm">
                         <li><a href="{{ route('products.index', ['type' => 'puja-essentials']) }}"
-                                class="hover:text-white transition">BluBliss Gangajal </a></li>
+                                class="hover:text-white transition">Blu Bliss Gangajal </a></li>
                         <li><a href="{{ route('products.index', ['type' => 'puja-essentials']) }}"
                                 class="hover:text-white transition">Brass Puja Bell </a></li>
                         <li><a href="{{ route('products.index', ['category' => 'puja-essentials']) }}"

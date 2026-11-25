@@ -101,11 +101,11 @@
                         <div class="leading-tight text-center min-w-0 hidden">
                             <!-- <span
                                 class="block font-serif font-extrabold text-base sm:text-2xl text-sky-500 tracking-tight drop-shadow-[1.5px_1.5px_0px_#06b6d4] group-hover:text-[#9F1239] transition truncate">
-                                BluBliss<sup>™</sup>
+                                Blu Bliss<sup>™</sup>
                             </span> -->
                             <span
                                 class="block font-serif font-extrabold text-base italic sm:text-2xl text-sky-500 tracking-tight transition truncate">
-                                BluBliss<sup>™</sup>
+                                Blu Bliss<sup>™</sup>
                             </span>
                             <span
                                 class="] -mt-2 mb-3 hidden sm:block text-[9px] font-bold tracking-widest text-[#B45309] uppercase">
