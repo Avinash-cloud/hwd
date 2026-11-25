@@ -525,7 +525,7 @@
                         @mouseleave="astroOpen = false">
                         <button type="button" @click="astroOpen = !astroOpen"
                             class="whitespace-nowrap shrink-0 inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-lg text-[11.5px] xl:text-xs font-semibold hover:text-[#D97706] hover:bg-amber-100/50 transition {{ $isAstroActive || request()->routeIs('online-puja*') ? 'text-[#D97706] font-bold bg-amber-100/60' : 'text-slate-700' }}">
-                            <span>Spiritual & Astro</span>
+                            <span>E-Puja & Astro</span>
                             <svg class="w-3 h-3 text-slate-400 group-hover:text-[#D97706] transition transform group-hover:rotate-180"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -543,7 +543,7 @@
                             <div class="py-1">
                                 <a href="{{ route('online-puja') }}"
                                     class="block px-3.5 py-2 text-xs hover:text-[#D97706] hover:bg-amber-50 font-semibold transition {{ request()->routeIs('online-puja*') ? 'text-[#D97706] font-bold bg-amber-50/80' : 'text-slate-700' }}">
-                                    Online Puja
+                                    Online Puja Haridwar
                                 </a>
                                 <a href="{{ route('contact') }}?subject=Astrology+Consultation"
                                     class="block px-3.5 py-2 text-xs text-slate-700 hover:text-[#D97706] hover:bg-amber-50 font-semibold transition">
@@ -554,7 +554,7 @@
                                 <div class="pt-1.5 px-3">
                                     <a href="{{ route('products.index', ['category' => $astroCat->slug]) }}"
                                         class="text-[11px] font-bold text-[#881337] hover:underline block py-1">
-                                        All Spiritual & Astro Items →
+                                        All E-puja & Astro Items →
                                     </a>
                                 </div>
                             @endif
