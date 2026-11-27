@@ -406,4 +406,27 @@ class SliderAndDynamicProductTest extends TestCase
         $response->assertDontSee('&lt;b&gt;Gangajal&lt;/b&gt;', false);
         $response->assertDontSee('&lt;br&gt;', false);
     }
+
+    public function test_hero_banner_image_renders_at_natural_aspect_ratio_without_forced_cropping(): void
+    {
+        Slider::query()->delete();
+
+        Slider::create([
+            'title' => null,
+            'subtitle' => null,
+            'description' => null,
+            'image' => 'images/desktop_banner.jpg',
+            'tablet_image' => 'images/tablet_banner.jpg',
+            'mobile_image' => 'images/mobile_banner.jpg',
+            'button_link' => '/membership/join',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get('/');
+        $response->assertOk();
+        $response->assertSee('media="(max-width: 639px)"', false);
+        $response->assertSee('media="(max-width: 1023px)"', false);
+        $response->assertSee('class="block w-full h-auto opacity-100"', false);
+        $response->assertDontSee('min-h-[440px] sm:min-h-[520px] lg:min-h-[620px]', false);
+    }
 }

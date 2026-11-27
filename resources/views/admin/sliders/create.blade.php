@@ -200,8 +200,8 @@
                     </div>
 
                     <div x-show="previewUrl" class="mt-3">
-                        <div class="h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-900 relative">
-                            <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover">
+                        <div class="rounded-lg overflow-hidden border border-slate-200 bg-slate-900 relative">
+                            <img :src="previewUrl" alt="Preview" class="w-full h-auto max-h-64 object-contain mx-auto block">
                         </div>
                     </div>
                 </div>

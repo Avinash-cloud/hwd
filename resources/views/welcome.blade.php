@@ -30,7 +30,7 @@
                  }
              }">
         <!-- Slides Wrapper (Responsive for Desktop 1920x700, Tablet 1024x600, Mobile 750x1000) -->
-        <div class="relative w-full min-h-[440px] sm:min-h-[520px] lg:min-h-[620px] flex items-center">
+        <div class="relative w-full grid grid-cols-1 overflow-hidden">
             @foreach ($sliders as $index => $slide)
                 @php
                     $badgeBg = match ($slide->badge_color) {
@@ -52,22 +52,25 @@
                         || !empty(trim($slide->secondary_button_text ?? ''))
                         || !empty($slide->right_image_url);
                 @endphp
-                <div x-show="activeSlide === {{ $index }}" x-transition:enter="transition ease-out duration-700"
+                <div x-show="activeSlide === {{ $index }}"
+                    @if ($index > 0) x-cloak @endif
+                    x-transition:enter="transition ease-out duration-700"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-500" x-transition:leave-start="opacity-100 scale-100"
-                    x-transition:leave-end="opacity-0 scale-95" class="absolute inset-0 w-full h-full">
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="col-start-1 row-start-1 relative w-full grid grid-cols-1">
 
                     @if ($slide->is_video && ($slide->is_video_embed || $slide->resolved_video_url))
                         @if ($slide->is_video_embed)
                             <!-- YouTube / Vimeo Video Slide Background with Autoplay -->
-                            <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                            <div class="col-start-1 row-start-1 relative w-full min-h-[360px] sm:min-h-[480px] lg:min-h-[580px] overflow-hidden pointer-events-none">
                                 <iframe src="{{ $slide->video_embed_url }}"
-                                    class="w-full h-full object-cover scale-125 md:scale-110 pointer-events-none border-0 {{ $hasText ? 'opacity-90' : 'opacity-100' }}"
+                                    class="absolute inset-0 w-full h-full object-cover scale-125 md:scale-110 pointer-events-none border-0 {{ $hasText ? 'opacity-90' : 'opacity-100' }}"
                                     allow="autoplay; encrypted-media; picture-in-picture" loading="eager"></iframe>
                             </div>
                         @else
                             <!-- MP4/WebM Video Slide Background with Muted Autoplay, Loop, and Unmute Toggle -->
-                            <div class="absolute inset-0 w-full h-full overflow-hidden"
+                            <div class="col-start-1 row-start-1 relative w-full min-h-[360px] sm:min-h-[480px] lg:min-h-[580px] overflow-hidden"
                                 x-data="{
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          isMuted: true,
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          init() {
@@ -122,7 +125,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }">
                                 <video x-ref="heroVideo" autoplay muted playsinline webkit-playsinline loop preload="auto"
                                     poster="{{ $slide->image_url }}"
-                                    class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
+                                    class="absolute inset-0 w-full h-full object-cover object-center {{ $hasText ? 'opacity-90' : 'opacity-100' }}">
                                     <source src="{{ $slide->resolved_video_url }}" type="video/mp4">
                                 </video>
 
@@ -134,27 +137,27 @@
                             </div>
                         @endif
                     @else
-                        <!-- Responsive Media with Art Direction (Desktop, Tablet, Mobile) -->
-                        <picture class="w-full h-full absolute inset-0">
+                        <!-- Responsive Media with Art Direction (Desktop 1920x700, Tablet 1024x600, Mobile 750x1000) -->
+                        <picture class="col-start-1 row-start-1 block w-full {{ $hasText ? 'h-full' : '' }}">
                             @if ($slide->mobile_image)
-                                <source media="(max-width: 640px)" srcset="{{ $slide->mobile_image_url }}">
+                                <source media="(max-width: 639px)" srcset="{{ $slide->mobile_image_url }}">
                             @endif
                             @if ($slide->tablet_image)
-                                <source media="(max-width: 1024px)" srcset="{{ $slide->tablet_image_url }}">
+                                <source media="(max-width: 1023px)" srcset="{{ $slide->tablet_image_url }}">
                             @endif
                             <img src="{{ $slide->image_url }}" alt="{{ strip_tags($slide->title ?: 'Sacred Hero Banner') }}"
-                                class="w-full h-full object-cover object-center {{ $hasText ? 'opacity-95' : 'opacity-100' }}">
+                                class="block w-full {{ $hasText ? 'h-auto min-h-full object-cover object-center opacity-95' : 'h-auto opacity-100' }}">
                         </picture>
                     @endif
 
                     @if ($hasText)
                         <!-- Slightest black shadow gradient to ensure text readability without darkening the whole banner -->
                         <div
-                            class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent pointer-events-none">
+                            class="col-start-1 row-start-1 w-full h-full bg-gradient-to-r from-black/55 via-black/25 to-transparent pointer-events-none z-10">
                         </div>
 
                         <!-- Slide Content -->
-                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+                        <div class="col-start-1 row-start-1 relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
                             <div class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 py-10 lg:py-12">
                                 <div
                                     class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'w-full max-w-3xl mx-auto text-center' }} space-y-4 sm:space-y-6">
@@ -231,23 +234,23 @@
         @if ($sliders->count() > 1)
             <!-- Carousel Navigation Controls -->
             <button type="button" @click="prevSlide()"
-                class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-xs transition z-20"
+                class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-xs transition z-20"
                 aria-label="Previous Slide">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
 
             <button type="button" @click="nextSlide()"
-                class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-xs transition z-20"
+                class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/40 text-white flex items-center justify-center backdrop-blur-xs transition z-20"
                 aria-label="Next Slide">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
 
             <!-- Carousel Indicators / Dots -->
-            <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
+            <div class="absolute bottom-2.5 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
                 @foreach ($sliders as $index => $slide)
                     <button type="button" @click="goToSlide({{ $index }})" class="h-2 rounded-full transition-all duration-300"
                         :class="activeSlide === {{ $index }} ? 'w-8 bg-[#D97706]' : 'w-2 bg-white/40 hover:bg-white/70'"></button>
