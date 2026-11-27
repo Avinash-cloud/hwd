@@ -193,11 +193,11 @@
                     <!-- Page Title -->
                     <div class="space-y-3 max-w-3xl mx-auto">
                         <h1 x-show="lang === 'en'"
-                            class="text-3xl sm:text-4xl lg:text-[40px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-snug drop-shadow-sm">
+                            class="text-center text-3xl sm:text-4xl lg:text-[40px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-snug drop-shadow-sm">
                             Sacred Haridwar Ghats Online Puja &amp; Vedic Rituals
                         </h1>
                         <h1 x-show="lang === 'hi'" x-cloak
-                            class="text-3xl sm:text-3xl lg:text-[36px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight hindi-title drop-shadow-sm">
+                            class="text-center text-3xl sm:text-3xl lg:text-[36px] font-serif font-extrabold text-[#FDE68A] italic tracking-tight hindi-title drop-shadow-sm">
                             हरिद्वार पावन घाट ऑनलाइन पूजा एवं वैदिक अनुष्ठान
                         </h1>
 

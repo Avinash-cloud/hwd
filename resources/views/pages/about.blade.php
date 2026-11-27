@@ -35,11 +35,11 @@
                 </p>
 
                 <div class="space-y-2">
-                    <h1 x-show="lang === 'en'" class="text-3xl sm:text-5xl font-serif font-bold text-stone-900">
+                    <h1 x-show="lang === 'en'" class="text-center text-3xl sm:text-5xl font-serif font-bold text-stone-900">
                         About Blu Bliss
                     </h1>
                     <h1 x-show="lang === 'hi'" x-cloak
-                        class="text-3xl sm:text-4xl font-serif font-bold text-stone-900 hindi-title">
+                        class="text-center text-3xl sm:text-4xl font-serif font-bold text-stone-900 hindi-title">
                         ब्लू ब्लिस (Blu Bliss) के बारे में
                     </h1>
 

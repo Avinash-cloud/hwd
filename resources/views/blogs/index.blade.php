@@ -12,7 +12,7 @@
             <!-- Page Title in Signature Maroon Card with High Contrast Gold Text -->
             <div class="w-full flex justify-center mb-1">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
+                    class="inline-block text-center text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     Spiritual Knowledge &amp; Ganga Lore
                 </h1>
             </div>

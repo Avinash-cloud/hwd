@@ -16,7 +16,7 @@
                         Jai Gange · Kumbh Sewa Request Confirmed
                     </div>
 
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-white" style="color: #FFFFFF;">
+                    <h1 class="text-center text-2xl sm:text-3xl font-extrabold text-white" style="color: #FFFFFF; text-align: center;">
                         Water Collection Registered
                     </h1>
 

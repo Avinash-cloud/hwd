@@ -7,7 +7,7 @@
                 <span class="w-2 h-2 rounded-full bg-[#0369A1]"></span>
                 <span>Verified Genuine Haridwar Bliss Consecration</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-serif font-extrabold text-slate-900">
+            <h1 class="text-center text-3xl sm:text-4xl font-serif font-extrabold text-slate-900">
                 Official Sacred Batch & Traceability Certificate
             </h1>
             <p class="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl mx-auto">

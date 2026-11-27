@@ -164,7 +164,7 @@
                     </div>
 
                     <h1
-                        class="text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-tight">
+                        class="text-center text-3xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-[#FDE68A] italic tracking-tight leading-tight">
                         Haridwar Kumbh Water Collection Service
                         <span
                             class="block text-xl sm:text-2xl lg:text-3xl font-semibold text-amber-200 mt-2 not-italic">

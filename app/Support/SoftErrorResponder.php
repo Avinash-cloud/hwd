@@ -116,7 +116,7 @@ class SoftErrorResponder
         body { font-family: Georgia, serif; background: #FFFDF7; color: #292524; margin: 0; padding: 32px 16px; display: flex; min-height: 90vh; align-items: center; justify-content: center; }
         .card { max-width: 560px; width: 100%; background: #FFFFFF; border: 1px solid #FDE68A; border-radius: 20px; padding: 36px 28px; text-align: center; box-shadow: 0 10px 25px rgba(120, 53, 15, 0.08); }
         .code { font-size: 56px; font-weight: 800; color: #B45309; margin: 0 0 8px; }
-        h1 { font-size: 24px; margin: 0 0 12px; color: #881337; }
+        h1 { font-size: 24px; margin: 0 0 12px; color: #881337; text-align: center; }
         p { font-family: sans-serif; font-size: 14px; line-height: 1.6; color: #57534E; margin: 0 0 20px; }
         .btn { display: inline-block; padding: 10px 22px; background: #D97706; color: #FFFFFF; text-decoration: none; border-radius: 999px; font-family: sans-serif; font-size: 13px; font-weight: 700; }
         .meta { margin-top: 20px; font-family: monospace; font-size: 11px; color: #78716C; }

@@ -208,7 +208,7 @@
                         <span class="font-serif tracking-wider font-extrabold uppercase">{{ $product->category->name }}</span>
                     </div>
                     <div class="w-full flex justify-center">
-                        <h1 class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
+                        <h1 class="inline-block text-center text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap">
                             {{ $product->name }}
                         </h1>
                     </div>

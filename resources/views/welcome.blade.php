@@ -157,7 +157,7 @@
                         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                             <div class="w-full flex flex-col lg:flex-row items-center justify-between gap-8 py-10 lg:py-12">
                                 <div
-                                    class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'max-w-2xl' }} space-y-4 sm:space-y-6">
+                                    class="{{ $slide->right_image_url ? 'w-full lg:w-3/5 xl:w-2/3 max-w-2xl' : 'w-full max-w-3xl mx-auto text-center' }} space-y-4 sm:space-y-6">
                                     @if ($slide->subtitle)
                                         <div
                                             class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border backdrop-blur-xs {{ $badgeBg }}">
@@ -168,19 +168,19 @@
 
                                     @if ($slide->title)
                                         <h1
-                                            class="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-snug sm:leading-snug lg:leading-[1.22] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                                            class="{{ $slide->right_image_url ? 'text-left' : 'text-center' }} text-2xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-snug sm:leading-snug lg:leading-[1.22] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                                             {!! $slide->title !!}
                                         </h1>
                                     @endif
 
                                     @if ($slide->description)
                                         <p
-                                            class="text-sm sm:text-base text-amber-100/90 leading-relaxed max-w-xl drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                                            class="text-sm sm:text-base text-amber-100/90 leading-relaxed max-w-xl {{ $slide->right_image_url ? '' : 'mx-auto' }} drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                                             {{ $slide->description }}
                                         </p>
                                     @endif
 
-                                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                                    <div class="flex flex-wrap items-center {{ $slide->right_image_url ? '' : 'justify-center' }} gap-3 pt-2">
                                         @if ($slide->button_text && $slide->button_link)
                                             <a href="{{ $slide->button_link }}"
                                                 class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#D97706] hover:bg-[#F97316] text-white rounded-xl font-bold text-sm shadow-xl transition transform hover:-translate-y-0.5">
@@ -533,8 +533,9 @@
                                 <span class="text-xs font-bold text-amber-900">/ 5 Full Years</span>
                             </div>
                             <span
-                                class="inline-block mt-2 text-[11px] font-bold text-amber-900 bg-amber-200/70 border border-amber-300 px-3 py-0.5 rounded-full">
-                                Equivalent to ₹{{ round($membershipFee / 60, 2) }} / month · All 5 Years Covered
+                                class="inline-block mt-2 text-[11px] font-bold text-amber-900 bg-amber-200/70 border border-amber-300 px-3.5 py-1.5 rounded-2xl leading-snug text-center">
+                                <span class="block">Equivalent to ₹{{ round($membershipFee / 60, 2) }} / month</span>
+                                <span class="block">All 5 Years Covered</span>
                             </span>
                         </div>
 

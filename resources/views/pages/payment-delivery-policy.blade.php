@@ -4,7 +4,7 @@
             <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
                 Razorpay &amp; NimbusPost Operations
             </span>
-            <h1 class="text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
+            <h1 class="text-center text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
                 Payment &amp; Delivery Policy
             </h1>
             <p class="text-xs sm:text-sm text-slate-600 mt-2">

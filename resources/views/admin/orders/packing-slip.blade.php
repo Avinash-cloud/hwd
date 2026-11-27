@@ -24,7 +24,7 @@
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('images/logo.png') }}" alt="Blu Bliss" class="w-12 h-12 rounded-lg object-cover ring-1 ring-slate-200 shrink-0">
                     <div>
-                        <h1 class="font-semibold text-lg text-slate-900 leading-tight">Blu Bliss — Dispatch Slip</h1>
+                        <h1 class="font-semibold text-lg text-slate-900 leading-tight text-left">Blu Bliss — Dispatch Slip</h1>
                         <p class="text-xs text-slate-500">Sacred Bottling Unit · Haridwar</p>
                     </div>
                 </div>

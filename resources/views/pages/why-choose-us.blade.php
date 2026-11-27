@@ -4,7 +4,7 @@
             <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
                 Sacred Sourcing &amp; Devotional Commitment
             </span>
-            <h1 class="text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
+            <h1 class="text-center text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
                 Why Choose Blu Bliss
             </h1>
             <p class="text-sm text-slate-600 mt-3 max-w-2xl mx-auto leading-relaxed">

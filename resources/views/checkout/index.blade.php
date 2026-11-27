@@ -1,8 +1,8 @@
 <x-app-layout>
     <div class="bg-[#FFFDF7] border-b border-[#D97706]/30 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Sacred Delivery</span>
-            <h1 class="text-3xl font-serif font-extrabold text-slate-900 mt-1">Shipping & Checkout</h1>
+            <h1 class="text-3xl font-serif font-extrabold text-slate-900 mt-1 text-center">Shipping & Checkout</h1>
         </div>
     </div>
 

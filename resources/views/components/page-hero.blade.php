@@ -36,7 +36,7 @@
             @endif
 
             {{-- Main Title --}}
-            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-[#FDE68A] italic leading-tight tracking-tight drop-shadow-sm">
+            <h1 class="text-center text-2xl sm:text-4xl lg:text-5xl font-serif font-extrabold text-[#FDE68A] italic leading-tight tracking-tight drop-shadow-sm">
                 {{ $title }}
             </h1>
 

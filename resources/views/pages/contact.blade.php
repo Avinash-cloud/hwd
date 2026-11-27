@@ -2,7 +2,7 @@
     <div class="bg-[#FFFDF7] py-12 border-b border-amber-200">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Devotee Assistance</span>
-            <h1 class="text-4xl font-serif font-extrabold text-slate-900 mt-2">
+            <h1 class="text-center text-4xl font-serif font-extrabold text-slate-900 mt-2">
                 Connect with Haridwar Bliss
             </h1>
             <p class="text-sm text-slate-600 mt-2">

@@ -41,6 +41,7 @@
             letter-spacing: 0.5px;
             margin: 0;
             font-family: Georgia, serif;
+            text-align: center;
         }
         .brand-subtitle {
             font-size: 11px;

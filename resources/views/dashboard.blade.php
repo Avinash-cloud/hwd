@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex flex-col items-center text-center gap-3">
             <div>
                 <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Devotee Portal</span>
-                <h1 class="text-2xl font-serif font-extrabold text-slate-900 mt-1">My Account & Sacred Deliveries</h1>
+                <h1 class="text-2xl font-serif font-extrabold text-slate-900 mt-1 text-center">My Account & Sacred Deliveries</h1>
             </div>
 
             @if ($membership && $membership->isActive())

@@ -4,7 +4,7 @@
             <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">
                 Transparent Devotee Policies
             </span>
-            <h1 class="text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
+            <h1 class="text-center text-3xl sm:text-4xl font-serif font-extrabold text-slate-900 mt-2">
                 Service &amp; E-Puja Cancellation Policy
             </h1>
             <p class="text-xs sm:text-sm text-slate-600 mt-2">

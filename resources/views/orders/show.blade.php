@@ -1,15 +1,15 @@
 <x-app-layout>
     <div class="bg-[#FFFDF7] border-b border-[#D97706]/30 py-8">
         <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center gap-4">
             <div>
                 <span class="text-xs font-bold uppercase tracking-widest text-[#D97706] font-mono">Order
                     Confirmation</span>
-                <h1 class="text-3xl font-serif font-extrabold text-slate-900 mt-1">Order #{{ $order->order_number }}
+                <h1 class="text-3xl font-serif font-extrabold text-slate-900 mt-1 text-center">Order #{{ $order->order_number }}
                 </h1>
                 <p class="text-xs text-slate-500 mt-1">Placed on {{ $order->created_at->format('M d, Y h:i A') }}</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center gap-3">
                 <a href="{{ route('orders.invoice', $order->order_number) }}" target="_blank"
                     class="px-4 py-2 bg-white border border-[#D97706]/40 text-slate-800 text-xs font-bold rounded-xl hover:bg-[#FFFDF7] shadow-xs transition flex items-center gap-2">
                     <svg class="w-4 h-4 text-[#D97706]" fill="none" viewBox="0 0 24 24" stroke="currentColor">

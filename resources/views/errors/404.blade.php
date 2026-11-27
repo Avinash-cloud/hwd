@@ -36,7 +36,7 @@
 
             <!-- Page Titles and Explanations -->
             <div class="space-y-3">
-                <h1 class="text-3xl sm:text-5xl font-serif font-bold text-stone-900 tracking-tight">
+                <h1 class="text-center text-3xl sm:text-5xl font-serif font-bold text-stone-900 tracking-tight">
                     Divine Path Not Found
                 </h1>
                 <p class="text-lg sm:text-xl font-serif text-amber-800 italic">

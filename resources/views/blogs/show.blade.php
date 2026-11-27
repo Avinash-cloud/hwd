@@ -16,16 +16,16 @@
         </div>
 
         <!-- 2. Article Header -->
-        <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center sm:text-left">
+        <header class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
             <div
                 class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-[#881337] text-[#FDE68A] border border-amber-300/40 mb-4 shadow-md">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                 <span class="font-serif tracking-wider font-extrabold uppercase">{{ $blog->category }}</span>
             </div>
 
-            <div class="w-full flex justify-center sm:justify-start mb-2">
+            <div class="w-full flex justify-center mb-2">
                 <h1
-                    class="inline-block text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
+                    class="inline-block text-center text-xl sm:text-3xl lg:text-4xl font-serif font-extrabold text-[#FDE68A] italic bg-[#881337] border border-amber-300/40 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl shadow-xl leading-tight text-wrap drop-shadow-xs">
                     {{ $blog->title }}
                 </h1>
             </div>
@@ -38,7 +38,7 @@
 
             <!-- Author & Meta bar -->
             <div class="flex flex-wrap items-center justify-between gap-4 mt-6 pt-6 border-t border-amber-200/50 text-xs text-slate-500">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 text-left">
                     <div class="w-10 h-10 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-sm text-[#D97706]">
                         {{ strtoupper(substr($blog->author_name, 0, 1)) }}
                     </div>

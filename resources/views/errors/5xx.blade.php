@@ -155,8 +155,8 @@
 
             <!-- Calm Heading & Bilingual Copy -->
             <div class="space-y-2.5">
-                <h1 class="text-2xl sm:text-4xl font-serif font-bold text-stone-900 tracking-tight"
-                    style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#1C1917;margin:0;">
+                <h1 class="text-center text-2xl sm:text-4xl font-serif font-bold text-stone-900 tracking-tight"
+                    style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#1C1917;margin:0;text-align:center;">
                     {{ $headline }}
                 </h1>
                 <p class="text-base sm:text-lg font-serif text-amber-800 italic"
